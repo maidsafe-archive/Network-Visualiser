@@ -44,3 +44,37 @@
 	margin: .5em 1em
 }
 
+.hex {
+    margin-top: 12px;
+	width: 36px;
+	height: 13px;
+	background: #000;
+	position: relative;
+}
+.hex:before, .hex:after {
+  content: "";
+	border-left: 18px solid transparent;
+	border-right: 18px solid transparent;
+	position: absolute;
+}
+.hex:before {
+    top: -15px;
+	border-bottom: 15px solid #000;
+}
+.hex:after {
+ 	bottom: -17px;
+	border-top: 17px solid #000;
+}
+.hex.inner {
+    background-color:#fff;
+    -webkit-transform: scale(.95, .95);
+    -moz-transform: scale(.95, .95);
+    transform: scale(.95, .95);
+    z-index:1;
+}
+.hex.inner:before {
+    border-bottom: 16px solid #fff;
+}
+.hex.inner:after {
+    border-top: 18px solid #fff;
+}
