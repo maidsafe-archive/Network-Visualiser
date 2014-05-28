@@ -1,0 +1,46 @@
+.diamond {
+	width: 15%;
+	height: 57%;
+	background: #fff;
+	border: 1px solid;
+	transform:rotate(45deg);
+	-webkit-transform:rotate(45deg);
+	-moz-transform:rotate(45deg);
+	-o-transform:rotate(45deg);
+	-ms-transform:rotate(45deg);
+	margin-top: .6em !important
+
+}
+
+.diamond p{	
+	margin: 0.2em .4em;
+	transform:rotate(-45deg);
+	-webkit-transform:rotate(-45deg);
+	-moz-transform:rotate(-45deg);
+	-o-transform:rotate(-45deg);
+	-ms-transform:rotate(-45deg);
+}
+
+.circle {
+	width: 20%;
+	height: 73%;
+	background: #fff;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+	border: 1px solid
+}
+.circle p{
+	margin: .5em 1em
+}
+.square {
+	width: 20%;
+	height: 70%;
+	background: #fff;
+	border: 1px solid;
+}
+
+.square p{
+	margin: .5em 1em
+}
+
