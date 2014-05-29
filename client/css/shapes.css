@@ -1,80 +1,21 @@
-.diamond {
-	width: 15%;
-	height: 57%;
-	background: #fff;
-	border: 1px solid;
-	transform:rotate(45deg);
-	-webkit-transform:rotate(45deg);
-	-moz-transform:rotate(45deg);
-	-o-transform:rotate(45deg);
-	-ms-transform:rotate(45deg);
-	margin-top: .6em !important
-
+.hexagon{
+	background: url('../../client/imgs/icons/hexagon.png') no-repeat;	
+	background-size: 100% 100%;
 }
 
-.diamond p{	
-	margin: 0.2em .4em;
-	transform:rotate(-45deg);
-	-webkit-transform:rotate(-45deg);
-	-moz-transform:rotate(-45deg);
-	-o-transform:rotate(-45deg);
-	-ms-transform:rotate(-45deg);
+.circle{
+	background: url('../../client/imgs/icons/circle.png') no-repeat;	
+	background-size: 100% 100%;
 }
 
-.circle {
-	width: 20%;
-	height: 73%;
-	background: #fff;
-	-moz-border-radius: 50px;
-	-webkit-border-radius: 50px;
-	border-radius: 50px;
-	border: 1px solid
-}
-.circle p{
-	margin: .5em 1em
-}
-.square {
-	width: 20%;
-	height: 70%;
-	background: #fff;
-	border: 1px solid;
+
+.square{
+	background: url('../../client/imgs/icons/square.png') no-repeat;	
+	background-size: 100% 100%;
 }
 
-.square p{
-	margin: .5em 1em
-}
 
-.hex {
-    margin-top: 12px;
-	width: 36px;
-	height: 13px;
-	background: #000;
-	position: relative;
-}
-.hex:before, .hex:after {
-  content: "";
-	border-left: 18px solid transparent;
-	border-right: 18px solid transparent;
-	position: absolute;
-}
-.hex:before {
-    top: -15px;
-	border-bottom: 15px solid #000;
-}
-.hex:after {
- 	bottom: -17px;
-	border-top: 17px solid #000;
-}
-.hex.inner {
-    background-color:#fff;
-    -webkit-transform: scale(.95, .95);
-    -moz-transform: scale(.95, .95);
-    transform: scale(.95, .95);
-    z-index:1;
-}
-.hex.inner:before {
-    border-bottom: 16px solid #fff;
-}
-.hex.inner:after {
-    border-top: 18px solid #fff;
+.rhombus{
+	background: url('../../client/imgs/icons/rhombus.png') no-repeat;	
+	background-size: 100% 100%;
 }

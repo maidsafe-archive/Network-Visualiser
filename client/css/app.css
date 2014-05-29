@@ -1,11 +1,12 @@
 body{
-	background-color:#fff;
-	font-size: .9em;
-	font-family: arial
+	font-family: arial;
+	font-size: 12px;	
+	background-color: #fff;
 }
-ul {list-style-type: none; margin: 0px;padding: 0px}
-/***********Header Section Begin ********************/
-header{
+
+ul{list-style-type: none;margin: 0px;padding: 0px}
+
+header{	
 	background-color: #E6E6E6;
 	height: 50px;
 	position: fixed;
@@ -13,103 +14,109 @@ header{
 	width: 100%;
 }
 
-header div.title{
-	font-size: 1.5em;
-	margin: .5em .5em;
-	float: left;
+header p.title {	
+	font-size: 2em;
+	margin: .5em;
+	float: left
 }
 
 header ul{
-	float: right;	
+	float: right;
+	margin: 1em
 }
 
 header ul li{
 	float: left;
-	margin: 1em .5em;		
+	margin-left: .5em
 }
-/* header ul li button{background-color: #ccc;}*/
-/***********Header Section Ends ********************/
 
-/***********Section Begins *************************/
 section {
 	position: fixed;
 	top:50px;/*Corresponds to the header height*/
 	bottom: 0px;
 	width: 100%;	
 }
-/***********Section Ends *************************/
-/***********Legends Section Begins *************************/
-section div.legends{		
+
+section div.legends{
+	border-bottom: 1px solid;
 	height: 30px;
-	border-bottom: 1px solid #ccc
 }
 
-section div.legends ul.personas{	
-	margin: 0px ;
-	float: left;
-	font-size: .8em
+section ul.personas{
+	margin: .5em
 }
-
-section div.legends ul.personas li{	
+section ul.personas li{
 	float: left;
-	margin: .3em;
+	padding: .3em;
 	border: 1px solid;
-	padding: .2em .5em;	
+	margin-right: .2em	
 }
 
-section div.legends ul.icons{	
-	margin: 0px ;
+section ul.options{
 	float: right;
-	font-size: .8em
+	margin: .2em;
 }
 
-section div.legends ul.icons li{	
+section ul.options li{
 	float: left;
-	margin: .3em;
-	width: 90px;
+	margin-right: .4em
 }
 
-section div.legends ul.icons li div.icon_name p{	
+
+section div.icons{
+	border-bottom: 1px solid;
+	height: 30px
+}
+
+section div.icons ul{
+	margin: .3em
+}
+
+section div.icons ul li {
 	float: left;
-	margin: .5em 0em .5em .2em; 
+	margin-left: 1.2em;
+	width: 13em
 }
-section div.legends ul.icons li div.icon_img img{	
-	float: left;	
+
+section div.icons ul li span{
+	margin: 0.5em;
+	position: absolute;
 }
-/***********Legends Section Ends *************************/
+
 section div.wrapper{	
 	padding: .343em;
 	height: 100%;
 	overflow: auto;
 }
 
+
 section div.wrapper div.node{
-	width: 20%;
-	padding: .5em;
-	height: 80px;	
-	float: left;
+	width: 15%;
+	margin: .5em;
 }
 
-section div.wrapper div.node div.box{
+section div.wrapper div.node div.box{	
+	height: 65px;
 	border: 2px solid #776E6E;
-	height: inherit;
 }
 
-section div.wrapper div.node div.box div.icons_tray{
-	height: 60%;
+section div.wrapper div.node div.box div.notif{
+	height: 30px;
 }
 
-section div.wrapper div.node div.box div.icons_tray ul{
-	padding: 0em .343em
+section div.wrapper div.node div.box div.notif ul{
+	margin: .5em;	
 }
 
-section div.wrapper div.node div.box div.icons_tray ul li{
+section div.wrapper div.node div.box div.notif ul li{	
 	float: left;
-	margin: .2em 2.2%
+	height: 25px;
+	width: 25px;
+	margin-left: 1.2em;
 }
 
 section div.wrapper div.node div.box div.progress{
-	height: 5%;
+	height: 4px;
 	background-color: #ccc;	
 }
 
@@ -119,22 +126,19 @@ section div.wrapper div.node div.box div.progress div{
 	width: 80%;	
 }
 
-section div.wrapper div.node div.box div.status_tray{
-	height: 35%;
+section div.wrapper div.node div.box div.info{
+	height: 25px;	
 }
 
-section div.wrapper div.node div.box div.status_tray p.name{
-	font-size: 1.2em;
+section div.wrapper div.node div.box div.info p{	
+	margin: 0px;
+	padding: .4em;
 	font-weight: bold;
-	margin: .2em ;	
 	float: left
 }
 
-section div.wrapper div.node div.box div.status_tray p.info{	
-	margin: .3em 0em ;	
+section div.wrapper div.node div.box div.info img{	
 	float: right;
-}
-
-section div.wrapper div.node div.box div.status_tray p.info img{
-	width: 70%
+	margin:.3em;
+	width: 20px 
 }
