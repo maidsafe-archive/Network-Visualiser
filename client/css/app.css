@@ -1,7 +1,7 @@
 body{
 	font-family: arial;
 	font-size: 12px;	
-	background-color: #fff;
+	background-color: #fff;	
 }
 
 ul{list-style-type: none;margin: 0px;padding: 0px}
@@ -17,6 +17,7 @@ header{
 	position: fixed;
 	top: 0px;
 	width: 100%;
+	
 }
 
 header p.title {	
@@ -39,7 +40,8 @@ section {
 	position: fixed;
 	top:50px;/*Corresponds to the header height*/
 	bottom: 0px;
-	width: 100%;	
+	width: 100%;		
+	
 }
 
 section div.legends{
@@ -95,8 +97,8 @@ section div.wrapper{
 	top:40px;
 	overflow: auto;
 	margin-left: 2em;
-	clear: both;
-	position: absolute;
+	clear: both;	
+	position: absolute;	
 }
 
 section div.wrapper.tray_open{
@@ -108,7 +110,8 @@ section div.wrapper div.node{
 	width: 15%;
 	height:110px;
 	margin: .5em;
-	float: left	
+	float: left;
+	min-width: 175px	
 }
 
 section div.wrapper div.node div.box{	

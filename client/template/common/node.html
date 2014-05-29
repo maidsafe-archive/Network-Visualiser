@@ -1,4 +1,4 @@
-<div class="node" ng-repeat="vault in vaults" ng-controller="VaultCtrl">
+<div class="node" ng-repeat="vault in vaults | orderBy:'name'" ng-controller="VaultCtrl">
 	<div class="box">
 		<div class="notif">
 			<ul>
@@ -18,8 +18,8 @@
 			<div ng-style="progressLevel"></div>
 		</div>
 		<div class="info persona_na">
-			<p>AAAA</p>	
-			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleStateIcon()">
+			<p>{{vault.name}}</p>	
+			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
 		</div>
 	</div>	
 	<div class="log_slider" ng-class="{false:'close'}[logsOpen]">

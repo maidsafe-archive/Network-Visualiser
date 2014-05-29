@@ -13,9 +13,9 @@
 </ul>
 <ul class="options">					
 	<li>
-		<button>Expand All</button>
+		<button ng-click="toggleExpandAllLogs()">{{allVaultsExpanded?'Hide All':'Expand All'}}</button>
 	</li>
 	<li>
-		<button ng-click="toggleIconsTray()">Toggle Keys</button>
+		<button ng-click="toggleIconsTray()">{{iconsTrayClosed?'Show Keys':'Hide Keys'}}</button>
 	</li>					
 </ul>
