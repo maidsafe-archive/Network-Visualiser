@@ -1,6 +1,6 @@
 .hexagon{
 	background: url('../../client/imgs/icons/hexagon.png') no-repeat;	
-	background-size: 100% 100%;
+	background-size: 100% 100%;	
 }
 
 .circle{
@@ -11,11 +11,25 @@
 
 .square{
 	background: url('../../client/imgs/icons/square.png') no-repeat;	
-	background-size: 100% 100%;
+	background-size: 100% 100%;	
+}
+
+.square p {
+	padding: 0.25em 0.6em;
+	margin: 0em;
+	font-size: 15px;
+	font-weight: bold;
 }
 
 
 .rhombus{
 	background: url('../../client/imgs/icons/rhombus.png') no-repeat;	
 	background-size: 100% 100%;
+}
+
+.rhombus  p {
+	padding: 0.25em 0.6em;
+	margin: 0em;
+	font-size: 15px;
+	font-weight: bold;
 }

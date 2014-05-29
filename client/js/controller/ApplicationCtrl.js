@@ -2,7 +2,7 @@ var ApplicationCtrl = ['$scope', function($scope){
 	
 	$scope.iconsTrayClosed = true;
 
-	$scope.vaults = [1,2,3,4,5]
+	$scope.vaults = []
 
 	$scope.toggleIconsTray = function(){
 		$scope.iconsTrayClosed = !$scope.iconsTrayClosed		
