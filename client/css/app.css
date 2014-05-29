@@ -65,7 +65,7 @@ section ul.options li{
 
 section div.icons{
 	border-bottom: 1px solid;
-	height: 60px
+	height: 62px;	
 }
 
 section div.icons ul{
@@ -75,7 +75,7 @@ section div.icons ul{
 section div.icons ul li {
 	float: left;
 	margin-left: 1.2em;
-	margin-top: .34em;
+	margin-top: .3em;
 	width: 13%
 }
 
@@ -88,6 +88,7 @@ section div.wrapper{
 	padding: .343em;
 	height: 100%;
 	overflow: auto;
+	clear: both;
 }
 
 
