@@ -6,6 +6,11 @@ body{
 
 ul{list-style-type: none;margin: 0px;padding: 0px}
 
+
+.close{
+	display: none;
+}
+
 header{	
 	background-color: #E6E6E6;
 	height: 50px;
@@ -86,15 +91,24 @@ section div.icons ul li span{
 
 section div.wrapper{	
 	padding: .343em;
-	height: 100%;
+	bottom: 0px;
+	top:40px;
 	overflow: auto;
+	margin-left: 2em;
 	clear: both;
+	position: absolute;
+}
+
+section div.wrapper.tray_open{
+	top: 100px;
 }
 
 
 section div.wrapper div.node{
 	width: 15%;
+	height:110px;
 	margin: .5em;
+	float: left	
 }
 
 section div.wrapper div.node div.box{	
@@ -107,7 +121,7 @@ section div.wrapper div.node div.box div.notif{
 }
 
 section div.wrapper div.node div.box div.notif ul{
-	margin: .5em 1em;	
+	margin: .5em .5em;	
 }
 
 section div.wrapper div.node div.box div.notif ul li{	
@@ -143,4 +157,16 @@ section div.wrapper div.node div.box div.info img{
 	float: right;
 	margin:.3em;
 	width: 20px 
+}
+
+section div.wrapper div.node div.log_slider{
+	border: 1px solid #776E6E;
+	height: 45px;
+	overflow: auto;	
+}
+
+section div.wrapper div.node div.log_slider ul li{
+	font-size: 11px;
+	border-bottom:  1px solid #776E6E;
+	margin-bottom: .2em;	
 }

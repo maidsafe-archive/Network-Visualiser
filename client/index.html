@@ -5,8 +5,12 @@
 		<link rel="stylesheet" type="text/css" href="../client/css/shapes.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/colours.css">
 		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
+
+		<script type="text/javascript" src="../client/js/controller/ApplicationCtrl.js"></script>
+		<script type="text/javascript" src="../client/js/controller/VaultCtrl.js"></script>
+		<script type="text/javascript" src="../client/js/config/registry.js"></script>		
 	</head>
-	<body ng-app>
+	<body ng-app ng-controller="ApplicationCtrl">
 		<header>
 			<ng-include src="'template/common/header.html'"></ng-include>
 		</header>
@@ -15,10 +19,10 @@
 					<ng-include src="'template/common/legends.html'"></ng-include>
 				</div>
 			</div>
-			<div class="icons">
+			<div class="icons" ng-class="{true:'close'}[iconsTrayClosed]">
 				<ng-include src="'template/common/icons_tray.html'"></ng-include>
 			</div>
-			<div class="wrapper">
+			<div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
 				<ng-include src="'template/common/node.html'"></ng-include>
 			</div>
 		</section>
