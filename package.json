@@ -1,0 +1,13 @@
+{
+  "name": "MaidSafe_NetworkVisualizer",
+  "version": "0.0.1",
+  "description": "Network Visualizer tool for monitoring logs across nodes",  
+  "author": "Krishna Kumar",  
+  "dependencies":{ },
+  "devDependencies":{
+    "express": "3.x",    
+    "mongoose" : "3.8.X",
+    "socket.io" :"0.9",
+    "bower": "latest"
+  }
+}

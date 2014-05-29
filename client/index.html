@@ -1,123 +1,25 @@
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+		<link rel="stylesheet" type="text/css" href="../vendor/normalize.css/normalize.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/app.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/shapes.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/colours.css">
+		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
 	</head>
-	<body>
+	<body ng-app>
 		<header>
-			<p class="title">Network Visualizer</p>
-			<ul>
-				<li>
-					<button>Reset</button>
-				</li>
-				<li>
-					<button>Export</button>
-				</li>
-				<li>
-					<button>Import</button>
-				</li>							
-				<li>
-					<button>Clear Logs</button>
-				</li>
-			</ul>
+			<ng-include src="'template/common/header.html'"></ng-include>
 		</header>
 		<section>
 			<div class="legends">				
-					<ul class="personas">
-						<li class="persona_na">NA</li>
-						<li class="persona_maid">Maid Node</li>
-						<li class="persona_mpid">Mpid Node</li>
-						<li class="persona_data_getter">Data Getter</li>
-						<li class="persona_maid_manager">Maid Manager</li>
-						<li class="persona_data_manager">Data Manager</li>
-						<li class="persona_pmid_manager">Pmid Manager</li>
-						<li class="persona_pmid_node">Pmid Node</li>
-						<li class="persona_mpid_manager">Mpid Manager</li>
-						<li class="persona_version_handler">Version Handler</li>
-						<!-- <li class="persona_cache_handler">Cache Handler</li> -->
-					</ul>
-					<ul class="options">					
-						<li>
-							<button>Expand All</button>
-						</li>
-						<li>
-							<button>Toggle Keys</button>
-						</li>					
-					</ul>
+					<ng-include src="'template/common/legends.html'"></ng-include>
 				</div>
 			</div>
 			<div class="icons">
-				<ul>
-					<li>						
-						<img src="../client/imgs/icons/joining-pmid-node.png"/><span>Joining PMID Node<span>						
-					</li>	
-					<li>
-						<img src="../client/imgs/icons/dropping-pmid-node.png"/><span>Dropping PMID Node<span>						
-					</li>	
-					<li>
-						<img src="../client/imgs/icons/marking-node-up.png"/><span>Marking Node Up<span>						
-					</li>										
-					<li>
-						<img src="../client/imgs/icons/marking-node-down.png"/><span>Marking Node Down<span>						
-					</li>
-					<li>
-						<img src="../client/imgs/icons/transfer-account.png"/><span>Transfer Account<span>						
-					</li>					
-					<li>
-						<img src="../client/imgs/icons/account-transferred.png"/><span>Got Account Transferred<span>
-					</li>					
-					<li>
-						<img src="../client/imgs/icons/remove-account.png"/><span>Remove Account<span>
-					</li>						
-					<li>
-						<img src="../client/imgs/icons/storing-data.png"/><span>Storing Data<span>
-					</li>					
-					<li>
-						<img src="../client/imgs/icons/deleting-data.png"/><span>Deleting Data<span>
-					</li>	
-					<li>
-						<img src="../client/imgs/icons/move-data.png"/><span>Move Data<span>
-					</li>					
-					<li>
-						<img src="../client/imgs/icons/update-data-version.png"/><span>Update Data Version<span>
-					</li>
-					<li>
-						<img src="../client/imgs/icons/blocked-delete-request.png"/><span>Blocked Delete Request<span>
-					</li>					
-					<li>
-						<img src="../client/imgs/icons/subscriber.png"/><span>Subscriber<span>
-					</li>										
-					<li>
-						<img src="../client/imgs/icons/counter.png"/><span>Counter<span>
-					</li>					
-				</ul>
+				<ng-include src="'template/common/icons_tray.html'"></ng-include>
 			</div>
 			<div class="wrapper">
-				<div class="node">
-					<div class="box">
-						<div class="notif">
-							<ul>
-								<li class="hexagon">									
-								</li>								
-								<li class="circle">									
-								</li>								
-								<li class="square">									
-								</li>								
-								<li class="rhombus">									
-								</li>
-							</ul>
-						</div>
-						<div class="progress">
-							<div></div>
-						</div>
-						<div class="info persona_na">
-							<p>AAAA</p>	
-							<img src="../client/imgs/icons/info.png">
-						</div>
-					</div>					
-				</div>
+				<ng-include src="'template/common/node.html'"></ng-include>
 			</div>
 		</section>
 	</body>
