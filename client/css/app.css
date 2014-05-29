@@ -65,17 +65,18 @@ section ul.options li{
 
 section div.icons{
 	border-bottom: 1px solid;
-	height: 30px
+	height: 60px
 }
 
 section div.icons ul{
-	margin: .3em
+	margin: .1em
 }
 
 section div.icons ul li {
 	float: left;
 	margin-left: 1.2em;
-	width: 13em
+	margin-top: .34em;
+	width: 13%
 }
 
 section div.icons ul li span{
@@ -105,7 +106,7 @@ section div.wrapper div.node div.box div.notif{
 }
 
 section div.wrapper div.node div.box div.notif ul{
-	margin: .5em;	
+	margin: .5em 1em;	
 }
 
 section div.wrapper div.node div.box div.notif ul li{	
