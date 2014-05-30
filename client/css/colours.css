@@ -2,43 +2,42 @@
 	background-color: #AAEAF4
 }
 
-.persona_maid {
+.persona_maidnode {
 	background-color: #F8CDA1
 }
 
-.persona_mpid {
+.persona_mpidnode {
 	background-color: #889A8B
 }
 
-.persona_data_getter {
+.persona_datagetter {
 	background-color: #C7CD8A
 }
 
-.persona_maid_manager {
+.persona_maidmanager {
 	background-color: #F8AED4
 }
 
-.persona_data_manager {
+.persona_datamanager {
 	background-color: #C1FFF6
 }
 
-.persona_pmid_manager {
+.persona_pmidmanager {
 	background-color: #F9A489
 }
 
-.persona_pmid_node {
+.persona_pmidnode {
 	background-color: #B8ADF2
 }
 
-.persona_mpid_manager {
+.persona_mpidmanager {
 	background-color: #7DCC9D
 }
 
-.persona_version_handler {
+.persona_versionhandler {
 	background-color: #8DC0F8
 }
 
-
-.persona_cache_handler {
+.persona_cachehandler {
 	background-color: #F8CDA1
 }

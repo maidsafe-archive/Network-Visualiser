@@ -1,40 +1,32 @@
-<div class="node" ng-repeat="vault in vaults | orderBy:'name'" ng-controller="VaultCtrl">
+<div class="node" ng-repeat="vault in vaults | orderBy:'vault'" ng-controller="VaultCtrl" ng-init="init(vault)">
 	<div class="box">
 		<div class="notif">
 			<ul>
-				<li class="hexagon">									
+				<li ng-class="accountClass">									
 				</li>								
-				<li class="circle">									
+				<li ng-class="chunkClass">									
 				</li>								
-				<li class="square">	
-					<p>8</p>
+				<li ng-class="subscriberClass">	
+					<p>{{subscriber}}</p>
 				</li>								
-				<li class="rhombus">									
-					<p>9</p>
+				<li ng-class="counterClass">									
+					<p>{{counter}}</p>
 				</li>
 			</ul>
 		</div>
 		<div class="progress" >
 			<div ng-style="progressLevel"></div>
 		</div>
-		<div class="info persona_na">
-			<p>{{vault.name}}</p>	
+		<div class="info" ng-class="personaColour">
+			<p>{{vaultName}}</p>	
 			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
 		</div>
 	</div>	
 	<div class="log_slider" ng-class="{false:'close'}[logsOpen]">
 		<ul>
-			<li>
-				Junk Log data for testing the legth of the data in the pipeline 
-			</li>
-
-			<li>
-				hjhjhjh
-			</li>
-
-			<li>
-				hjhjhjh
-			</li>			
+			<li ng-repeat="log in logs">
+				{{vaultBehaviour.personas[log.persona_id] + ' - ' + vaultBehaviour.actions[log.action_id]}}
+			</li>		
 		</ul>		
 	</div>				
 </div>

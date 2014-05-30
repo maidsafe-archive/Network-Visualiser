@@ -21,9 +21,28 @@
 	font-weight: bold;
 }
 
+.square-red{
+	background: url('../../client/imgs/icons/square-red.png') no-repeat;	
+	background-size: 100% 100%;
+}
+
+.square-green{
+	background: url('../../client/imgs/icons/square-green.png') no-repeat;	
+	background-size: 100% 100%;
+}
+
 
 .rhombus{
 	background: url('../../client/imgs/icons/rhombus.png') no-repeat;	
+	background-size: 100% 100%;
+}
+
+.rhombus-red{
+	background: url('../../client/imgs/icons/rhombus-red.png') no-repeat;	
+	background-size: 100% 100%;
+}
+.rhombus-green{
+	background: url('../../client/imgs/icons/rhombus-green.png') no-repeat;	
 	background-size: 100% 100%;
 }
 
@@ -33,3 +52,65 @@
 	font-size: 15px;
 	font-weight: bold;
 }
+
+.account-transferred{
+	background: url('../../client/imgs/icons/account-transferred.png') no-repeat;	
+	background-size: 100% 100%;	
+}
+
+.blocked-delete-request{
+	background: url('../../client/imgs/icons/blocked-delete-request.png') no-repeat;	
+	background-size: 100% 100%;		
+}
+
+.deleting-data{
+	background: url('../../client/imgs/icons/deleting-data.png') no-repeat;	
+	background-size: 100% 100%;			
+}
+
+.dropping-pmid-node{
+	background: url('../../client/imgs/icons/dropping-pmid-node.png') no-repeat;	
+	background-size: 100% 100%;				
+}
+
+.joining-pmid-node{
+	background: url('../../client/imgs/icons/joining-pmid-node.png') no-repeat;	
+	background-size: 100% 100%;					
+}
+
+.marking-node-down{
+	background: url('../../client/imgs/icons/marking-node-down.png') no-repeat;	
+	background-size: 100% 100%;				
+}
+
+.marking-node-up{
+	background: url('../../client/imgs/icons/marking-node-up.png') no-repeat;	
+	background-size: 100% 100%;				
+}
+
+.move-data{
+	background: url('../../client/imgs/icons/move-data.png') no-repeat;	
+	background-size: 100% 100%;				
+}
+
+.remove-account {
+	background: url('../../client/imgs/icons/remove-account.png') no-repeat;	
+	background-size: 100% 100%;			
+}
+
+.storing-data{
+	background: url('../../client/imgs/icons/storing-data.png') no-repeat;	
+	background-size: 100% 100%;				
+}
+
+
+.transfer-account{
+	background: url('../../client/imgs/icons/transfer-account.png') no-repeat;	
+	background-size: 100% 100%;				
+}
+
+.update-data-version{
+	background: url('../../client/imgs/icons/update-data-version.png') no-repeat;	
+	background-size: 100% 100%;				
+}
+

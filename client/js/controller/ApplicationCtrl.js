@@ -1,8 +1,8 @@
-var ApplicationCtrl = ['$scope', '$rootScope', function($scope, $rootScope){
+var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', function($scope, $rootScope, dataManager){
 	
 	$scope.iconsTrayClosed = true;
-
-	$scope.vaults = []
+	
+	$scope.vaults = dataManager.vaults	
 
 	$scope.allVaultsExpanded = false;
 
@@ -16,8 +16,11 @@ var ApplicationCtrl = ['$scope', '$rootScope', function($scope, $rootScope){
 		$rootScope.$broadcast('expandVault', $scope.allVaultsExpanded)
 	}
 
+
+	window.dm = dataManager
+
 	//just for unit testing
-	for(var i=0;i<40;i++){
-		$scope.vaults.push({name:((100-i)+'demo')})		
-	}
+	// for(var i=0;i<40;i++){
+	// 	$scope.vaults.push({name:((100-i)+'demo')})		
+	// }
 }];
