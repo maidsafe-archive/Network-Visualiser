@@ -1,12 +1,9 @@
-var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
-	
+var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){		
 
-	//{vault_id:"", persona_id:1, action_id:2, value1:0, value:2, ts: new Date()}
+	var vaultLogPool,  vaults
+	var addLogToPool
 
-	var vaultLogPool,  vaults;
-	var addLogToPool, getLogsForVault
-
-	vaultLogPool = {}
+	//vaultLogPool = {}//is this needed - might be for history play back
 	vaults = []
 
 	addLogToPool = function(log){
@@ -15,7 +12,7 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 			vaults.push(log.vault_id)
 			$rootScope.$apply()
 		}
-		vaultLogPool[log.vault_id].push(log);
+		//vaultLogPool[log.vault_id].push(log);
 		notify(log);		
 	}
 
@@ -23,9 +20,6 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 		$rootScope.$broadcast(log.vault_id, log)			
 	}
 	
-
-
 	this.vaults = vaults
-	this.pushLog = addLogToPool;
-	this.getLogsForVault = getLogsForVault
+	this.pushLog = addLogToPool
 }]

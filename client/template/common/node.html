@@ -1,15 +1,16 @@
-<div class="node" ng-repeat="vault in vaults | orderBy:'vault'" ng-controller="VaultCtrl" ng-init="init(vault)">
+<div class="node" ng-repeat="vault in vaults | orderBy:'vault'" ng-controller="VaultCtrl" ng-init="init(vault)" 
+	ng-class="{false:'dead'}[isActive]">
 	<div class="box">
 		<div class="notif">
 			<ul>
-				<li ng-class="accountClass">									
+				<li ng-class="iconsTray.account">									
 				</li>								
-				<li ng-class="chunkClass">									
+				<li ng-class="iconsTray.chunk">									
 				</li>								
-				<li ng-class="subscriberClass">	
+				<li class="shape" ng-class="iconsTray.subscriber">	
 					<p>{{subscriber}}</p>
 				</li>								
-				<li ng-class="counterClass">									
+				<li class="shape" ng-class="iconsTray.counter">									
 					<p>{{counter}}</p>
 				</li>
 			</ul>
@@ -18,14 +19,14 @@
 			<div ng-style="progressLevel"></div>
 		</div>
 		<div class="info" ng-class="personaColour">
-			<p>{{vaultName}}</p>	
+			<p>{{vaultName.substring(0,6)}}</p>	
 			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
 		</div>
 	</div>	
 	<div class="log_slider" ng-class="{false:'close'}[logsOpen]">
 		<ul>
 			<li ng-repeat="log in logs">
-				{{vaultBehaviour.personas[log.persona_id] + ' - ' + vaultBehaviour.actions[log.action_id]}}
+			  	{{ vaultBehaviour.formatMessage(log)}}
 			</li>		
 		</ul>		
 	</div>				

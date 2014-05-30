@@ -5,11 +5,13 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	$scope.vaultName	
 	$scope.logs
 	$scope.vaultBehaviour = vaultBehaviour
+	$scope.iconsTray	
+	$scope.isActive = false
 
 	$scope.PERSONA_COLOUR_TAG = "persona_"
 	
 	//initialize the controller
-	$scope.init = function(vaultName){	
+	$scope.init = function(vaultName){			
 		$scope.updateProgress(0);
 		$scope.stateIcon = "info.png";
 		$scope.logsOpen = false;		
@@ -23,17 +25,35 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	}
 
 	$scope.updateIcons = function(actionId){
-		var icons = $scope.vaultBehaviour.icons[actionId]
-		$scope.accountClass = icons.account
-		$scope.chunkClass = icons.chunk
-		$scope.subscriberClass = icons.subscriber
-		$scope.counterClass = icons.counter
+		$scope.iconsTray = $scope.vaultBehaviour.icons[actionId]		
+	}
+
+	$scope.addLog = function(log){
+		if($scope.logs.length>=$scope.vaultBehaviour.MAX_LOGS)
+			$scope.logs.shift()
+		$scope.logs.push(log)	
+	}
+
+	$scope.stateOfVault = function(log){
+		$scope.isActive = (log.action_id != 18)
 	}
 
 	$scope.logRecieved = function(log){		
-		$scope.logs.push(log)	
+		$scope.addLog(log)
 		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + $scope.vaultBehaviour.personas[log.persona_id]
-		$scope.updateIcons(log.action_id)//few cases no update needed - check it
+		if(log.action_id == 17){
+			$scope.updateProgress(log.value1)
+		}else{
+			$scope.subscriber = null
+			$scope.counter = null
+			$scope.updateIcons(log.action_id)
+		}			
+		if(log.action_id == 1 || log.action_id == 2){
+			$scope.counter = log.value1			
+		}else if(log.action_id == 6 || log.action_id == 7){
+			$scope.subscriber = log.value1			
+		}
+		$scope.stateOfVault(log)
 		$scope.$apply()
 	}
 

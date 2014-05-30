@@ -1,12 +1,16 @@
 var VaultBehaviourService = [function(){
-	
-	this.personas = {
-			0:'NA', 1 : 'MaidNode', 2 :'MpidNode', 3:'DataGetter', 
-			4:'MaidManager', 5:'DataManager', 6:'PmidManager', 7:'PmidNode', 
-			8:'MpidManager', 9:'VersionHandler'
+	service = this;
+
+
+	service.MAX_LOGS = 3;//Max logs retained for showing on info click
+
+	service.personas = {
+			0 : 'MaidNode', 1 :'MpidNode', 2:'DataGetter', 
+			3:'MaidManager', 4:'DataManager', 5:'PmidManager', 6:'PmidNode', 
+			7:'MpidManager', 8:'VersionHandler', 9:'NA'
 		}
 
-	this.actions = {
+	service.actions = {
 					0:'Vault Started', 1:'Increases count to', 2:'Decreases count to',
 					3:'Blocked Delete Request',	4:'Account Transfer', 5:'Got Account Transferred',
 					6:'Increase Subscribers', 7:'Decrease Subscribers',	8:'Move Chunk',
@@ -16,8 +20,10 @@ var VaultBehaviourService = [function(){
 					18:'Vault Stopping'
 				}
 
+	service.actionsNotUpdatingIcons = [17]
 
-	this.icons = {
+
+	service.icons = {
 		0:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus'},
 		1:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus-green'},
 		2:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus-red'},
@@ -38,5 +44,27 @@ var VaultBehaviourService = [function(){
 		17:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus'},
 		18:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus'}
 	}		
+
+	var generalFormater = function(log){				
+		return  service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' 
+	}
+
+	var generalFormaterWithVaule1 = function(log){
+		return this.personas[log.persona_id] + ' - ' + this.actions[log.action_id] + ' ' + log.value1
+	}
+
+
+	var generalFormaterWithBothVaules = function(log){
+		return this.personas[log.persona_id] + ' - ' + this.actions[log.action_id] + ' ' + log.value1 + " : " + log.value2
+	}
+
+
+	var formaters = {		
+		1 : generalFormater
+	}
+
+	service.formatMessage = function(log){		
+		return (formaters[log.action_id] || generalFormater)(log)
+	}
 
 }]

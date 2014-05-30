@@ -14,8 +14,8 @@
 	background-size: 100% 100%;	
 }
 
-.square p {
-	padding: 0.25em 0.6em;
+.shape p {
+	padding: 0.25em 0.5em;
 	margin: 0em;
 	font-size: 15px;
 	font-weight: bold;
@@ -31,7 +31,6 @@
 	background-size: 100% 100%;
 }
 
-
 .rhombus{
 	background: url('../../client/imgs/icons/rhombus.png') no-repeat;	
 	background-size: 100% 100%;
@@ -46,12 +45,6 @@
 	background-size: 100% 100%;
 }
 
-.rhombus  p {
-	padding: 0.25em 0.6em;
-	margin: 0em;
-	font-size: 15px;
-	font-weight: bold;
-}
 
 .account-transferred{
 	background: url('../../client/imgs/icons/account-transferred.png') no-repeat;	

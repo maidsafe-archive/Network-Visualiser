@@ -11,6 +11,11 @@ ul{list-style-type: none;margin: 0px;padding: 0px}
 	display: none;
 }
 
+.dead{
+	opacity: .4;
+	
+}
+
 header{	
 	background-color: #E6E6E6;
 	height: 50px;
