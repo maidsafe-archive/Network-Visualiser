@@ -3,7 +3,7 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 	var vaultLogPool,  vaults
 	var addLogToPool
 
-	//vaultLogPool = {}//is this needed - might be for history play back
+	vaultLogPool = {}//is this needed - might be for history play back
 	vaults = []
 
 	addLogToPool = function(log){
@@ -12,7 +12,7 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 			vaults.push(log.vault_id)
 			$rootScope.$apply()
 		}
-		//vaultLogPool[log.vault_id].push(log);
+		vaultLogPool[log.vault_id].push(log);
 		notify(log);		
 	}
 
