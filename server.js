@@ -1,5 +1,6 @@
 var express = require('express')
 var server = express()
+var PORT = 8080
 
 var INDEX_PAGE = '/client/index.html';
 
@@ -13,5 +14,5 @@ server.get('/', function(req, res){
 	res.redirect(INDEX_PAGE)
 })
 
-server.listen(8080)
-console.log('Server started at 8080')
+server.listen(PORT)
+console.log('Server started at ' + PORT)

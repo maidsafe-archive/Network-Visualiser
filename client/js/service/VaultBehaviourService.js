@@ -1,7 +1,6 @@
 var VaultBehaviourService = [function(){
 	service = this;
 
-
 	service.MAX_LOGS = 3;//Max logs retained for showing on info click
 
 	service.personas = {
@@ -19,9 +18,7 @@ var VaultBehaviourService = [function(){
 					15:'Update Version', 16:'Remove Account', 17:'Network Health changed',
 					18:'Vault Stopping'
 				}
-
-	service.actionsNotUpdatingIcons = [17]
-
+	
 
 	service.icons = {
 		0:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus'},
@@ -50,17 +47,32 @@ var VaultBehaviourService = [function(){
 	}
 
 	var generalFormaterWithVaule1 = function(log){
-		return this.personas[log.persona_id] + ' - ' + this.actions[log.action_id] + ' ' + log.value1
+		return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + log.value1
 	}
 
 
 	var generalFormaterWithBothVaules = function(log){
-		return this.personas[log.persona_id] + ' - ' + this.actions[log.action_id] + ' ' + log.value1 + " : " + log.value2
+		return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + log.value1 + " : " + log.value2
 	}
 
 
 	var formaters = {		
-		1 : generalFormater
+		1 : generalFormaterWithVaule1,
+		2 : generalFormaterWithVaule1,
+		3 : generalFormaterWithVaule1,
+		4 : generalFormaterWithBothVaules,
+		5 : generalFormaterWithBothVaules,
+		6 : generalFormaterWithVaule1,
+		7 : generalFormaterWithVaule1,
+		8 : generalFormaterWithBothVaules,
+		9 : generalFormaterWithVaule1,
+		10: generalFormaterWithVaule1,
+		11: generalFormaterWithVaule1,
+		12: generalFormaterWithVaule1,
+		13: generalFormaterWithVaule1,
+		14: generalFormaterWithVaule1,
+		15: generalFormaterWithBothVaules,
+		16: generalFormaterWithVaule1
 	}
 
 	service.formatMessage = function(log){		

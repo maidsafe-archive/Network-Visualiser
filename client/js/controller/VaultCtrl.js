@@ -11,14 +11,14 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	$scope.PERSONA_COLOUR_TAG = "persona_"
 	
 	//initialize the controller
-	$scope.init = function(vaultName){			
+	$scope.init = function(vault){			
 		$scope.updateProgress(0);
 		$scope.stateIcon = "info.png";
 		$scope.logsOpen = false;		
-		$scope.vaultName = vaultName
+		$scope.vaultName = vault.vault_id
 		$scope.logs = []
 		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + $scope.vaultBehaviour.personas[0]		
-		$scope.$on(vaultName, function(e, log){
+		$scope.$on($scope.vaultName, function(e, log){
 			$scope.logRecieved(log)
 		})
 		$scope.updateIcons(0)
@@ -73,4 +73,8 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		$scope.toggleVaultLogs(v)
 	})
 	
+
+	$scope.lastLog = function(){		
+		return $scope.logs.length>0?$scope.vaultBehaviour.formatMessage($scope.logs[$scope.logs.length-1]):""
+	}
 }]

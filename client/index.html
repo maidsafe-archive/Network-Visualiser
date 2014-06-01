@@ -10,6 +10,7 @@
 		<script type="text/javascript" src="../client/js/service/VaultBehaviourService.js"></script>
 		<script type="text/javascript" src="../client/js/controller/ApplicationCtrl.js"></script>
 		<script type="text/javascript" src="../client/js/controller/VaultCtrl.js"></script>
+		<script type="text/javascript" src="../client/js/directive/tooltip.js"></script>
 		<script type="text/javascript" src="../client/js/config/registry.js"></script>		
 	</head>
 	<body ng-app="MaidSafe" ng-controller="ApplicationCtrl">
@@ -18,14 +19,13 @@
 		</header>
 		<section>
 			<div class="legends">				
-					<ng-include src="'template/common/legends.html'"></ng-include>
-				</div>
+					<ng-include src="'template/common/legends.html'"></ng-include>				
 			</div>
 			<div class="icons" ng-class="{true:'close'}[iconsTrayClosed]">
 				<ng-include src="'template/common/icons_tray.html'"></ng-include>
 			</div>
 			<div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
-				<ng-include src="'template/common/node.html'"></ng-include>
+				<ng-include src="'template/common/node.html'"></ng-include>				
 			</div>
 		</section>
 	</body>

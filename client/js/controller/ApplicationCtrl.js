@@ -17,10 +17,7 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', function($scope, $
 	}
 
 
-	window.dm = dataManager
+	window.dm = dataManager//for testing
 
-	//just for unit testing
-	// for(var i=0;i<40;i++){
-	// 	$scope.vaults.push({name:((100-i)+'demo')})		
-	// }
+
 }];

@@ -9,7 +9,7 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 	addLogToPool = function(log){
 		if(!vaultLogPool.hasOwnProperty(log.vault_id)){
 			vaultLogPool[log.vault_id] = []
-			vaults.push(log.vault_id)
+			vaults.push({vault_id:log.vault_id})
 			$rootScope.$apply()
 		}
 		vaultLogPool[log.vault_id].push(log);
