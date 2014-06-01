@@ -1,10 +1,12 @@
-var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', function($scope, $rootScope, dataManager){
+var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService' , function($scope, $rootScope, dataManager, socketService){
 	
 	$scope.iconsTrayClosed = true;
 	
 	$scope.vaults = dataManager.vaults	
 
 	$scope.allVaultsExpanded = false;
+
+
 
 	$scope.toggleIconsTray = function(){
 		$scope.iconsTrayClosed = !$scope.iconsTrayClosed		
@@ -16,8 +18,16 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', function($scope, $
 		$rootScope.$broadcast('expandVault', $scope.allVaultsExpanded)
 	}
 
+	$scope.clearLogs = function(){
+		if(confirm("This operation will clear all the logs on the server. Proceed clearing logs?")){
+			dataManager.clearLogs()			
+		}
+	}
 
-	window.dm = dataManager//for testing
+	$scope.$on('push', function(e, log){
+		dataManager.pushLog(log)
+	})
 
+	setTimeout(function(){dataManager.getActiveVaults()}, 100)
 
 }];

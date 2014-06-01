@@ -170,6 +170,7 @@ section div.wrapper div.node div.box div.info img{
 section div.wrapper div.node div.log_slider{
 	border: 1px solid #776E6E;
 	height: 45px;
+	width:99%;
 	overflow: auto;	
 }
 

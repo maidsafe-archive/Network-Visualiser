@@ -18,8 +18,8 @@
 		<div class="progress" >
 			<div ng-style="progressLevel"></div>
 		</div>
-		<div class="info" ng-class="personaColour" tooltip="{{vaultName}}">
-			<p>{{vaultName.substring(0,6)}}</p>	
+		<div class="info" ng-class="personaColour" >
+			<p tooltip="{{vaultName}}">{{vaultName.substring(0,6)}}</p>	
 			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
 		</div>
 	</div>	

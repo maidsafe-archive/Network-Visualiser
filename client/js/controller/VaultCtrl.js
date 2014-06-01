@@ -21,7 +21,7 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		$scope.$on($scope.vaultName, function(e, log){
 			$scope.logRecieved(log)
 		})
-		$scope.updateIcons(0)
+		$scope.updateIcons(0)		
 	}
 
 	$scope.updateIcons = function(actionId){
@@ -31,7 +31,7 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	$scope.addLog = function(log){
 		if($scope.logs.length>=$scope.vaultBehaviour.MAX_LOGS)
 			$scope.logs.shift()
-		$scope.logs.push(log)	
+		$scope.logs.push(log)			
 	}
 
 	$scope.stateOfVault = function(log){
