@@ -2,9 +2,10 @@ var db, vaultLog, mongoose, logManager, vaultStatus;
 mongoose = require('mongoose');
 logManager = require('./LogManager.js');
 vaultStatus = require('./VaultStatus.js');
+config = require('./../../Config.js');
 
  
-mongoose.connect('mongodb://localhost:27017/maidsafe_logs');
+mongoose.connect(config.Constants.mongo_con);
 db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
@@ -13,9 +14,9 @@ db.once('open', function callback () {
    vaultStatus = vaultStatus.VaultHealth(db)
 });
 
-exports.addLog = function(data, promise){
-	vaultStatus.updateStatus(data)
-	vaultLog.save(data, promise)
+exports.addLog = function(log, promise){
+	vaultStatus.updateStatus(log)
+	vaultLog.save(log, promise)
 }
 
 exports.searchLog = function(criteria, promise){

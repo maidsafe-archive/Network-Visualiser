@@ -6,7 +6,7 @@ var VaultBehaviourService = [function(){
 	service.personas = {
 							0 : 'MaidNode', 1 :'MpidNode', 2:'DataGetter', 
 							3:'MaidManager', 4:'DataManager', 5:'PmidManager', 6:'PmidNode', 
-							7:'MpidManager', 8:'VersionHandler', 9:'NA'
+							7:'MpidManager', 8:'VersionHandler', 9:'Cachehandler', 10:'NA'
 						}
 
 	service.actions = 	{
@@ -72,7 +72,8 @@ var VaultBehaviourService = [function(){
 						13: generalFormaterWithVaule1,
 						14: generalFormaterWithVaule1,
 						15: generalFormaterWithBothVaules,
-						16: generalFormaterWithVaule1
+						16: generalFormaterWithVaule1,
+						17 : generalFormaterWithVaule1
 					}
 
 	service.formatMessage = function(log){		
