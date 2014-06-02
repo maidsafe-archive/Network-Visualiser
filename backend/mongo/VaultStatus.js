@@ -10,7 +10,7 @@ var VaultHealth = function(dbConnection){
 	SCHEMA = {
 		last_updated: { type: Date, default: Date.now },
 		vault_id: String,
-		vault_id_long: String,
+		vault_id_full: String,
 		status: String
 	};
 	MODEL_NAME = 'vaultStatus'
@@ -22,7 +22,11 @@ var VaultHealth = function(dbConnection){
 	}
 
 	var transformData = function(data){
-		return {vault_id:data.vault_id, vault_id_long: data.vault_id, last_updated: new Date(), status:(data.action_id==0)?STATUS.active:STATUS.dead}
+		var temp = {vault_id:data.vault_id, last_updated: new Date(), status:(data.action_id==0)?STATUS.active:STATUS.dead}
+		if(data.action_id == 0){
+			temp.vault_id_full = data.value1
+		}
+		return 
 	}
 
 	this.updateStatus = function(data){	

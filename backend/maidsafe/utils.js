@@ -22,6 +22,11 @@ exports.isEmptyObject = function(object){
 	return false
 }
 
+exports.decodeData = function(str){
+	str = new Buffer(str, "base64").toString("utf8")
+	return new Buffer(str).toString('hex')
+}
+
 
 exports.isPageRequestValid = function(criteria){
 	if(criteria.vault_id){		

@@ -17,6 +17,7 @@ server.get('/', function(req, res){
 	res.redirect(INDEX_PAGE)
 })
 
+
 logController.register(server)
 
 server.listen(PORT)
