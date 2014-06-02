@@ -39,10 +39,14 @@ var dropDB = function(req, res){
 var activeVaultsWithRecentLogs = function(req, res){
 	bridge.getActiveVaults().then(function(vaults){
 		var counter = 0
-		var results = {}		
+		var results = {}
+		if(!vaults.length){
+			res.send("No vaults are active")
+			return
+		}		
 		for(var index in vaults){
 			results[vaults[index].vault_id] = []											
-			bridge.vaultHistory(vaults[index].vault_id, 0, config.Constants.vault_logs_count).then(function(logs){
+			bridge.vaultHistory(vaults[index].vault_id, 0, config.Constants.vault_logs_count).then(function(logs){				
 				counter++
 				if(logs.length>0)				
 					results[logs[0].vault_id] = logs

@@ -18,7 +18,7 @@ var history = function(req, res){
 }
 
 exports.register = 	function(server){
-	server.get('/logs', saveLogs);
+	server.get('/log', saveLogs);
 	server.get('/vaults', getActiveVaults);
 	server.get('/clearLogs', clearDB);
 	server.get('/history', history);

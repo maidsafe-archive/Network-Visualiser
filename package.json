@@ -8,6 +8,7 @@
     "express": "3.x",    
     "mongoose" : "3.8.X",
     "socket.io" :"0.9",
-    "bower": "latest"
+    "bower": "latest",
+    "forever" : "latest"
   }
 }

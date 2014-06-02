@@ -8,24 +8,19 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 
 	addLogToPool = function(log){		
 		if(!vaultLogPool.hasOwnProperty(log.vault_id)){
-			vaultLogPool[log.vault_id] = []
+			vaultLogPool[log.vault_id] = []			
 			vaults.push({vault_id:log.vault_id})						
 			$rootScope.$apply()									
 		}
-		vaultLogPool[log.vault_id].push(log);
+		vaultLogPool[log.vault_id].push(log);			
+			
 		notify(log)		
 	}
 
 	var notify = function(log){			
-		$rootScope.$broadcast(log.vault_id, log)
-		//$rootScope.$apply()			
+		$rootScope.$broadcast(log.vault_id, log)		
 	}
 
-	var transformer = function(log){
-		log.persona_id = parseInt(log.persona_id)
-		log.action_id = parseInt(log.action_id)
-		return log
-	}
 
 	var activeVaults = function(){
 		$http.get('/vaults').then(function(result){

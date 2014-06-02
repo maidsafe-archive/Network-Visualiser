@@ -1,4 +1,4 @@
-var socket = require('./../../socket/socket.js')
+var socket = require('./../../socket/Socket.js')
 
 exports.SaveLogHandler = function(res){
 	this.res = res

@@ -1,5 +1,5 @@
-var app = angular.module('MaidSafe', []).run(['$rootScope', function($rootScope){
-	$rootScope.socketEndPoint = "http://localhost:8081"
+var app = angular.module('MaidSafe', []).run(['$rootScope', '$location', function($rootScope, $location){	
+	$rootScope.socketEndPoint = "http://" + $location.host() + ":80"	
 }]);
 
 app.directive('tooltip', ToolTip);
