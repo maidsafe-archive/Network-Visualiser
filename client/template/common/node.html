@@ -15,18 +15,23 @@
 				</li>
 			</ul>
 		</div>
-		<div class="progress" >
+		<div class="progress" ng-class="{true:'vault_start'}[logs[logs.length-1].action_id==0]">
 			<div ng-style="progressLevel"></div>
 		</div>
 		<div class="info" ng-class="personaColour" >
-			<p tooltip="{{vaultName}}">{{vaultName.substring(0,6)}}</p>	
+			<p tooltip="{{fullVaultName}}">{{vaultName.substring(0,6)}}</p>	
 			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
 		</div>
 	</div>	
 	<div class="log_slider" ng-class="{false:'close'}[logsOpen]">
 		<ul>
 			<li ng-repeat="log in logs" >
-			  	{{ vaultBehaviour.formatMessage(log)}}
+			  	<div class="log_date">
+			  		{{log.ts | date : 'MMM dd hh:mm:ss'}}
+			  	</div>
+			  	<div class="log_msg">
+			  		{{ vaultBehaviour.formatMessage(log) }}
+			  	</div>
 			</li>		
 		</ul>		
 	</div>				

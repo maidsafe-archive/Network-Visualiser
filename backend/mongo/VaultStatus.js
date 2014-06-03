@@ -4,7 +4,7 @@ var VaultHealth = function(dbConnection){
 
 	var SCHEMA, HIDE_FIELDS, VaultStatus, MODEL_NAME;	
 
-	var STATUS = {active:"active", dead:"dead"}
+	var STATUS = {active:'active', dead:"dead"}
 		
 	HIDE_FIELDS = {_id:0, __v:0}
 	SCHEMA = {
@@ -26,15 +26,17 @@ var VaultHealth = function(dbConnection){
 		if(data.action_id == 0){
 			temp.vault_id_full = data.value1
 		}
-		return 
+		return temp
 	}
 
 	this.updateStatus = function(data){	
+		
 		if(canUpdateStatus(data.action_id)){
-			VaultStatus.update({vault_id:data.vault_id}, transformData(data), {upsert:true}, function(err){
+			VaultStatus.update({vault_id:data.vault_id}, transformData(data), {upsert:true}, function(err, doc){
 				if(err) console.log('Failed to update Status for vault - ' + data.vault_id)
 			});
 		}					
+		
 	}
 
 	this.getActiveVaults = function(callback){
@@ -42,6 +44,18 @@ var VaultHealth = function(dbConnection){
 		if(callback) promise.addBack(callback)
 		VaultStatus.find({status:STATUS.active}, function(err, vaults){
 			err?promise.error(err):promise.complete(vaults)
+		})
+		return promise
+	}
+
+	this.isVaultActive = function(log){
+		var promise = new mongoose.Promise
+		VaultStatus.findOne({vault_id:log.vault_id}, function(err, vault){
+			if(!vault){
+				promise.complete(false)
+			} else{
+				err?promise.error(err):promise.complete(vault.status == STATUS.active)	
+			} 			
 		})
 		return promise
 	}

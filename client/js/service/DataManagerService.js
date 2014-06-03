@@ -15,6 +15,7 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 		vaultLogPool[log.vault_id].push(log);			
 			
 		notify(log)		
+		console.log(vaults)
 	}
 
 	var notify = function(log){			
@@ -26,8 +27,9 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 		$http.get('/vaults').then(function(result){
 			var vaults = result.data
 			for(var key in vaults){
-				var logs = vaults[key].reverse()				
+				var logs = vaults[key].logs.reverse()				
 				for(var index in logs){
+					logs[index].vault_id_full = vaults[key].vault_id_full
 					addLogToPool(logs[index])
 				}									
 			}			

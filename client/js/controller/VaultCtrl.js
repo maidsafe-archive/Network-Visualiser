@@ -3,10 +3,12 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	$scope.logsOpen
 	$scope.progressLevel
 	$scope.vaultName	
+	$scope.fullVaultName
 	$scope.logs
 	$scope.vaultBehaviour = vaultBehaviour
 	$scope.iconsTray	
 	$scope.isActive = false
+
 
 	$scope.PERSONA_COLOUR_TAG = "persona_"
 	
@@ -53,6 +55,9 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		}else if(log.action_id == 6 || log.action_id == 7){
 			$scope.subscriber = log.value1			
 		}
+		if(!$scope.fullVaultName && (log.action_id == 0 || log.hasOwnProperty('vault_id_full'))){			
+			$scope.fullVaultName =  log.vault_id_full || log.value1
+		}
 		$scope.stateOfVault(log)
 		$scope.$apply()
 	}
@@ -69,7 +74,7 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 
 	$scope.$on('expandVault', function(e, v){						
 		if(v == $scope.logsOpen)
-			 return;
+			return;
 		$scope.toggleVaultLogs(v)
 	})
 	

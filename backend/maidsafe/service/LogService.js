@@ -5,9 +5,15 @@ var url = require('url')
 var config = require('./../../../Config.js')
 
 
-var saveLog = 	function(req, res){
+var saveLog = function(req, res){
 	var log = url.parse(req.url, true).query;
 	utils.formatDate(log)
+	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
+		log.value1 = utils.decodeData(log.value1)
+	}
+	if(log.value2 && log.value2.length>config.Constants.minLengthForDecode){
+		log.value2 = utils.decodeData(log.value2)
+	}
 	utils.isValid(log)?bridge.addLog(log, new Handler.SaveLogHandler(res)):res.send('Invalid Parameters')
 }
 
@@ -45,11 +51,11 @@ var activeVaultsWithRecentLogs = function(req, res){
 			return
 		}		
 		for(var index in vaults){
-			results[vaults[index].vault_id] = []											
+			results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}											
 			bridge.vaultHistory(vaults[index].vault_id, 0, config.Constants.vault_logs_count).then(function(logs){				
 				counter++
 				if(logs.length>0)				
-					results[logs[0].vault_id] = logs
+					results[logs[0].vault_id].logs = logs
 				if(counter >= vaults.length)
 					res.send(results)
 			})

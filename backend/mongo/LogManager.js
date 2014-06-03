@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var utils = require('./../maidsafe/utils.js')
 
 var LogManager = function(dbConnConnection){
 	var dbConn, LOG_SCHEMA, HIDE_FIELDS;	
@@ -41,8 +42,8 @@ var LogManager = function(dbConnConnection){
 
 	this.save = function(data, callback){	
 		var promise = new mongoose.Promise;	
-		if(callback) promise.addBack(callback);
-		dbConn.db.collection(data.vault_id, function(err, coll){
+		if(callback) promise.addBack(callback);		
+		dbConn.db.collection(utils.transformVaultId(data.vault_id), function(err, coll){
 			coll.save(data, function(err, docs){
 				err?promise.error(err):promise.complete(data)
 			})
@@ -62,7 +63,7 @@ var LogManager = function(dbConnConnection){
 	this.history = 	function(vaultId, page, max, callback){
 		var promise = new mongoose.Promise;	
 		if(callback) promise.addBack(callback);		
-		vaultHistory(vaultId, page, max, promise)
+		vaultHistory(utils.transformVaultId(vaultId), page, max, promise)
 		return promise;
 	}
 

@@ -16,7 +16,13 @@ db.once('open', function callback () {
 
 exports.addLog = function(log, promise){
 	vaultStatus.updateStatus(log)
-	vaultLog.save(log, promise)
+	vaultStatus.isVaultActive(log).then(function(isActive){		
+		if(isActive || log.action_id == 0 || log.action_id == 18)
+			vaultLog.save(log, promise)
+		else{			
+			promise('Vault is not active')
+		}			
+	})	
 }
 
 exports.searchLog = function(criteria, promise){

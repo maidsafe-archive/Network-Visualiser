@@ -12,8 +12,7 @@ ul{list-style-type: none;margin: 0px;padding: 0px}
 }
 
 .dead{
-	opacity: .4;
-	
+	opacity: .4;	
 }
 
 header{	
@@ -121,11 +120,13 @@ section div.wrapper div.node{
 
 section div.wrapper div.node div.box{	
 	height: 65px;
+	width: 100%;
 	border: 2px solid #776E6E;
 }
 
 section div.wrapper div.node div.box div.notif{
 	height: 30px;
+	width: 100%;
 }
 
 section div.wrapper div.node div.box div.notif ul{
@@ -142,6 +143,10 @@ section div.wrapper div.node div.box div.notif ul li{
 section div.wrapper div.node div.box div.progress{
 	height: 4px;
 	background-color: #ccc;	
+}
+
+section div.wrapper div.node div.box div.progress.vault_start{
+	background-color: rgb(153, 36, 36)
 }
 
 section div.wrapper div.node div.box div.progress div{
@@ -170,7 +175,7 @@ section div.wrapper div.node div.box div.info img{
 section div.wrapper div.node div.log_slider{
 	border: 1px solid #776E6E;
 	height: 45px;
-	width:99%;
+	width:100%;
 	overflow: auto;	
 }
 
@@ -179,4 +184,14 @@ section div.wrapper div.node div.log_slider ul li{
 	border-bottom:  1px solid #776E6E;
 	margin-bottom: .2em;	
 	padding: .5em;
+}
+
+.log_date{
+	padding: .2em;
+	font-size: 11px;
+	color: #696161;
+}
+
+.log_msg {
+	word-wrap : break-word;
 }

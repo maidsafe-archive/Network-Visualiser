@@ -8,11 +8,11 @@ exports.SaveLogHandler = function(res){
 		res.send('Saved')
 	}
 
-	var onDatabaseError = function(err){			
-		res.send(err.message)
+	var onDatabaseError = function(err){
+		res.send(err.message || err)
 	}
 
-	this.promise = function(err, data){	
+	this.promise = function(err, data){		
 		err?onDatabaseError(err):onLogSaved(data)
 	}
 

@@ -15,10 +15,11 @@
 }
 
 .shape p {
-	padding: 0.25em 0.5em;
+	padding: 0.25em;
 	margin: 0em;
 	font-size: 15px;
 	font-weight: bold;
+	text-align: center;
 }
 
 .square-red{

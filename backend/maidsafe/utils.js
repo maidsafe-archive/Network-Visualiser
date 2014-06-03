@@ -22,6 +22,10 @@ exports.isEmptyObject = function(object){
 	return false
 }
 
+exports.transformVaultId = function(vaultId){	
+	return (vaultId.indexOf('..')>-1)?vaultId.replace('..', '_'):vaultId.replace('_', '..')
+}
+
 exports.decodeData = function(str){
 	str = new Buffer(str, "base64").toString("utf8")
 	return new Buffer(str).toString('hex')
