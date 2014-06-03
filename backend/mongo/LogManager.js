@@ -31,7 +31,9 @@ var LogManager = function(dbConnConnection){
 
 	var vaultHistory =  function(vaultId, page, max, promise){		
 		dbConn.db.collection(vaultId, function(err, coll){
-			var q = coll.find({}, HIDE_FIELDS).sort([['ts', 'descending']]).skip(page * max).limit(max)
+			var q = coll.find({}, HIDE_FIELDS).sort([['ts', 'descending']])
+			if(max > 0)
+				q.skip(page * max).limit(max)
 			q.toArray(function(err, data){
 				err?promise.error(err):promise.complete(data)
 			})

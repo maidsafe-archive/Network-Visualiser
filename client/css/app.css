@@ -195,3 +195,8 @@ section div.wrapper div.node div.log_slider ul li{
 .log_msg {
 	word-wrap : break-word;
 }
+
+.see_history a{
+	float: right;
+	color: rgb(74, 74, 229)
+}

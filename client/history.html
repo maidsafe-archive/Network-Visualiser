@@ -1,0 +1,53 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../vendor/normalize.css/normalize.css">
+		<link rel="stylesheet" type="text/css" href="../client/css/history.css">
+		<link rel="stylesheet" type="text/css" href="../client/css/app.css">
+		<link rel="stylesheet" type="text/css" href="../client/css/shapes.css">
+		<link rel="stylesheet" type="text/css" href="../client/css/colours.css">
+		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>		
+
+		<script type="text/javascript" src="../client/js/service/SocketService.js"></script>
+		<script type="text/javascript" src="../client/js/service/DataManagerService.js"></script>
+		<script type="text/javascript" src="../client/js/service/VaultBehaviourService.js"></script>
+		<script type="text/javascript" src="../client/js/controller/ApplicationCtrl.js"></script>
+		<script type="text/javascript" src="../client/js/controller/VaultCtrl.js"></script>
+		<script type="text/javascript" src="../client/js/controller/HistoryCtrl.js"></script>
+		<script type="text/javascript" src="../client/js/directive/tooltip.js"></script>
+		<script type="text/javascript" src="../client/js/config/registry.js"></script>		
+		<title>Network Visualiser - MaidSafe</title>				
+	</head>
+	<body ng-app="MaidSafe">
+		<div class="history" ng-controller="historyCtrl"> 
+			<div class="info">
+				<p class="title">Log History  - {{vaultId}}</p>
+				<p class="time">As of&nbsp;{{ asOfDate | date : 'HH:mm:ss MMM dd yyyy'}}</p>
+			</div>
+			<div>
+				<table>
+					<tr ng-repeat="log in logs">
+						<td style="width:12.5%">
+							{{log.ts | date:'MMM dd yy HH:mm.ss.sss'}}
+						</td>						
+						<td style="width:10%">
+							{{vaultBehaviour.actions[log.action_id]}}
+						</td>
+						<td style="width:10%">
+							{{vaultBehaviour.personas[log.persona_id]}}
+						</td>
+						<td style="width:35%;">
+							<div>
+								{{log.value1}}
+							</div>
+						</td>
+						<td style="width:35%">
+							<div>
+								{{log.value2}}
+							</div>
+						</td>						
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

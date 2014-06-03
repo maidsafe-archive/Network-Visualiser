@@ -1,0 +1,38 @@
+.history .info{
+	min-height: 50px;
+	background-color: #E6E6E6;
+	padding: .2em;
+}
+
+.history .info p{	
+	margin: 1em .5em;
+}
+
+.history .info .title{
+	font-size: 1.3em;
+	font-weight: bold;	
+	float: left;
+}
+
+
+.history .info .time{
+	margin: 1.5em;
+	font-size: 1em;	
+	float: right;
+}
+
+
+table {
+	max-width: 100%;
+	margin: .3em
+}
+
+table tr td {
+	font-size: 13px;
+	padding: .3em;
+	border: 1px solid;
+}
+
+table tr td div {	
+	word-break : break-word;
+}

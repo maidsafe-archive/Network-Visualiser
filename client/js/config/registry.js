@@ -8,5 +8,6 @@ app.service('dataManager', DataManagerService)
 app.service('vaultBehaviour', VaultBehaviourService)
 app.service('socketService', SocketService)
 
-app.controller('ApplicationCtrl', ApplicationCtrl);
-app.controller('VaultCtrl', VaultCtrl);
+app.controller('applicationCtrl', ApplicationCtrl);
+app.controller('vaultCtrl', VaultCtrl);
+app.controller('historyCtrl', HistoryCtrl);
