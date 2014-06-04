@@ -20,20 +20,24 @@
 	<body ng-app="MaidSafe">
 		<div class="history" ng-controller="historyCtrl"> 
 			<div class="info">
-				<p class="title">Log History  - {{vaultId}}</p>
-				<p class="time">As of&nbsp;{{ asOfDate | date : 'HH:mm:ss MMM dd yyyy'}}</p>
+				<p class="title">Log History  - {{vaultId}}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="text-align:center;font-weight:none" ng-model="search" placeholder="Type text to filter"/>
+				</p>	
+				<p class="time">					
+					<span>As of&nbsp;{{ asOfDate | date : 'HH:mm:ss MMM dd yyyy'}}<span>
+				</p>
 			</div>
 			<div>
 				<table>
-					<tr ng-repeat="log in logs">
+					<tr ng-repeat="log in logs | filter:search">
 						<td style="width:12.5%">
-							{{log.ts | date:'MMM dd yy HH:mm.ss.sss'}}
+							{{log.ts = (log.ts | date:'MMM dd yy HH:mm.ss.sss')}}
 						</td>						
 						<td style="width:10%">
-							{{vaultBehaviour.actions[log.action_id]}}
-						</td>
+							{{log.p = vaultBehaviour.personas[log.persona_id]}}
+						</td>						
 						<td style="width:10%">
-							{{vaultBehaviour.personas[log.persona_id]}}
+							{{log.a = vaultBehaviour.actions[log.action_id]}}
 						</td>
 						<td style="width:35%;">
 							<div>

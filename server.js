@@ -8,6 +8,8 @@ var PORT = config.Constants.serverPort
 var INDEX_PAGE = config.Constants.landingPage
 
 server.use(express.json());
+server.use(express.urlencoded())
+
 
 server.configure(function(){
   server.use('/', express.static(__dirname));  

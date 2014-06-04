@@ -6,7 +6,8 @@ var config = require('./../../../Config.js')
 
 
 var saveLog = function(req, res){
-	var log = url.parse(req.url, true).query;
+	var log = req.body;
+	console.log(log)
 	utils.formatDate(log)
 	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
 		log.value1 = utils.decodeData(log.value1)
