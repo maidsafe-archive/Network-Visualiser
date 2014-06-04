@@ -9,7 +9,7 @@ exports.SaveLogHandler = function(res){
 	}
 
 	var onDatabaseError = function(err){
-		res.send(err.message || err)
+		res.send(500, err.message || err)
 	}
 
 	this.promise = function(err, data){		
@@ -29,7 +29,7 @@ exports.SearchHandler = function(res){
 	}
 
 	var onDatabaseError = function(err){			
-		res.send(err.message)
+		res.send(500, err.message)
 	}
 
 	this.promise = function(err, data){		

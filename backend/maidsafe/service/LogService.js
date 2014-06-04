@@ -14,14 +14,16 @@ var saveLog = function(req, res){
 	if(log.value2 && log.value2.length>config.Constants.minLengthForDecode){
 		log.value2 = utils.decodeData(log.value2)
 	}
-	utils.isValid(log)?bridge.addLog(log, new Handler.SaveLogHandler(res)):res.send('Invalid Parameters')
+	if(!log.persona_id)
+		log.persona_id = 10//NA
+	utils.isValid(log)?bridge.addLog(log, new Handler.SaveLogHandler(res)):res.send(500, 'Invalid Parameters')
 }
 
 
 var searchLog = function(req, res){
 	var criteria = url.parse(req.url, true).query	
 	if(!criteria || utils.isEmptyObject(criteria)){
-		res.send('Invalid search criteria')
+		res.send(500, 'Invalid search criteria')
 		return;
 	}else{
 		utils.transformQuery(criteria)	
@@ -34,7 +36,7 @@ var history = 	function(req, res){
 	if(utils.isPageRequestValid(criteria))
 		bridge.vaultHistory(criteria.vault_id, parseInt(criteria.page), parseInt(criteria.max),  new Handler.SearchHandler(res)) 
 	else
-		res.send('Invalid Request')
+		res.send(500, 'Invalid Request')
 }
 
 var dropDB = function(req, res){

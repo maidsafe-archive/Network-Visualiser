@@ -1,6 +1,6 @@
 var config = require('./../../Config.js')
 
-exports.isValid = 	function(log){
+exports.isValid = 	function(log){	
 	return (log.vault_id && log.action_id && log.persona_id)
 }
 
