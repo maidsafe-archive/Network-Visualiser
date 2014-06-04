@@ -4,6 +4,9 @@ var saveLogs = 	function(req, res){
 	logService.saveLog(req, res)
 }
 
+var search = function(req, res){
+	logService.searchLog(req, res)
+}
 
 var getActiveVaults = 	function(req, res){
 	logService.getActiveVaults(req, res)
@@ -22,4 +25,5 @@ exports.register = 	function(server){
 	server.get('/vaults', getActiveVaults);
 	server.get('/clearLogs', clearDB);
 	server.get('/history', history);
+	server.get('/search', search);
 }

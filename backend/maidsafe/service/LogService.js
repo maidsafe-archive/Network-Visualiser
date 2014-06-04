@@ -6,8 +6,7 @@ var config = require('./../../../Config.js')
 
 
 var saveLog = function(req, res){
-	var log = req.body;
-	console.log(log)
+	var log = req.body;	
 	utils.formatDate(log)
 	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
 		log.value1 = utils.decodeData(log.value1)
@@ -20,7 +19,7 @@ var saveLog = function(req, res){
 
 
 var searchLog = function(req, res){
-	var criteria = url.parse(req.url, true).query
+	var criteria = url.parse(req.url, true).query	
 	if(!criteria || utils.isEmptyObject(criteria)){
 		res.send('Invalid search criteria')
 		return;

@@ -4,7 +4,6 @@ exports.isValid = 	function(log){
 	return (log.vault_id && log.action_id && log.persona_id)
 }
 
-
 exports.formatDate = function(log){
 	if(log.ts){
 		if(log.ts.indexOf('GMT')<0)//since utc time 
@@ -17,9 +16,9 @@ exports.formatDate = function(log){
 
 exports.isEmptyObject = function(object){
 	for(var i in object){
-		return true
+		return false
 	}
-	return false
+	return true
 }
 
 exports.transformVaultId = function(vaultId){	
@@ -30,7 +29,6 @@ exports.decodeData = function(str){
 	str = new Buffer(str, "base64").toString("utf8")
 	return new Buffer(str).toString('hex')
 }
-
 
 exports.isPageRequestValid = function(criteria){
 	if(criteria.vault_id){		
@@ -60,14 +58,12 @@ exports.isPageRequestValid = function(criteria){
 
 
 exports.transformQuery	= 	function(query){
-	for(exports.key in query){
-		if(key == 'ts'){
-			exports.date = new Date()
-			date.setMinutes(date.getMinutes() - parseInt(query[key]))			
-			query[key] = {"$gt": date}
+	for(var key in query){
+		if(key == 'ts'){			
+			query[key] = {"$gt": query[key]}//works fine only ISO string - query is done based on ISO string
 		}else{//For like operation on strings
 			query[key] = new  RegExp(query[key], "i")
 		}		
-	}
+	}	
 	return query
 }
