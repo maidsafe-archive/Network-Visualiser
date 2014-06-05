@@ -5,5 +5,6 @@ exports.Constants = {
 	socketPort : 8081,
 	serverPort : 8080,
 	vault_logs_count : 3,
-	minLengthForDecode : 6
+	minLengthForDecode : 6,
+	persona_na : 10
 }

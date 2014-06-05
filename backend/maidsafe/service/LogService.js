@@ -15,7 +15,7 @@ var saveLog = function(req, res){
 		log.value2 = utils.decodeData(log.value2)
 	}
 	if(!log.persona_id)
-		log.persona_id = 10//NA
+		log.persona_id = config.Contants.persona_na//NA
 	utils.isValid(log)?bridge.addLog(log, new Handler.SaveLogHandler(res)):res.send(500, 'Invalid Parameters')
 }
 

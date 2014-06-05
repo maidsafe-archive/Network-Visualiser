@@ -25,8 +25,8 @@ var VaultBehaviourService = [function(){
 						1:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus-green'},
 						2:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus-red'},
 						3:{account:'hexagon', chunk:'blocked-delete-request', subscriber:'square', counter:'rhombus'},
-						4:{account:'account-transferred', chunk:'circle', subscriber:'square', counter:'rhombus'},
-						5:{account:'transfer-account', chunk:'circle', subscriber:'square', counter:'rhombus'},
+						4:{account:'transfer-account', chunk:'circle', subscriber:'square', counter:'rhombus'},
+						5:{account:'account-transferred', chunk:'circle', subscriber:'square', counter:'rhombus'},
 						6:{account:'hexagon', chunk:'circle', subscriber:'square-green', counter:'rhombus'},
 						7:{account:'hexagon', chunk:'circle', subscriber:'square-red', counter:'rhombus'},
 						8:{account:'hexagon', chunk:'move-data', subscriber:'square', counter:'rhombus'},
@@ -46,13 +46,20 @@ var VaultBehaviourService = [function(){
 		return  service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' 
 	}
 
-	var generalFormaterWithVaule1 = function(log){
-		return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + log.value1
+	var trim = function(txt){
+		if(txt && txt.length > 10){
+			return txt.substring(0,6) + '..' + txt.substr(txt.length-6)
+		}
+		return txt
+	}
+
+	var generalFormaterWithVaule1 = function(log){		
+		return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + trim(log.value1)
 	}
 
 
 	var generalFormaterWithBothVaules = function(log){
-		return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + log.value1 + " : " + log.value2
+		return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + trim(log.value1) + " : " + trim(log.value2)
 	}
 
 

@@ -1,7 +1,20 @@
 var SocketService = ['$rootScope', function($rootScope){
-	
+	var active = true;	
+
 	var socket = io.connect($rootScope.socketEndPoint);
 	socket.on('log', function (data) {
-		    $rootScope.$broadcast('push', data);		    
-	});	
+		if(active)
+			$rootScope.$broadcast('push', data);		    
+	});
+
+
+	this.start = function(){
+		active = true
+	}
+
+	this.stop = function(){
+		active = false
+	}
+
+
 }]

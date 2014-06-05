@@ -1,12 +1,11 @@
-var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService' , function($scope, $rootScope, dataManager, socketService){
+var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', 'playbackService' , function($scope, $rootScope, dataManager, socketService, playbackService){
 	
 	$scope.iconsTrayClosed = true;
 	
 	$scope.vaults = dataManager.vaults	
 
 	$scope.allVaultsExpanded = false;
-
-
+	
 
 	$scope.toggleIconsTray = function(){
 		$scope.iconsTrayClosed = !$scope.iconsTrayClosed		
@@ -24,9 +23,37 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService' , 
 		}
 	}
 
+	$scope.stopRealtime = function(){
+		socketService.stop()
+	}
+
+	$scope.startRealTime = function(){
+		socketService.start()
+	}
+
+	$scope.playHistory = function(_time){			
+		playbackService.play(_time)
+	}
+
+	$scope.pauseHistoryPlayback = function(_time){			
+		playbackService.pause()
+	}
+
+	$scope.resumeHistoryPlayback = function(_time){			
+		playbackService.resume()
+	}
+
+
+	$scope.reset = function(){
+		dataManager.clearAll()
+		dataManager.getActiveVaults()		
+	}
+
 	$scope.$on('push', function(e, log){
 		dataManager.pushLog(log)
 	})
+
+
 
 	setTimeout(function(){dataManager.getActiveVaults()}, 100)
 

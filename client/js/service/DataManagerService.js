@@ -3,19 +3,24 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 	var vaultLogPool,  vaults
 	var addLogToPool
 
-	vaultLogPool = {}//is this needed - might be for history play back
+	//vaultLogPool = {}//is this needed - might be for history play back
 	vaults = []
 
+	var vaultsInDisplay = {}
+
+	var clear = function(){
+		vaults = []
+		// vaultLogPool = {}
+		$rootScope.$apply()
+	}
+
 	addLogToPool = function(log){		
-		if(!vaultLogPool.hasOwnProperty(log.vault_id)){
-			vaultLogPool[log.vault_id] = []			
+		if(!vaultsInDisplay.hasOwnProperty(log.vault_id)){			
 			vaults.push({vault_id:log.vault_id})						
+			vaultsInDisplay[log.vault_id] = {}
 			$rootScope.$apply()									
-		}
-		vaultLogPool[log.vault_id].push(log);			
-			
-		notify(log)		
-		console.log(vaults)
+		}				
+		notify(log)				
 	}
 
 	var notify = function(log){			
@@ -27,11 +32,13 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 		$http.get('/vaults').then(function(result){
 			var vaults = result.data
 			for(var key in vaults){
-				var logs = vaults[key].logs.reverse()				
-				for(var index in logs){
-					logs[index].vault_id_full = vaults[key].vault_id_full
-					addLogToPool(logs[index])
-				}									
+				if(vaults[key].logs){
+					var logs = vaults[key].logs.reverse()				
+					for(var index in logs){
+						logs[index].vault_id_full = vaults[key].vault_id_full
+						addLogToPool(logs[index])
+					}
+				}												
 			}			
 		})
 	}
@@ -47,4 +54,5 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 	this.vaults = vaults
 	this.pushLog = addLogToPool
 	this.clearLogs = clearLogs
+	this.clearVaults = clear
 }]
