@@ -7,6 +7,7 @@ var config = require('./../../../Config.js')
 
 var saveLog = function(req, res){
 	var log = req.body;	
+	console.log(log)
 	utils.formatDate(log)
 	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
 		log.value1 = utils.decodeData(log.value1)
@@ -14,8 +15,8 @@ var saveLog = function(req, res){
 	if(log.value2 && log.value2.length>config.Constants.minLengthForDecode){
 		log.value2 = utils.decodeData(log.value2)
 	}
-	if(!log.persona_id)
-		log.persona_id = config.Contants.persona_na//NA
+	if(!log.hasOwnProperty('persona_id'))
+		log.persona_id = config.Constants.persona_na//NA
 	utils.isValid(log)?bridge.addLog(log, new Handler.SaveLogHandler(res)):res.send(500, 'Invalid Parameters')
 }
 
