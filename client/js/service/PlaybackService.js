@@ -27,7 +27,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 				key = getDateKey(log.ts)
 				if(!timePool.hasOwnProperty(key)){
 					timePool[key] = []
-				}				
+				}
 				timePool[key].push(log)
 			}			
 		}
@@ -36,7 +36,8 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	var sortTimePool = function(){
 		for(var key in timePool){
 			timePool[key] = $filter('orderBy')(timePool[key], '-ts')
-		}				
+		}
+		console.log('done')				
 	}
 
 	
@@ -47,8 +48,25 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	}
 	
 
-	var start = function(){		
+	var start = function(){				
 		timerId = setInterval(pushLogs,1000) 
+	}
+	
+	
+
+	var pushLogs = function(){		
+		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]
+		if(logs && logs.length>0){
+			for(var log in logs){
+				dataManager.pushLog(log)
+			}			
+		}
+		timePool[getDateKey(new Date(nextPushTime).toISOString())] = null
+		updateNextPushTime()		
+	}
+
+	var updateNextPushTime = function(){
+		nextPushTime += 1000
 	}
 	
 	this.play = function(time){	
@@ -64,19 +82,5 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	this.resume = function(){
 		start()
 	}
-
-	var pushLogs = function(){	
-		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]
-		if(logs && logs.length>0){
-			console.log('PUSH')
-			console.log(logs)
-		}
-		updateNextPushTime()		
-	}
-
-	var updateNextPushTime = function(){
-		nextPushTime += 1000
-	}
-	
 	
 }]

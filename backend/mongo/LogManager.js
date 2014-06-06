@@ -46,9 +46,13 @@ var LogManager = function(dbConnConnection){
 		var promise = new mongoose.Promise;	
 		if(callback) promise.addBack(callback);		
 		dbConn.db.collection(utils.transformVaultId(data.vault_id), function(err, coll){
-			coll.save(data, function(err, docs){
-				err?promise.error(err):promise.complete(data)
-			})
+			if(err){				
+				promise.error(err)
+			}else{
+				coll.save(data, function(err, docs){
+					err?promise.error(err):promise.complete(data)
+				})
+			}			
 		});
 		return promise
 	}

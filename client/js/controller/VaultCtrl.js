@@ -12,6 +12,14 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 
 	$scope.PERSONA_COLOUR_TAG = "persona_"
 	
+
+	$scope.updateFromQueue = function(){
+		var logs = dataManager.getLogsFromQueue($scope.vaultName)
+		for(var index in logs){			
+			$scope.logRecieved(logs[index])
+		}
+	}
+
 	//initialize the controller
 	$scope.init = function(vault){			
 		$scope.updateProgress(0);
@@ -19,21 +27,20 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		$scope.logsOpen = false;		
 		$scope.vaultName = vault.vault_id
 		$scope.logs = []
-		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + $scope.vaultBehaviour.personas[0]		
-		$scope.$on($scope.vaultName, function(e, log){
-			$scope.logRecieved(log)
-		})
-		$scope.updateIcons(0)		
+		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + $scope.vaultBehaviour.personas[0]				
+		$scope.updateIcons(0)	
+		dataManager.setLogListner($scope.vaultName, $scope.logRecieved)
+		$scope.updateFromQueue()		
 	}
 
 	$scope.updateIcons = function(actionId){
 		$scope.iconsTray = $scope.vaultBehaviour.icons[actionId]		
 	}
 
-	$scope.addLog = function(log){
+	$scope.addLog = function(log){		
 		if($scope.logs.length>=$scope.vaultBehaviour.MAX_LOGS)
 			$scope.logs.shift()
-		$scope.logs.push(log)			
+		$scope.logs.push(log)				
 	}
 
 	$scope.stateOfVault = function(log){
@@ -59,7 +66,8 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 			$scope.fullVaultName =  log.vault_id_full || log.value1
 		}
 		$scope.stateOfVault(log)
-		$scope.$apply()
+		if(!$scope.$$phase)
+			$scope.$apply()		
 	}
 
 	$scope.updateProgress = function(progress){
