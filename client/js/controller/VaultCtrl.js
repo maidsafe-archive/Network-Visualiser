@@ -11,6 +11,10 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 
 
 	$scope.PERSONA_COLOUR_TAG = "persona_"
+
+	$scope.networkHealth = 0
+
+	$scope.intervalId
 	
 
 	$scope.updateFromQueue = function(){
@@ -51,6 +55,7 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		$scope.addLog(log)
 		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + $scope.vaultBehaviour.personas[log.persona_id]
 		if(log.action_id == 17){
+			$scope.networkHealth = log.value1
 			$scope.updateProgress(log.value1)
 		}else{
 			$scope.subscriber = null
@@ -68,6 +73,7 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		$scope.stateOfVault(log)		
 		if(!$scope.$$phase)
 			$scope.$apply()		
+		$scope.resetInActivityMonitor()
 	}
 
 	$scope.updateProgress = function(progress){
@@ -90,4 +96,20 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	$scope.lastLog = function(){		
 		return $scope.logs.length>0?$scope.vaultBehaviour.formatMessage($scope.logs[$scope.logs.length-1]):""
 	}
+
+	$scope.resetInActivityMonitor = function(){		
+		if($scope.intervalId)
+			clearInterval($scope.intervalId)
+		$scope.intervalId = setInterval(function(){
+			$scope.updateIcons(0)
+			$scope.subscriber = null
+			$scope.counter = null
+			if(!$scope.$$phase)
+				$scope.$apply()	
+		}, 5000)	
+	}
+	
+
+
+
 }]

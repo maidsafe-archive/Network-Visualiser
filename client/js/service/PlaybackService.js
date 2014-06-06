@@ -3,7 +3,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	var _playbackTime
 	var timerId = 0
 	var nextPushTime
-
+	var playEndsAt
 	var timePool = {}
 
 	var playerStatus = ""
@@ -82,11 +82,15 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 		updateNextPushTime()		
 	}
 
-	var updateNextPushTime = function(){
-		nextPushTime += 1000
+	var updateNextPushTime = function(){		
+		if( playEndsAt < nextPushTime )
+			this.stop()
+		else
+			nextPushTime += 1000
 	}
 	
-	this.play = function(time){			
+	this.play = function(time){		
+		playEndsAt = new Date().getTime()	
 		setPlayerStatus("Preparing for playback")
 		clearAll()	
 		nextPushTime = new Date(time).getTime()

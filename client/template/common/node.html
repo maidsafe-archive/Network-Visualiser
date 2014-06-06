@@ -18,7 +18,7 @@
 		<div class="progress" ng-class="{true:'vault_start'}[logs[logs.length-1].action_id==0]">
 			<div ng-style="progressLevel"></div>
 		</div>
-		<div class="info" ng-class="personaColour" >
+		<div class="info" ng-class="personaColour" ><!-- tooltip="Network Health is {{networkHealth}}%" -->
 			<p tooltip="{{fullVaultName}}">{{vaultName.substring(0,6) | uppercase}}</p>	
 			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
 		</div>

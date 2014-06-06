@@ -45,15 +45,16 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 
 	var getPlayTime = function(rollBackTo, timeUnit){	
 		var date = new Date(new Date().getTime() - (parseFloat(rollBackTo) * ( timeUnit * 1000 )))	
-		date.setSeconds(0)	
+		if(timeUnit>60)
+			date.setSeconds(0)	
 		return date.toISOString()
 	}
 
 	$scope.playHistory = function(rollBackTo, timeUnit){	
+		$scope.stopRealtime()
 		$scope.playerState = $scope.PLAYER_STATE.PLAYING		
 		$scope.vaults = []//clear the present state
-		var _time = getPlayTime(rollBackTo, timeUnit)
-		console.log(_time)
+		var _time = getPlayTime(rollBackTo, timeUnit)		
 		dataManager.clearState()
 		dataManager.getActiveVaults(_time)
 		playbackService.play(_time || '')
