@@ -29,8 +29,8 @@ exports.searchLog = function(criteria, promise){
 	vaultLog.search(criteria, promise)
 }
 
-exports.vaultHistory = function(vaultId, page, max, promise){	
-	return vaultLog.history(vaultId, page, max, promise)
+exports.vaultHistory = function(vaultId, criteria, page, max, promise){	
+	return vaultLog.history(vaultId, criteria, page, max, promise)
 }
 
 
@@ -40,4 +40,8 @@ exports.dropDB = function(){
 
 exports.getActiveVaults = function(){	
 	return vaultStatus.getActiveVaults()
+}
+
+exports.getAllVaultNames = function(){
+	return vaultStatus.getAllVaultNames()
 }

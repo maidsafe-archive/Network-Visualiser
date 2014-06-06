@@ -5,11 +5,8 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 	var newVaultObserver
 	var vaultsInDisplay = {}
 
-	var clear = function(){
-		vaults = []		
-		$rootScope.$apply(function(){
-			vaultsInDisplay = {}
-		})
+	var clear = function(){		
+		vaultsInDisplay = {}
 	}
 
 	this.onNewVault = function(callback){
@@ -17,7 +14,7 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 	}
 
 	addLogToPool = function(log){		
-		if(!vaultsInDisplay.hasOwnProperty(log.vault_id)){						
+		if(!vaultsInDisplay.hasOwnProperty(log.vault_id)){				
 			vaultsInDisplay[log.vault_id] = {pushLog:null, queue:[]}
 			newVaultObserver({vault_id:log.vault_id})						
 		}
@@ -30,11 +27,11 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 	}
 
 
-	var activeVaults = function(){
-		$http.get('/vaults').then(function(result){
+	var activeVaults = function(time){
+		$http.get('/vaults?' + (time?('ts='+time):'')).then(function(result){
 			var vaults = result.data
 			for(var key in vaults){
-				if(vaults[key].logs){
+				if(vaults[key].logs && vaults[key].logs.length>0){
 					var logs = vaults[key].logs.reverse()				
 					for(var index in logs){
 						logs[index].vault_id_full = vaults[key].vault_id_full
@@ -67,4 +64,5 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 	this.clearLogs = clearLogs
 	this.getLogsFromQueue = getLogsFromQueue
 	this.setLogListner = setLogListner
+	this.clearState = clear
 }]

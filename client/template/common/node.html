@@ -25,7 +25,7 @@
 	</div>	
 	<div class="log_slider" ng-class="{false:'close'}[logsOpen]">
 		<ul>
-			<li ng-repeat="log in logs" >
+			<li ng-repeat="log in logs track by $index" >
 			  	<div class="log_date">
 			  		{{log.ts | date : 'MMM dd HH:mm:ss'}}
 			  	</div>

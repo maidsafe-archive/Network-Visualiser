@@ -7,7 +7,7 @@ var config = require('./../../../Config.js')
 
 var saveLog = function(req, res){
 	var log = req.body;	
-	//console.log(log)
+	console.log(log)
 	utils.formatDate(log)
 	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
 		log.value1 = utils.decodeData(log.value1)
@@ -34,8 +34,9 @@ var searchLog = function(req, res){
 
 var history = 	function(req, res){
 	var criteria = url.parse(req.url, true).query
+	var timeCriteria = criteria.ts?{'ts':{"$lt": criteria.ts}}:{}
 	if(utils.isPageRequestValid(criteria))
-		bridge.vaultHistory(criteria.vault_id, parseInt(criteria.page), parseInt(criteria.max),  new Handler.SearchHandler(res)) 
+		bridge.vaultHistory(criteria.vault_id, timeCriteria, parseInt(criteria.page), parseInt(criteria.max),  new Handler.SearchHandler(res)) 
 	else
 		res.send(500, 'Invalid Request')
 }
@@ -43,19 +44,20 @@ var history = 	function(req, res){
 var dropDB = function(req, res){
 	bridge.dropDB()
 	res.send('Dropped Database')
-}				
+}		
 
-var activeVaultsWithRecentLogs = function(req, res){
+
+var getCurrentActiveVaults = function(req, res){
 	bridge.getActiveVaults().then(function(vaults){
 		var counter = 0
 		var results = {}
 		if(!vaults.length){
-			res.send("No vaults are active")
+			res.send(500, "No vaults are active")
 			return
 		}		
 		for(var index in vaults){
-			results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}											
-			bridge.vaultHistory(vaults[index].vault_id, 0, config.Constants.vault_logs_count).then(function(logs){				
+			results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}														
+			bridge.vaultHistory(vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs){				
 				counter++
 				if(logs.length>0)				
 					results[logs[0].vault_id].logs = logs
@@ -63,8 +65,39 @@ var activeVaultsWithRecentLogs = function(req, res){
 					res.send(results)
 			})
 		}		
-	})									
+	})
 }
+
+
+var getActiveVaultsAtTime = function(criteria, res){
+	bridge.getAllVaultNames().then(function(vaults){
+		var results = {}
+		var counter = 0		
+		for(var index in vaults){			
+			results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}														
+			bridge.vaultHistory(vaults[index].vault_id, {ts:{'$lt':criteria.ts}}, 0, config.Constants.vault_logs_count).then(function(logs){												
+				counter++				
+				if(logs.length>0 && logs[logs.length-1] != 18)				
+					results[logs[0].vault_id].logs = logs
+				if(counter >= vaults.length)
+					res.send(results)
+			},function(err){
+				console.log(err)
+			})			
+		}			
+	})
+}
+
+
+var activeVaultsWithRecentLogs = function(req, res){
+	var criteria = url.parse(req.url, true).query
+	if(criteria.ts){
+		getActiveVaultsAtTime(criteria, res)
+	}else{
+		getCurrentActiveVaults(req, res)
+	}										
+}
+
 
 exports.saveLog = saveLog
 exports.searchLog = searchLog

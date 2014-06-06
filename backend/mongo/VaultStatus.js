@@ -59,6 +59,18 @@ var VaultHealth = function(dbConnection){
 		})
 		return promise
 	}
+
+	this.getAllVaultNames = function(){
+		var promise = new mongoose.Promise		
+		VaultStatus.find({}, {_id:0, vault_id:1, vault_id_full:1}, function(err, vaults){
+			if(err){
+				promise.error(err)
+			}else{
+				promise.complete(vaults)	
+			}			
+		})
+		return promise
+	}
 	
 	return this
 }

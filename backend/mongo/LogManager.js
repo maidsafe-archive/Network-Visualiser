@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var utils = require('./../maidsafe/utils.js')
+var utils = require('./../maidsafe/utils.js');
 
 var LogManager = function(dbConnConnection){
 	var dbConn, LOG_SCHEMA, HIDE_FIELDS;	
@@ -29,15 +29,19 @@ var LogManager = function(dbConnConnection){
 	}
 
 
-	var vaultHistory =  function(vaultId, page, max, promise){		
-		dbConn.db.collection(vaultId, function(err, coll){
-			var q = coll.find({}, HIDE_FIELDS).sort([['ts', 'descending']])
-			if(max > 0)
-				q.skip(page * max).limit(max)
-			q.toArray(function(err, data){
-				err?promise.error(err):promise.complete(data)
-			})
-		});						
+	var vaultHistory =  function(vaultId, criteria, page, max, promise){		
+		dbConn.db.collection(vaultId, function(err, coll){			
+			if(err){
+				promise.error(err)
+			}else{
+				var q = coll.find(criteria, HIDE_FIELDS).sort([['ts', 'descending']])
+				if(max > 0)
+					q.skip(page * max).limit(max)
+				q.toArray(function(err, data){						
+					err?promise.error(err):promise.complete(data)
+				})	
+			}			
+		});								
 	}
 
 
@@ -66,10 +70,10 @@ var LogManager = function(dbConnConnection){
 		return promise;
 	}
 
-	this.history = 	function(vaultId, page, max, callback){
+	this.history = 	function(vaultId, criteria, page, max, callback){
 		var promise = new mongoose.Promise;	
 		if(callback) promise.addBack(callback);		
-		vaultHistory(utils.transformVaultId(vaultId), page, max, promise)
+		vaultHistory(utils.transformVaultId(vaultId), criteria, page, max, promise)
 		return promise;
 	}
 

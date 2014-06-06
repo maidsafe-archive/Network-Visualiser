@@ -65,7 +65,7 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		if(!$scope.fullVaultName && (log.action_id == 0 || log.hasOwnProperty('vault_id_full'))){			
 			$scope.fullVaultName =  log.vault_id_full || log.value1
 		}
-		$scope.stateOfVault(log)
+		$scope.stateOfVault(log)		
 		if(!$scope.$$phase)
 			$scope.$apply()		
 	}

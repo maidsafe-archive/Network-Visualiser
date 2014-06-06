@@ -1,10 +1,15 @@
 <p class="title">Network Visualiser</p>
-<!--<div class="timeline">
-	<input type="text" ng-model="playbackTime"/> 
-	<button ng-click="playHistory(playbackTime)">Play</button>
-	<button ng-click="pauseHistoryPlayback()">Pause</button>
-	<button ng-click="resumeHistoryPlayback()">Resume</button>
-</div>-->
+<div class="timeline">
+	<div>
+		<span ng-model="playerStatus">{{playerStatus}}</span>
+	</div>	
+	<input type="text" ng-model="rollBackTime"/>
+	<select ng-model="playBackUnit" ng-options="unit.id for unit in units"></select>
+	<button ng-click="playHistory(rollBackTime, playBackUnit.offset)" ng-show="playerState == PLAYER_STATE.STOPED">Play</button>
+	<button ng-click="pauseHistoryPlayback()" ng-show="playerState == PLAYER_STATE.PLAYING">Pause</button>
+	<button ng-click="resumeHistoryPlayback()" ng-show="playerState == PLAYER_STATE.PAUSED">Resume</button>
+	<button ng-click="stopHistoryPlayback()" ng-show="playerState != PLAYER_STATE.STOPED">Stop</button>	 
+</div>
 <ul>
 	<li>
 		<button>Reset</button>
