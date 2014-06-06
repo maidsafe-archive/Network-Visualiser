@@ -15,7 +15,7 @@ var LogManager = function(dbConnConnection){
 			for(i in colls){	   			
 				if(colls[i].name.indexOf('system.index')<0){
 					dbConn.db.collection(colls[i].name.replace( dbConn.name + '.',''), function(err, col){
-						col.find(criteria, HIDE_FIELDS).toArray(function(err, docs){	  	   											   						
+						col.find(criteria, {__v:0}).toArray(function(err, docs){	  	   											   						
 							fetched++
 							if(docs.length>0)
 								results[docs[0].vault_id] = docs

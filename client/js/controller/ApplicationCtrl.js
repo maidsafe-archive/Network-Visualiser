@@ -82,7 +82,12 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 	}
 
 	$scope.reset = function(){
-		$scope.vaults = []		
+		if($scope.playerState != $scope.PLAYER_STATE.STOPED){
+			$scope.stopHistoryPlayback()
+		}			
+		$scope.vaults = []	
+		dataManager.clearState()
+		$scope.startRealTime()	
 		dataManager.getActiveVaults()		
 	}
 
@@ -98,6 +103,7 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 		if(!$scope.$$phase)
 			$scope.$apply()
 	}
+
 
 	playbackService.onStatusChange(updatePlayerStatus)
 

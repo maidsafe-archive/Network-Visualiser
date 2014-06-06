@@ -5,6 +5,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	var nextPushTime
 	var playEndsAt
 	var timePool = {}
+	var SPEED = 1000
 
 	var playerStatus = ""
 	
@@ -47,9 +48,10 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 		}
 	}
 
+	//sorting by id to arrange in the same sequence order of recieving the logs
 	var sortTimePool = function(){
 		for(var key in timePool){
-			timePool[key] = $filter('orderBy')(timePool[key], '-ts')
+			timePool[key] = $filter('orderBy')(timePool[key], '-__id')
 		}
 		setPlayerStatus("Ready to play")					
 	}
@@ -63,14 +65,14 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 
 
 	var start = function(){				
-		setPlayerStatus("Starting to play " + dateFormater(new Date(nextPushTime)))
-		timerId = setInterval(pushLogs,1000) 
+		setPlayerStatus("Starting to play")
+		timerId = setInterval(pushLogs,SPEED) 
 	}
 	
 	
 
 	var pushLogs = function(){
-		setPlayerStatus('Playing - ' + dateFormater(new Date(nextPushTime)))		
+		setPlayerStatus(dateFormater(new Date(nextPushTime)) + ' / ' + dateFormater(new Date(playEndsAt)))
 		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]
 		if(logs && logs.length>0){
 			for(var index in logs){				
@@ -86,7 +88,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 		if( playEndsAt < nextPushTime )
 			this.stop()
 		else
-			nextPushTime += 1000
+			nextPushTime += SPEED
 	}
 	
 	this.play = function(time){		
@@ -110,6 +112,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	this.stop = function(){		
 		clearAll()			
 		setPlayerStatus('')
+
 	}
 	
 
