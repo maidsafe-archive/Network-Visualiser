@@ -26,9 +26,9 @@ var searchLog = function(req, res){
 	if(!criteria || utils.isEmptyObject(criteria)){
 		res.send(500, 'Invalid search criteria')
 		return;
-	}else{
-		utils.transformQuery(criteria)	
-		bridge.searchLog(criteria, new Handler.SearchHandler(res))
+	}else{		
+		var offset = new Date(criteria.ts).getTime() + ((criteria.offset || 1) * 60000)			
+		bridge.searchLog({'ts':{ "$gt": criteria.ts, '$lt' : new Date(offset).toISOString() } }, new Handler.SearchHandler(res))
 	} 		
 }		
 
