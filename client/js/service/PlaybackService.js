@@ -96,7 +96,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]
 		if(logs && logs.length>0){
 			for(var index in logs){				
-				dataManager.pushLog(logs[index])
+				setTimeout(function(){dataManager.pushLog(logs[index])},1)
 			}			
 		}
 		if(logs)

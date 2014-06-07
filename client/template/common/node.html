@@ -15,10 +15,10 @@
 				</li>
 			</ul>
 		</div>
-		<div class="progress" ng-class="{true:'vault_start'}[logs[logs.length-1].action_id==0]">
+		<div class="progress" ng-class="{true:'vault_start'}[logs[logs.length-1].action_id==0]" tooltip="Network Health is {{networkHealth}}%"> 
 			<div ng-style="progressLevel"></div>
 		</div>
-		<div class="info" ng-class="personaColour" ><!-- tooltip="Network Health is {{networkHealth}}%" -->
+		<div class="info" ng-class="personaColour">
 			<p tooltip="{{fullVaultName}}">{{vaultName.substring(0,6) | uppercase}}</p>	
 			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
 		</div>
