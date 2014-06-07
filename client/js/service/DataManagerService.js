@@ -5,12 +5,18 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 	var newVaultObserver
 	var vaultsInDisplay = {}
 
+	var vaultsLoadedObserver
+
 	var clear = function(){		
 		vaultsInDisplay = {}
 	}
 
 	this.onNewVault = function(callback){
 		newVaultObserver = callback
+	}
+
+	this.onVaultsLoaded = function(callback){
+		vaultsLoadedObserver = callback
 	}
 
 	addLogToPool = function(log){		
@@ -38,7 +44,8 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 						addLogToPool(logs[index])
 					}
 				}												
-			}			
+			}
+			if(vaultsLoadedObserver && time) vaultsLoadedObserver(time)
 		})
 	}
 

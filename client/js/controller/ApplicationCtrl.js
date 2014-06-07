@@ -50,14 +50,27 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 		return date.toISOString()
 	}
 
-	$scope.playHistory = function(rollBackTo, timeUnit){	
-		$scope.stopRealtime()
-		$scope.playerState = $scope.PLAYER_STATE.PLAYING		
-		$scope.vaults = []//clear the present state
-		var _time = getPlayTime(rollBackTo, timeUnit)		
-		dataManager.clearState()
-		dataManager.getActiveVaults(_time)
-		playbackService.play(_time || '')
+	var isNumber = function(num){
+		try{
+			parseFloat(num)
+			return true
+		}catch(e){
+			return false
+		}
+	}
+
+	$scope.playHistory = function(rollBackTo, timeUnit){
+		if(isNumber(rollBackTo)){
+			var _time = getPlayTime(rollBackTo, timeUnit)
+			$scope.stopRealtime()
+			$scope.playerState = $scope.PLAYER_STATE.PLAYING		
+			$scope.vaults = []//clear the present state		
+			dataManager.clearState()
+			dataManager.getActiveVaults(_time)			
+		}else{
+			alert("Enter a valid number")
+		}	
+		
 	}
 
 	$scope.pauseHistoryPlayback = function(){			
@@ -98,6 +111,11 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 			$scope.$apply()
 	}
 
+	var onVaultsLoaded = function(time){
+		$scope.playerStatus = "Preparing playback.."
+		playbackService.play(time)
+	}
+
 	var updatePlayerStatus = function(status){
 		$scope.playerStatus = status
 		if(!$scope.$$phase)
@@ -108,6 +126,7 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 	playbackService.onStatusChange(updatePlayerStatus)
 
 	dataManager.onNewVault(newVault)
+	dataManager.onVaultsLoaded(onVaultsLoaded)	
 
 	setTimeout(function(){dataManager.getActiveVaults()}, 100)
 
