@@ -12,6 +12,12 @@
 </div>
 <ul>
 	<li>
+		<button ng-click="toggleExpandAllLogs()">{{allVaultsExpanded?'Hide All':'Expand All'}}</button>
+	</li>
+	<li>
+		<button ng-click="toggleIconsTray()">{{iconsTrayClosed?'Show Keys':'Hide Keys'}}</button>
+	</li>
+	<li>
 		<button ng-click="reset()">Reset</button>
 	</li>
 	<li>

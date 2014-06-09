@@ -21,7 +21,6 @@ header{
 	position: fixed;
 	top: 0px;
 	width: 100%;
-	
 }
 
 header p.title {	
@@ -52,7 +51,6 @@ section {
 	top:50px;/*Corresponds to the header height*/
 	bottom: 0px;
 	width: 100%;		
-	
 }
 
 section div.legends{
@@ -85,11 +83,12 @@ section ul.options li{
 
 section div.icons{
 	border-bottom: 1px solid;
-	height: 62px;	
+	height: 150px;
 }
 
 section div.icons ul{
-	margin: .1em
+	margin: .1em;
+	clear: both;
 }
 
 section div.icons ul li {
@@ -97,6 +96,13 @@ section div.icons ul li {
 	margin-left: 1.2em;
 	margin-top: .3em;
 	width: 13%
+}
+section div.icons ul.personas li {
+	width: 8%
+}
+
+section div.icons ul {
+	padding: 1em;
 }
 
 section div.icons ul li span{
@@ -115,38 +121,39 @@ section div.wrapper{
 }
 
 section div.wrapper.tray_open{
-	top: 100px;
+	top: 150px;
 }
 
 
 section div.wrapper div.node{
 	width: 15%;
-	height:155px;
-	margin: .5em;
+	height:180px;
+	margin: 15px;
 	float: left;
-	min-width: 175px	
+	width: 220px	
 }
 
 section div.wrapper div.node div.box{	
-	height: 65px;
-	width: 100%;
+	height: 100px;
+	/*width: 100%;*/
+	width: 220px;
 	border: 2px solid #776E6E;
 }
 
 section div.wrapper div.node div.box div.notif{
-	height: 28px;
+	height: 54px;
 	width: 100%;
 }
 
 section div.wrapper div.node div.box div.notif ul{
-	margin: .5em .5em;	
+	margin: 2px;	
 }
 
 section div.wrapper div.node div.box div.notif ul li{	
 	float: left;
-	height: 25px;
-	width: 25px;
-	margin-left: 1.2em;
+	/*height: 25px;
+	width: 25px;*/
+	margin-left: 0.2em;
 }
 
 section div.wrapper div.node div.box div.progress{
@@ -165,19 +172,20 @@ section div.wrapper div.node div.box div.progress div{
 }
 
 section div.wrapper div.node div.box div.info{
-	height: 25px;	
+	height: 37px;	
 }
 
 section div.wrapper div.node div.box div.info p{	
 	margin: 0px;
 	padding: .4em;
 	font-weight: bold;
-	float: left
+	float: left;
+	font-size:18px;
 }
 
 section div.wrapper div.node div.box div.info img{	
 	float: right;
-	margin:.3em;
+	margin:8px;
 	width: 20px 
 }
 

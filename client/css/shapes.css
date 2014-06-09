@@ -1,110 +1,130 @@
 .hexagon{
 	background: url('../../client/imgs/icons/hexagon.png') no-repeat;	
-	background-size: 100% 100%;	
+	width: 50px;
+	height: 50px;	
 }
 
 .circle{
 	background: url('../../client/imgs/icons/circle.png') no-repeat;	
-	background-size: 100% 100%;
+	width:50px;
+	height:50px;
 }
 
 
 .square{
 	background: url('../../client/imgs/icons/square.png') no-repeat;	
-	background-size: 100% 100%;	
+	width:50px;
+	height:50px;
 }
 
 .shape p {
-	padding: 0.25em;
+	padding: 15px;
 	margin: 0em;
-	font-size: 15px;
+	font-size: 18px;
 	font-weight: bold;
 	text-align: center;
 }
 
 .square-red{
 	background: url('../../client/imgs/icons/square-red.png') no-repeat;	
-	background-size: 100% 100%;
+	width:50px;
+	height:50px;
 }
 
 .square-green{
 	background: url('../../client/imgs/icons/square-green.png') no-repeat;	
-	background-size: 100% 100%;
+	width:50px;
+	height:50px;
 }
 
 .rhombus{
 	background: url('../../client/imgs/icons/rhombus.png') no-repeat;	
-	background-size: 100% 100%;
+	width:50px;
+	height:50px;
 }
 
 .rhombus-red{
 	background: url('../../client/imgs/icons/rhombus-red.png') no-repeat;	
-	background-size: 100% 100%;
+	width:50px;
+	height:50px;
 }
 .rhombus-green{
 	background: url('../../client/imgs/icons/rhombus-green.png') no-repeat;	
-	background-size: 100% 100%;
+	width:50px;
+	height:50px;
 }
 
 
 .account-transferred{
 	background: url('../../client/imgs/icons/account-transferred.png') no-repeat;	
-	background-size: 100% 100%;	
+	width:50px;
+	height:50px;
 }
 
 .blocked-delete-request{
 	background: url('../../client/imgs/icons/blocked-delete-request.png') no-repeat;	
-	background-size: 100% 100%;		
+	width:50px;
+	height:50px;	
 }
 
 .deleting-data{
 	background: url('../../client/imgs/icons/deleting-data.png') no-repeat;	
-	background-size: 100% 100%;			
+	width:50px;
+	height:50px;		
 }
 
 .dropping-pmid-node{
 	background: url('../../client/imgs/icons/dropping-pmid-node.png') no-repeat;	
-	background-size: 100% 100%;				
+	width:50px;
+	height:50px;				
 }
 
 .joining-pmid-node{
 	background: url('../../client/imgs/icons/joining-pmid-node.png') no-repeat;	
-	background-size: 100% 100%;					
+	width:50px;
+	height:50px;			
 }
 
 .marking-node-down{
 	background: url('../../client/imgs/icons/marking-node-down.png') no-repeat;	
-	background-size: 100% 100%;				
+	width:50px;
+	height:50px;			
 }
 
 .marking-node-up{
 	background: url('../../client/imgs/icons/marking-node-up.png') no-repeat;	
-	background-size: 100% 100%;				
+	width:50px;
+	height:50px;			
 }
 
 .move-data{
 	background: url('../../client/imgs/icons/move-data.png') no-repeat;	
-	background-size: 100% 100%;				
+	width:50px;
+	height:50px;		
 }
 
 .remove-account {
 	background: url('../../client/imgs/icons/remove-account.png') no-repeat;	
-	background-size: 100% 100%;			
+	width:50px;
+	height:50px;		
 }
 
 .storing-data{
 	background: url('../../client/imgs/icons/storing-data.png') no-repeat;	
-	background-size: 100% 100%;				
+	width:50px;
+	height:50px;		
 }
 
 
 .transfer-account{
 	background: url('../../client/imgs/icons/transfer-account.png') no-repeat;	
-	background-size: 100% 100%;				
+	width:50px;
+	height:50px;			
 }
 
 .update-data-version{
 	background: url('../../client/imgs/icons/update-data-version.png') no-repeat;	
-	background-size: 100% 100%;				
+	width:50px;
+	height:50px;		
 }
 
