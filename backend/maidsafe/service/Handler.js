@@ -38,3 +38,8 @@ exports.SearchHandler = function(res){
 
 	return this.promise;
 }
+
+exports.DatabaseCleared = function(res){
+	socket.broadcastSignal("DB_CLEARED")
+	res.send("Database cleared")
+}

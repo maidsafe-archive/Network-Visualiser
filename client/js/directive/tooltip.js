@@ -6,11 +6,14 @@ var ToolTip = ['$compile', function($compile){
 
 			var ele 			
 			var style = 'position:fixed;background-color:#fff;padding:.5em;border:1px solid;border-radius:6px;';
-			scope.tip = attr.tooltip			
+			scope.tip = attr.tooltip
+			
+			scope.enabled = attr['canshow']	|| "true"
 			
 
+
 			var show = function(e){
-			    if(!ele){
+			    if(!ele && scope.enabled == "true"){
 			    	ele = $compile('<div style="'+ style + ";top:" + e.y + 'px;left:'  + e.x + 'px' + '">{{tip}}</div>')(scope)				
 			    	scope.$apply()
 					parent.append(ele)
@@ -22,13 +25,19 @@ var ToolTip = ['$compile', function($compile){
 			})
 
 			element.on('mouseout', function(){
-				ele.remove()
-				ele = null
+				if(ele){
+					ele.remove()
+					ele = null
+				}				
 			});
 
 
-			 scope.$watch(function(){return element.attr('tooltip')}, function(n){
+			 scope.$watch(function(){return element.attr('tooltip')}, function(n){			 	
 			 	 scope.tip = n
+			 })
+
+			 scope.$watch(function(){return element.attr('canshow')}, function(n){			 				 	
+			 	 scope.enabled = n
 			 })
 			
 		}

@@ -35,7 +35,7 @@ exports.vaultHistory = function(vaultId, criteria, page, max, promise){
 
 
 exports.dropDB = function(){
-	db.db.dropDatabase()	
+	db.db.dropDatabase()		
 }
 
 exports.getActiveVaults = function(){	

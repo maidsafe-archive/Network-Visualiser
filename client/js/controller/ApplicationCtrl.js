@@ -12,6 +12,7 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 
 	$scope.playerState = $scope.PLAYER_STATE.STOPED
 
+	$scope.showLoader = true
 
 	$scope.units = [{id:'Minutes', offset:60}, {id:'Seconds', offset:1}, {id:'Hours', offset:3600}]
 
@@ -42,6 +43,15 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 		socketService.start()
 	}
 
+	socketService.setSignalListner(function(signal){
+		if(signal == 'DB_CLEARED'){
+			$scope.stopHistoryPlayback()
+			$scope.vaults = []//clear the present state		
+			dataManager.clearState()
+			alert('All logs were cleared')
+		}		
+	});
+
 
 	var getPlayTime = function(rollBackTo, timeUnit){	
 		var date = new Date(new Date().getTime() - (parseFloat(rollBackTo) * ( timeUnit * 1000 )))	
@@ -66,6 +76,7 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 			$scope.playerState = $scope.PLAYER_STATE.PLAYING		
 			$scope.vaults = []//clear the present state		
 			dataManager.clearState()
+			$scope.showLoader = true
 			dataManager.getActiveVaults(_time)			
 		}else{
 			alert("Enter a valid number")
@@ -112,8 +123,11 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', '
 	}
 
 	var onVaultsLoaded = function(time){
-		$scope.playerStatus = "Preparing playback.."
-		playbackService.play(time)
+		$scope.showLoader = false
+		if(time){
+			$scope.playerStatus = "Preparing playback.."
+			playbackService.play(time)
+		}		
 	}
 
 	var updatePlayerStatus = function(status){

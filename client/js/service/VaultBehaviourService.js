@@ -42,6 +42,14 @@ var VaultBehaviourService = [function(){
 						18:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus'}
 					}		
 
+
+	var tootips = {
+		0 : [4, 5, 9, 10, 11, 12, 16],
+		1 : [3, 8, 13, 14, 15],
+		2 : [6, 7],
+		3 : [1, 2,]
+	}				
+
 	var generalFormater = function(log){				
 		return  service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' 
 	}
@@ -85,6 +93,10 @@ var VaultBehaviourService = [function(){
 
 	service.formatMessage = function(log){		
 		return (formaters[log.action_id] || generalFormater)(log)
+	}
+
+	service.canShowToolTip = function(shape, actionId){				
+		return tootips[shape].indexOf(parseInt(actionId)) > -1
 	}
 
 }]

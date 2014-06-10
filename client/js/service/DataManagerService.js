@@ -45,15 +45,13 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 					}
 				}												
 			}
-			if(vaultsLoadedObserver && time) vaultsLoadedObserver(time)
+			if(vaultsLoadedObserver) vaultsLoadedObserver(time)
 		})
 	}
 
 
 	var clearLogs = function(){
-		$http.get('/clearLogs').then(function(){
-			alert('Logs have been cleared.')
-		});
+		$http.get('/clearLogs')
 	}
 
 	var getLogsFromQueue = function(vaultId){

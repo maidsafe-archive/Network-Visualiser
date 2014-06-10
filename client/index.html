@@ -28,7 +28,12 @@
 			</div>
 			<div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
 				<ng-include src="'template/common/node.html'"></ng-include>				
-			</div>
+			</div>			
 		</section>
+		<div class="loading" ng-style="{ false:{display:'none'}}[showLoader]">
+			<div class="loader_icon" >
+				<img src="../client/imgs/loader.gif">
+			</div>
+		</div>
 	</body>
 </html>

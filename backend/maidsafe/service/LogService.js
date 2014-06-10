@@ -43,7 +43,7 @@ var history = 	function(req, res){
 
 var dropDB = function(req, res){
 	bridge.dropDB()
-	res.send('Dropped Database')
+	new Handler.DatabaseCleared(res)
 }		
 
 

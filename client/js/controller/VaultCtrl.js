@@ -8,14 +8,17 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	$scope.vaultBehaviour = vaultBehaviour
 	$scope.iconsTray	
 	$scope.isActive = false
+	$scope.flagClearedIcons = false
 
 
 	$scope.PERSONA_COLOUR_TAG = "persona_"
+	$scope.ICONS_TRAY_SHAPES = { HEXAGON : 0, CIRCLE : 1, SQUARE : 2, DIAMOND : 3}
 
 	$scope.networkHealth = 0
 
 	$scope.intervalId
 	
+
 
 	$scope.updateFromQueue = function(){
 		var logs = dataManager.getLogsFromQueue($scope.vaultName)
@@ -26,15 +29,15 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 
 	//initialize the controller
 	$scope.init = function(vault){			
-		$scope.updateProgress(0);
-		$scope.stateIcon = "info.png";
-		$scope.logsOpen = false;		
+		$scope.updateProgress(0)
+		$scope.stateIcon = "info.png"
+		$scope.logsOpen = false
 		$scope.vaultName = vault.vault_id
 		$scope.logs = []
-		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + $scope.vaultBehaviour.personas[0]				
-		$scope.updateIcons(0)	
+		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + $scope.vaultBehaviour.personas[0]
+		$scope.updateIcons(0)
 		dataManager.setLogListner($scope.vaultName, $scope.logRecieved)
-		$scope.updateFromQueue()		
+		$scope.updateFromQueue()
 	}
 
 	$scope.updateIcons = function(actionId){
@@ -97,10 +100,12 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		return $scope.logs.length>0?$scope.vaultBehaviour.formatMessage($scope.logs[$scope.logs.length-1]):""
 	}
 
-	$scope.resetInActivityMonitor = function(){		
+	$scope.resetInActivityMonitor = function(){
+		$scope.flagClearedIcons = false		
 		if($scope.intervalId)
 			clearInterval($scope.intervalId)
 		$scope.intervalId = setInterval(function(){
+			$scope.flagClearedIcons = true
 			$scope.updateIcons(0)
 			$scope.subscriber = null
 			$scope.counter = null
@@ -110,6 +115,14 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	}
 	
 
+
+	$scope.isToolTipEnabled = function(shape){	
+		if($scope.flagClearedIcons || !$scope.logs || $scope.logs.length <= 0){
+			return false
+		}else{						
+			return vaultBehaviour.canShowToolTip(shape, $scope.logs[$scope.logs.length-1].action_id)
+		}			
+	}
 
 
 }]
