@@ -3,8 +3,7 @@ var SocketService = ['$rootScope', 'dataManager', function($rootScope, dataManag
 
 	var socket = io.connect($rootScope.socketEndPoint);
 
-	socket.on('log', function (data) {
-		console.log(data)
+	socket.on('log', function (data) {		
 		if(active){
 			setTimeout(function(){dataManager.pushLog(data)}, 1)//threaded so ui is non-blocking
 		}			
