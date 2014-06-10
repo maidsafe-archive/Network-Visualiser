@@ -11,7 +11,8 @@ var VaultHealth = function(dbConnection){
 		last_updated: { type: Date, default: Date.now },
 		vault_id: String,
 		vault_id_full: String,
-		status: String
+		status: String,
+		first_update : { type: Date}
 	};
 	MODEL_NAME = 'vaultStatus'
 
@@ -32,11 +33,30 @@ var VaultHealth = function(dbConnection){
 	this.updateStatus = function(data){	
 		
 		if(canUpdateStatus(data.action_id)){
-			VaultStatus.update({vault_id:data.vault_id}, transformData(data), {upsert:true}, function(err, doc){
-				if(err) console.log('Failed to update Status for vault - ' + data.vault_id)
+			data = transformData(data)			
+			VaultStatus.update({vault_id:data.vault_id}, data, {upsert:true}, function(err, doc){				
+				if(err){
+					console.log('Failed to update Status for vault - ' + data.vault_id)	
+				} else{		
+					//This is bery costly must create a new model			
+					VaultStatus.find({vault_id:data.vault_id}, function(err, doc){
+						if(!doc[0].first_update){
+							data.first_update = doc[0].last_updated
+							VaultStatus.update({vault_id:data.vault_id}, data, {upsert:true}, function(e,d){})	
+						}
+					})				
+				}
 			});
-		}					
-		
+		}							
+	}
+
+	this.getFirstLogTime = function(callback){
+		var promise = new mongoose.Promise
+		if(callback) promise.addBack(callback)
+		VaultStatus.find({}, {}, {sort:{ first_update: 1}, limit:1}, function(err, doc){			
+			err?promise.error(err):promise.complete(doc[0])
+		})	
+		return promise
 	}
 
 	this.getActiveVaults = function(callback){

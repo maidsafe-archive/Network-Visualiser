@@ -46,6 +46,9 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 				}												
 			}
 			if(vaultsLoadedObserver) vaultsLoadedObserver(time)
+		}, function(err){
+			alert(err.data)
+			vaultsLoadedObserver()
 		})
 	}
 

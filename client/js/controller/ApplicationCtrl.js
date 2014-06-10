@@ -1,147 +1,141 @@
-var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', 'playbackService' , function($scope, $rootScope, dataManager, socketService, playbackService){
+var ApplicationCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'socketService', 'playbackService' , 
+	function($scope, $rootScope, $http, dataManager, socketService, playbackService){
 	
-	$scope.iconsTrayClosed = true;
-	
-	$scope.vaults = []
+		$scope.iconsTrayClosed = true;
+		
+		$scope.vaults = []
 
-	$scope.allVaultsExpanded = false;
+		$scope.allVaultsExpanded = false;
 
-	$scope.playerStatus = ""
-	
-	$scope.PLAYER_STATE = { PLAYING : "playing", STOPED : "stoped", PAUSED : 'pause'}
+		$scope.playerStatus = ""
+		
+		$scope.PLAYER_STATE = { PLAYING : "playing", STOPED : "stoped", PAUSED : 'pause'}
 
-	$scope.playerState = $scope.PLAYER_STATE.STOPED
+		$scope.playerState = $scope.PLAYER_STATE.STOPED
 
-	$scope.showLoader = true
+		$scope.showLoader = true
+		
+		$scope.firstLogtime
 
-	$scope.units = [{id:'Minutes', offset:60}, {id:'Seconds', offset:1}, {id:'Hours', offset:3600}]
+		$scope.playbackTime = 100
+		
 
-	$scope.playBackUnit = $scope.units[0]
-	
-
-	$scope.toggleIconsTray = function(){
-		$scope.iconsTrayClosed = !$scope.iconsTrayClosed		
-	}
-
-
-	$scope.toggleExpandAllLogs = function(){
-		$scope.allVaultsExpanded = !$scope.allVaultsExpanded
-		$rootScope.$broadcast('expandVault', $scope.allVaultsExpanded)
-	}
-
-	$scope.clearLogs = function(){
-		if(confirm("This operation will clear all the logs on the server. Proceed clearing logs?")){
-			dataManager.clearLogs()			
+		$scope.toggleIconsTray = function(){
+			$scope.iconsTrayClosed = !$scope.iconsTrayClosed		
 		}
-	}
-
-	$scope.stopRealtime = function(){		
-		socketService.stop()
-	}
-
-	$scope.startRealTime = function(){
-		socketService.start()
-	}
-
-	socketService.setSignalListner(function(signal){
-		if(signal == 'DB_CLEARED'){
-			$scope.stopHistoryPlayback()
-			$scope.vaults = []//clear the present state		
-			dataManager.clearState()
-			alert('All logs were cleared')
-		}		
-	});
 
 
-	var getPlayTime = function(rollBackTo, timeUnit){	
-		var date = new Date(new Date().getTime() - (parseFloat(rollBackTo) * ( timeUnit * 1000 )))	
-		if(timeUnit>60)
-			date.setSeconds(0)	
-		return date.toISOString()
-	}
-
-	var isNumber = function(num){
-		try{
-			parseFloat(num)
-			return true
-		}catch(e){
-			return false
+		$scope.toggleExpandAllLogs = function(){
+			$scope.allVaultsExpanded = !$scope.allVaultsExpanded
+			$rootScope.$broadcast('expandVault', $scope.allVaultsExpanded)
 		}
-	}
 
-	$scope.playHistory = function(rollBackTo, timeUnit){
-		if(isNumber(rollBackTo)){
-			var _time = getPlayTime(rollBackTo, timeUnit)
+		$scope.clearLogs = function(){
+			if(confirm("This operation will clear all the logs on the server. Proceed clearing logs?")){
+				dataManager.clearLogs()			
+			}
+		}
+
+		$scope.stopRealtime = function(){		
+			socketService.stop()
+		}
+
+		$scope.startRealTime = function(){
+			socketService.start()
+		}
+
+		socketService.setSignalListner(function(signal){
+			if(signal == 'DB_CLEARED'){
+				$scope.stopHistoryPlayback()
+				$scope.vaults = []//clear the present state		
+				dataManager.clearState()
+				alert('All logs were cleared')
+			}		
+		});
+
+
+		var getPlayTime = function(playFrom){
+			var currentTime	= new Date().getTime();	
+			var date = new Date(currentTime - (((100 - playFrom)/100) * (currentTime  - $scope.firstLogtime)))			
+			return date.toISOString()
+		}
+
+		
+
+		$scope.playHistory = function(playTime){	
+			var _time = getPlayTime(parseInt(playTime))
 			$scope.stopRealtime()
 			$scope.playerState = $scope.PLAYER_STATE.PLAYING		
 			$scope.vaults = []//clear the present state		
 			dataManager.clearState()
 			$scope.showLoader = true
-			dataManager.getActiveVaults(_time)			
-		}else{
-			alert("Enter a valid number")
-		}	
+			dataManager.getActiveVaults(_time)					
+		}
+
+		$scope.pauseHistoryPlayback = function(){			
+			$scope.playerState = $scope.PLAYER_STATE.PAUSED
+			playbackService.pause()
+		}
+
+		$scope.resumeHistoryPlayback = function(){			
+			$scope.playerState = $scope.PLAYER_STATE.PLAYING
+			playbackService.resume()
+		}
+
+		$scope.stopHistoryPlayback = function(){			
+			$scope.playerState = $scope.PLAYER_STATE.STOPED
+			playbackService.stop()
+		}
+
+		$scope.stopPlayer = function(){
+			$scope.playerState = $scope.PLAYER_STATE.STOPED		
+			playbackService.pause()
+			dataManager.clearState()
+		}
+
+		$scope.reset = function(){
+			if($scope.playerState != $scope.PLAYER_STATE.STOPED){
+				$scope.stopHistoryPlayback()
+			}			
+			$scope.vaults = []	
+			dataManager.clearState()
+			$scope.startRealTime()	
+			dataManager.getActiveVaults()		
+		}
+
 		
-	}
+		var newVault = function(vault){	
+			$scope.vaults.push(vault)
+			if(!$scope.$$phase)
+				$scope.$apply()
+		}
 
-	$scope.pauseHistoryPlayback = function(){			
-		$scope.playerState = $scope.PLAYER_STATE.PAUSED
-		playbackService.pause()
-	}
+		var onVaultsLoaded = function(time){
+			$scope.showLoader = false
+			if(time){
+				$scope.playerStatus = "Preparing playback.."
+				playbackService.play(time)
+			}		
+		}
 
-	$scope.resumeHistoryPlayback = function(){			
-		$scope.playerState = $scope.PLAYER_STATE.PLAYING
-		playbackService.resume()
-	}
-
-	$scope.stopHistoryPlayback = function(){			
-		$scope.playerState = $scope.PLAYER_STATE.STOPED
-		playbackService.stop()
-	}
-
-	$scope.stopPlayer = function(){
-		$scope.playerState = $scope.PLAYER_STATE.STOPED		
-		playbackService.pause()
-		dataManager.clearState()
-	}
-
-	$scope.reset = function(){
-		if($scope.playerState != $scope.PLAYER_STATE.STOPED){
-			$scope.stopHistoryPlayback()
-		}			
-		$scope.vaults = []	
-		dataManager.clearState()
-		$scope.startRealTime()	
-		dataManager.getActiveVaults()		
-	}
-
-	
-	var newVault = function(vault){	
-		$scope.vaults.push(vault)
-		if(!$scope.$$phase)
-			$scope.$apply()
-	}
-
-	var onVaultsLoaded = function(time){
-		$scope.showLoader = false
-		if(time){
-			$scope.playerStatus = "Preparing playback.."
-			playbackService.play(time)
-		}		
-	}
-
-	var updatePlayerStatus = function(status){
-		$scope.playerStatus = status
-		if(!$scope.$$phase)
-			$scope.$apply()
-	}
+		var updatePlayerStatus = function(status){
+			$scope.playerStatus = status
+			if(!$scope.$$phase)
+				$scope.$apply()
+		}
 
 
-	playbackService.onStatusChange(updatePlayerStatus)
+		playbackService.onStatusChange(updatePlayerStatus)
 
-	dataManager.onNewVault(newVault)
-	dataManager.onVaultsLoaded(onVaultsLoaded)	
+		dataManager.onNewVault(newVault)
+		dataManager.onVaultsLoaded(onVaultsLoaded)	
 
-	setTimeout(function(){dataManager.getActiveVaults()}, 100)
+		setTimeout(function(){
+			dataManager.getActiveVaults()
+		}, 10)
+
+		$http.get('/firstuptime').then(function(data){		
+			$scope.firstLogtime = new Date(data.data).getTime()	- 2000//reducing 2 secondes for the play	
+		})
 
 }];

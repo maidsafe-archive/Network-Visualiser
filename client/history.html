@@ -30,6 +30,13 @@
 			</div>
 			<div>
 				<table>
+					<thead>
+						<td>Timestamp</td>
+						<td>Persona</td>
+						<td>Action</td>
+						<td>Value 1</td>
+						<td>Value 2</td>
+					</thead>
 					<tr ng-repeat="log in logs | filter:search">
 						<td style="width:12.5%">
 							{{log.ts = (log.ts | date:'MMM dd yy HH:mm.ss.sss')}}

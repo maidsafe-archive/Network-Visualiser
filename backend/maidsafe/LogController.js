@@ -20,10 +20,20 @@ var history = function(req, res){
 	logService.vaultHistory(req, res)
 }
 
+var exportLogs = function(req, res){
+	logService.exportLogsAsCSV(req, res)
+}
+
+var firstLogTime = function(req, res){
+	logService.getFirstLogTime(req, res)
+}
+
 exports.register = 	function(server){
 	server.post('/log', saveLogs);
 	server.get('/vaults', getActiveVaults);
 	server.get('/clearLogs', clearDB);
 	server.get('/history', history);
 	server.get('/search', search);
+	server.get('/export', exportLogs);
+	server.get('/firstuptime', firstLogTime);
 }

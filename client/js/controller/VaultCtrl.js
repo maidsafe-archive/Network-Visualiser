@@ -107,6 +107,7 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		$scope.intervalId = setInterval(function(){
 			$scope.flagClearedIcons = true
 			$scope.updateIcons(0)
+			$scope.personaColour = $scope.PERSONA_COLOUR_TAG + 'na'
 			$scope.subscriber = null
 			$scope.counter = null
 			if(!$scope.$$phase)

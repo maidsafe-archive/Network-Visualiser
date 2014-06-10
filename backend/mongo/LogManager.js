@@ -7,13 +7,14 @@ var LogManager = function(dbConnConnection){
 	
 	HIDE_FIELDS = {_id:0, __v:0}
 
+	
 
 	var searchAllCollections = function(criteria, promise){
-		var results = {}				
+		var results = {}			
 		dbConn.db.collectionNames(function(e, colls){
-		var fetched = 0   	   	
-			for(i in colls){	   			
-				if(colls[i].name.indexOf('system.index')<0){
+			var fetched = 0
+			for(i in colls){
+				if(colls[i].name.indexOf('system.index')<0){//} || colls[i].name.indexOf('vaultStatus')<0){
 					dbConn.db.collection(colls[i].name.replace( dbConn.name + '.',''), function(err, col){
 						col.find(criteria, {__v:0}).toArray(function(err, docs){	  	   											   						
 							fetched++

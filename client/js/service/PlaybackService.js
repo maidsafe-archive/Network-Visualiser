@@ -92,7 +92,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	
 
 	var pushLogs = function(){
-		setPlayerStatus(dateFormater(new Date(nextPushTime)) + ' / ' + dateFormater(new Date(playEndsAt)))
+		setPlayerStatus(dateFormater(new Date(nextPushTime)))
 		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]
 		if(logs && logs.length>0){
 			for(var index in logs){				

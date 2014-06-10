@@ -1,12 +1,12 @@
 var SocketService = ['$rootScope', 'dataManager', function($rootScope, dataManager){
-	var active = true;	
+	$rootScope.realTime = true;	
 
 	var socket = io.connect($rootScope.socketEndPoint);
 
 	var signalObserver
 
-	socket.on('log', function (data) {		
-		if(active){
+	socket.on('log', function (data) {				
+		if($rootScope.realTime){
 			setTimeout(function(){dataManager.pushLog(data)}, 1)//threaded so ui is non-blocking
 		}			
 	});
@@ -17,11 +17,11 @@ var SocketService = ['$rootScope', 'dataManager', function($rootScope, dataManag
 	});
 
 	this.start = function(){
-		active = true
+		$rootScope.realTime = true
 	}
 
-	this.stop = function(){
-		active = false
+	this.stop = function(){		
+		$rootScope.realTime = false
 	}
 
 	this.setSignalListner = function(callback){

@@ -6,8 +6,7 @@ var config = require('./../../../Config.js')
 
 
 var saveLog = function(req, res){
-	var log = req.body;	
-	console.log(log)
+	var log = req.body;		
 	utils.formatDate(log)
 	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
 		log.value1 = utils.decodeData(log.value1)
@@ -16,7 +15,7 @@ var saveLog = function(req, res){
 		log.value2 = utils.decodeData(log.value2)
 	}
 	if(!log.hasOwnProperty('persona_id'))
-		log.persona_id = config.Constants.persona_na//NA
+		log.persona_id = config.Constants.persona_na//NA	
 	utils.isValid(log)?bridge.addLog(log, new Handler.SaveLogHandler(res)):res.send(500, 'Invalid Parameters')
 }
 
@@ -99,8 +98,15 @@ var activeVaultsWithRecentLogs = function(req, res){
 }
 
 
+var getFirstLogTime = function(req, res){
+	var date = bridge.firstLogTime() || new Date()
+	res.send(date.toISOString())
+}
+
+
 exports.saveLog = saveLog
 exports.searchLog = searchLog
 exports.vaultHistory = history
 exports.clearAll = dropDB
 exports.getActiveVaults = activeVaultsWithRecentLogs
+exports.getFirstLogTime = getFirstLogTime

@@ -27,6 +27,13 @@ table {
 	margin: .3em
 }
 
+table thead {
+	border: 1px solid;
+	font-weight: bold;
+	text-align: center;
+}
+
+
 table tr td {
 	font-size: 13px;
 	padding: .3em;
