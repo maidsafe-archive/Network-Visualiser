@@ -3,14 +3,14 @@
 	<div class="box">
 		<div class="notif">			
 			<ul>
-				<li ng-class="iconsTray.account" tooltip="{{lastLog()}}">									
+				<li ng-class="iconsTray.account" tooltip="{{lastLog()}}">			
 				</li>								
-				<li ng-class="iconsTray.chunk" tooltip="{{lastLog()}}">									
+				<li ng-class="iconsTray.chunk" tooltip="{{lastLog()}}">		
 				</li>								
 				<li class="shape" ng-class="iconsTray.subscriber" tooltip="{{lastLog()}}">	
 					<p>{{subscriber}}</p>
 				</li>								
-				<li class="shape" ng-class="iconsTray.counter" tooltip="{{lastLog()}}">									
+				<li class="shape" ng-class="iconsTray.counter" tooltip="{{lastLog()}}">			
 					<p>{{counter}}</p>
 				</li>
 			</ul>
@@ -22,7 +22,7 @@
 			<p tooltip="{{fullVaultName}}">{{vaultName.substring(0,6) | uppercase}}</p>	
 			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
 		</div>
-	</div>	
+	</div>
 	<div class="log_slider" ng-class="{false:'close'}[logsOpen]">
 		<ul>
 			<li ng-repeat="log in logs track by $index" >
@@ -33,7 +33,7 @@
 			  		{{ vaultBehaviour.formatMessage(log) }}
 			  	</div>
 			</li>		
-		</ul>	
+		</ul>
 		<div class="see_history">
 			<a target="_blank" ng-href="/client/history.html#?id={{vaultName}}"/>See All</a>
 		</div>	
