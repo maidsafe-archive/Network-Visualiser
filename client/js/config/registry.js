@@ -12,3 +12,4 @@ app.service('playbackService', PlaybackService)
 app.controller('applicationCtrl', ApplicationCtrl);
 app.controller('vaultCtrl', VaultCtrl);
 app.controller('historyCtrl', HistoryCtrl);
+app.controller('timelineCtrl', TimelineCtrl);
