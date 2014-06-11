@@ -1,41 +1,82 @@
 .persona_na{
-	background-color: #8DC0F8
+	background-color: rgb(141, 192, 248)
 }
 
 .persona_maidnode {
-	background-color: #F8CDA1
+	background-color: rgb(248, 205, 161);
 }
 
 .persona_mpidnode {
-	background-color: #889A8B
+	background-color: rgb(136, 154, 139)
 }
 
 .persona_datagetter {
-	background-color: #C7CD8A
+	background-color: rgb(199, 205, 138);
 }
 
 .persona_maidmanager {
-	background-color: #F8AED4
+	background-color: rgb(248, 174, 212)
 }
 
 .persona_datamanager {
-	background-color: #C1FFF6
+	background-color: rgb(193, 255, 246);
 }
 
 .persona_pmidmanager {
-	background-color: #F9A489
+	background-color: rgb(249, 164, 137)
 }
 
 .persona_pmidnode {
-	background-color: #B8ADF2
+	background-color: rgb(184, 173, 242)
 }
 
 .persona_mpidmanager {
-	background-color: #7DCC9D
+	background-color: rgb(125, 204, 157)
 }
 
 .persona_versionhandler {
-	background-color: #AAEAF4
+	background-color: rgb(170, 234, 244)
+}
+
+
+.persona_na_alpha{
+	background-color: rgba(141, 192, 248, .5)
+}
+
+.persona_maidnode_alpha {
+	background-color: rgba(248, 205, 161, .5);
+}
+
+.persona_mpidnode_alpha {
+	background-color: rgba(136, 154, 139, .5)
+}
+
+.persona_datagetter_alpha {
+	background-color: rgba(199, 205, 138, .5);
+}
+
+.persona_maidmanager_alpha {
+	background-color: rgba(248, 174, 212, .5)
+}
+
+.persona_datamanager_alpha {
+	background-color: rgba(193, 255, 246, .5);
+}
+
+.persona_pmidmanager_alpha {
+	background-color: rgba(249, 164, 137, .5)
+}
+
+.persona_pmidnode_alpha {
+	background-color: rgba(184, 173, 242, .5)
+}
+
+.persona_mpidmanager_alpha {
+	background-color: rgba(125, 204, 157, .5)
+}
+
+.persona_versionhandler_alpha {
+	background-color: rgba(170, 234, 244, .5)
 }
 
 .persona_cachehandler {

@@ -23,7 +23,7 @@
 			<img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
 		</div>
 	</div>	
-	<div class="log_slider" ng-class="{false:'close'}[logsOpen]">
+	<div class="log_slider" ng-class="{false:'close', true:personaColour+'_alpha'}[logsOpen]">
 		<ul>
 			<li ng-repeat="log in logs track by $index" >
 			  	<div class="log_date">
