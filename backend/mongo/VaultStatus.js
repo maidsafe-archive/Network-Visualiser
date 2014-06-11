@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var VaultHealth = function(dbConnection){
 
 	var SCHEMA, HIDE_FIELDS, VaultStatus, MODEL_NAME;	
+	var firstLogTime
 
 	var STATUS = {active:'active', dead:"dead"}
 		
@@ -12,7 +13,8 @@ var VaultHealth = function(dbConnection){
 		vault_id: String,
 		vault_id_full: String,
 		status: String,
-		first_update : { type: Date}
+		key: String,
+		value:String
 	};
 	MODEL_NAME = 'vaultStatus'
 
@@ -23,11 +25,15 @@ var VaultHealth = function(dbConnection){
 	}
 
 	var transformData = function(data){
-		var temp = {vault_id:data.vault_id, last_updated: new Date(), status:(data.action_id==0)?STATUS.active:STATUS.dead}
+		var temp = {vault_id:data.vault_id, last_updated: new Date(), status:(data.action_id==0)?STATUS.active:STATUS.dead, key:'vault'}
 		if(data.action_id == 0){
 			temp.vault_id_full = data.value1
 		}
 		return temp
+	}
+
+	this.clearFirstLogTime = function(){
+		firstLogTime = null
 	}
 
 	this.updateStatus = function(data){	
@@ -37,12 +43,14 @@ var VaultHealth = function(dbConnection){
 			VaultStatus.update({vault_id:data.vault_id}, data, {upsert:true}, function(err, doc){				
 				if(err){
 					console.log('Failed to update Status for vault - ' + data.vault_id)	
-				} else{		
-					//This is bery costly must create a new model			
-					VaultStatus.find({vault_id:data.vault_id}, function(err, doc){
-						if(!doc[0].first_update){
-							data.first_update = doc[0].last_updated
-							VaultStatus.update({vault_id:data.vault_id}, data, {upsert:true}, function(e,d){})	
+					console.log(err)
+				}else if(!firstLogTime){							
+					var fisrtLog =  new VaultStatus({key:'firstLogTime', value:data.last_updated.toISOString()})
+					fisrtLog.save(function(err, doc){
+						if(err){
+							console.log(err)
+						}else{
+							firstLogTime = data.last_updated.toISOString()
 						}
 					})				
 				}
@@ -51,12 +59,7 @@ var VaultHealth = function(dbConnection){
 	}
 
 	this.getFirstLogTime = function(callback){
-		var promise = new mongoose.Promise
-		if(callback) promise.addBack(callback)
-		VaultStatus.find({}, {}, {sort:{ first_update: 1}, limit:1}, function(err, doc){			
-			err?promise.error(err):promise.complete(doc[0])
-		})	
-		return promise
+		return firstLogTime || new Date().toISOString()
 	}
 
 	this.getActiveVaults = function(callback){
@@ -82,7 +85,7 @@ var VaultHealth = function(dbConnection){
 
 	this.getAllVaultNames = function(){
 		var promise = new mongoose.Promise		
-		VaultStatus.find({}, {_id:0, vault_id:1, vault_id_full:1}, function(err, vaults){
+		VaultStatus.find({key:'vault'}, {_id:0, vault_id:1, vault_id_full:1}, function(err, vaults){
 			if(err){
 				promise.error(err)
 			}else{
@@ -91,6 +94,17 @@ var VaultHealth = function(dbConnection){
 		})
 		return promise
 	}
+
+	var setFirstLogTime = function(){
+		VaultStatus.find({key:'firstLogTime'}, function(err, doc){			
+			if(!err && !doc.length == 0){
+				firstLogTime = doc[0].value
+			}			
+		})	
+
+	}
+
+	setFirstLogTime()
 	
 	return this
 }

@@ -1,4 +1,4 @@
-var db, vaultLog, mongoose, logManager, vaultStatus, firstLogTime;
+var db, vaultLog, mongoose, logManager, vaultStatus;
 mongoose = require('mongoose');
 logManager = require('./LogManager.js');
 vaultStatus = require('./VaultStatus.js');
@@ -11,10 +11,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
    console.log('Mongodb connected successfully')  
    vaultLog = logManager.getManager(db)      
-   vaultStatus = vaultStatus.VaultHealth(db)
-   vaultStatus.getFirstLogTime().then(function(doc){
-   		firstLogTime = doc.first_update || new Date()
-   })
+   vaultStatus = vaultStatus.VaultHealth(db)  
 });
 
 exports.addLog = function(log, promise){
@@ -38,7 +35,8 @@ exports.vaultHistory = function(vaultId, criteria, page, max, promise){
 
 
 exports.dropDB = function(){
-	db.db.dropDatabase()		
+	db.db.dropDatabase()
+	vaultStatus.clearFirstLogTime()		
 }
 
 exports.getActiveVaults = function(){	
@@ -50,5 +48,5 @@ exports.getAllVaultNames = function(){
 }
 
 exports.firstLogTime = function(){
-	return firstLogTime
+	return vaultStatus.getFirstLogTime()
 }

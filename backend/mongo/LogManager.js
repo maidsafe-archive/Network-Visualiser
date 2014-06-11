@@ -3,6 +3,7 @@ var utils = require('./../maidsafe/utils.js');
 
 var LogManager = function(dbConnConnection){
 	var dbConn, LOG_SCHEMA, HIDE_FIELDS;	
+	
 	dbConn = dbConnConnection;
 	
 	HIDE_FIELDS = {_id:0, __v:0}
@@ -12,7 +13,7 @@ var LogManager = function(dbConnConnection){
 	var searchAllCollections = function(criteria, promise){
 		var results = {}			
 		dbConn.db.collectionNames(function(e, colls){
-			var fetched = 0
+			var fetched = 0			
 			for(i in colls){
 				if(colls[i].name.indexOf('system.index')<0){//} || colls[i].name.indexOf('vaultStatus')<0){
 					dbConn.db.collection(colls[i].name.replace( dbConn.name + '.',''), function(err, col){
@@ -28,6 +29,7 @@ var LogManager = function(dbConnConnection){
 			}	   		
 		});  		
 	}
+
 
 
 	var vaultHistory =  function(vaultId, criteria, page, max, promise){		

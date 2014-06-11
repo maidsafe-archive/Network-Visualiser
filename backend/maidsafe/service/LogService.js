@@ -72,17 +72,21 @@ var getActiveVaultsAtTime = function(criteria, res){
 	bridge.getAllVaultNames().then(function(vaults){
 		var results = {}
 		var counter = 0		
+		console.log('Vaults fetched')
+		console.log(vaults)
 		for(var index in vaults){			
-			results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}														
-			bridge.vaultHistory(vaults[index].vault_id, {ts:{'$lt':criteria.ts}}, 0, config.Constants.vault_logs_count).then(function(logs){												
-				counter++				
-				if(logs.length>0 && logs[logs.length-1] != 18)				
-					results[logs[0].vault_id].logs = logs
-				if(counter >= vaults.length)
-					res.send(results)
-			},function(err){
-				console.log(err)
-			})			
+			if(vaults[index].vault_id){
+				results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}															
+				bridge.vaultHistory(vaults[index].vault_id, {ts:{'$lt':criteria.ts}}, 0, config.Constants.vault_logs_count).then(function(logs){												
+					counter++				
+					if(logs.length>0 && logs[logs.length-1] != 18)				
+						results[logs[0].vault_id].logs = logs
+					if(counter >= vaults.length)
+						res.send(results)
+				},function(err){
+					console.log(err)
+				})
+			}					
 		}			
 	})
 }
@@ -98,9 +102,8 @@ var activeVaultsWithRecentLogs = function(req, res){
 }
 
 
-var getFirstLogTime = function(req, res){
-	var date = bridge.firstLogTime() || new Date()
-	res.send(date.toISOString())
+var getFirstLogTime = function(req, res){	
+	res.send(bridge.firstLogTime())
 }
 
 
