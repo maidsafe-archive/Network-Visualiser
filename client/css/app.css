@@ -120,7 +120,7 @@ section ul.options li{
 
 section div.icons{
 	border-bottom: 1px solid;
-	height: 150px;
+	height: 175px;
 }
 
 section div.icons ul{
@@ -143,7 +143,7 @@ section div.icons ul {
 }
 
 section div.icons ul li span{
-	margin: 0.5em;
+	margin: 1.5em 0.5em;
 	position: absolute;
 }
 
@@ -158,7 +158,7 @@ section div.wrapper{
 }
 
 section div.wrapper.tray_open{
-	top: 150px;
+	top: 180px;
 }
 
 
@@ -227,10 +227,16 @@ section div.wrapper div.node div.box div.info img{
 }
 
 section div.wrapper div.node div.log_slider{
-	border: 1px solid #776E6E;
-	height: 90px;
+	border-left: 2px solid #776E6E;
+	border-bottom: 2px solid #776E6E;
+	border-right: 2px solid #776E6E;
+	background: #FFF;
+	height: 88px;
 	width:100%;
 	overflow: auto;	
+	position: relative;
+	top: -2px;
+	z-index: 200;
 }
 
 section div.wrapper div.node div.log_slider ul li{

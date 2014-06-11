@@ -5,12 +5,13 @@
 			<ul>
 				<li ng-class="iconsTray.account" tooltip="{{lastLog()}}" canshow="{{isToolTipEnabled(ICONS_TRAY_SHAPES.HEXAGON)}}">									
 				</li>								
-				<li ng-class="iconsTray.chunk" tooltip="{{lastLog()}}" canshow="{{isToolTipEnabled(ICONS_TRAY_SHAPES.CIRCLE)}}">									
+				<li ng-class="iconsTray.chunk" tooltip="{{lastLog()}}" canshow="{{isToolTipEnabled(ICONS_TRAY_SHAPES.CIRCLE)}}">		
 				</li>								
 				<li class="shape" ng-class="iconsTray.subscriber" tooltip="{{lastLog()}}" canshow="{{isToolTipEnabled(ICONS_TRAY_SHAPES.SQUARE)}}">	
 					<p>{{subscriber}}</p>
 				</li>								
 				<li class="shape" ng-class="iconsTray.counter" tooltip="{{lastLog()}}" canshow="{{isToolTipEnabled(ICONS_TRAY_SHAPES.DIAMOND)}}">									
+
 					<p>{{counter}}</p>
 				</li>
 			</ul>
@@ -33,7 +34,7 @@
 			  		{{ vaultBehaviour.formatMessage(log) }}
 			  	</div>
 			</li>		
-		</ul>	
+		</ul>
 		<div class="see_history">
 			<a target="_blank" ng-href="/client/history.html#?id={{vaultName}}"/>See All</a>
 		</div>	
