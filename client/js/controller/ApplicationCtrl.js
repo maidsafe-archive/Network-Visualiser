@@ -18,7 +18,14 @@ var ApplicationCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'socketSe
 		$scope.firstLogtime
 
 		$scope.playbackTime = 100
+
+		$scope.alert
 		
+
+		$scope.setStatusAlert = function(msg){
+			$scope.alert = msg
+			setTimeout(function(){ $scope.alert = null}, 5000)
+		}
 
 		$scope.toggleIconsTray = function(){
 			$scope.iconsTrayClosed = !$scope.iconsTrayClosed		
@@ -31,9 +38,9 @@ var ApplicationCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'socketSe
 		}
 
 		$scope.clearLogs = function(){
-			if(confirm("This operation will clear all the logs on the server. Proceed clearing logs?")){
+		//	if(confirm("This operation will clear all the logs on the server. Proceed clearing logs?")){
 				dataManager.clearLogs()			
-			}
+		//	}
 		}
 
 		$scope.stopRealtime = function(){		
@@ -49,7 +56,7 @@ var ApplicationCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'socketSe
 				$scope.stopHistoryPlayback()
 				$scope.vaults = []//clear the present state		
 				dataManager.clearState()
-				alert('All logs were cleared')
+				$scope.setStatusAlert('Logs were cleared')
 			}		
 		});
 
@@ -111,6 +118,9 @@ var ApplicationCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'socketSe
 
 		var onVaultsLoaded = function(time){
 			$scope.showLoader = false
+			if(!$scope.vaults || $scope.vaults.length == 0){
+				$scope.setStatusAlert('No active vaults')
+			}
 			if(time){
 				$scope.playerStatus = "Preparing playback.."
 				playbackService.play(time)
@@ -136,5 +146,7 @@ var ApplicationCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'socketSe
 		$http.get('/firstuptime').then(function(data){		
 			$scope.firstLogtime = new Date(data.data).getTime()	- 2000//reducing 2 secondes for the play	
 		})
+
+
 
 }];

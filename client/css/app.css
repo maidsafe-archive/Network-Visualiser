@@ -30,6 +30,18 @@ header p.title {
 	width: 20%;
 }
 
+header div.status{
+	margin: 1em;
+	float: left;
+	position: center;
+	padding: .34em;
+	border-radius: 9px;
+}
+
+header div.status.alert{
+	background:rgba(214, 69, 47, 0.5);
+}
+
 header div.timeline{
 	margin: 1em;
 	float: left;

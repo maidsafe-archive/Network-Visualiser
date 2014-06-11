@@ -51,7 +51,7 @@ var DBUtil = function(dbConnection){
 					}else{
 						console.log(colls[i].name.replace( dbConn.name + '.',''))
 					}
-'"' ' " -db maidsafe_logs -c vaultStatus -o d:\\dd3.csv --fields vault_id,status,key --csv'
+//'"' ' " -db maidsafe_logs -c vaultStatus -o d:\\dd3.csv --fields vault_id,status,key --csv'
 					//exec("", handler.callback)					
 					handler.callback(null, '', null)
 				}					   		

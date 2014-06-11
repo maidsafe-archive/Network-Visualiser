@@ -19,11 +19,10 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	$scope.intervalId
 	
 
-
 	$scope.updateFromQueue = function(){
 		var logs = dataManager.getLogsFromQueue($scope.vaultName)
 		for(var index in logs){			
-			$scope.logRecieved(logs[index])
+			$scope.logRecieved(logs[index], true)
 		}
 	}
 
@@ -54,25 +53,30 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		$scope.isActive = (log.action_id != 18)
 	}
 
-	$scope.logRecieved = function(log){		
+	$scope.logRecieved = function(log, initialLoad){		
 		$scope.addLog(log)
-		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + $scope.vaultBehaviour.personas[log.persona_id]
+		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + (initialLoad?'na':$scope.vaultBehaviour.personas[log.persona_id])
 		if(log.action_id == 17){
 			$scope.networkHealth = log.value1
 			$scope.updateProgress(log.value1)
 		}else{
 			$scope.subscriber = null
 			$scope.counter = null
-			$scope.updateIcons(log.action_id)
-		}			
-		if(log.action_id == 1 || log.action_id == 2){
-			$scope.counter = log.value1			
-		}else if(log.action_id == 6 || log.action_id == 7){
-			$scope.subscriber = log.value1			
+			if(!initialLoad)
+				$scope.updateIcons(log.action_id)
 		}
+		if(!initialLoad){
+			if(log.action_id == 1 || log.action_id == 2){
+				$scope.counter = log.value1			
+			}else if(log.action_id == 6 || log.action_id == 7){
+				$scope.subscriber = log.value1			
+			}	
+		}			
+		
 		if(!$scope.fullVaultName && (log.action_id == 0 || log.hasOwnProperty('vault_id_full'))){			
 			$scope.fullVaultName =  log.vault_id_full || log.value1
 		}
+		
 		$scope.stateOfVault(log)		
 		if(!$scope.$$phase)
 			$scope.$apply()		
