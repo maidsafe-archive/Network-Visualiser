@@ -72,8 +72,6 @@ var getActiveVaultsAtTime = function(criteria, res){
 	bridge.getAllVaultNames().then(function(vaults){
 		var results = {}
 		var counter = 0		
-		console.log('Vaults fetched')
-		console.log(vaults)
 		for(var index in vaults){			
 			if(vaults[index].vault_id){
 				results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}															
@@ -107,9 +105,16 @@ var getFirstLogTime = function(req, res){
 }
 
 
+var exportLogs = function(req, res){
+	bridge.exportLogs().then(function(){
+		res.send('done')
+	})
+}
+
 exports.saveLog = saveLog
 exports.searchLog = searchLog
 exports.vaultHistory = history
 exports.clearAll = dropDB
 exports.getActiveVaults = activeVaultsWithRecentLogs
 exports.getFirstLogTime = getFirstLogTime
+exports.exportLogs = exportLogs

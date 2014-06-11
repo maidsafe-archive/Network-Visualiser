@@ -92,7 +92,7 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 	$scope.$on('expandVault', function(e, v){						
 		if(v == $scope.logsOpen)
 			return;
-		$scope.toggleVaultLogs(v)
+		$scope.toggleVaultLogs(v)		
 	})
 	
 

@@ -21,7 +21,7 @@ var history = function(req, res){
 }
 
 var exportLogs = function(req, res){
-	logService.exportLogsAsCSV(req, res)
+	logService.exportLogs(req, res)
 }
 
 var firstLogTime = function(req, res){

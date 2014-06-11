@@ -71,7 +71,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 				timePool[key] = buffer_pool[key]
 			}
 			buffer_pool = {}
-		}					
+		}						
 	}
 
 	
@@ -89,18 +89,21 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 		timerId = setInterval(pushLogs,SPEED) 				
 	}
 	
-	
+	var PushWrapper = function(log){
+		var _log = log
+		this.push = function(){
+			dataManager.pushLog(_log)
+		}
+	}
 
 	var pushLogs = function(){
 		setPlayerStatus(dateFormater(new Date(nextPushTime)))
-		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]
+		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]		
 		if(logs && logs.length>0){
 			for(var index in logs){				
-				setTimeout(function(){dataManager.pushLog(logs[index])},1)
+				setTimeout(new PushWrapper(logs[index]).push,1)
 			}			
 		}
-		if(logs)
-			delete timePool[getDateKey(new Date(nextPushTime).toISOString())]
 		updateNextPushTime()		
 	}
 

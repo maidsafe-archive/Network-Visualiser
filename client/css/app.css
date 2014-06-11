@@ -150,7 +150,7 @@ section div.icons ul li span{
 section div.wrapper{	
 	padding: .343em;
 	bottom: 0px;
-	top:40px;
+	top:0px;
 	overflow: auto;
 	margin-left: 2em;
 	clear: both;	
@@ -229,8 +229,7 @@ section div.wrapper div.node div.box div.info img{
 section div.wrapper div.node div.log_slider{
 	border-left: 2px solid #776E6E;
 	border-bottom: 2px solid #776E6E;
-	border-right: 2px solid #776E6E;
-	background: #FFF;
+	border-right: 2px solid #776E6E;	
 	height: 88px;
 	width:100%;
 	overflow: auto;	

@@ -2,6 +2,7 @@ var db, vaultLog, mongoose, logManager, vaultStatus;
 mongoose = require('mongoose');
 logManager = require('./LogManager.js');
 vaultStatus = require('./VaultStatus.js');
+dbUtils = require('./DBUtils.js');
 config = require('./../../Config.js');
 
  
@@ -12,6 +13,7 @@ db.once('open', function callback () {
    console.log('Mongodb connected successfully')  
    vaultLog = logManager.getManager(db)      
    vaultStatus = vaultStatus.VaultHealth(db)  
+   dbUtils = dbUtils.getDBUtil(db)
 });
 
 exports.addLog = function(log, promise){
@@ -49,4 +51,8 @@ exports.getAllVaultNames = function(){
 
 exports.firstLogTime = function(){
 	return vaultStatus.getFirstLogTime()
+}
+
+exports.exportLogs = function(){
+	return dbUtils.exportLogs()
 }

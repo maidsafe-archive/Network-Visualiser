@@ -53,7 +53,6 @@ var ApplicationCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'socketSe
 			}		
 		});
 
-
 		var getPlayTime = function(playFrom){
 			var currentTime	= new Date().getTime();	
 			var date = new Date(currentTime - (((100 - playFrom)/100) * (currentTime  - $scope.firstLogtime)))			
