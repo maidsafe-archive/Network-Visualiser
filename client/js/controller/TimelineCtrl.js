@@ -45,10 +45,8 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 		}				
 	} )
 
-	$scope.updatePlayingTime = function(){
-		if(!$scope.playbackTimeUpdateInterval){		
-			$scope.playback.currentState += $scope.playback.incrementalSteps; 								
-		}	
+	$scope.updatePlayingTime = function(){		
+		$scope.playback.currentState += $scope.playback.incrementalSteps; 										
 		$scope.playback.currentPlayTime += 1000	
 	}
 
@@ -77,7 +75,7 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 
 	$scope.playHistory = function(){
-		$rootScope.playerPaused = false
+		$rootScope.playerPaused = false		
 		var _time = new Date($scope.playback.currentPlayTime).toISOString()
 		$scope.playerState = $scope.PLAYER_STATE.PLAYING		
 		$scope.vaults = []//clear the present state		
@@ -118,9 +116,14 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 	}
 
 	var onVaultsLoaded = function(time){
-		$scope.showLoader = false
+		$scope.showLoader = false		
 		if(!$scope.vaults || $scope.vaults.length == 0){
-			$scope.setStatusAlert('No active vaults')
+			$scope.playerStatus = 'No active vaults'
+			setTimeout(function(){
+				$scope.playerStatus = ''
+				if(!$scope.$$phase)
+					$scope.$apply()
+			}, 3000)
 		}
 		if(time){		
 			playbackService.play(time)
@@ -155,8 +158,8 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 	$http.get('/firstuptime').then(function(res){
 			$scope.firstLogtime = new Date(res.data).getTime()	- 3000//reducing 3 secondes for the play				
-			$scope.incrementalSteps = 1000 / ( ($scope.maxTime - $scope.firstLogtime) / $scope.SLIDER_MAX_STEPS )
-			$scope.playback.currentPlayTime = $scope.firstLogtime
+			$scope.playback.incrementalSteps = 1000 / ( (new Date($scope.maxTime).getTime() - $scope.firstLogtime) / $scope.playback.max_steps )			
+			$scope.playback.currentPlayTime = $scope.firstLogtime			
 	})
 
 	setTimeout(function(){

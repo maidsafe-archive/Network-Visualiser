@@ -27,7 +27,7 @@ header p.title {
 	font-size: 2em;
 	margin: .5em;
 	float: left;	
-	width: 20%;
+	width: 210px;
 }
 
 header div.status{
@@ -47,8 +47,19 @@ header div.timeline{
 	margin: .3em;
 }
 
-header div.timeline div.player div.player_msgs span.status{
-	margin-left: 10em;
+.time_slider div.time_label {
+	float: left;
+	margin: .2em
+}
+
+.time_slider div.slider {	
+	width: 500px;
+	margin-left: 10em !important
+}
+
+header div.timeline div.player div.player_msgs span{
+	margin-left: 20em;	
+	text-align: center;
 	text-align: center
 }	
 
@@ -63,19 +74,15 @@ header div.timeline div.time_slider{
 
 
 header div.timeline div.player{
-	width: 400px;
-	float: left	
-}
-
-
-header div.timeline div.player{
-	width: 400px;
-	float: left	
+	width: 630px;
+	float: left;
+	margin: .5em
 }
 
 header div.timeline div.player_buttons{	
 	float: left;
-	margin-left: 3.2em 	
+	margin-left: 2em;
+	margin-top: .5em 	
 }
 
 .ngrs-range-slider{

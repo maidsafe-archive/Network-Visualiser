@@ -72,20 +72,24 @@ var getActiveVaultsAtTime = function(criteria, res){
 	bridge.getAllVaultNames().then(function(vaults){
 		var results = {}
 		var counter = 0		
-		for(var index in vaults){			
-			if(vaults[index].vault_id){
-				results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}															
-				bridge.vaultHistory(vaults[index].vault_id, {ts:{'$lt':criteria.ts}}, 0, config.Constants.vault_logs_count).then(function(logs){												
-					counter++				
-					if(logs.length>0 && logs[logs.length-1] != 18)				
-						results[logs[0].vault_id].logs = logs
-					if(counter >= vaults.length)
-						res.send(results)
-				},function(err){
-					console.log(err)
-				})
-			}					
-		}			
+		if(vaults.length==0){
+			res.send(500, 'No active vaults')
+		}else{
+			for(var index in vaults){			
+				if(vaults[index].vault_id){
+					results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}															
+					bridge.vaultHistory(vaults[index].vault_id, {ts:{'$lt':criteria.ts}}, 0, config.Constants.vault_logs_count).then(function(logs){												
+						counter++				
+						if(logs.length>0 && logs[logs.length-1] != 18)				
+							results[logs[0].vault_id].logs = logs
+						if(counter >= vaults.length)
+							res.send(results)
+					},function(err){
+						console.log(err)
+					})
+				}					
+			}
+		}				
 	})
 }
 
