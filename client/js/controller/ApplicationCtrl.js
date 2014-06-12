@@ -16,7 +16,11 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
 
 		$scope.setStatusAlert = function(msg){
 			$scope.alert = msg
-			setTimeout(function(){ $scope.alert = null}, 5000)
+			setTimeout(function(){ 
+				$scope.alert = null
+				if(!$scope.$$phase)
+					$scope.$apply()
+			}, 5000)
 		}
 
 

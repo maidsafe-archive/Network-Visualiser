@@ -1,4 +1,4 @@
-var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dataManager, vaultBehaviour){
+var VaultCtrl = ['$scope', '$rootScope', 'dataManager', 'vaultBehaviour', function($scope, $rootScope, dataManager, vaultBehaviour){
 	$scope.stateIcon
 	$scope.logsOpen
 	$scope.progressLevel
@@ -109,13 +109,16 @@ var VaultCtrl = ['$scope', 'dataManager', 'vaultBehaviour', function($scope, dat
 		if($scope.intervalId)
 			clearInterval($scope.intervalId)
 		$scope.intervalId = setInterval(function(){
-			$scope.flagClearedIcons = true
-			$scope.updateIcons(0)
-			$scope.personaColour = $scope.PERSONA_COLOUR_TAG + 'na'
-			$scope.subscriber = null
-			$scope.counter = null
-			if(!$scope.$$phase)
-				$scope.$apply()	
+			if(!$rootScope.playerPaused){
+				$scope.flagClearedIcons = true
+				$scope.updateIcons(0)
+				$scope.personaColour = $scope.PERSONA_COLOUR_TAG + 'na'
+				$scope.subscriber = null
+				$scope.counter = null
+				if(!$scope.$$phase)
+					$scope.$apply()		
+			}
+			
 		}, 5000)	
 	}
 	

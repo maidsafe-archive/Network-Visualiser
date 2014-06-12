@@ -30,17 +30,19 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 	$scope.autoSeekItervalId 
 
 	$scope.$watch('playback.currentState', function(newValue){	
-		if($scope.firstLogtime)	
+		if($scope.firstLogtime){
 			$scope.playback.currentPlayTime = $scope.getPlayTime(parseInt(newValue))
-		if(!$scope.$$phase)
-			$scope.$apply()
-		if($scope.autoSeekItervalId){
-			clearTimeout($scope.autoSeekItervalId)
-			$scope.autoSeekItervalId = null
-		}else{
-			$scope.autoSeekItervalId = setTimeout(function(){}, 2000)//start from here
-		}
-
+			if(!$scope.$$phase)
+				$scope.$apply()
+			if($scope.autoSeekItervalId){
+				clearTimeout($scope.autoSeekItervalId)
+				$scope.autoSeekItervalId = null
+			}
+			$scope.autoSeekItervalId = setTimeout(function(){
+				$scope.stopHistoryPlayback()
+				$scope.playHistory()
+			}, 2000)			
+		}				
 	} )
 
 	$scope.updatePlayingTime = function(){
@@ -75,21 +77,24 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 
 	$scope.playHistory = function(){
+		$rootScope.playerPaused = false
 		var _time = new Date($scope.playback.currentPlayTime).toISOString()
 		$scope.playerState = $scope.PLAYER_STATE.PLAYING		
 		$scope.vaults = []//clear the present state		
 		dataManager.clearState()
 		$scope.showLoader = true
 		dataManager.getActiveVaults(_time)			
-		$scope.playerStatus = "Buffering playback"
+		$scope.playerStatus = "Buffering..."
 	}
 
 	$scope.pauseHistoryPlayback = function(){					
+		$rootScope.playerPaused = true
 		$scope.playerState = $scope.PLAYER_STATE.PAUSED
 		playbackService.pause()
 	}
 
-	$scope.resumeHistoryPlayback = function(){					
+	$scope.resumeHistoryPlayback = function(){
+		$rootScope.playerPaused = false					
 		$scope.playerState = $scope.PLAYER_STATE.PLAYING
 		playbackService.resume()
 	}
@@ -122,8 +127,7 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 		}	
 	}
 
-	var updatePlayerStatus = function(status){		
-		
+	var updatePlayerStatus = function(status){				
 		switch(status){
 			case 0://playing
 				$scope.playerStatus = ""
@@ -139,7 +143,6 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 		if(!$scope.$$phase)
 				$scope.$apply()				
-	
 	}
 
 		
