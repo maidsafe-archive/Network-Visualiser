@@ -3,6 +3,8 @@
 "version":"0.0.1",
 "dependencies" : {		
 		"angular":"1.2.X",
-		"normalize.css":"latest"
+		"normalize.css":"latest",
+		"angular-rangeslider" : "latest",
+		"jquery" : "latest"
 	}
 }

@@ -1,8 +1,8 @@
-var app = angular.module('MaidSafe', []).run(['$rootScope', '$location', function($rootScope, $location){	
+var app = angular.module('MaidSafe', ['ui-rangeSlider']).run(['$rootScope', '$location', function($rootScope, $location){	
 	$rootScope.socketEndPoint = "http://" + $location.host() + ":8081"	
 }]);
 
-app.directive('tooltip', ToolTip);
+app.directive('tooltip', ToolTip)
 
 app.service('dataManager', DataManagerService)
 app.service('vaultBehaviour', VaultBehaviourService)

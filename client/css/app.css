@@ -42,47 +42,45 @@ header div.status.alert{
 	background:rgba(214, 69, 47, 0.5);
 }
 
-header div.timeline{
-	margin: 1em;
+header div.timeline{	
 	float: left;
-	position: center;
+	margin: .3em;
 }
 
-input[type='range']{
-	margin: .7em
+header div.timeline div.player div.player_msgs span.status{
+	margin-left: 10em;
+	text-align: center
+}	
+
+p.time_label{
+	margin: .4em
 }
-input[type='range'] {
-		-webkit-appearance: none;
-		border-radius: 5px;
-		box-shadow: inset 0 0 5px #333;
-		background-color: #999;
-		height: 10px;
-		vertical-align: middle;
+
+header div.timeline div.time_slider{
+	width: 400px;
+	margin-left: 3em
 }
-input[type='range']::-moz-range-track {
-	-moz-appearance: none;
-	border-radius: 5px;
-	box-shadow: inset 0 0 5px #333;
-	background-color: #999;
-	height: 10px;
+
+
+header div.timeline div.player{
+	width: 400px;
+	float: left	
 }
-input[type='range']::-webkit-slider-thumb {
-	-webkit-appearance: none !important;
-	border-radius: 20px;
-	background-color: #FFF;
-	box-shadow:inset 0 0 10px rgba(000,000,000,0.5);
-	border: 1px solid #999;
-	height: 20px;
-	width: 20px;
+
+
+header div.timeline div.player{
+	width: 400px;
+	float: left	
 }
-input[type='range']::-moz-range-thumb {
-	-moz-appearance: none;
-	border-radius: 20px;
-	background-color: #FFF;
-	box-shadow:inset 0 0 10px rgba(000,000,000,0.5);
-	border: 1px solid #999;
-	height: 20px;
-	width: 20px;
+
+header div.timeline div.player_buttons{	
+	float: left;
+	margin-left: 3.2em 	
+}
+
+.ngrs-range-slider{
+	margin: 0px !important;
+	padding: 0px !important;
 }
 
 header ul{

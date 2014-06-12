@@ -11,13 +11,15 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	var bufferMonitor = 0
 	var firstBuffer = true
 	var buffer_pool = {}	
+
+	var status = { playing : 0, stoped:1, pause:2, resume:3 }
 	
 	var playerStatus = ""
 	
 	var statusChangeListner
 
 	var dateFormater = function(date){
-		return $filter('date')(date, 'MMM dd yy HH:mm:ss')
+		return $filter('date')(date, 'dd/MM/yyyy HH:mm:ss')
 	}
 
 	var onNetworkError = function(err){
@@ -64,7 +66,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 		}
 		if(!timePool){
 			timePool = buffer_pool
-			setPlayerStatus("Ready to play")
+			//setPlayerStatus("Ready to play")
 			buffer_pool = {}
 		}else{
 			for(var key in buffer_pool){
@@ -84,8 +86,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	}
 
 
-	var start = function(){				
-		setPlayerStatus("Starting to play")		
+	var start = function(){						
 		timerId = setInterval(pushLogs,SPEED) 				
 	}
 	
@@ -97,7 +98,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	}
 
 	var pushLogs = function(){
-		setPlayerStatus(dateFormater(new Date(nextPushTime)))
+		setPlayerStatus(status.playing)
 		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]		
 		if(logs && logs.length>0){
 			for(var index in logs){				
@@ -147,7 +148,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	
 	this.play = function(time){		
 		playEndsAt = new Date().getTime()	
-		setPlayerStatus("Preparing for playback")
+		//setPlayerStatus("Preparing for playback")
 		clearAll()	
 		nextPushTime = new Date(time).getTime()
 		lastBufferedTime = nextPushTime
@@ -155,7 +156,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	}
 
 	this.pause = function(){
-		setPlayerStatus("Paused at " + dateFormater(new Date(nextPushTime)))
+		setPlayerStatus(status.pause)
 		clearInterval(timerId)
 	}
 
@@ -166,7 +167,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 
 	this.stop = function(){		
 		clearAll()			
-		setPlayerStatus('')
+		setPlayerStatus(status.stoped);
 	}
 	
 

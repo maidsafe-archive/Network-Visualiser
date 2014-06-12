@@ -12,9 +12,9 @@ var ToolTip = ['$compile', function($compile){
 			
 
 
-			var show = function(e){
-			    if(!ele && scope.enabled == "true"){
-			    	ele = $compile('<div style="'+ style + ";top:" + e.y + 'px;left:'  + e.x + 'px' + '">{{tip}}</div>')(scope)				
+			var show = function(e){				
+			    if(!ele && scope.enabled == "true"){			    	
+			    	ele = $compile('<div style="'+ style + ";top:" + e.clientY + 'px;left:'  + e.clientX + 'px' + '">{{tip}}</div>')(scope)				
 			    	scope.$apply()
 					parent.append(ele)
 			    }				 				

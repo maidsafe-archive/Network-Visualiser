@@ -11,8 +11,7 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
 		$scope.alert
 	
 		$scope.timeline = function(){		
- 			var win = window.open('/client/timeline.html', '_blank');
-  			win.focus();		
+ 			window.open('/client/timeline.html', '_blank').focus();  			
 		}	
 
 		$scope.setStatusAlert = function(msg){
@@ -20,33 +19,15 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
 			setTimeout(function(){ $scope.alert = null}, 5000)
 		}
 
-		$scope.toggleIconsTray = function(){
-			$scope.iconsTrayClosed = !$scope.iconsTrayClosed		
-		}
-
-
-		$scope.toggleExpandAllLogs = function(){
-			$scope.allVaultsExpanded = !$scope.allVaultsExpanded
-			$rootScope.$broadcast('expandVault', $scope.allVaultsExpanded)
-		}
 
 		$scope.clearLogs = function(){
 		//	if(confirm("This operation will clear all the logs on the server. Proceed clearing logs?")){
 				dataManager.clearLogs()			
 		//	}
 		}
-
-		// $scope.stopRealtime = function(){		
-		// 	socketService.stop()
-		// }
-
-		// $scope.startRealTime = function(){
-		// 	socketService.start()
-		// }
-		
+	
 		socketService.setSignalListner(function(signal){
 			if(signal == 'DB_CLEARED'){
-				$scope.stopHistoryPlayback()
 				$scope.vaults = []//clear the present state		
 				dataManager.clearState()
 				$scope.setStatusAlert('Logs were cleared')
@@ -67,6 +48,17 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
 				$scope.setStatusAlert('No active vaults')
 			}	
 		}
+
+
+		$scope.toggleIconsTray = function(){
+			$scope.iconsTrayClosed = !$scope.iconsTrayClosed		
+		}
+
+
+		$scope.toggleExpandAllLogs = function(){
+			$scope.allVaultsExpanded = !$scope.allVaultsExpanded
+			$rootScope.$broadcast('expandVault', $scope.allVaultsExpanded)
+		}
 		
 		dataManager.onNewVault(newVault)
 		dataManager.onVaultsLoaded(onVaultsLoaded)	
@@ -74,9 +66,5 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
 		setTimeout(function(){
 			dataManager.getActiveVaults()
 		}, 10)
-
-		
-
-
-
+	
 }];
