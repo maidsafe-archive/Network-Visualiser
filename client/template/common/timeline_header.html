@@ -3,7 +3,7 @@
 	<div class="player">		
 		<div class="time_slider">					
 			<div class="time_label">
-				{{playback.currentPlayTime |  date: 'dd/MM/yyyy HH:mm:ss'}}
+				{{ currentPlayTime |  date: 'dd/MM/yyyy HH:mm:ss' }}
 			</div>
 			<div class="slider" range-slider min="0" max="playback.max_steps" model-min="0" model-max="playback.currentState" pin-handle="min" show-values="false" ></div>
 		</div>

@@ -156,7 +156,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	}
 
 	this.pause = function(){
-		setPlayerStatus(status.pause)
+		setPlayerStatus(status.pause)		
 		clearInterval(timerId)
 	}
 

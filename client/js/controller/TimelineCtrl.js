@@ -19,7 +19,9 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 	$scope.firstLogtime
 
-	$scope.playback = {currentState : 0, max_steps : 1000, incrementalSteps:0 , currentPlayTime:null }
+	$scope.playback = {currentState : 0, max_steps : 1000, incrementalSteps:0 }
+
+	$scope.currentPlayTime = null
 
 	$scope.maxTime = new Date()
 	
@@ -30,24 +32,28 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 	$scope.autoSeekItervalId 
 
 	$scope.$watch('playback.currentState', function(newValue){	
-		if($scope.firstLogtime){
-			$scope.playback.currentPlayTime = $scope.getPlayTime(parseInt(newValue))
+		if($scope.firstLogtime && String(newValue).indexOf(".")==-1){			
+			$scope.currentPlayTime = $scope.getPlayTime(parseFloat(newValue))			
 			if(!$scope.$$phase)
 				$scope.$apply()
-			if($scope.autoSeekItervalId){
-				clearTimeout($scope.autoSeekItervalId)
-				$scope.autoSeekItervalId = null
-			}
-			$scope.autoSeekItervalId = setTimeout(function(){
-				$scope.stopHistoryPlayback()
-				$scope.playHistory()
-			}, 2000)			
+			 if($scope.autoSeekItervalId){
+			 	clearTimeout($scope.autoSeekItervalId)
+			 	$scope.autoSeekItervalId = null
+			 }			
+			 $scope.autoSeekItervalId = setTimeout(function(){
+				if(!$rootScope.playerPaused){
+					$scope.stopHistoryPlayback()
+					$scope.playHistory()
+				}				
+			}, 1500)			
 		}				
 	} )
 
-	$scope.updatePlayingTime = function(){		
-		$scope.playback.currentState += $scope.playback.incrementalSteps; 										
-		$scope.playback.currentPlayTime += 1000	
+	$scope.updatePlayingTime = function(){				
+		$scope.playback.currentState += $scope.playback.incrementalSteps; 
+		$scope.currentPlayTime += 1000													
+		if(!$scope.$$phase)
+				$scope.$apply()
 	}
 
 	
@@ -70,17 +76,18 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 	$scope.getPlayTime = function(playFrom){		
 		var time = $scope.maxTime.getTime();	
 		var date = new Date(time - ((($scope.playback.max_steps - playFrom)/$scope.playback.max_steps) * (time  - $scope.firstLogtime)))			
+		console.log(date)
 		return date.getTime()
 	}		
 
 
 	$scope.playHistory = function(){
+		$scope.showLoader = true
 		$rootScope.playerPaused = false		
-		var _time = new Date($scope.playback.currentPlayTime).toISOString()
+		var _time = new Date($scope.currentPlayTime).toISOString()
 		$scope.playerState = $scope.PLAYER_STATE.PLAYING		
 		$scope.vaults = []//clear the present state		
-		dataManager.clearState()
-		$scope.showLoader = true
+		dataManager.clearState()		
 		dataManager.getActiveVaults(_time)			
 		$scope.playerStatus = "Buffering..."
 	}
@@ -102,11 +109,11 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 		playbackService.stop()
 	}
 
-	$scope.stopPlayer = function(){		
-		$scope.playerState = $scope.PLAYER_STATE.STOPED		
-		playbackService.pause()
-		dataManager.clearState()
-	}
+	// $scope.stopPlayer = function(){		
+	// 	$scope.playerState = $scope.PLAYER_STATE.STOPED		
+	// 	playbackService.pause()
+	// 	dataManager.clearState()
+	// }
 
 	
 	var newVault = function(vault){	
@@ -130,7 +137,7 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 		}	
 	}
 
-	var updatePlayerStatus = function(status){				
+	var updatePlayerStatus = function(status){						
 		switch(status){
 			case 0://playing
 				$scope.playerStatus = ""
@@ -142,10 +149,8 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 				$scope.updatePlayingTime()
 				break;
 
-		}		
-
-		if(!$scope.$$phase)
-				$scope.$apply()				
+		}				
+		
 	}
 
 		
@@ -157,14 +162,14 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 
 	$http.get('/firstuptime').then(function(res){
-			$scope.firstLogtime = new Date(res.data).getTime()	- 3000//reducing 3 secondes for the play				
+			$scope.firstLogtime = new Date(res.data).getTime()	- 10000//reducing 10 secondes for the play				
 			$scope.playback.incrementalSteps = 1000 / ( (new Date($scope.maxTime).getTime() - $scope.firstLogtime) / $scope.playback.max_steps )			
-			$scope.playback.currentPlayTime = $scope.firstLogtime			
+			$scope.currentPlayTime = $scope.firstLogtime			
 	})
 
-	setTimeout(function(){
-		dataManager.getActiveVaults()
-	}, 10)
-
+	// setTimeout(function(){
+	// 	dataManager.getActiveVaults()
+	// }, 10)
+	$scope.showLoader = false
 
 }]
