@@ -17,14 +17,21 @@ db.once('open', function callback () {
 });
 
 exports.addLog = function(log, promise){
-	vaultStatus.updateStatus(log)
-	vaultStatus.isVaultActive(log).then(function(isActive){		
-		if(isActive || log.action_id == 0 || log.action_id == 18)
-			vaultLog.save(log, promise)
-		else{			
-			promise('Vault is not active')
-		}			
-	})	
+	vaultStatus.updateStatus(log).then(function(){
+		console.log('IN ')
+		vaultStatus.isVaultActive(log).then(function(isActive){	
+		console.log(isActive)	
+			if(isActive || log.action_id == 0 || log.action_id == 18)
+				vaultLog.save(log, promise)
+			else{			
+				if(promise)
+					promise('Vault is not active')
+			}			
+		})	
+	}, function(err){
+		console.log('ERR ::' + err)
+	});
+		
 }
 
 exports.searchLog = function(criteria, promise){	
@@ -55,4 +62,8 @@ exports.firstLogTime = function(){
 
 exports.exportLogs = function(){
 	return dbUtils.exportLogs()
+}
+
+exports.importLogs = function(fileName){
+	return dbUtils.importLogs(fileName, vaultStatus, vaultLog)
 }

@@ -6,8 +6,8 @@ var config = require('./../../../Config.js')
 var fs = require('fs')
 
 var saveLog = function(req, res){
-	var log = req.body;
-	console.log(log)		
+	var log = req.body;	
+	console.log(log)
 	utils.formatDate(log)
 	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
 		log.value1 = utils.decodeData(log.value1)
@@ -122,6 +122,20 @@ var exportLogs = function(req, res){
 	})
 }
 
+
+var importLogs = function(req, res){
+	fs.readFile(req.files.logFile.path, function (err, data) {		
+		var fileName = new Date().getTime() + '.csv'
+		fs.writeFile(fileName, data, function (err) {
+			bridge.dropDB()
+			bridge.importLogs(fileName).then(function(){				
+				res.send('Imported')
+    			deleteFile(fileName)
+			})    		
+  		});
+	})
+}
+
 exports.saveLog = saveLog
 exports.searchLog = searchLog
 exports.vaultHistory = history
@@ -129,3 +143,4 @@ exports.clearAll = dropDB
 exports.getActiveVaults = activeVaultsWithRecentLogs
 exports.getFirstLogTime = getFirstLogTime
 exports.exportLogs = exportLogs
+exports.importLogs = importLogs

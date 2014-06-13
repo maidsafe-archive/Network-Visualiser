@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var fs = require('fs');
+var csv = require('fast-csv')
 
 
 var DBUtil = function(dbConnection){
@@ -53,7 +54,7 @@ var DBUtil = function(dbConnection){
 			dbConn.db.collection(vaultId, function(err, col){
 				var stream = col.find({}, {__id:0, __v:0}).stream()
 				stream.on('data', function(doc){					
-						outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n')					
+					outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n')					
 				})
 				stream.on('close', function(){					
 					setTimeout(function(){handler.callback()}, 1000)
@@ -61,9 +62,7 @@ var DBUtil = function(dbConnection){
 
 			})						
 		}
-
 		writeToStream()
-
 	}
 
 
@@ -117,6 +116,35 @@ var DBUtil = function(dbConnection){
 		var outFile = createTempFile(helper.streamReady)		
 		helper.setOutStream(outFile.stream)					
 		return promise
+	}
+
+
+	this.importLogs = function(filePath,  vaultStatus, logManager){
+		var promise = new mongoose.Promise		
+		var stream = fs.createReadStream(filePath);
+		var firstRecord = true
+		var log = {}
+		csv.fromStream(stream)
+		.on("record", function(data){
+		 	if(firstRecord){
+		 		firstRecord = false
+		 	}else{		 		
+		 		console
+		 		log = { vault_id: data[0], action_id:data[1], persona_id:data[2], value1:(data[3]||''), value2 : (data[4]||'')}
+		 		vaultStatus.updateStatus(log).then(function(){
+					vaultStatus.isVaultActive(log).then(function(isActive){		
+						if(isActive || log.action_id == 0 || log.action_id == 18)
+							logManager.save(log, promise)								
+					})	
+				}, function(err){
+					console.log('ERR ::' + err)
+				});
+		 	}		     
+		})
+		.on("end", function(){		    
+		     promise.complete('Completed')
+		 });
+		return promise	
 	}
 
 	return this;

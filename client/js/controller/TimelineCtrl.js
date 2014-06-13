@@ -30,9 +30,16 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 	$scope.autoSeekItervalId 
 
+	$scope.changedOnPause = false
+
 	$scope.$watch('playback.currentState', function(newValue){	
-		if($scope.firstLogtime && String(newValue).indexOf(".")==-1){			
-			$scope.currentPlayTime = $scope.getPlayTime(parseFloat(newValue))			
+		if($scope.firstLogtime && String(newValue).indexOf(".")==-1){				
+			if($rootScope.playerPaused){
+				$scope.changedOnPause = true
+			}else{
+				$scope.showLoader = true
+			}				
+			$scope.currentPlayTime = $scope.getPlayTime(parseFloat(newValue))
 			if(!$scope.$$phase)
 				$scope.$apply()
 			 if($scope.autoSeekItervalId){
@@ -45,7 +52,7 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 					$scope.playHistory()
 				}				
 			}, 1500)			
-		}				
+		}			
 	} )
 
 	$scope.updatePlayingTime = function(){				
@@ -74,8 +81,7 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 	$scope.getPlayTime = function(playFrom){		
 		var time = $scope.maxTime.getTime();	
-		var date = new Date(time - ((($scope.playback.max_steps - playFrom)/$scope.playback.max_steps) * (time  - $scope.firstLogtime)))			
-		console.log(date)
+		var date = new Date(time - ((($scope.playback.max_steps - playFrom)/$scope.playback.max_steps) * (time  - $scope.firstLogtime)))					
 		return date.getTime()
 	}		
 
@@ -100,7 +106,14 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 	$scope.resumeHistoryPlayback = function(){
 		$rootScope.playerPaused = false					
 		$scope.playerState = $scope.PLAYER_STATE.PLAYING
-		playbackService.resume()
+		if($scope.changedOnPause){
+			$scope.changedOnPause = false
+			$scope.stopHistoryPlayback()
+			$scope.playHistory()
+		}else{
+			playbackService.resume()
+		}
+
 	}
 
 	$scope.stopHistoryPlayback = function(){			

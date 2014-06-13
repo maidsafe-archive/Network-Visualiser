@@ -14,7 +14,6 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
  			window.open('/client/timeline.html', '_blank').focus();  			
 		}	
 
-
 		$scope.export = function(){		
  			window.open('/export', '_blank');  			
 		}	
@@ -27,7 +26,6 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
 					$scope.$apply()
 			}, 5000)
 		}
-
 
 		$scope.clearLogs = function(){
 		//	if(confirm("This operation will clear all the logs on the server. Proceed clearing logs?")){

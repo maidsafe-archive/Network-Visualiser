@@ -37,25 +37,31 @@ var VaultHealth = function(dbConnection){
 	}
 
 	this.updateStatus = function(data){	
-		
+		var promise = new mongoose.Promise
 		if(canUpdateStatus(data.action_id)){
 			data = transformData(data)			
 			VaultStatus.update({vault_id:data.vault_id}, data, {upsert:true}, function(err, doc){				
 				if(err){
 					console.log('Failed to update Status for vault - ' + data.vault_id)	
-					console.log(err)
+					promise.error(err)
 				}else if(!firstLogTime){							
 					var fisrtLog =  new VaultStatus({key:'firstLogTime', value:data.last_updated.toISOString()})
 					fisrtLog.save(function(err, doc){
-						if(err){
-							console.log(err)
-						}else{
-							firstLogTime = data.last_updated.toISOString()
-						}
+							if(err){
+								promise.error(err)
+							}else{
+								firstLogTime = data.last_updated.toISOString()
+								promise.complete('')
+							}
 					})				
+				}else{
+					promise.complete('')
 				}
 			});
-		}							
+		}else{
+			promise.complete('')			
+		}	
+		return promise						
 	}
 
 	this.getFirstLogTime = function(callback){

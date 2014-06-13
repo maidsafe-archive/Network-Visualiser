@@ -9,6 +9,7 @@
     "mongoose" : "3.8.X",
     "socket.io" :"0.9",
     "bower": "latest",
+    "fast-csv":"latest",
     "forever" : "latest"
   }
 }

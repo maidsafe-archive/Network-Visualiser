@@ -24,6 +24,12 @@ var exportLogs = function(req, res){
 	logService.exportLogs(req, res)
 }
 
+
+var importLogs = function(req, res){
+	logService.importLogs(req, res)
+}
+
+
 var firstLogTime = function(req, res){
 	logService.getFirstLogTime(req, res)
 }
@@ -36,4 +42,5 @@ exports.register = 	function(server){
 	server.get('/search', search);
 	server.get('/export', exportLogs);
 	server.get('/firstuptime', firstLogTime);
+	server.post('/import', importLogs);
 }

@@ -9,6 +9,7 @@ var INDEX_PAGE = config.Constants.landingPage
 
 server.use(express.json());
 server.use(express.urlencoded())
+server.use(express.multipart())
 
 
 server.configure(function(){
@@ -18,6 +19,7 @@ server.configure(function(){
 server.get('/', function(req, res){
 	res.redirect(INDEX_PAGE)
 })
+
 
 logController.register(server)
 
