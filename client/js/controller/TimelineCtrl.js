@@ -1,6 +1,5 @@
 var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackService', 'socketService', function($scope, $rootScope, $http, dataManager, playbackService, socketService){
 
-
 	$scope.iconsTrayClosed = true;
 	
 	$scope.vaults = []

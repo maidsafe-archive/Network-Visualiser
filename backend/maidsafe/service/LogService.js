@@ -3,7 +3,7 @@ var Handler = require('./Handler.js')
 var utils = require('./../utils.js')
 var url = require('url')
 var config = require('./../../../Config.js')
-
+var fs = require('fs')
 
 var saveLog = function(req, res){
 	var log = req.body;
@@ -109,10 +109,16 @@ var getFirstLogTime = function(req, res){
 	res.send(bridge.firstLogTime())
 }
 
+var deleteFile = function(path){	
+	setTimeout(function(){
+		fs.unlinkSync(path)
+	} ,600000)//after 10 minutes
+}
 
 var exportLogs = function(req, res){
-	bridge.exportLogs().then(function(){
-		res.send('done')
+	bridge.exportLogs().then(function(path){				
+		res.download(path)	
+		deleteFile(path)
 	})
 }
 
