@@ -47,12 +47,12 @@ var VaultHealth = function(dbConnection){
 				}else if(!firstLogTime){							
 					var fisrtLog =  new VaultStatus({key:'firstLogTime', value:data.last_updated.toISOString()})
 					fisrtLog.save(function(err, doc){
-							if(err){
-								promise.error(err)
-							}else{
-								firstLogTime = data.last_updated.toISOString()
-								promise.complete('')
-							}
+						if(err){
+							promise.error(err)
+						}else{
+							firstLogTime = data.last_updated.toISOString()
+							promise.complete('')
+						}
 					})				
 				}else{
 					promise.complete('')

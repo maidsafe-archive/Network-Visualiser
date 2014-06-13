@@ -273,8 +273,9 @@ section div.wrapper div.node div.log_slider ul li{
 }
 
 .see_history a{
-	float: right;
-	color: rgb(74, 74, 229)
+	float: left;
+	margin:3px;
+	text-decoration: none
 }
 
 .loading {

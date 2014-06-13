@@ -102,7 +102,8 @@ var DBUtil = function(dbConnection){
 
 
 	var createTempFile = function(streamReadyCallback){
-		this.fileName = "Logs_" + new Date().getTime() + ".csv"
+
+		this.fileName = "\dump\Logs_" + new Date().getTime() + ".csv"
 		this.stream = fs.createWriteStream(this.fileName);
 		this.stream.once('open', streamReadyCallback)	
 		return this
@@ -129,7 +130,7 @@ var DBUtil = function(dbConnection){
 		 	if(firstRecord){
 		 		firstRecord = false
 		 	}else{		 		
-		 		console
+		 		console.log(data)
 		 		log = { vault_id: data[0], action_id:data[1], persona_id:data[2], value1:(data[3]||''), value2 : (data[4]||'')}
 		 		vaultStatus.updateStatus(log).then(function(){
 					vaultStatus.isVaultActive(log).then(function(isActive){		

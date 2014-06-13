@@ -6,8 +6,7 @@ var config = require('./../../../Config.js')
 var fs = require('fs')
 
 var saveLog = function(req, res){
-	var log = req.body;	
-	console.log(log)
+	var log = req.body;			
 	utils.formatDate(log)
 	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
 		log.value1 = utils.decodeData(log.value1)
@@ -112,7 +111,7 @@ var getFirstLogTime = function(req, res){
 var deleteFile = function(path){	
 	setTimeout(function(){
 		fs.unlinkSync(path)
-	} ,600000)//after 10 minutes
+	} ,120000)//after 2 minutes
 }
 
 var exportLogs = function(req, res){
@@ -136,6 +135,22 @@ var importLogs = function(req, res){
 	})
 }
 
+
+var testLog = function(req, res){
+	var log = req.body;	
+	console.log(log)
+	utils.formatDate(log)
+	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
+		log.value1 = utils.decodeData(log.value1)
+	}
+	if(log.value2 && log.value2.length>config.Constants.minLengthForDecode){
+		log.value2 = utils.decodeData(log.value2)
+	}
+	if(!log.hasOwnProperty('persona_id'))
+		log.persona_id = config.Constants.persona_na
+	res.send(200, "Saved")
+}
+
 exports.saveLog = saveLog
 exports.searchLog = searchLog
 exports.vaultHistory = history
@@ -144,3 +159,4 @@ exports.getActiveVaults = activeVaultsWithRecentLogs
 exports.getFirstLogTime = getFirstLogTime
 exports.exportLogs = exportLogs
 exports.importLogs = importLogs
+exports.testLog = testLog

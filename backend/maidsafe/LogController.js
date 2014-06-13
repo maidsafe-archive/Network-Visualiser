@@ -34,6 +34,11 @@ var firstLogTime = function(req, res){
 	logService.getFirstLogTime(req, res)
 }
 
+
+var testLog = function(req, res) {
+	logService.testLog(req, res)
+}
+
 exports.register = 	function(server){
 	server.post('/log', saveLogs);
 	server.get('/vaults', getActiveVaults);
@@ -43,4 +48,6 @@ exports.register = 	function(server){
 	server.get('/export', exportLogs);
 	server.get('/firstuptime', firstLogTime);
 	server.post('/import', importLogs);
+
+	server.post('/logtest', testLog);
 }
