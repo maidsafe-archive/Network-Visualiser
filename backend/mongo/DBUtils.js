@@ -6,6 +6,24 @@ var csv = require('fast-csv')
 var DBUtil = function(dbConnection){
 	var dbConn = dbConnection
 
+	var ACTION_TO_STRING = {
+							0:'Vault Started', 1:'Increases count', 2:'Decreases count',
+							3:'Blocked Delete Request',	4:'Account Transfer', 5:'Got Account Transferred',
+							6:'Increase Subscribers', 7:'Decrease Subscribers',	8:'Move Chunk',
+							9:'Marking Node up', 10:'Marking Node Down', 11:'Joining PMID Node',
+							12:'Dropping PMID Node', 13:'Storing Chunk', 14:'Deleting Chunk',
+							15:'Update Version', 16:'Remove Account', 17:'Network Health changed',
+							18:'Vault Stopping'
+						}
+
+
+	var PERSONA_TO_STRING = {
+							0 : 'MaidNode', 1 :'MpidNode', 2:'DataGetter', 
+							3:'MaidManager', 4:'DataManager', 5:'PmidManager', 6:'PmidNode', 
+							7:'MpidManager', 8:'VersionHandler', 9:'Cachehandler', 10:'NA'
+						}						
+
+
 
 	var ExportHandler = function(promise){
 		var fetched = 0			
@@ -33,22 +51,6 @@ var DBUtil = function(dbConnection){
 
 
 	var VaultToCSV = function(vaultId, outStream, handler){
-
-		var ACTION_TO_STRING = {
-							0:'Vault Started', 1:'Increases count', 2:'Decreases count',
-							3:'Blocked Delete Request',	4:'Account Transfer', 5:'Got Account Transferred',
-							6:'Increase Subscribers', 7:'Decrease Subscribers',	8:'Move Chunk',
-							9:'Marking Node up', 10:'Marking Node Down', 11:'Joining PMID Node',
-							12:'Dropping PMID Node', 13:'Storing Chunk', 14:'Deleting Chunk',
-							15:'Update Version', 16:'Remove Account', 17:'Network Health changed',
-							18:'Vault Stopping'
-						}
-
-		var PERSONA_TO_STRING = {
-							0 : 'MaidNode', 1 :'MpidNode', 2:'DataGetter', 
-							3:'MaidManager', 4:'DataManager', 5:'PmidManager', 6:'PmidNode', 
-							7:'MpidManager', 8:'VersionHandler', 9:'Cachehandler', 10:'NA'
-						}						
 
 		var writeToStream = function(){
 			dbConn.db.collection(vaultId, function(err, col){
@@ -102,8 +104,7 @@ var DBUtil = function(dbConnection){
 
 
 	var createTempFile = function(streamReadyCallback){
-
-		this.fileName = "\dump\Logs_" + new Date().getTime() + ".csv"
+		this.fileName = "Logs_" + new Date().getTime() + ".csv"
 		this.stream = fs.createWriteStream(this.fileName);
 		this.stream.once('open', streamReadyCallback)	
 		return this
@@ -120,29 +121,65 @@ var DBUtil = function(dbConnection){
 	}
 
 
+
+	var getActionNameMap = function(){
+		var map = {}
+		for(var key in ACTION_TO_STRING){
+			map[ACTION_TO_STRING[key]] = key
+		}
+		return map
+	}
+
+
+	var getPersonaNameMap = function(){
+		var map = {}
+		for(var key in PERSONA_TO_STRING){
+			map[PERSONA_TO_STRING[key]] = key
+		}
+		return map
+	}
+
+
+
+
 	this.importLogs = function(filePath,  vaultStatus, logManager){
 		var promise = new mongoose.Promise		
 		var stream = fs.createReadStream(filePath);
 		var firstRecord = true
 		var log = {}
+		var actionMap = getActionNameMap()		
+		var personaMap = getPersonaNameMap()
+		var firstLogTime
+		var temp 
+
+		var SaveLog = function(data){					 				 			
+	 		var log = { vault_id: data[0], ts:data[1], action_id:actionMap[data[2]], persona_id:personaMap[data[3]], value1:(data[4]||''), value2 : (data[5]||'')}		 		
+	 		vaultStatus.updateStatus(log).then(function(){		 			
+				vaultStatus.isVaultActive(log).then(function(isActive){								
+					if(isActive || log.action_id == 0 || log.action_id == 18){							
+						logManager.save(log)								
+					}							
+				})	
+			}, function(err){
+				console.log('ERR ::' + err)
+			});		 	
+		}
+
 		csv.fromStream(stream)
 		.on("record", function(data){
-		 	if(firstRecord){
+			if(firstRecord){
 		 		firstRecord = false
 		 	}else{		 		
-		 		console.log(data)
-		 		log = { vault_id: data[0], action_id:data[1], persona_id:data[2], value1:(data[3]||''), value2 : (data[4]||'')}
-		 		vaultStatus.updateStatus(log).then(function(){
-					vaultStatus.isVaultActive(log).then(function(isActive){		
-						if(isActive || log.action_id == 0 || log.action_id == 18)
-							logManager.save(log, promise)								
-					})	
-				}, function(err){
-					console.log('ERR ::' + err)
-				});
-		 	}		     
+		 		temp = new Date(data[1]).getTime()
+		 		if(!firstLogTime || firstLogTime > temp){		 			
+		 			firstLogTime = temp		 			
+		 		}		 			
+				new SaveLog(data)
+			}
 		})
-		.on("end", function(){		    
+		.on("end", function(){			
+			console.log(new Date(firstLogTime))
+			 vaultStatus.setFirstLogTime(new Date(firstLogTime).toISOString())		    
 		     promise.complete('Completed')
 		 });
 		return promise	

@@ -50,7 +50,7 @@ var VaultHealth = function(dbConnection){
 						if(err){
 							promise.error(err)
 						}else{
-							firstLogTime = data.last_updated.toISOString()
+							firstLogTime = data.ts.toISOString()
 							promise.complete('')
 						}
 					})				
@@ -66,6 +66,11 @@ var VaultHealth = function(dbConnection){
 
 	this.getFirstLogTime = function(callback){
 		return firstLogTime || new Date().toISOString()
+	}
+
+
+	this.setFirstLogTime = function(firstLogTimeISO){//as iso string		
+		firstLogTime = firstLogTimeISO
 	}
 
 	this.getActiveVaults = function(callback){

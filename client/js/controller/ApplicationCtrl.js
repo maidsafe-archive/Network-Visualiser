@@ -16,6 +16,10 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
 
 		$scope.export = function(){		
  			window.open('/export', '_blank');  			
+		}
+
+		$scope.import = function(){
+			window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
 		}	
 
 		$scope.setStatusAlert = function(msg){

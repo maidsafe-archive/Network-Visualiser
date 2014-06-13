@@ -111,7 +111,7 @@ var getFirstLogTime = function(req, res){
 var deleteFile = function(path){	
 	setTimeout(function(){
 		fs.unlinkSync(path)
-	} ,120000)//after 2 minutes
+	} , 60000)//after 1 minute
 }
 
 var exportLogs = function(req, res){
