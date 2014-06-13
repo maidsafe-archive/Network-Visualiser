@@ -129,3 +129,31 @@
 	height:50px;		
 }
 
+.play-btn {
+	background: #87b7ec url(../imgs/icon-play.png) no-repeat 0 -2px;
+	width: 70px;
+	height: 40px;
+	text-indent: -9999px;
+}
+.play-btn:hover {
+	background: #29578A url(../imgs/icon-play.png) no-repeat 0 -2px;
+}
+.pause-btn {
+	background: #87b7ec url(../imgs/icon-pause.png) no-repeat -4px -2px;
+	width: 70px;
+	height: 40px;
+	text-indent: -9999px;
+}
+.pause-btn:hover {
+	background: #29578A url(../imgs/icon-pause.png) no-repeat -4px -2px;
+}
+.resume-btn {
+	background: #87b7ec url(../imgs/icon-resume.png) no-repeat 0 -2px;
+	width: 70px;
+	height: 40px;
+	text-indent: -9999px;
+}
+.resume-btn:hover {
+	background: #29578A url(../imgs/icon-resume.png) no-repeat 0 -2px;
+}
+

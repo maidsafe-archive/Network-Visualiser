@@ -1,4 +1,6 @@
-<p class="title">Network Visualiser</p>
+<div class="top-header">
+	<h1>Network Visualiser - Realtime View</h1>
+	</div>
 <!-- <div class="timeline">
 	<divstyle="float:left">
 		<span ng-model="playerStatus">{{playerStatus}}</span>
@@ -11,13 +13,25 @@
 		<button ng-click="stopHistoryPlayback()" ng-show="playerState != PLAYER_STATE.STOPED">Stop</button>	 
 	</div>
 </div> -->
+
+<ul class="buttons-left">
+<li>
+		<button ng-click="timeline()">Timeline</button>
+	</li>
+	<li>
+		<button ng-click="export()">Export</button>
+	</li>
+	<li>
+		<button>Import</button>
+	</li>
+	<li>
+		<button ng-click="clearLogs()">Clear Logs</button>
+	</li>				
+</ul>
 <div class="status" ng-class="{true:'alert'}[alert != null]">
 	<span>{{alert}}</span>
 </div>
-<ul>
-	<li>
-		<button ng-click="timeline()">Timeline</button>
-	</li>
+<ul class="buttons-right">
 	<li>
 		<button ng-click="toggleExpandAllLogs()">{{allVaultsExpanded?'Hide All':'Expand All'}}</button>
 	</li>
@@ -27,6 +41,7 @@
 	<!-- <li>
 		<button ng-click="reset()">Reset</button>
 	</li> -->
+
 	<li>
 		<button ng-click="export()">Export</button>
 	</li>
@@ -36,4 +51,5 @@
 	<li>
 		<button ng-click="clearLogs()">Clear Logs</button>
 	</li>
+
 </ul>
