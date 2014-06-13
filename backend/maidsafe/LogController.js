@@ -1,6 +1,6 @@
 var logService = require('./service/LogService.js')
 
-var saveLogs = 	function(req, res){
+var saveLogs = 	function(req, res){	
 	logService.saveLog(req, res)
 }
 

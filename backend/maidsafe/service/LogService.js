@@ -3,10 +3,11 @@ var Handler = require('./Handler.js')
 var utils = require('./../utils.js')
 var url = require('url')
 var config = require('./../../../Config.js')
-
+var fs = require('fs')
 
 var saveLog = function(req, res){
-	var log = req.body;		
+	var log = req.body;
+	console.log(log)		
 	utils.formatDate(log)
 	if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
 		log.value1 = utils.decodeData(log.value1)
@@ -72,20 +73,24 @@ var getActiveVaultsAtTime = function(criteria, res){
 	bridge.getAllVaultNames().then(function(vaults){
 		var results = {}
 		var counter = 0		
-		for(var index in vaults){			
-			if(vaults[index].vault_id){
-				results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}															
-				bridge.vaultHistory(vaults[index].vault_id, {ts:{'$lt':criteria.ts}}, 0, config.Constants.vault_logs_count).then(function(logs){												
-					counter++				
-					if(logs.length>0 && logs[logs.length-1] != 18)				
-						results[logs[0].vault_id].logs = logs
-					if(counter >= vaults.length)
-						res.send(results)
-				},function(err){
-					console.log(err)
-				})
-			}					
-		}			
+		if(vaults.length==0){
+			res.send(500, 'No active vaults')
+		}else{
+			for(var index in vaults){			
+				if(vaults[index].vault_id){
+					results[vaults[index].vault_id] = {vault_id_full: vaults[index].vault_id_full, logs:[]}															
+					bridge.vaultHistory(vaults[index].vault_id, {ts:{'$lt':criteria.ts}}, 0, config.Constants.vault_logs_count).then(function(logs){												
+						counter++				
+						if(logs.length>0 && logs[logs.length-1] != 18)				
+							results[logs[0].vault_id].logs = logs
+						if(counter >= vaults.length)
+							res.send(results)
+					},function(err){
+						console.log(err)
+					})
+				}					
+			}
+		}				
 	})
 }
 
@@ -104,10 +109,16 @@ var getFirstLogTime = function(req, res){
 	res.send(bridge.firstLogTime())
 }
 
+var deleteFile = function(path){	
+	setTimeout(function(){
+		fs.unlinkSync(path)
+	} ,600000)//after 10 minutes
+}
 
 var exportLogs = function(req, res){
-	bridge.exportLogs().then(function(){
-		res.send('done')
+	bridge.exportLogs().then(function(path){				
+		res.download(path)	
+		deleteFile(path)
 	})
 }
 

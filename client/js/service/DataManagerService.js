@@ -34,7 +34,7 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 
 
 	var activeVaults = function(time){
-		$http.get('/vaults?' + (time?('ts='+time):'')).then(function(result){
+		$http.get('/vaults?' + (time?('ts='+time):'')).then(function(result){			
 			var vaults = result.data
 			for(var key in vaults){
 				if(vaults[key].logs && vaults[key].logs.length>0){
@@ -46,7 +46,7 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 				}												
 			}
 			if(vaultsLoadedObserver) vaultsLoadedObserver(time)
-		}, function(err){			
+		}, function(err){							
 			vaultsLoadedObserver()
 		})
 	}

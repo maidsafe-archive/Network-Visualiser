@@ -14,9 +14,18 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
  			window.open('/client/timeline.html', '_blank').focus();  			
 		}	
 
+
+		$scope.export = function(){		
+ 			window.open('/export', '_blank');  			
+		}	
+
 		$scope.setStatusAlert = function(msg){
 			$scope.alert = msg
-			setTimeout(function(){ $scope.alert = null}, 5000)
+			setTimeout(function(){ 
+				$scope.alert = null
+				if(!$scope.$$phase)
+					$scope.$apply()
+			}, 5000)
 		}
 
 
