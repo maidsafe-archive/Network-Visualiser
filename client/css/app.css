@@ -1,7 +1,8 @@
 body{
 	font-family: arial;
 	font-size: 12px;	
-	background-color: #fff;	
+	background-color: #fff;
+	font-family: 'OpenSansRegular', Arial, sans-serif;	
 }
 
 ul{list-style-type: none;margin: 0px;padding: 0px}
@@ -16,73 +17,101 @@ ul{list-style-type: none;margin: 0px;padding: 0px}
 }
 
 header{	
-	background-color: #E6E6E6;
-	height: 50px;
-	position: fixed;
+	background-color: #5593d7;
+	height: 90px;
+	position: absolute;
 	top: 0px;
 	width: 100%;
+	min-width: 1550px;
+	overflow-x: scroll;
 }
 
-header p.title {	
+header p.title {
+	font-family: 'OpenSansBold', Arial, sans-serif;	
 	font-size: 2em;
-	margin: .5em;
+	margin: 1em 0em 1em 2em;
 	float: left;	
-	width: 210px;
+	color: #fff;
 }
 
 header div.status{
 	margin: 1em;
 	float: left;
-	position: center;
-	padding: .34em;
+	display: block;
+	position: relative;
+	padding: .34em 1em;
 	border-radius: 9px;
+	font-family: 'OpenSansRegular', Arial, sans-serif;
+	font-size: 14px;
+	color: #fff;
+	top: 5px;
+	left: 240px
+	
 }
 
 header div.status.alert{
-	background:rgba(214, 69, 47, 0.5);
+	background:#f78b8b;
 }
 
 header div.timeline{	
 	float: left;
 	margin: .3em;
+	width: 80%;
 }
 
 .time_slider div.time_label {
+	font-family: 'OpenSansRegular', Arial, sans-serif;	
 	float: left;
-	margin: .2em
+	margin: -0.1em 1em 0em 0;
+	display: inline-block;
+	color: #fff;
+	font-size: 30px;
+
 }
 
 .time_slider div.slider {	
-	width: 500px;
-	margin-left: 10em !important
+	width: 100%;
+	margin-left: 12em !important;
 }
 
 header div.timeline div.player div.player_msgs span{
-	margin-left: 20em;	
+	font-family: 'OpenSansRegular', Arial, sans-serif;
+	font-size: 14px;
+	margin-left: 0em;	
 	text-align: center;
-	text-align: center
+	text-align: center;
+	display: inline-block;
+	position: relative;
+	top: -30px;
+	left: 640px
 }	
 
 p.time_label{
-	margin: .4em
+	margin: 1em;
+	font-family: 'OpenSansLight', Arial, sans-serif;
+	color: #fff;
+	font-size: 14px;
 }
 
 header div.timeline div.time_slider{
-	width: 400px;
-	margin-left: 3em
+	/*width: 960px;*/
+	width: 92%;
+	margin-left: 1.2em;
+	margin-top: 0.2em;
 }
 
 
 header div.timeline div.player{
-	width: 630px;
+	/*width: 1070px;*/
+	width: 85%;
 	float: left;
 	margin: .5em
 }
 
 header div.timeline div.player_buttons{	
 	float: left;
-	margin-left: 2em;
-	margin-top: .5em 	
+	margin-left: 7em;
+	margin-top: 0.6em 	
 }
 
 .ngrs-range-slider{
@@ -92,7 +121,7 @@ header div.timeline div.player_buttons{
 
 header ul{
 	float: right;
-	margin: 1em
+	margin: 1.3em 1.5em;
 }
 
 header ul li{
@@ -100,9 +129,59 @@ header ul li{
 	margin-left: .5em
 }
 
+.top-header {
+	width: 100%;
+	background:#3476be;
+	height: 25px;
+	position: relative;
+}
+
+.top-header h1 {
+	font-family: 'OpenSansLight', Arial, sans-serif;
+	font-size: 12px;
+	text-transform: uppercase;;
+	color: #fff;
+	margin: 0;
+	padding: 0.4em 2em 0 2em;
+	display: inline;
+	float: left;
+}
+
+.top-header p { 
+	margin: 0; 
+	padding: 0.2em 2em; 
+	text-align: right;
+
+}
+
+ul.buttons-left { float: left;}
+ul.buttons-right { float: right;}
+
+
+button {
+	background-color:#87b7ec;
+	font-size: 16px;
+    font-weight: 400;
+	color:#FFFFFF!important;
+	cursor:pointer;
+	text-decoration:none;
+	border-color: rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    border-style: none;
+    padding: 5px 15px 5px 15px;
+	display: inline-block;
+	float:right;
+	width: 110px;
+	
+}
+button:hover {
+	background-color:#29578A;
+}
+
+
 section {
 	position: fixed;
-	top:50px;/*Corresponds to the header height*/
+	top:90px;/*Corresponds to the header height plus 20px*/
 	bottom: 0px;
 	width: 100%;		
 }
@@ -118,7 +197,6 @@ section ul.personas{
 section ul.personas li{
 	float: left;
 	padding: .3em 0em;
-	border: 1px solid;
 	margin-right: .2em;
 	text-align: center;
 	width: 100px;	
@@ -136,8 +214,16 @@ section ul.options li{
 
 
 section div.icons{
-	border-bottom: 1px solid;
-	height: 175px;
+	min-width: 1450px;
+	overflow:hidden;
+	background: #f2f2f2;
+}
+
+section div.icons:after {
+content:".";
+display:block;
+clear:both;
+visibility:hidden;
 }
 
 section div.icons ul{
@@ -147,12 +233,13 @@ section div.icons ul{
 
 section div.icons ul li {
 	float: left;
-	margin-left: 1.2em;
+	margin-left: 1em;
 	margin-top: .3em;
-	width: 13%
+	width: 190px;
 }
 section div.icons ul.personas li {
-	width: 8%
+	width: 110px;
+	padding: 5px 0;
 }
 
 section div.icons ul {
@@ -160,7 +247,7 @@ section div.icons ul {
 }
 
 section div.icons ul li span{
-	margin: 1.5em 0.5em;
+	margin: 1.5em 0em;
 	position: absolute;
 }
 
@@ -294,3 +381,5 @@ section div.wrapper div.node div.log_slider ul li{
 .loading div.loader_icon img{
 	width: 50px
 }
+
+

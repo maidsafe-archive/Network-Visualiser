@@ -4,6 +4,9 @@
 		<link rel="stylesheet" type="text/css" href="../client/css/app.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/shapes.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/colours.css">
+		<link rel="stylesheet" type="text/css" href="../client/css/fonts.css">
+		<link rel="stylesheet" type="text/css" href="../client/css/slider.css">
+
 		<script type="text/javascript" src="../vendor/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
 		<script type="text/javascript" src="../client/js/socket.io/socket.io.min.js"></script>
@@ -20,10 +23,14 @@
 		<script type="text/javascript" src="../client/js/controller/VaultCtrl.js"></script>
 		<script type="text/javascript" src="../client/js/directive/tooltip.js"></script>
 		<script type="text/javascript" src="../client/js/controller/HistoryCtrl.js"></script>
-		<script type="text/javascript" src="../client/js/config/registry.js"></script>		
-		<title>Network Visualiser - MaidSafe</title>				
+		<script type="text/javascript" src="../client/js/config/registry.js"></script>
+
+		<title>Network Visualiser - Timeline View</title>
+
+		<link rel="shortcut icon" href="imgs/favicon.ico" />
+  		<link rel="icon" type="image/ico" href="imgs/favicon.ico" />				
 	</head>
-	<body ng-app="MaidSafe" ng-controller="timelineCtrl">
+	<body id="timeline" ng-app="MaidSafe" ng-controller="timelineCtrl">
 		<header>
 			<ng-include src="'template/common/timeline_header.html'"></ng-include>
 		</header>
