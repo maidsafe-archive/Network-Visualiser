@@ -123,7 +123,7 @@ header div.timeline div.player_buttons{
 
 header ul{
 	float: right;
-	margin: 1.3em 2.2em 0em 1.5em;/*1.8*/
+	margin: 1.3em 2.2em 0em .5em;/*1.8*/
 }
 
 header ul li{
@@ -216,7 +216,8 @@ section ul.options li{
 
 
 section div.icons{
-	min-width: 1450px;
+	/*min-width: 1450px;*/
+	width: 100%;
 	overflow:hidden;
 	background: #f2f2f2;
 	display: none
@@ -238,10 +239,10 @@ section div.icons ul li {
 	float: left;
 	margin-left: 1em;
 	margin-top: .3em;
-	width: 190px;
+	width: 13%;
 }
 section div.icons ul.personas li {
-	width: 110px;
+	width: 8.6%;
 	padding: 5px 0;
 }
 
@@ -250,8 +251,10 @@ section div.icons ul {
 }
 
 section div.icons ul li span{
-	margin: 1.5em 0em;
+	margin: 1em 0em;
 	position: absolute;
+	word-wrap:break-word;
+	width: 100px
 }
 
 section div.wrapper{	
