@@ -5,7 +5,7 @@ var ToolTip = ['$compile', function($compile){
 	var tooltip = function(scope, element, attr, ctrls){			
 
 			var ele 			
-			var style = 'position:fixed;background-color:#fff;padding:.5em;border:1px solid;border-radius:6px;';
+			var style = 'position:fixed;background-color:#fff;padding:.5em;border:1px solid;border-radius:6px;z-index:999';
 			scope.tip = attr.tooltip
 			
 			scope.enabled = attr['canshow']	|| "true"

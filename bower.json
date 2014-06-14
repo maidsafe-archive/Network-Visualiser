@@ -5,6 +5,7 @@
 		"angular":"1.2.X",
 		"normalize.css":"latest",
 		"angular-rangeslider" : "latest",
-		"jquery" : "latest"
+		"jquery" : "latest",
+		"animate.css": "latest"
 	}
 }

@@ -8,7 +8,7 @@
 <div class="timeline">
 	<div class="player">		
 		<div class="time_slider">					
-			<div class="time_label">
+			<div class="time_label" tooltip="{{ currentPlayTime |  date: 'dd/MM/yyyy' }}" canshow="true">
 				{{ currentPlayTime |  date: 'HH:mm:ss' }}
 			</div>
 			<div class="slider" range-slider min="0" max="playback.max_steps" model-min="0" model-max="playback.currentState" pin-handle="		min" show-values="false" >
