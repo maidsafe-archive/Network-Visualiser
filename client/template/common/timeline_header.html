@@ -11,12 +11,12 @@
 			<div class="time_label">
 				{{ currentPlayTime |  date: 'HH:mm:ss' }}
 			</div>
-			<div class="slider" range-slider min="0" max="playback.max_steps" model-min="0" model-max="playback.currentState" pin-handle="min" show-values="false" ></div>
+			<div class="slider" range-slider min="0" max="playback.max_steps" model-min="0" model-max="playback.currentState" pin-handle="		min" show-values="false" >
+			</div>
 			<div class="player_msgs">						
-			<span>{{playerStatus}}</span>		
-		</div>
-		</div>
-			
+				<span>{{playerStatus}}</span>		
+			</div>
+		</div>		
 	</div>		
 	<div class="player_buttons">	
 		<button ng-click="playHistory()" ng-show="playerState == PLAYER_STATE.STOPED" class="play-btn">Play</button>

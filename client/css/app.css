@@ -22,8 +22,6 @@ header{
 	position: absolute;
 	top: 0px;
 	width: 100%;
-	/*min-width: 1550px;
-	overflow-x: scroll;*/
 }
 
 header p.title {
@@ -56,7 +54,7 @@ header div.status.alert{
 header div.timeline{	
 	float: left;
 	margin: .3em;
-	width: 80%;
+	width: 75%;
 }
 
 .time_slider div.time_label {
@@ -95,22 +93,22 @@ p.time_label{
 
 header div.timeline div.time_slider{
 	/*width: 960px;*/
-	width: 92%;
-	margin-left: 1.2em;
+	width: 80%;
+	margin-left: .8em;
 	margin-top: 0.2em;
 }
 
 
 header div.timeline div.player{
 	/*width: 1070px;*/
-	width: 85%;
+	width: 88%;
 	float: left;
-	margin: .5em
+	margin: .5em 1em
 }
 
 header div.timeline div.player_buttons{	
 	float: left;
-	margin-left: 6.7em;
+	margin-left: 0em;
 	margin-top: 0.6em 	
 }
 
@@ -121,7 +119,7 @@ header div.timeline div.player_buttons{
 
 header ul{
 	float: right;
-	margin: 1.3em 0.5em;
+	margin: 1.3em 2.2em 0em 1.5em;/*1.8*/
 }
 
 header ul li{
