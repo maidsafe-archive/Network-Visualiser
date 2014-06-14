@@ -1,4 +1,4 @@
-var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackService', 'socketService', function($scope, $rootScope, $http, dataManager, playbackService, socketService){
+var TimelineCtrl = ['$scope', '$rootScope', '$location', '$http', 'dataManager', 'playbackService', 'socketService', function($scope, $rootScope, $location, $http, dataManager, playbackService, socketService){
 
 	$scope.iconsTrayClosed = true;
 	
@@ -22,7 +22,7 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 	$scope.currentPlayTime = null
 
-	$scope.maxTime = new Date()
+	$scope.maxTime = $location.search().ts? new Date($location.search().ts) : new Date()
 	
 	$scope.playingTime = new Date()
 
@@ -31,6 +31,8 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 	$scope.autoSeekItervalId 
 
 	$scope.changedOnPause = false
+
+	
 
 	$scope.$watch('playback.currentState', function(newValue){	
 		if($scope.firstLogtime && String(newValue).indexOf(".")==-1){				

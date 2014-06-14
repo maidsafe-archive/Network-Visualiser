@@ -88,8 +88,8 @@ var VaultCtrl = ['$scope', '$rootScope', 'dataManager', 'vaultBehaviour', functi
 	}
 
 	$scope.toggleVaultLogs = function(expand){
+		$scope.stateIcon = !$scope.logsOpen?"arrow-up.png":"info.png";
 		$scope.logsOpen = expand?expand:!$scope.logsOpen;					
-		$scope.stateIcon = $scope.logsOpen?"arrow-up.png":"info.png";
 	}
 
 

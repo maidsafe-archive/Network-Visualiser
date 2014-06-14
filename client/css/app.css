@@ -336,6 +336,7 @@ section div.wrapper div.node div.box div.info p{
 	font-weight: bold;
 	float: left;
 	font-size:18px;
+	cursor:pointer
 }
 
 section div.wrapper div.node div.box div.info img{	

@@ -19,7 +19,7 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
 		}, 1000)
 	
 		$scope.timeline = function(){		
- 			window.open('/client/timeline.html', '_blank').focus();  			
+ 			window.open('/client/timeline.html#?ts='+new Date().toISOString(), '_blank').focus();  			
 		}	
 
 		$scope.export = function(){		
