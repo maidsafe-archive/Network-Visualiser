@@ -22,8 +22,8 @@ header{
 	position: absolute;
 	top: 0px;
 	width: 100%;
-	min-width: 1550px;
-	overflow-x: scroll;
+	/*min-width: 1550px;
+	overflow-x: scroll;*/
 }
 
 header p.title {
@@ -45,7 +45,7 @@ header div.status{
 	font-size: 14px;
 	color: #fff;
 	top: 5px;
-	left: 240px
+	left: 10%
 	
 }
 
@@ -110,7 +110,7 @@ header div.timeline div.player{
 
 header div.timeline div.player_buttons{	
 	float: left;
-	margin-left: 7em;
+	margin-left: 6.7em;
 	margin-top: 0.6em 	
 }
 
@@ -121,7 +121,7 @@ header div.timeline div.player_buttons{
 
 header ul{
 	float: right;
-	margin: 1.3em 1.5em;
+	margin: 1.3em 0.5em;
 }
 
 header ul li{

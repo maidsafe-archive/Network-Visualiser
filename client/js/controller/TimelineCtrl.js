@@ -174,7 +174,7 @@ var TimelineCtrl = ['$scope', '$rootScope', '$http', 'dataManager', 'playbackSer
 
 
 	$http.get('/firstuptime').then(function(res){
-			$scope.firstLogtime = new Date(res.data).getTime()	- 10000//reducing 10 secondes for the play				
+			$scope.firstLogtime = new Date(res.data).getTime()	- 3000//reducing 3 secondes for the play				
 			$scope.playback.incrementalSteps = 1000 / ( (new Date($scope.maxTime).getTime() - $scope.firstLogtime) / $scope.playback.max_steps )			
 			$scope.currentPlayTime = $scope.firstLogtime			
 	})

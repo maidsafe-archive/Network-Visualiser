@@ -50,7 +50,7 @@ var VaultHealth = function(dbConnection){
 						if(err){
 							promise.error(err)
 						}else{
-							firstLogTime = data.ts.toISOString()
+							firstLogTime = new Date().toISOString()
 							promise.complete('')
 						}
 					})				

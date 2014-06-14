@@ -18,9 +18,7 @@ db.once('open', function callback () {
 
 exports.addLog = function(log, promise){
 	vaultStatus.updateStatus(log).then(function(){
-		console.log('IN ')
 		vaultStatus.isVaultActive(log).then(function(isActive){	
-		console.log(isActive)	
 			if(isActive || log.action_id == 0 || log.action_id == 18)
 				vaultLog.save(log, promise)
 			else{			
