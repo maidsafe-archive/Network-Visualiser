@@ -6,7 +6,7 @@
 		<link rel="stylesheet" type="text/css" href="../client/css/colours.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/fonts.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/slider.css">
-		<link rel="stylesheet" type="text/css" href="../vendor/animate.css/animate.min.css">
+
 
 		<script type="text/javascript" src="../vendor/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
@@ -36,10 +36,10 @@
 			<ng-include src="'template/common/timeline_header.html'"></ng-include>
 		</header>
 		<section>
-			<div class="icons" ng-class="{true:'animated fadeOutUp', false:'show animated fadeInDown' }[iconsTrayClosed]" >
+			<div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]" >
 				<ng-include src="'template/common/icons_tray.html'"></ng-include>
 			</div>
-			<div class="wrapper" ng-class="{false:'tray_open animated fadeIn', true:'animated fadeInUp'}[iconsTrayClosed]">
+			<div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
 				<ng-include src="'template/common/node.html'"></ng-include>				
 			</div>			
 		</section>

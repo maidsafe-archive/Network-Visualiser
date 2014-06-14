@@ -3,7 +3,12 @@ body{
 	font-size: 12px;	
 	background-color: #fff;
 	font-family: 'OpenSansRegular', Arial, sans-serif;	
+	min-width: 1150;
+	width: 100%;
 }
+
+section{min-width: 1150px}
+header{min-width: 1150px}
 
 ul{list-style-type: none;margin: 0px;padding: 0px}
 
@@ -26,6 +31,7 @@ header{
 	position: absolute;
 	top: 0px;
 	width: 100%;
+	min-width: 1150px
 }
 
 header p.title {
@@ -59,6 +65,7 @@ header div.timeline{
 	float: left;
 	margin: .3em;
 	width: 75%;
+	position: relative;
 }
 
 .time_slider div.time_label {
@@ -72,7 +79,7 @@ header div.timeline{
 }
 
 .time_slider div.slider {	
-	width: 100%;
+	width: 80%;
 	margin-left: 12em !important;
 }
 
@@ -105,15 +112,17 @@ header div.timeline div.time_slider{
 
 header div.timeline div.player{
 	/*width: 1070px;*/
-	width: 88%;
+	width: 80%;
 	float: left;
 	margin: .5em 1em
 }
 
 header div.timeline div.player_buttons{	
 	float: left;
-	margin-left: 0em;
-	margin-top: 0.6em 	
+	left: 60%;
+	margin-top: -3.3em;
+	position: absolute;
+	margin-left: 8em;
 }
 
 .ngrs-range-slider{
@@ -123,7 +132,7 @@ header div.timeline div.player_buttons{
 
 header ul{
 	float: right;
-	margin: 1.3em 2.2em 0em .5em;/*1.8*/
+	margin: 1.3em 2.2em 0em 1.5em;/*1.8*/
 }
 
 header ul li{
@@ -156,7 +165,7 @@ header ul li{
 
 }
 
-ul.buttons-left { float: left;}
+ul.buttons-left { float: left;margin: 1.3em 2.2em 0em 1.5em;/*1.8*/}
 ul.buttons-right { float: right;}
 
 
@@ -182,7 +191,7 @@ button:hover {
 
 
 section {
-	position: fixed;
+	position: absolute;
 	top:90px;/*Corresponds to the header height plus 20px*/
 	bottom: 0px;
 	width: 100%;		
@@ -219,8 +228,7 @@ section div.icons{
 	/*min-width: 1450px;*/
 	width: 100%;
 	overflow:hidden;
-	background: #f2f2f2;
-	display: none
+	background: #f2f2f2;	
 }
 
 section div.icons:after {
@@ -237,9 +245,9 @@ section div.icons ul{
 
 section div.icons ul li {
 	float: left;
-	margin-left: 1em;
+	margin-left: .3em;
 	margin-top: .3em;
-	width: 13%;
+	width: 13%;	
 }
 section div.icons ul.personas li {
 	width: 8.6%;
