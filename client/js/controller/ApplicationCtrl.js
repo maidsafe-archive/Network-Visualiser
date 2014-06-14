@@ -9,6 +9,14 @@ var ApplicationCtrl = ['$scope', '$rootScope', 'dataManager', 'socketService', f
 		$scope.showLoader = true
 		
 		$scope.alert
+
+		$scope.currentTime = new Date().getTime()
+
+		setInterval(function(){
+			$scope.currentTime+=1000
+			if(!$scope.$$phase)
+				$scope.$apply()
+		}, 1000)
 	
 		$scope.timeline = function(){		
  			window.open('/client/timeline.html', '_blank').focus();  			

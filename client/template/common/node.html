@@ -28,7 +28,7 @@
 		<ul>
 			<li ng-repeat="log in logs | orderBy:'-ts'" >
 			  	<div class="log_date">
-			  		{{log.ts | date : 'MMM dd HH:mm:ss'}}
+			  		{{log.ts | date : 'dd/MM/yyyy HH:mm:ss'}}
 			  	</div>
 			  	<div class="log_msg">
 			  		{{ vaultBehaviour.formatMessage(log) }}
