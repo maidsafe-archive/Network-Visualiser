@@ -5,13 +5,18 @@ exports.isValid = 	function(log){
 }
 
 exports.formatDate = function(log){
-	if(log.ts){
-		if(log.ts.indexOf('GMT')<0)//since utc time 
-			log.ts += 'GMT'
-		log.ts = new Date(log.ts).toISOString()
-	} else{
-		log.ts = new Date().toISOString()
-	} 
+	try{
+		if(log.ts){
+			if(log.ts.indexOf('GMT')<0)//since utc time 
+				log.ts += 'GMT'
+				log.ts = new Date(log.ts).toISOString()
+		} else{
+			log.ts = new Date().toISOString()
+		}	
+	}catch(err){		
+		return false
+	}	
+	return true
 }
 
 exports.isEmptyObject = function(object){

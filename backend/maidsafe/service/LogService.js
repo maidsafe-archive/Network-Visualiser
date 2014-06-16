@@ -5,18 +5,23 @@ var url = require('url')
 var config = require('./../../../Config.js')
 var fs = require('fs')
 
+
+
 var saveLog = function(req, res){
 	var log = req.body;			
-	utils.formatDate(log)
-	// if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
-	// 	log.value1 = utils.decodeData(log.value1)
-	// }
-	// if(log.value2 && log.value2.length>config.Constants.minLengthForDecode){
-	// 	log.value2 = utils.decodeData(log.value2)
-	// }
-	if(!log.hasOwnProperty('persona_id'))
-		log.persona_id = config.Constants.persona_na//NA	
-	utils.isValid(log)?bridge.addLog(log, new Handler.SaveLogHandler(res)):res.send(500, 'Invalid Parameters')
+	if(utils.formatDate(log)){
+		// if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
+		// 	log.value1 = utils.decodeData(log.value1)
+		// }
+		// if(log.value2 && log.value2.length>config.Constants.minLengthForDecode){
+		// 	log.value2 = utils.decodeData(log.value2)
+		// }
+		if(!log.hasOwnProperty('persona_id'))
+			log.persona_id = config.Constants.persona_na//NA	
+		utils.isValid(log)?bridge.addLog(log, new Handler.SaveLogHandler(res)):res.send(500, 'Invalid Parameters')	
+	}else{
+		res.send(500, "Invalid date time format")
+	}	
 }
 
 
@@ -124,12 +129,14 @@ var exportLogs = function(req, res){
 
 var importLogs = function(req, res){
 	fs.readFile(req.files.logFile.path, function (err, data) {		
-		var fileName = new Date().getTime() + '.csv'
-		fs.writeFile(fileName, data, function (err) {
-			bridge.dropDB()
+		var fileName = "Import_" + new Date().getTime() + '.csv'
+		fs.writeFile(fileName, data, function (err) {			
 			bridge.importLogs(fileName).then(function(){				
 				res.send('Imported')
     			deleteFile(fileName)
+			},function(err){ 
+				res.send(err.message)				
+				deleteFile(fileName)
 			})    		
   		});
 	})

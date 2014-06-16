@@ -6,6 +6,10 @@ var csv = require('fast-csv')
 var DBUtil = function(dbConnection){
 	var dbConn = dbConnection
 
+	var actionMap, personaMap
+
+
+
 	var ACTION_TO_STRING = {
 							0:'Vault Started', 1:'Increases count', 2:'Decreases count',
 							3:'Blocked Delete Request',	4:'Account Transfer', 5:'Got Account Transferred',
@@ -84,7 +88,7 @@ var DBUtil = function(dbConnection){
 			if(outStream && isReady){	
 				outStream.write("Vault_Id,Timestamp,Action,Persona,Value1,Value2\n")			
 				dbConn.db.collectionNames(function(e, colls){
-					handler.setTotalCount(colls.length-2)		
+					handler.setTotalCount(colls.length-2)//2 = index + vaultStatus tables in the db		
 					for(var i in colls){				
 						if(colls[i].name.indexOf('system.index') < 0 && colls[i].name.indexOf('vaultStatus') < 0){
 							new VaultToCSV(colls[i].name.replace( dbConn.name + '.',''), outStream, handler)					
@@ -140,17 +144,63 @@ var DBUtil = function(dbConnection){
 	}
 
 
+	var getLogFromCSVRow = function(data){
+		return { vault_id: data[0], ts:data[1], action_id:actionMap[data[2]], persona_id:(personaMap[data[3]]||10), value1:(data[4]||''), value2 : (data[5]||'')}		 		
+	}
+
+	var importValidator = function(data){
+		var log = getLogFromCSVRow(data)
+		var errString = ''
+		var isValid = true
+
+		var addErrorMessage = function(msg){
+			errString += ((errString==''?errString : ', ') + msg)
+			isValid = false
+		}
+
+		if(!log.vault_id || log.vault_id == ''){
+			addErrorMessage("Vault Id is empty")
+		}
+		if(!log.ts){
+			addErrorMessage("Timestamp is empty")
+		}
+		if(log.ts){
+			try{
+				new Date(log.ts)
+			}catch(e){
+				addErrorMessage("Invalid Timesatmp")
+			}			
+		}
+		if(!log.action_id){
+			addErrorMessage("Action Id is empty")
+		}
+		if(log.action_id){
+			try{
+				parseInt(log.action_id)
+			}catch(e){
+				addErrorMessage('Invalid Action Id')
+			}			
+		}
+		if(log.persona_id){
+			try{
+				parseInt(log.action_id)
+			}catch(e){
+				addErrorMessage('Invalid Persona Id')
+			}
+		}
+		
+		return {valid:isValid, msg: errString}
+	}
 
 
-	this.importLogs = function(filePath,  vaultStatus, logManager){
-		var promise = new mongoose.Promise		
+	var ImportFactory = function(filePath, vaultStatus, logManager, promise, validationCallback){
 		var stream = fs.createReadStream(filePath);
 		var firstRecord = true
-		var log = {}
-		var actionMap = getActionNameMap()		
-		var personaMap = getPersonaNameMap()
+		var log = {}		
 		var firstLogTime
 		var temp 
+		var validationErrors = []
+		var lineNumber = 0
 
 		var SaveLog = function(data){					 				 			
 	 		var log = { vault_id: data[0], ts:data[1], action_id:actionMap[data[2]], persona_id:personaMap[data[3]], value1:(data[4]||''), value2 : (data[5]||'')}		 		
@@ -165,25 +215,66 @@ var DBUtil = function(dbConnection){
 			});		 	
 		}
 
+
+
 		csv.fromStream(stream)
 		.on("record", function(data){
+			lineNumber++
 			if(firstRecord){
 		 		firstRecord = false
-		 	}else{		 		
-		 		temp = new Date(data[1]).getTime()
-		 		if(!firstLogTime || firstLogTime > temp){		 			
-		 			firstLogTime = temp		 			
-		 		}		 			
-				new SaveLog(data)
+		 	}else {
+		 		if(validationCallback){
+		 			temp = importValidator(data)
+		 			if(!temp.valid){
+		 				temp.lineNumber = lineNumber
+		 				validationErrors.push(temp)
+		 			}
+	 			} else {
+	 				temp = new Date(data[1]).getTime()
+			 		if(!firstLogTime || firstLogTime > temp){		 			
+			 			firstLogTime = temp		 			
+			 		}		 		
+		 			new SaveLog(data)		 				 		
+		 		}
 			}
 		})
 		.on("end", function(){			
-			console.log(new Date(firstLogTime))
-			 vaultStatus.setFirstLogTime(new Date(firstLogTime).toISOString())		    
-		     promise.complete('Completed')
-		 });
+			if(validationCallback){
+				validationCallback(validationErrors)
+			}else{
+				vaultStatus.setFirstLogTime(new Date(firstLogTime).toISOString())		    
+		     	promise.complete('Completed')
+			}			 
+	 	});
+
+	}
+
+
+
+	this.importLogs = function(filePath,  vaultStatus, logManager){
+		var promise = new mongoose.Promise		
+		
+		var validationCallback = function(errors){
+			if(errors.length > 0){
+				var err = '' 	
+				for(var i=0;i<errors.length;i++){
+					err += (errors[i].lineNumber  + ' : ' + errors[i].msg + '\n')
+				}						
+				promise.error(err)
+			} else {
+				dbConn.db.dropDatabase()
+				ImportFactory(filePath, vaultStatus, logManager, promise)
+			}
+		}
+
+		ImportFactory(filePath, vaultStatus, logManager, promise, validationCallback)
+
+
 		return promise	
 	}
+
+	actionMap = getActionNameMap()		
+	personaMap = getPersonaNameMap()
 
 	return this;
 }
