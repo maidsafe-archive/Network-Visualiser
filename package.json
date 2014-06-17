@@ -10,6 +10,9 @@
     "socket.io" :"0.9",
     "bower": "latest",
     "fast-csv":"latest",
-    "forever" : "latest"
+    "forever" : "latest",
+    "ejs":"latest",
+    "passport" : "latest",
+    "passport-google-oauth": "latest"
   }
 }

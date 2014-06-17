@@ -11,12 +11,11 @@
 					<p>{{subscriber}}</p>
 				</li>								
 				<li class="shape" ng-class="iconsTray.counter" tooltip="{{lastLog()}}" canshow="{{isToolTipEnabled(ICONS_TRAY_SHAPES.DIAMOND)}}">									
-
 					<p>{{counter}}</p>
 				</li>
 			</ul>
 		</div>
-		<div class="progress" ng-class="{true:'vault_start'}[logs[logs.length-1].action_id==0]" tooltip="Network Health is {{networkHealth}}%" canshow="true"> 
+		<div class="progress" ng-class="{true:'vault_start'}[logs[logs.length-1].action_id==0 || networkHealth < 0]" tooltip="Network Health is {{networkHealth}}%" canshow="true"> 
 			<div ng-style="progressLevel"></div>
 		</div>
 		<div class="info" ng-class="personaColour">

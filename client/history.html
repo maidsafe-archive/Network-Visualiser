@@ -5,6 +5,8 @@
 		<link rel="stylesheet" type="text/css" href="../client/css/app.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/shapes.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/colours.css">
+		<link rel="stylesheet" type="text/css" href="../client/css/fonts.css">
+
 		<script type="text/javascript" src="../vendor/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
 		<script type="text/javascript" src="../client/js/socket.io/socket.io.min.js"></script>
@@ -24,28 +26,36 @@
 		<script type="text/javascript" src="../client/js/config/registry.js"></script>		
 
 		<link rel="shortcut icon" href="imgs/favicon.ico" />
-  		<link rel="icon" type="image/ico" href="imgs/favicon.ico" />				
+  		<link rel="icon" type="image/ico" href="imgs/favicon.ico" />		
 
 		<title>Network Visualiser - MaidSafe</title>				
 	</head>
 	<body ng-app="MaidSafe">
-		<div class="history" ng-controller="historyCtrl"> 
-			<div class="info">
-				<p class="title">Log History  - {{vaultId}}
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="text-align:center;font-weight:none" ng-model="search" placeholder="Type text to filter"/>
-				</p>	
-				<p class="time">					
-					<span>As of&nbsp;{{ asOfDate | date : 'HH:mm:ss MMM dd yyyy'}}<span>
+		<header>
+			<div class="history" ng-controller="historyCtrl"> 
+			<div class="top-header">
+				<h1>Network Visualiser - Timeline View - {{vaultId}}</h1>
+				<p class="time_label">					
+					<span>Snapshot at {{ asOfDate | date : 'HH:mm:ss, dd/MM/yyyy'}}<span>
 				</p>
+			</div>
+			<div class="info">
+					<div class="search-wrapper">
+						<form id="search-filter">
+							<input type="text" style="text-align:center;font-weight:none" name="focus" class="search-box" required ng-model="search" placeholder="Type text to filter"/>
+							
+							<button id="clear" class="close-icon reset" type="reset"></button>
+						</form>
+					</div>
 			</div>
 			<div>
 				<table>
 					<thead>
-						<td>Timestamp</td>
-						<td>Persona</td>
-						<td>Action</td>
-						<td>Value 1</td>
-						<td>Value 2</td>
+						<td class="timestamp-head">Timestamp</td>
+						<td class="persona-head">Persona</td>
+						<td class="action-head">Action</td>
+						<td class="value1-head">Value 1</td>
+						<td class="value2-head">Value 2</td>
 					</thead>
 					<tr ng-repeat="log in logs | filter:search">
 						<td style="width:12.5%">
@@ -70,6 +80,7 @@
 					</tr>
 				</table>
 			</div>			
-		</div>	
+		</div>
+		</header>	
 	</body>
 </html>

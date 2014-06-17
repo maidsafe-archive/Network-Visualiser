@@ -140,6 +140,12 @@ header ul li{
 	margin-left: .5em
 }
 
+header ul li a {
+	text-decoration: none;
+	font-size: 17px;
+	color: #fff;
+}
+
 .top-header {
 	width: 100%;
 	background:#3476be;
@@ -162,7 +168,6 @@ header ul li{
 	margin: 0; 
 	padding: 0.2em 2em; 
 	text-align: right;
-
 }
 
 ul.buttons-left { float: left;margin: 1.3em 2.2em 0em 1.5em;/*1.8*/}
@@ -188,7 +193,6 @@ button {
 button:hover {
 	background-color:#29578A;
 }
-
 
 section {
 	position: absolute;
@@ -397,5 +401,4 @@ section div.wrapper div.node div.log_slider ul li{
 .loading div.loader_icon img{
 	width: 50px
 }
-
 

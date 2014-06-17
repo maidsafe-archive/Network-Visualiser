@@ -165,14 +165,14 @@ var DBUtil = function(dbConnection){
 			addErrorMessage("Timestamp is empty")
 		}
 		if(log.ts){
-			try{
-				new Date(log.ts)
+			try{				
+				new Date(log.ts) == "Invalid Date"? addErrorMessage("Invalid Timestamp"):null
 			}catch(e){
-				addErrorMessage("Invalid Timesatmp")
+				addErrorMessage("Invalid Timestamp")
 			}			
 		}
 		if(!log.action_id){
-			addErrorMessage("Action Id is empty")
+			addErrorMessage("Action Id is empty or invalid - spell check")
 		}
 		if(log.action_id){
 			try{
@@ -258,7 +258,7 @@ var DBUtil = function(dbConnection){
 			if(errors.length > 0){
 				var err = '' 	
 				for(var i=0;i<errors.length;i++){
-					err += (errors[i].lineNumber  + ' : ' + errors[i].msg + '\n')
+					err += (errors[i].lineNumber  + ' : ' + errors[i].msg + '</br>')
 				}						
 				promise.error(err)
 			} else {

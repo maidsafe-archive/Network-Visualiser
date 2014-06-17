@@ -2,7 +2,7 @@
 	<h1>Network Visualiser - Realtime View</h1>
 	<p class="time_label">
 			{{currentTime | date : 'HH:mm:ss dd/MM/yyyy'}} 
-	</p>
+	</p>	
 </div>
 <ul class="buttons-left">
 	<li>
@@ -11,12 +11,6 @@
 	<li>
 		<button ng-click="export()">Export</button>
 	</li>	
-	<li>
-		<button ng-click="import()">Import</button>
-	</li>
-	<li>
-		<button ng-click="clearLogs()">Clear Logs</button>
-	</li>
 </ul>
 <div class="status" ng-class="{true:'alert'}[alert != null]">
 	<span>{{alert}}</span>
@@ -27,5 +21,8 @@
 	</li>
 	<li>
 		<button ng-click="toggleIconsTray()">{{iconsTrayClosed?'Show Keys':'Hide Keys'}}</button>
+	</li>		
+	<li>
+		<a href="/auth/google">Sign In</a>
 	</li>
 </ul>

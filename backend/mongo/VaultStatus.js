@@ -44,7 +44,8 @@ var VaultHealth = function(dbConnection){
 				if(err){
 					console.log('Failed to update Status for vault - ' + data.vault_id)	
 					promise.error(err)
-				}else if(!firstLogTime){							
+				}else if(!firstLogTime){
+				console.log('set initial')							
 					var fisrtLog =  new VaultStatus({key:'firstLogTime', value:data.last_updated.toISOString()})
 					fisrtLog.save(function(err, doc){
 						if(err){
@@ -64,13 +65,19 @@ var VaultHealth = function(dbConnection){
 		return promise						
 	}
 
-	this.getFirstLogTime = function(callback){
-		return firstLogTime || new Date().toISOString()
+	this.getFirstLogTime = function(callback){		
+		return firstLogTime ||new Date().toISOString()
 	}
 
 
 	this.setFirstLogTime = function(firstLogTimeISO){//as iso string		
 		firstLogTime = firstLogTimeISO
+		new VaultStatus({key:'firstLogTime', value:firstLogTimeISO}).save(function(err, doc){
+			if(err)
+				console.log(err)
+		})
+				
+		console.log(firstLogTime)
 	}
 
 	this.getActiveVaults = function(callback){
@@ -106,16 +113,17 @@ var VaultHealth = function(dbConnection){
 		return promise
 	}
 
-	var setFirstLogTime = function(){
+	var setFirstLogTimeFromDB = function(){
 		VaultStatus.find({key:'firstLogTime'}, function(err, doc){			
 			if(!err && !doc.length == 0){
 				firstLogTime = doc[0].value
+				console.log(firstLogTime)
 			}			
 		})	
 
 	}
 
-	setFirstLogTime()
+	setFirstLogTimeFromDB()
 	
 	return this
 }
