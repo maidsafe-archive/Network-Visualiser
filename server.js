@@ -93,10 +93,7 @@ app.get('/auth', ensureAuthenticated, function(req, res) {
 //   will redirect the user back to this application
 app.get('/auth/google',
   passport.authenticate('google', {
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email'
-    ]
+    scope: ['https://www.googleapis.com/auth/userinfo.email']
   }),
   function(req, res) {
     // The request will be redirected to Google for authentication, so this
@@ -108,7 +105,7 @@ app.get('/auth/google',
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
-app.get('/oauth2callback',
+app.get('/googlecallback',
   passport.authenticate('google', { failureRedirect: '/' }),
   function(req, res) {
     res.redirect('/auth');
