@@ -1,5 +1,5 @@
 {
-  "name":"MaidSafe_NetworkVisualizer",
+  "name":"Network-Visualiser",
   "version":"0.0.1",
   "dependencies":{
     "angular":"1.2.X",
