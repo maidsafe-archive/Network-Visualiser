@@ -1,404 +1,387 @@
-body{
-	font-family: arial;
-	font-size: 12px;
-	background-color: #fff;
-	font-family: 'OpenSansRegular', Arial, sans-serif;
-	min-width: 1150;
-	width: 100%;
+body {
+  background-color: #fff;
+  font-family: arial;
+  font-family: 'OpenSansRegular', Arial, sans-serif;
+  font-size: 12px;
+  min-width: 1150;
+  width: 100%;
 }
 
-section{min-width: 1150px}
-header{min-width: 1150px}
+section { min-width: 1150px }
 
-ul{list-style-type: none;margin: 0px;padding: 0px}
+header { min-width: 1150px }
 
-
-.close{
-	display: none;
+ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px
 }
 
-.show{
-	display: block !important;
-}
 
-.dead{
-	opacity: .4;
-}
+.close { display: none; }
 
-header{
-	background-color: #5593d7;
-	height: 90px;
-	position: absolute;
-	top: 0px;
-	width: 100%;
-	min-width: 1150px
+.show { display: block !important; }
+
+.dead { opacity: .4; }
+
+header {
+  background-color: #5593d7;
+  height: 90px;
+  min-width: 1150px;
+  position: absolute;
+  top: 0px;
+  width: 100%;
 }
 
 header p.title {
-	font-family: 'OpenSansBold', Arial, sans-serif;
-	font-size: 2em;
-	margin: 1em 0em 1em 2em;
-	float: left;
-	color: #fff;
+  color: #fff;
+  float: left;
+  font-family: 'OpenSansBold', Arial, sans-serif;
+  font-size: 2em;
+  margin: 1em 0em 1em 2em;
 }
 
-header div.status{
-	margin: 1em;
-	float: left;
-	display: block;
-	position: relative;
-	padding: .34em 1em;
-	border-radius: 9px;
-	font-family: 'OpenSansRegular', Arial, sans-serif;
-	font-size: 14px;
-	color: #fff;
-	top: 5px;
-	left: 10%
-
+header div.status {
+  border-radius: 9px;
+  color: #fff;
+  display: block;
+  float: left;
+  font-family: 'OpenSansRegular', Arial, sans-serif;
+  font-size: 14px;
+  left: 10%;
+  margin: 1em;
+  padding: .34em 1em;
+  position: relative;
+  top: 5px;
 }
 
-header div.status.alert{
-	background:#f78b8b;
-}
+header div.status.alert { background: #f78b8b; }
 
-header div.timeline{
-	float: left;
-	margin: .3em;
-	width: 75%;
-	position: relative;
+header div.timeline {
+  float: left;
+  margin: .3em;
+  position: relative;
+  width: 75%;
 }
 
 .time_slider div.time_label {
-	font-family: 'OpenSansRegular', Arial, sans-serif;
-	float: left;
-	margin: -0.1em 1em 0em 0;
-	display: inline-block;
-	color: #fff;
-	font-size: 30px;
-
+  color: #fff;
+  display: inline-block;
+  float: left;
+  font-family: 'OpenSansRegular', Arial, sans-serif;
+  font-size: 30px;
+  margin: -0.1em 1em 0em 0;
 }
 
 .time_slider div.slider {
-	width: 80%;
-	margin-left: 12em !important;
+  margin-left: 12em !important;
+  width: 80%;
 }
 
-header div.timeline div.player div.player_msgs span{
-	font-family: 'OpenSansRegular', Arial, sans-serif;
-	font-size: 14px;
-	margin-left: 0em;
-	text-align: center;
-	text-align: center;
-	display: inline-block;
-	position: relative;
-	top: -30px;
-	left: 640px
+header div.timeline div.player div.player_msgs span {
+  display: inline-block;
+  font-family: 'OpenSansRegular', Arial, sans-serif;
+  font-size: 14px;
+  left: 640px;
+  margin-left: 0em;
+  position: relative;
+  text-align: center;
+  text-align: center;
+  top: -30px;
 }
 
-p.time_label{
-	margin: 1em;
-	font-family: 'OpenSansLight', Arial, sans-serif;
-	color: #fff;
-	font-size: 14px;
+p.time_label {
+  color: #fff;
+  font-family: 'OpenSansLight', Arial, sans-serif;
+  font-size: 14px;
+  margin: 1em;
 }
 
-header div.timeline div.time_slider{
-	/*width: 960px;*/
-	width: 80%;
-	margin-left: .8em;
-	margin-top: 0.2em;
+header div.timeline div.time_slider {
+  margin-left: .8em;
+  margin-top: 0.2em;
+  /*width: 960px;*/
+  width: 80%;
 }
 
 
-header div.timeline div.player{
-	/*width: 1070px;*/
-	width: 80%;
-	float: left;
-	margin: .5em 1em
+header div.timeline div.player {
+  float: left;
+  margin: .5em 1em;
+  /*width: 1070px;*/
+  width: 80%;
 }
 
-header div.timeline div.player_buttons{
-	float: left;
-	left: 60%;
-	margin-top: -3.3em;
-	position: absolute;
-	margin-left: 8em;
+header div.timeline div.player_buttons {
+  float: left;
+  left: 60%;
+  margin-left: 8em;
+  margin-top: -3.3em;
+  position: absolute;
 }
 
-.ngrs-range-slider{
-	margin: 0px !important;
-	padding: 0px !important;
+.ngrs-range-slider {
+  margin: 0px !important;
+  padding: 0px !important;
 }
 
-header ul{
-	float: right;
-	margin: 1.3em 2.2em 0em 1.5em;/*1.8*/
+header ul {
+  float: right;
+  margin: 1.3em 2.2em 0em 1.5em; /*1.8*/
 }
 
-header ul li{
-	float: left;
-	margin-left: .5em
+header ul li {
+  float: left;
+  margin-left: .5em
 }
 
 header ul li a {
-	text-decoration: none;
-	font-size: 17px;
-	color: #fff;
+  color: #fff;
+  font-size: 17px;
+  text-decoration: none;
 }
 
 .top-header {
-	width: 100%;
-	background:#3476be;
-	height: 25px;
-	position: relative;
+  background: #3476be;
+  height: 25px;
+  position: relative;
+  width: 100%;
 }
 
 .top-header h1 {
-	font-family: 'OpenSansLight', Arial, sans-serif;
-	font-size: 12px;
-	text-transform: uppercase;;
-	color: #fff;
-	margin: 0;
-	padding: 0.4em 2em 0 2em;
-	display: inline;
-	float: left;
+  color: #fff;
+  display: inline;
+  float: left;
+  ;
+  font-family: 'OpenSansLight', Arial, sans-serif;
+  font-size: 12px;
+  margin: 0;
+  padding: 0.4em 2em 0 2em;
+  text-transform: uppercase;
 }
 
 .top-header p {
-	margin: 0;
-	padding: 0.2em 2em;
-	text-align: right;
+  margin: 0;
+  padding: 0.2em 2em;
+  text-align: right;
 }
 
-ul.buttons-left { float: left;margin: 1.3em 2.2em 0em 1.5em;/*1.8*/}
-ul.buttons-right { float: right;}
+ul.buttons-left {
+  float: left;
+  margin: 1.3em 2.2em 0em 1.5em; /*1.8*/
+}
+
+ul.buttons-right { float: right; }
 
 
 button {
-	background-color:#87b7ec;
-	font-size: 16px;
-    font-weight: 400;
-	color:#FFFFFF!important;
-	cursor:pointer;
-	text-decoration:none;
-	border-color: rgba(0, 0, 0, 0);
-    border-radius: 5px;
-    border-style: none;
-    padding: 5px 15px 5px 15px;
-	display: inline-block;
-	float:right;
-	width: 110px;
+  background-color: #87b7ec;
+  border-color: rgba(0, 0, 0, 0);
+  border-radius: 5px;
+  border-style: none;
+  color: #FFFFFF !important;
+  cursor: pointer;
+  display: inline-block;
+  float: right;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 5px 15px 5px 15px;
+  text-decoration: none;
+  width: 110px;
+}
 
-}
-button:hover {
-	background-color:#29578A;
-}
+button:hover { background-color: #29578A; }
 
 section {
-	position: absolute;
-	top:90px;/*Corresponds to the header height plus 20px*/
-	bottom: 0px;
-	width: 100%;
+  bottom: 0px;
+  position: absolute;
+  top: 90px; /*Corresponds to the header height plus 20px*/
+  width: 100%;
 }
 
-section div.legends{
-	border-bottom: 1px solid;
-	height: 30px;
+section div.legends {
+  border-bottom: 1px solid;
+  height: 30px;
 }
 
-section ul.personas{
-	margin: .5em
-}
-section ul.personas li{
-	float: left;
-	padding: .3em 0em;
-	margin-right: .2em;
-	text-align: center;
-	width: 100px;
-}
+section ul.personas { margin: .5em }
 
-section ul.options{
-	float: right;
-	margin: .2em;
+section ul.personas li {
+  float: left;
+  margin-right: .2em;
+  padding: .3em 0em;
+  text-align: center;
+  width: 100px;
 }
 
-section ul.options li{
-	float: left;
-	margin-right: .4em
+section ul.options {
+  float: right;
+  margin: .2em;
+}
+
+section ul.options li {
+  float: left;
+  margin-right: .4em
 }
 
 
-section div.icons{
-	/*min-width: 1450px;*/
-	width: 100%;
-	overflow:hidden;
-	background: #f2f2f2;
+section div.icons {
+  background: #f2f2f2;
+  overflow: hidden;
+  /*min-width: 1450px;*/
+  width: 100%;
 }
 
 section div.icons:after {
-content:".";
-display:block;
-clear:both;
-visibility:hidden;
-}
-
-section div.icons ul{
-	margin: .1em;
-	clear: both;
-}
-
-section div.icons ul li {
-	float: left;
-	margin-left: .3em;
-	margin-top: .3em;
-	width: 13%;
-}
-section div.icons ul.personas li {
-	width: 8.6%;
-	padding: 5px 0;
+  clear: both;
+  content: ".";
+  display: block;
+  visibility: hidden;
 }
 
 section div.icons ul {
-	padding: 1em;
+  clear: both;
+  margin: .1em;
 }
 
-section div.icons ul li span{
-	margin: 1em 0em;
-	position: absolute;
-	word-wrap:break-word;
-	width: 100px
+section div.icons ul li {
+  float: left;
+  margin-left: .3em;
+  margin-top: .3em;
+  width: 13%;
 }
 
-section div.wrapper{
-	padding: .343em;
-	bottom: 0px;
-	top:0px;
-	overflow: auto;
-	margin-left: 2em;
-	clear: both;
-	position: absolute;
+section div.icons ul.personas li {
+  padding: 5px 0;
+  width: 8.6%;
 }
 
-section div.wrapper.tray_open{
-	top: 180px;
+section div.icons ul { padding: 1em; }
+
+section div.icons ul li span {
+  margin: 1em 0em;
+  position: absolute;
+  width: 100px;
+  word-wrap: break-word;
 }
 
-
-section div.wrapper div.node{
-	width: 15%;
-	height:180px;
-	margin: 15px;
-	float: left;
-	width: 220px
+section div.wrapper {
+  bottom: 0px;
+  clear: both;
+  margin-left: 2em;
+  overflow: auto;
+  padding: .343em;
+  position: absolute;
+  top: 0px;
 }
 
-section div.wrapper div.node div.box{
-	height: 100px;
-	/*width: 100%;*/
-	width: 220px;
-	border: 2px solid #776E6E;
+section div.wrapper.tray_open { top: 180px; }
+
+
+section div.wrapper div.node {
+  float: left;
+  height: 180px;
+  margin: 15px;
+  width: 15%;
+  width: 220px
 }
 
-section div.wrapper div.node div.box div.notif{
-	height: 54px;
-	width: 100%;
+section div.wrapper div.node div.box {
+  border: 2px solid #776E6E;
+  height: 100px;
+  /*width: 100%;*/
+  width: 220px;
 }
 
-section div.wrapper div.node div.box div.notif ul{
-	margin: 2px;
+section div.wrapper div.node div.box div.notif {
+  height: 54px;
+  width: 100%;
 }
 
-section div.wrapper div.node div.box div.notif ul li{
-	float: left;
-	/*height: 25px;
+section div.wrapper div.node div.box div.notif ul { margin: 2px; }
+
+section div.wrapper div.node div.box div.notif ul li {
+  float: left;
+  /*height: 25px;
 	width: 25px;*/
-	margin-left: 0.2em;
+  margin-left: 0.2em;
 }
 
-section div.wrapper div.node div.box div.progress{
-	height: 7px;
-	background-color: #ccc;
+section div.wrapper div.node div.box div.progress {
+  background-color: #ccc;
+  height: 7px;
 }
 
-section div.wrapper div.node div.box div.progress.vault_start{
-	background-color: rgb(153, 36, 36)
+section div.wrapper div.node div.box div.progress.vault_start { background-color: rgb(153, 36, 36) }
+
+section div.wrapper div.node div.box div.progress div {
+  background-color: #4E4D4E;
+  height: 100%;
+  width: 80%;
 }
 
-section div.wrapper div.node div.box div.progress div{
-	background-color: #4E4D4E;
-	height: 100%;
-	width: 80%;
+section div.wrapper div.node div.box div.info { height: 37px; }
+
+section div.wrapper div.node div.box div.info p {
+  cursor: pointer;
+  float: left;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0px;
+  padding: .4em;
 }
 
-section div.wrapper div.node div.box div.info{
-	height: 37px;
+section div.wrapper div.node div.box div.info img {
+  float: right;
+  margin: 8px;
+  width: 20px
 }
 
-section div.wrapper div.node div.box div.info p{
-	margin: 0px;
-	padding: .4em;
-	font-weight: bold;
-	float: left;
-	font-size:18px;
-	cursor:pointer
+section div.wrapper div.node div.log_slider {
+  border-bottom: 2px solid #776E6E;
+  border-left: 2px solid #776E6E;
+  border-right: 2px solid #776E6E;
+  height: 88px;
+  overflow: auto;
+  position: relative;
+  top: -2px;
+  width: 100%;
+  z-index: 200;
 }
 
-section div.wrapper div.node div.box div.info img{
-	float: right;
-	margin:8px;
-	width: 20px
+section div.wrapper div.node div.log_slider ul li {
+  border-bottom: 1px solid #776E6E;
+  font-size: 11px;
+  margin-bottom: .2em;
+  padding: .5em;
 }
 
-section div.wrapper div.node div.log_slider{
-	border-left: 2px solid #776E6E;
-	border-bottom: 2px solid #776E6E;
-	border-right: 2px solid #776E6E;
-	height: 88px;
-	width:100%;
-	overflow: auto;
-	position: relative;
-	top: -2px;
-	z-index: 200;
+.log_date {
+  color: #696161;
+  font-size: 11px;
+  padding: .2em;
 }
 
-section div.wrapper div.node div.log_slider ul li{
-	font-size: 11px;
-	border-bottom:  1px solid #776E6E;
-	margin-bottom: .2em;
-	padding: .5em;
-}
+.log_msg { word-wrap: break-word; }
 
-.log_date{
-	padding: .2em;
-	font-size: 11px;
-	color: #696161;
-}
-
-.log_msg {
-	word-wrap : break-word;
-}
-
-.see_history a{
-	float: left;
-	margin:3px;
-	text-decoration: none
+.see_history a {
+  float: left;
+  margin: 3px;
+  text-decoration: none
 }
 
 .loading {
-	width: 100%;
-	height: 100%;
-	background-color: rgba(228, 225, 225, 0.4);
-	z-index: 999;
-	position: fixed;
+  background-color: rgba(228, 225, 225, 0.4);
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
 }
 
-.loading div.loader_icon{
-	position: absolute;
-	top: 50%;
-	left: 50%;
+.loading div.loader_icon {
+  left: 50%;
+  position: absolute;
+  top: 50%;
 }
 
-.loading div.loader_icon img{
-	width: 50px
-}
-
+.loading div.loader_icon img { width: 50px }

@@ -1,21 +1,20 @@
-var express = require('express')
-  , passport = require('passport')
-  , util = require('util')
-  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var express = require('express'),
+  passport = require('passport'),
+  util = require('util'),
+  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-var logController = require('./backend/maidsafe/LogController.js')
-var config = require('./Config.js')
-var fs = require('fs')
-var app = express()
-var PORT = config.Constants.serverPort
-var gAuth
-
+var logController = require('./backend/maidsafe/LogController.js');
+var config = require('./Config.js');
+var fs = require('fs');
+var app = express();
+var PORT = config.Constants.serverPort;
+var gAuth;
 var needsAuth = true;
 
-fs.readFile('gauth.json', 'utf8', function (err, data) {
+fs.readFile('gauth.json', 'utf8', function(err, data) {
   if (err) {
     console.log('Error: ' + err);
-    needsAuth = false
+    needsAuth = false;
     return;
   }
 
@@ -32,19 +31,17 @@ fs.readFile('gauth.json', 'utf8', function (err, data) {
     },
     function(accessToken, refreshToken, profile, done) {
       // asynchronous verification, for effect...
-      process.nextTick(function () {
+      process.nextTick(function() {
 
         // The user's Google profile is returned to
         // represent the logged-in user.
         return done(null, profile);
       });
     }
-));
-
+  ));
 
 
 });
-
 
 
 // API Access link for creating client ID and secret:
@@ -65,7 +62,6 @@ passport.deserializeUser(function(obj, done) {
 });
 
 
-
 // configure Express
 app.configure(function() {
   app.set('views', __dirname + '/client');
@@ -82,12 +78,12 @@ app.configure(function() {
 });
 
 
-app.get('/', function(req, res){
-  res.render('index', { user: {enabled:!needsAuth} });
+app.get('/', function(req, res) {
+  res.render('index', { user: { enabled: !needsAuth } });
 });
 
-app.get('/auth', ensureAuthenticated, function(req, res){
-  res.render('index', { user: {enabled:req.user._json.email.indexOf(gAuth.VALIDATION_STRING)>0, email: req.user._json.email}});
+app.get('/auth', ensureAuthenticated, function(req, res) {
+  res.render('index', { user: { enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0, email: req.user._json.email } });
 });
 
 // GET /auth/google
@@ -96,9 +92,13 @@ app.get('/auth', ensureAuthenticated, function(req, res){
 //   redirecting the user to google.com.  After authorization, Google
 //   will redirect the user back to this application
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-                                            'https://www.googleapis.com/auth/userinfo.email'] }),
-  function(req, res){
+  passport.authenticate('google', {
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email'
+    ]
+  }),
+  function(req, res) {
     // The request will be redirected to Google for authentication, so this
     // function will not be called.
   });
@@ -121,16 +121,15 @@ app.get('/oauth2callback',
 //   the request will proceed.  Otherwise, the user will be redirected to the
 //   login page.
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+  if (req.isAuthenticated()) {
+    return next();
+  }
   res.redirect('/');
 }
 
 
-app.get('/', function(req, res){
-  res.render('index')
-})
-
-
-logController.register(app)
-
-app.listen(PORT)
+app.get('/', function(req, res) {
+  res.render('index');
+});
+logController.register(app);
+app.listen(PORT);

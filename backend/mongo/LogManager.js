@@ -1,86 +1,72 @@
 var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
 
-var LogManager = function(dbConnConnection){
-	var dbConn, LOG_SCHEMA, HIDE_FIELDS;
+var LogManager = function(dbConnConnection) {
+  var dbConn, LOG_SCHEMA, HIDE_FIELDS;
 
-	dbConn = dbConnConnection;
+  dbConn = dbConnConnection;
 
-	HIDE_FIELDS = {_id:0, __v:0}
-
-
-
-	var searchAllCollections = function(criteria, promise){
-		var results = {}
-		dbConn.db.collectionNames(function(e, colls){
-			var fetched = 0
-			for(i in colls){
-				if(colls[i].name.indexOf('system.index')<0){//} || colls[i].name.indexOf('vaultStatus')<0){
-					dbConn.db.collection(colls[i].name.replace( dbConn.name + '.',''), function(err, col){
-						col.find(criteria, {__v:0}).toArray(function(err, docs){
-							fetched++
-							if(docs.length>0)
-								results[docs[0].vault_id] = docs
-							if(fetched == colls.length-1)
-								promise.complete(results)
-						});
-					});
-				}
-			}
-		});
-	}
-
-
-
-	var vaultHistory =  function(vaultId, criteria, page, max, promise){
-		dbConn.db.collection(vaultId, function(err, coll){
-			if(err){
-				promise.error(err)
-			}else{
-				var q = coll.find(criteria, HIDE_FIELDS).sort([['ts', 'descending']])
-				if(max > 0)
-					q.skip(page * max).limit(max)
-				q.toArray(function(err, data){
-					err?promise.error(err):promise.complete(data)
-				})
-			}
-		});
-	}
-
-
-
-	this.save = function(data, callback){
-		var promise = new mongoose.Promise;
-		if(callback) promise.addBack(callback);
-		dbConn.db.collection(utils.transformVaultId(data.vault_id), function(err, coll){
-			if(err){
-				promise.error(err)
-			}else{
-				coll.save(data, function(err, docs){
-					err?promise.error(err):promise.complete(data)
-				})
-			}
-		});
-		return promise
-	}
-
-
-
-	this.search = 	function(criteria, callback){
-		var promise = new mongoose.Promise;
-		if(callback) promise.addBack(callback);
-		searchAllCollections(criteria, promise)
-		return promise;
-	}
-
-	this.history = 	function(vaultId, criteria, page, max, callback){
-		var promise = new mongoose.Promise;
-		if(callback) promise.addBack(callback);
-		vaultHistory(utils.transformVaultId(vaultId), criteria, page, max, promise)
-		return promise;
-	}
-
-	return this;
+  HIDE_FIELDS = { _id: 0, __v: 0 };
+  var searchAllCollections = function(criteria, promise) {
+    var results = {};
+    dbConn.db.collectionNames(function(e, colls) {
+      var fetched = 0;
+      for (i in colls) {
+        if (colls[i].name.indexOf('system.index') < 0) { //} || colls[i].name.indexOf('vaultStatus')<0){
+          dbConn.db.collection(colls[i].name.replace(dbConn.name + '.', ''), function(err, col) {
+            col.find(criteria, { __v: 0 }).toArray(function(err, docs) {
+              fetched++;
+              if (docs.length > 0)
+                results[docs[0].vault_id] = docs;
+              if (fetched == colls.length - 1)
+                promise.complete(results);
+            });
+          });
+        }
+      }
+    });
+  };
+  var vaultHistory = function(vaultId, criteria, page, max, promise) {
+    dbConn.db.collection(vaultId, function(err, coll) {
+      if (err) {
+        promise.error(err);
+      } else {
+        var q = coll.find(criteria, HIDE_FIELDS).sort([['ts', 'descending']]);
+        if (max > 0)
+          q.skip(page * max).limit(max);
+        q.toArray(function(err, data) {
+          err ? promise.error(err) : promise.complete(data);
+        });
+      }
+    });
+  };
+  this.save = function(data, callback) {
+    var promise = new mongoose.Promise;
+    if (callback) promise.addBack(callback);
+    dbConn.db.collection(utils.transformVaultId(data.vault_id), function(err, coll) {
+      if (err) {
+        promise.error(err);
+      } else {
+        coll.save(data, function(err, docs) {
+          err ? promise.error(err) : promise.complete(data);
+        });
+      }
+    });
+    return promise;
+  };
+  this.search = function(criteria, callback) {
+    var promise = new mongoose.Promise;
+    if (callback) promise.addBack(callback);
+    searchAllCollections(criteria, promise);
+    return promise;
+  };
+  this.history = function(vaultId, criteria, page, max, callback) {
+    var promise = new mongoose.Promise;
+    if (callback) promise.addBack(callback);
+    vaultHistory(utils.transformVaultId(vaultId), criteria, page, max, promise);
+    return promise;
+  };
+  return this;
 };
 
-exports.getManager = LogManager
+exports.getManager = LogManager;

@@ -1,18 +1,20 @@
 {
-  "name": "MaidSafe_NetworkVisualizer",
-  "version": "0.0.1",
-  "description": "Network Visualizer tool for monitoring logs across nodes",
-  "author": "Krishna Kumar",
-  "dependencies":{ },
+  "name":"Network Visualiser",
+  "version":"0.0.1",
+  "description":"Network Visualizer tool for monitoring VLOGs from vault processes",
+  "author":"Krishna Kumar",
+  "dependencies":{
+
+  },
   "devDependencies":{
-    "express": "3.x",
-    "mongoose" : "3.8.X",
-    "socket.io" :"0.9",
-    "bower": "latest",
+    "express":"3.x",
+    "mongoose":"3.8.X",
+    "socket.io":"0.9",
+    "bower":"latest",
     "fast-csv":"latest",
-    "forever" : "latest",
+    "forever":"latest",
     "ejs":"latest",
-    "passport" : "latest",
-    "passport-google-oauth": "latest"
+    "passport":"latest",
+    "passport-google-oauth":"latest"
   }
 }
