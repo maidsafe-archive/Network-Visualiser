@@ -6,24 +6,24 @@
 	</div>
 
 <div class="timeline">
-	<div class="player">		
-		<div class="time_slider">					
+	<div class="player">
+		<div class="time_slider">
 			<div class="time_label" tooltip="{{ currentPlayTime |  date: 'dd/MM/yyyy' }}" canshow="true">
 				{{ currentPlayTime |  date: 'HH:mm:ss' }}
 			</div>
 			<div class="slider" range-slider min="0" max="playback.max_steps" model-min="0" model-max="playback.currentState" pin-handle="		min" show-values="false" >
 			</div>
-			<!-- <div class="player_msgs" >						
-				<span>{{playerStatus}}</span>		
+			<!-- <div class="player_msgs" >
+				<span>{{playerStatus}}</span>
 			</div> -->
-			<div class="player_buttons">	
+			<div class="player_buttons">
 				<button ng-click="playHistory()" ng-show="playerState == PLAYER_STATE.STOPED" class="play-btn">Play</button>
 				<button ng-click="pauseHistoryPlayback()" ng-show="playerState == PLAYER_STATE.PLAYING" class="pause-btn">Pause</button>
 				<button ng-click="resumeHistoryPlayback()" ng-show="playerState == PLAYER_STATE.PAUSED" class="resume-btn">Resume</button>
 		<!-- <button ng-click="stopHistoryPlayback()" ng-show="playerState != PLAYER_STATE.STOPED">Stop</button>	  -->
 			</div>
-		</div>		
-	</div>			
+		</div>
+	</div>
 </div>
 <ul>
 	<!--<li>

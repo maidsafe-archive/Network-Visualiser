@@ -1,4 +1,4 @@
-var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){		
+var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 
 	var vaultLogPool,  vaults
 	var addLogToPool
@@ -7,7 +7,7 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 
 	var vaultsLoadedObserver
 
-	var clear = function(){		
+	var clear = function(){
 		vaultsInDisplay = {}
 	}
 
@@ -19,34 +19,34 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 		vaultsLoadedObserver = callback
 	}
 
-	addLogToPool = function(log){		
-		if(!vaultsInDisplay.hasOwnProperty(log.vault_id)){				
+	addLogToPool = function(log){
+		if(!vaultsInDisplay.hasOwnProperty(log.vault_id)){
 			vaultsInDisplay[log.vault_id] = {pushLog:null, queue:[]}
-			newVaultObserver({vault_id:log.vault_id})						
+			newVaultObserver({vault_id:log.vault_id})
 		}
 		//Temporary Queue to hold logs until the vault has not registered for recieving logs
-		if(vaultsInDisplay[log.vault_id].pushLog){			
-			vaultsInDisplay[log.vault_id].pushLog(log)					
+		if(vaultsInDisplay[log.vault_id].pushLog){
+			vaultsInDisplay[log.vault_id].pushLog(log)
 		}else{
 			vaultsInDisplay[log.vault_id].queue.push(log)
-		}		
+		}
 	}
 
 
 	var activeVaults = function(time){
-		$http.get('/vaults?' + (time?('ts='+time):'')).then(function(result){			
+		$http.get('/vaults?' + (time?('ts='+time):'')).then(function(result){
 			var vaults = result.data
 			for(var key in vaults){
 				if(vaults[key].logs && vaults[key].logs.length>0){
-					var logs = vaults[key].logs.reverse()				
+					var logs = vaults[key].logs.reverse()
 					for(var index in logs){
 						logs[index].vault_id_full = vaults[key].vault_id_full
 						addLogToPool(logs[index])
 					}
-				}												
+				}
 			}
 			if(vaultsLoadedObserver) vaultsLoadedObserver(time)
-		}, function(err){							
+		}, function(err){
 			vaultsLoadedObserver()
 		})
 	}
@@ -60,14 +60,14 @@ var DataManagerService = ['$http', '$rootScope', function($http, $rootScope){
 		var logs = vaultsInDisplay[vaultId].queue
 		vaultsInDisplay[vaultId].queue = []
 		return logs
-	} 
+	}
 
-	var setLogListner = function(vaultId, callback){		
+	var setLogListner = function(vaultId, callback){
 		vaultsInDisplay[vaultId].pushLog = callback
 	}
 
-	this.getActiveVaults = activeVaults		
-	this.pushLog = addLogToPool	
+	this.getActiveVaults = activeVaults
+	this.pushLog = addLogToPool
 	this.clearLogs = clearLogs
 	this.getLogsFromQueue = getLogsFromQueue
 	this.setLogListner = setLogListner

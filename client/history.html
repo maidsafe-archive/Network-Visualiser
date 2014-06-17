@@ -10,10 +10,10 @@
 		<script type="text/javascript" src="../vendor/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
 		<script type="text/javascript" src="../client/js/socket.io/socket.io.min.js"></script>
-		
+
 		<script type="text/javascript" src="../vendor/angular-rangeslider/angular.rangeSlider.js"></script>
 		<link rel="stylesheet" type="text/css" href="../vendor/angular-rangeslider/angular.rangeSlider.css">
-		
+
 		<script type="text/javascript" src="../client/js/service/SocketService.js"></script>
 		<script type="text/javascript" src="../client/js/service/DataManagerService.js"></script>
 		<script type="text/javascript" src="../client/js/service/PlaybackService.js"></script>
@@ -23,19 +23,19 @@
 		<script type="text/javascript" src="../client/js/controller/VaultCtrl.js"></script>
 		<script type="text/javascript" src="../client/js/controller/HistoryCtrl.js"></script>
 		<script type="text/javascript" src="../client/js/directive/tooltip.js"></script>
-		<script type="text/javascript" src="../client/js/config/registry.js"></script>		
+		<script type="text/javascript" src="../client/js/config/registry.js"></script>
 
 		<link rel="shortcut icon" href="imgs/favicon.ico" />
-  		<link rel="icon" type="image/ico" href="imgs/favicon.ico" />		
+  		<link rel="icon" type="image/ico" href="imgs/favicon.ico" />
 
-		<title>Network Visualiser - MaidSafe</title>				
+		<title>Network Visualiser - MaidSafe</title>
 	</head>
 	<body ng-app="MaidSafe">
 		<header>
-			<div class="history" ng-controller="historyCtrl"> 
+			<div class="history" ng-controller="historyCtrl">
 			<div class="top-header">
 				<h1>Network Visualiser - Timeline View - {{vaultId}}</h1>
-				<p class="time_label">					
+				<p class="time_label">
 					<span>Snapshot at {{ asOfDate | date : 'HH:mm:ss, dd/MM/yyyy'}}<span>
 				</p>
 			</div>
@@ -43,7 +43,7 @@
 					<div class="search-wrapper">
 						<form id="search-filter">
 							<input type="text" style="text-align:center;font-weight:none" name="focus" class="search-box" required ng-model="search" placeholder="Type text to filter"/>
-							
+
 							<button id="clear" class="close-icon reset" type="reset"></button>
 						</form>
 					</div>
@@ -60,10 +60,10 @@
 					<tr ng-repeat="log in logs | filter:search">
 						<td style="width:12.5%">
 							{{log.ts = (log.ts | date:'MMM dd yy HH:mm.ss.sss')}}
-						</td>						
+						</td>
 						<td style="width:10%">
 							{{log.p = vaultBehaviour.personas[log.persona_id]}}
-						</td>						
+						</td>
 						<td style="width:10%">
 							{{log.a = vaultBehaviour.actions[log.action_id]}}
 						</td>
@@ -76,11 +76,11 @@
 							<div>
 								{{log.value2}}
 							</div>
-						</td>						
+						</td>
 					</tr>
 				</table>
-			</div>			
+			</div>
 		</div>
-		</header>	
+		</header>
 	</body>
 </html>

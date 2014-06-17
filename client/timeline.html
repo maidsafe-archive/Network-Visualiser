@@ -11,10 +11,10 @@
 		<script type="text/javascript" src="../vendor/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
 		<script type="text/javascript" src="../client/js/socket.io/socket.io.min.js"></script>
-		
+
 		<script type="text/javascript" src="../vendor/angular-rangeslider/angular.rangeSlider.js"></script>
 		<link rel="stylesheet" type="text/css" href="../vendor/angular-rangeslider/angular.rangeSlider.css">
-		
+
 		<script type="text/javascript" src="../client/js/service/SocketService.js"></script>
 		<script type="text/javascript" src="../client/js/service/DataManagerService.js"></script>
 		<script type="text/javascript" src="../client/js/service/PlaybackService.js"></script>
@@ -29,7 +29,7 @@
 		<title>Network Visualiser - Timeline View</title>
 
 		<link rel="shortcut icon" href="imgs/favicon.ico" />
-  		<link rel="icon" type="image/ico" href="imgs/favicon.ico" />				
+  		<link rel="icon" type="image/ico" href="imgs/favicon.ico" />
 	</head>
 	<body id="timeline" ng-app="MaidSafe" ng-controller="timelineCtrl">
 		<header>
@@ -40,8 +40,8 @@
 				<ng-include src="'template/common/icons_tray.html'"></ng-include>
 			</div>
 			<div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
-				<ng-include src="'template/common/node.html'"></ng-include>				
-			</div>			
+				<ng-include src="'template/common/node.html'"></ng-include>
+			</div>
 		</section>
 		<div class="loading" ng-style="{ false:{display:'none'}}[showLoader]">
 			<div class="loader_icon" >

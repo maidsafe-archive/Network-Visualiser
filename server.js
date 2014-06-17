@@ -18,8 +18,8 @@ fs.readFile('gauth.json', 'utf8', function (err, data) {
     needsAuth = false
     return;
   }
- 
-  gAuth = JSON.parse(data); 
+
+  gAuth = JSON.parse(data);
 
   //   Use the GoogleStrategy within Passport.
   //   Strategies in Passport require a `verify` function, which accept
@@ -33,9 +33,9 @@ fs.readFile('gauth.json', 'utf8', function (err, data) {
     function(accessToken, refreshToken, profile, done) {
       // asynchronous verification, for effect...
       process.nextTick(function () {
-        
+
         // The user's Google profile is returned to
-        // represent the logged-in user.      
+        // represent the logged-in user.
         return done(null, profile);
       });
     }
@@ -55,7 +55,7 @@ fs.readFile('gauth.json', 'utf8', function (err, data) {
 // To support persistent login sessions, Passport needs to be able to
 // serialize users into and deserialize users out of the session.  Typically,
 // this will be as simple as storing the user ID when serializing, and finding
-// the user by ID when deserializing. 
+// the user by ID when deserializing.
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -74,7 +74,7 @@ app.configure(function() {
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.session({ secret: 'maidsafelogs' }));  
+  app.use(express.session({ secret: 'maidsafelogs' }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
@@ -94,7 +94,7 @@ app.get('/auth', ensureAuthenticated, function(req, res){
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  The first step in Google authentication will involve
 //   redirecting the user to google.com.  After authorization, Google
-//   will redirect the user back to this application 
+//   will redirect the user back to this application
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
                                             'https://www.googleapis.com/auth/userinfo.email'] }),
@@ -108,9 +108,9 @@ app.get('/auth/google',
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
-app.get('/oauth2callback', 
+app.get('/oauth2callback',
   passport.authenticate('google', { failureRedirect: '/' }),
-  function(req, res) {    
+  function(req, res) {
     res.redirect('/auth');
   });
 

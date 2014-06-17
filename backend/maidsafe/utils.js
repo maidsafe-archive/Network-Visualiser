@@ -1,21 +1,21 @@
 var config = require('./../../Config.js')
 
-exports.isValid = 	function(log){	
+exports.isValid = 	function(log){
 	return (log.vault_id && log.action_id && log.persona_id)
 }
 
 exports.formatDate = function(log){
 	try{
 		if(log.ts){
-			if(log.ts.indexOf('GMT')<0)//since utc time 
+			if(log.ts.indexOf('GMT')<0)//since utc time
 				log.ts += 'GMT'
 				log.ts = new Date(log.ts).toISOString()
 		} else{
 			log.ts = new Date().toISOString()
-		}	
-	}catch(err){		
+		}
+	}catch(err){
 		return false
-	}	
+	}
 	return true
 }
 
@@ -26,7 +26,7 @@ exports.isEmptyObject = function(object){
 	return true
 }
 
-exports.transformVaultId = function(vaultId){	
+exports.transformVaultId = function(vaultId){
 	return (vaultId.indexOf('..')>-1)?vaultId.replace('..', '_'):vaultId.replace('_', '..')
 }
 
@@ -36,12 +36,12 @@ exports.decodeData = function(str){
 }
 
 exports.isPageRequestValid = function(criteria){
-	if(criteria.vault_id){		
+	if(criteria.vault_id){
 		if(criteria.page){
 			try{
 				criteria.page = parseInt(criteria.page)
 			}catch(e){
-				criteria.page = 0	
+				criteria.page = 0
 			}
 		}else{
 			criteria.page = 0
@@ -51,10 +51,10 @@ exports.isPageRequestValid = function(criteria){
 			try{
 				criteria.max = parseInt(criteria.max)
 			}catch(e){
-				criteria.max = config.Constants.paging.max	
+				criteria.max = config.Constants.paging.max
 			}
 		}else{
-			criteria.max = config.Constants.paging.max	
+			criteria.max = config.Constants.paging.max
 		}
 		return true;
 	}
@@ -64,11 +64,11 @@ exports.isPageRequestValid = function(criteria){
 
 exports.transformQuery	= 	function(query){
 	for(var key in query){
-		if(key == 'ts'){			
+		if(key == 'ts'){
 			query[key] = {"$gt": query[key]}//works fine only ISO string - query is done based on ISO string
 		}else{//For like operation on strings
 			query[key] = new  RegExp(query[key], "i")
-		}		
-	}	
+		}
+	}
 	return query
 }

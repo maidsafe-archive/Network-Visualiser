@@ -22,15 +22,15 @@ var DBUtil = function(dbConnection){
 
 
 	var PERSONA_TO_STRING = {
-							0 : 'MaidNode', 1 :'MpidNode', 2:'DataGetter', 
-							3:'MaidManager', 4:'DataManager', 5:'PmidManager', 6:'PmidNode', 
+							0 : 'MaidNode', 1 :'MpidNode', 2:'DataGetter',
+							3:'MaidManager', 4:'DataManager', 5:'PmidManager', 6:'PmidNode',
 							7:'MpidManager', 8:'VersionHandler', 9:'Cachehandler', 10:'NA'
-						}						
+						}
 
 
 
 	var ExportHandler = function(promise){
-		var fetched = 0			
+		var fetched = 0
 		var max = 0
 		var outStream
 
@@ -42,10 +42,10 @@ var DBUtil = function(dbConnection){
 			outStream = outStream_
 		}
 
-		this.callback = function(){			
+		this.callback = function(){
 			fetched++;
-			if(fetched == max){		
-				outStream.end()						
+			if(fetched == max){
+				outStream.end()
 				promise.complete(outStream.path)
 			}
 		}
@@ -59,48 +59,48 @@ var DBUtil = function(dbConnection){
 		var writeToStream = function(){
 			dbConn.db.collection(vaultId, function(err, col){
 				var stream = col.find({}, {__id:0, __v:0}).stream()
-				stream.on('data', function(doc){					
-					outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n')					
+				stream.on('data', function(doc){
+					outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n')
 				})
-				stream.on('close', function(){					
+				stream.on('close', function(){
 					setTimeout(function(){handler.callback()}, 1000)
 				})
 
-			})						
+			})
 		}
 		writeToStream()
 	}
 
 
 	var ExportHelper = function(promise){
-		var outStream		
-		var handler	
-		var isReady = false		
-		
+		var outStream
+		var handler
+		var isReady = false
+
 		this.setOutStream = function(stream){
-			outStream = stream	
+			outStream = stream
 			handler = new ExportHandler(promise)
 			handler.setFile(outStream)
 			convert()
 		}
 
-		var convert = function(){			
-			if(outStream && isReady){	
-				outStream.write("Vault_Id,Timestamp,Action,Persona,Value1,Value2\n")			
+		var convert = function(){
+			if(outStream && isReady){
+				outStream.write("Vault_Id,Timestamp,Action,Persona,Value1,Value2\n")
 				dbConn.db.collectionNames(function(e, colls){
-					handler.setTotalCount(colls.length-2)//2 = index + vaultStatus tables in the db		
-					for(var i in colls){				
+					handler.setTotalCount(colls.length-2)//2 = index + vaultStatus tables in the db
+					for(var i in colls){
 						if(colls[i].name.indexOf('system.index') < 0 && colls[i].name.indexOf('vaultStatus') < 0){
-							new VaultToCSV(colls[i].name.replace( dbConn.name + '.',''), outStream, handler)					
+							new VaultToCSV(colls[i].name.replace( dbConn.name + '.',''), outStream, handler)
 						}
-					}				
+					}
 				});
-			}			
+			}
 		}
 
-		this.streamReady = function(fd){	
-			isReady = true				
-			convert()	
+		this.streamReady = function(fd){
+			isReady = true
+			convert()
 		};
 
 		return this;
@@ -110,17 +110,17 @@ var DBUtil = function(dbConnection){
 	var createTempFile = function(streamReadyCallback){
 		this.fileName = "Logs_" + new Date().getTime() + ".csv"
 		this.stream = fs.createWriteStream(this.fileName);
-		this.stream.once('open', streamReadyCallback)	
+		this.stream.once('open', streamReadyCallback)
 		return this
 	}
 
 
 
 	this.exportLogs = function(){
-		var promise = new mongoose.Promise		
+		var promise = new mongoose.Promise
 		var helper = new ExportHelper(promise)
-		var outFile = createTempFile(helper.streamReady)		
-		helper.setOutStream(outFile.stream)					
+		var outFile = createTempFile(helper.streamReady)
+		helper.setOutStream(outFile.stream)
 		return promise
 	}
 
@@ -145,7 +145,7 @@ var DBUtil = function(dbConnection){
 
 
 	var getLogFromCSVRow = function(data){
-		return { vault_id: data[0], ts:data[1], action_id:actionMap[data[2]], persona_id:(personaMap[data[3]]||10), value1:(data[4]||''), value2 : (data[5]||'')}		 		
+		return { vault_id: data[0], ts:data[1], action_id:actionMap[data[2]], persona_id:(personaMap[data[3]]||10), value1:(data[4]||''), value2 : (data[5]||'')}
 	}
 
 	var importValidator = function(data){
@@ -165,11 +165,11 @@ var DBUtil = function(dbConnection){
 			addErrorMessage("Timestamp is empty")
 		}
 		if(log.ts){
-			try{				
+			try{
 				new Date(log.ts) == "Invalid Date"? addErrorMessage("Invalid Timestamp"):null
 			}catch(e){
 				addErrorMessage("Invalid Timestamp")
-			}			
+			}
 		}
 		if(!log.action_id){
 			addErrorMessage("Action Id is empty or invalid - spell check")
@@ -179,7 +179,7 @@ var DBUtil = function(dbConnection){
 				parseInt(log.action_id)
 			}catch(e){
 				addErrorMessage('Invalid Action Id')
-			}			
+			}
 		}
 		if(log.persona_id){
 			try{
@@ -188,7 +188,7 @@ var DBUtil = function(dbConnection){
 				addErrorMessage('Invalid Persona Id')
 			}
 		}
-		
+
 		return {valid:isValid, msg: errString}
 	}
 
@@ -196,23 +196,23 @@ var DBUtil = function(dbConnection){
 	var ImportFactory = function(filePath, vaultStatus, logManager, promise, validationCallback){
 		var stream = fs.createReadStream(filePath);
 		var firstRecord = true
-		var log = {}		
+		var log = {}
 		var firstLogTime
-		var temp 
+		var temp
 		var validationErrors = []
 		var lineNumber = 0
 
-		var SaveLog = function(data){					 				 			
-	 		var log = { vault_id: data[0], ts:data[1], action_id:actionMap[data[2]], persona_id:personaMap[data[3]], value1:(data[4]||''), value2 : (data[5]||'')}		 		
-	 		vaultStatus.updateStatus(log).then(function(){		 			
-				vaultStatus.isVaultActive(log).then(function(isActive){								
-					if(isActive || log.action_id == 0 || log.action_id == 18){							
-						logManager.save(log)								
-					}							
-				})	
+		var SaveLog = function(data){
+	 		var log = { vault_id: data[0], ts:data[1], action_id:actionMap[data[2]], persona_id:personaMap[data[3]], value1:(data[4]||''), value2 : (data[5]||'')}
+	 		vaultStatus.updateStatus(log).then(function(){
+				vaultStatus.isVaultActive(log).then(function(isActive){
+					if(isActive || log.action_id == 0 || log.action_id == 18){
+						logManager.save(log)
+					}
+				})
 			}, function(err){
 				console.log('ERR ::' + err)
-			});		 	
+			});
 		}
 
 
@@ -231,20 +231,20 @@ var DBUtil = function(dbConnection){
 		 			}
 	 			} else {
 	 				temp = new Date(data[1]).getTime()
-			 		if(!firstLogTime || firstLogTime > temp){		 			
-			 			firstLogTime = temp		 			
-			 		}		 		
-		 			new SaveLog(data)		 				 		
+			 		if(!firstLogTime || firstLogTime > temp){
+			 			firstLogTime = temp
+			 		}
+		 			new SaveLog(data)
 		 		}
 			}
 		})
-		.on("end", function(){			
+		.on("end", function(){
 			if(validationCallback){
 				validationCallback(validationErrors)
 			}else{
-				vaultStatus.setFirstLogTime(new Date(firstLogTime).toISOString())		    
+				vaultStatus.setFirstLogTime(new Date(firstLogTime).toISOString())
 		     	promise.complete('Completed')
-			}			 
+			}
 	 	});
 
 	}
@@ -252,14 +252,14 @@ var DBUtil = function(dbConnection){
 
 
 	this.importLogs = function(filePath,  vaultStatus, logManager){
-		var promise = new mongoose.Promise		
-		
+		var promise = new mongoose.Promise
+
 		var validationCallback = function(errors){
 			if(errors.length > 0){
-				var err = '' 	
+				var err = ''
 				for(var i=0;i<errors.length;i++){
 					err += (errors[i].lineNumber  + ' : ' + errors[i].msg + '</br>')
-				}						
+				}
 				promise.error(err)
 			} else {
 				dbConn.db.dropDatabase()
@@ -270,10 +270,10 @@ var DBUtil = function(dbConnection){
 		ImportFactory(filePath, vaultStatus, logManager, promise, validationCallback)
 
 
-		return promise	
+		return promise
 	}
 
-	actionMap = getActionNameMap()		
+	actionMap = getActionNameMap()
 	personaMap = getPersonaNameMap()
 
 	return this;

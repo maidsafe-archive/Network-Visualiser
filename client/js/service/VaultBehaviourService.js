@@ -4,8 +4,8 @@ var VaultBehaviourService = [function(){
 	service.MAX_LOGS = 3;//Max logs retained for showing on info click
 
 	service.personas = {
-							0 : 'MaidNode', 1 :'MpidNode', 2:'DataGetter', 
-							3:'MaidManager', 4:'DataManager', 5:'PmidManager', 6:'PmidNode', 
+							0 : 'MaidNode', 1 :'MpidNode', 2:'DataGetter',
+							3:'MaidManager', 4:'DataManager', 5:'PmidManager', 6:'PmidNode',
 							7:'MpidManager', 8:'VersionHandler', 9:'Cachehandler', 10:'NA'
 						}
 
@@ -18,7 +18,7 @@ var VaultBehaviourService = [function(){
 							15:'Update Version', 16:'Remove Account', 17:'Network Health changed',
 							18:'Vault Stopping'
 						}
-	
+
 
 	service.icons = {
 						0:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus'},
@@ -40,7 +40,7 @@ var VaultBehaviourService = [function(){
 						16:{account:'remove-account', chunk:'circle', subscriber:'square', counter:'rhombus'},
 						17:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus'},
 						18:{account:'hexagon', chunk:'circle', subscriber:'square', counter:'rhombus'}
-					}		
+					}
 
 
 	var tootips = {
@@ -48,10 +48,10 @@ var VaultBehaviourService = [function(){
 		1 : [3, 8, 13, 14, 15],
 		2 : [6, 7],
 		3 : [1, 2,]
-	}				
+	}
 
-	var generalFormater = function(log){				
-		return  service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' 
+	var generalFormater = function(log){
+		return  service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' '
 	}
 
 	var trim = function(txt){
@@ -61,7 +61,7 @@ var VaultBehaviourService = [function(){
 		return txt
 	}
 
-	var generalFormaterWithVaule1 = function(log){		
+	var generalFormaterWithVaule1 = function(log){
 		return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + trim(log.value1)
 	}
 
@@ -71,7 +71,7 @@ var VaultBehaviourService = [function(){
 	}
 
 
-	var formaters = {		
+	var formaters = {
 						1 : generalFormaterWithVaule1,
 						2 : generalFormaterWithVaule1,
 						3 : generalFormaterWithVaule1,
@@ -91,11 +91,11 @@ var VaultBehaviourService = [function(){
 						17 : generalFormaterWithVaule1
 					}
 
-	service.formatMessage = function(log){		
+	service.formatMessage = function(log){
 		return (formaters[log.action_id] || generalFormater)(log)
 	}
 
-	service.canShowToolTip = function(shape, actionId){				
+	service.canShowToolTip = function(shape, actionId){
 		return tootips[shape].indexOf(parseInt(actionId)) > -1
 	}
 

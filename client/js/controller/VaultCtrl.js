@@ -2,11 +2,11 @@ var VaultCtrl = ['$scope', '$rootScope', 'dataManager', 'vaultBehaviour', functi
 	$scope.stateIcon
 	$scope.logsOpen
 	$scope.progressLevel
-	$scope.vaultName	
+	$scope.vaultName
 	$scope.fullVaultName
 	$scope.logs
 	$scope.vaultBehaviour = vaultBehaviour
-	$scope.iconsTray	
+	$scope.iconsTray
 	$scope.isActive = false
 	$scope.flagClearedIcons = false
 
@@ -17,17 +17,17 @@ var VaultCtrl = ['$scope', '$rootScope', 'dataManager', 'vaultBehaviour', functi
 	$scope.networkHealth = 0
 
 	$scope.intervalId
-	
+
 
 	$scope.updateFromQueue = function(){
 		var logs = dataManager.getLogsFromQueue($scope.vaultName)
-		for(var index in logs){			
+		for(var index in logs){
 			$scope.logRecieved(logs[index], true)
 		}
 	}
 
 	//initialize the controller
-	$scope.init = function(vault){			
+	$scope.init = function(vault){
 		$scope.updateProgress(0)
 		$scope.stateIcon = "info.png"
 		$scope.logsOpen = false
@@ -40,20 +40,20 @@ var VaultCtrl = ['$scope', '$rootScope', 'dataManager', 'vaultBehaviour', functi
 	}
 
 	$scope.updateIcons = function(actionId){
-		$scope.iconsTray = $scope.vaultBehaviour.icons[actionId]		
+		$scope.iconsTray = $scope.vaultBehaviour.icons[actionId]
 	}
 
-	$scope.addLog = function(log){		
+	$scope.addLog = function(log){
 		if($scope.logs.length>=$scope.vaultBehaviour.MAX_LOGS)
 			$scope.logs.shift()
-		$scope.logs.push(log)				
+		$scope.logs.push(log)
 	}
 
 	$scope.stateOfVault = function(log){
 		$scope.isActive = (log.action_id != 18)
 	}
 
-	$scope.logRecieved = function(log, initialLoad){		
+	$scope.logRecieved = function(log, initialLoad){
 		$scope.addLog(log)
 		$scope.personaColour = $scope.PERSONA_COLOUR_TAG + (initialLoad?'na':$scope.vaultBehaviour.personas[log.persona_id])
 		if(log.action_id == 17){
@@ -67,45 +67,45 @@ var VaultCtrl = ['$scope', '$rootScope', 'dataManager', 'vaultBehaviour', functi
 		}
 		if(!initialLoad){
 			if(log.action_id == 1 || log.action_id == 2){
-				$scope.counter = log.value1			
+				$scope.counter = log.value1
 			}else if(log.action_id == 6 || log.action_id == 7){
-				$scope.subscriber = log.value1			
-			}	
-		}			
-		
-		if(!$scope.fullVaultName && (log.action_id == 0 || log.hasOwnProperty('vault_id_full'))){			
+				$scope.subscriber = log.value1
+			}
+		}
+
+		if(!$scope.fullVaultName && (log.action_id == 0 || log.hasOwnProperty('vault_id_full'))){
 			$scope.fullVaultName =  log.vault_id_full || log.value1
 		}
-		
-		$scope.stateOfVault(log)		
+
+		$scope.stateOfVault(log)
 		if(!$scope.$$phase)
-			$scope.$apply()		
+			$scope.$apply()
 		$scope.resetInActivityMonitor()
 	}
 
 	$scope.updateProgress = function(progress){
-		$scope.progressLevel = {width: (progress+'%')};		
+		$scope.progressLevel = {width: (progress+'%')};
 	}
 
 	$scope.toggleVaultLogs = function(expand){
 		$scope.stateIcon = !$scope.logsOpen?"arrow-up.png":"info.png";
-		$scope.logsOpen = expand?expand:!$scope.logsOpen;					
+		$scope.logsOpen = expand?expand:!$scope.logsOpen;
 	}
 
 
-	$scope.$on('expandVault', function(e, v){						
+	$scope.$on('expandVault', function(e, v){
 		if(v == $scope.logsOpen)
 			return;
-		$scope.toggleVaultLogs(v)		
+		$scope.toggleVaultLogs(v)
 	})
-	
 
-	$scope.lastLog = function(){		
+
+	$scope.lastLog = function(){
 		return $scope.logs.length>0?$scope.vaultBehaviour.formatMessage($scope.logs[$scope.logs.length-1]):""
 	}
 
 	$scope.resetInActivityMonitor = function(){
-		$scope.flagClearedIcons = false		
+		$scope.flagClearedIcons = false
 		if($scope.intervalId)
 			clearInterval($scope.intervalId)
 		$scope.intervalId = setInterval(function(){
@@ -116,20 +116,20 @@ var VaultCtrl = ['$scope', '$rootScope', 'dataManager', 'vaultBehaviour', functi
 				$scope.subscriber = null
 				$scope.counter = null
 				if(!$scope.$$phase)
-					$scope.$apply()		
+					$scope.$apply()
 			}
-			
-		}, 5000)	
+
+		}, 5000)
 	}
-	
 
 
-	$scope.isToolTipEnabled = function(shape){	
+
+	$scope.isToolTipEnabled = function(shape){
 		if($scope.flagClearedIcons || !$scope.logs || $scope.logs.length <= 0){
 			return false
-		}else{						
+		}else{
 			return vaultBehaviour.canShowToolTip(shape, $scope.logs[$scope.logs.length-1].action_id)
-		}			
+		}
 	}
 
 

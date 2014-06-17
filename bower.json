@@ -1,7 +1,7 @@
 {
 "name":"MaidSafe_NetworkVisualizer",
 "version":"0.0.1",
-"dependencies" : {		
+"dependencies" : {
 		"angular":"1.2.X",
 		"normalize.css":"latest",
 		"angular-rangeslider" : "latest",

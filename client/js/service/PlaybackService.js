@@ -10,12 +10,12 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	var lastBufferedTime
 	var bufferMonitor = 0
 	var firstBuffer = true
-	var buffer_pool = {}	
+	var buffer_pool = {}
 
 	var status = { playing : 0, stoped:1, pause:2, resume:3 }
-	
+
 	var playerStatus = ""
-	
+
 	var statusChangeListner
 
 	var dateFormater = function(date){
@@ -24,7 +24,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 
 	var onNetworkError = function(err){
 			buffering = false
-			console.error(err.data)		
+			console.error(err.data)
 	}
 
 	var getDateKey = function(timestamp){
@@ -33,11 +33,11 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 
 	var clearAll = function(){
 		clearInterval(timerId)
-		timerId = null		
-		timePool = null	
+		timerId = null
+		timePool = null
 		bufferMonitor = 0
-		firstBuffer = true	
-		buffer_pool = {}	
+		firstBuffer = true
+		buffer_pool = {}
 	}
 
 	var setPlayerStatus = function(status){
@@ -47,7 +47,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 
 	var populateTimePool = function(history){
 		var key, log
-		for(var vault in history){		
+		for(var vault in history){
 			for(var index in history[vault]){
 				log = history[vault][index]
 				key = getDateKey(log.ts)
@@ -55,7 +55,7 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 					buffer_pool[key] = []
 				}
 				buffer_pool[key].push(log)
-			}			
+			}
 		}
 	}
 
@@ -73,23 +73,23 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 				timePool[key] = buffer_pool[key]
 			}
 			buffer_pool = {}
-		}						
+		}
 	}
 
-	
-	var prepareData = function(data){				
+
+	var prepareData = function(data){
 		buffering = false
-		populateTimePool(data.data)		
+		populateTimePool(data.data)
 		sortTimePool()
-		if(!timerId)					
-			start()	
+		if(!timerId)
+			start()
 	}
 
 
-	var start = function(){						
-		timerId = setInterval(pushLogs,SPEED) 				
+	var start = function(){
+		timerId = setInterval(pushLogs,SPEED)
 	}
-	
+
 	var PushWrapper = function(log){
 		var _log = log
 		this.push = function(){
@@ -99,13 +99,13 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 
 	var pushLogs = function(){
 		setPlayerStatus(status.playing)
-		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]		
+		var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())]
 		if(logs && logs.length>0){
-			for(var index in logs){				
+			for(var index in logs){
 				setTimeout(new PushWrapper(logs[index]).push,1)
-			}			
+			}
 		}
-		updateNextPushTime()		
+		updateNextPushTime()
 	}
 
 
@@ -116,47 +116,47 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	}
 
 	var loadBuffer = function(){
-		var condition		
-		if(firstBuffer){			
+		var condition
+		if(firstBuffer){
 			condition = (BUFFER_MINUTES * 60)/4
 		}else{
-			condition = BUFFER_MINUTES * 60		
-		}		
+			condition = BUFFER_MINUTES * 60
+		}
 		bufferMonitor++;
 		if(bufferMonitor == condition){
 			firstBuffer  = false
 			bufferMonitor = 0
-			if(isEmpty(buffer_pool) && !buffering){			
+			if(isEmpty(buffer_pool) && !buffering){
 				buffering = true
-				lastBufferedTime += (BUFFER_MINUTES * 60000)			
-				$http.get('/search?offset=' + BUFFER_MINUTES + '&ts='+ new Date(lastBufferedTime).toISOString()).then(prepareData, onNetworkError)		
+				lastBufferedTime += (BUFFER_MINUTES * 60000)
+				$http.get('/search?offset=' + BUFFER_MINUTES + '&ts='+ new Date(lastBufferedTime).toISOString()).then(prepareData, onNetworkError)
 			}
-		}					
+		}
 	}
 
-	
 
-	var updateNextPushTime = function(){			
+
+	var updateNextPushTime = function(){
 		if( playEndsAt < nextPushTime )
 			this.stop()
 		else{
 			nextPushTime += SPEED
-		}	
-		loadBuffer()		
+		}
+		loadBuffer()
 	}
 
-	
-	this.play = function(time){		
-		playEndsAt = new Date().getTime()	
+
+	this.play = function(time){
+		playEndsAt = new Date().getTime()
 		//setPlayerStatus("Preparing for playback")
-		clearAll()	
+		clearAll()
 		nextPushTime = new Date(time).getTime()
 		lastBufferedTime = nextPushTime
-		$http.get('/search?offset=' + BUFFER_MINUTES + '&ts='+time).then(prepareData, onNetworkError)		
+		$http.get('/search?offset=' + BUFFER_MINUTES + '&ts='+time).then(prepareData, onNetworkError)
 	}
 
 	this.pause = function(){
-		setPlayerStatus(status.pause)		
+		setPlayerStatus(status.pause)
 		clearInterval(timerId)
 	}
 
@@ -165,11 +165,11 @@ var PlaybackService = ['$http', '$filter', 'dataManager' , function($http, $filt
 	}
 
 
-	this.stop = function(){		
-		clearAll()			
+	this.stop = function(){
+		clearAll()
 		setPlayerStatus(status.stoped);
 	}
-	
+
 
 	this.onStatusChange = function(callback){
 		statusChangeListner = callback

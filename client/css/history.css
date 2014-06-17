@@ -4,27 +4,27 @@
 	padding: .2em;
 }
 
-.history .info p{	
+.history .info p{
 	margin: 1em .5em;
 }
 
 .history .info .title{
 	font-size: 1.3em;
-	font-weight: bold;	
+	font-weight: bold;
 	float: left;
 }
 
 
 .history .info .time{
 	margin: 1.5em;
-	font-size: 1em;	
+	font-size: 1em;
 	float: right;
 }
 
-button.close-icon { 
+button.close-icon {
 	width:auto;
-	bottom: 27px; 
-	right: 30px; 
+	bottom: 27px;
+	right: 30px;
 }
 
 button.close-icon:hover {
@@ -100,7 +100,7 @@ table tr td {
 	border: 1px solid #a7c8ec;
 }
 
-table tr td div {	
+table tr td div {
 	word-break : break-word;
 }
 

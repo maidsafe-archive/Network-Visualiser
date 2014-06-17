@@ -6,7 +6,7 @@
 		<link rel="stylesheet" type="text/css" href="../client/css/colours.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/fonts.css">
 		<link rel="stylesheet" type="text/css" href="../client/css/slider.css">
-		
+
 		<<script type="text/javascript" src="../vendor/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
 		<script type="text/javascript" src="../client/js/socket.io/socket.io.min.js"></script>
@@ -23,16 +23,16 @@
 		<script type="text/javascript" src="../client/js/controller/VaultCtrl.js"></script>
 		<script type="text/javascript" src="../client/js/directive/tooltip.js"></script>
 		<script type="text/javascript" src="../client/js/controller/HistoryCtrl.js"></script>
-		<script type="text/javascript" src="../client/js/config/registry.js"></script>	
+		<script type="text/javascript" src="../client/js/config/registry.js"></script>
 
 		<title>Network Visualiser - Realtime View</title>
 
 		<link rel="shortcut icon" href="imgs/favicon.ico" />
-  		<link rel="icon" type="image/ico" href="imgs/favicon.ico" />				
+  		<link rel="icon" type="image/ico" href="imgs/favicon.ico" />
 	</head>
-	<body ng-app="MaidSafe" ng-controller="applicationCtrl">		
+	<body ng-app="MaidSafe" ng-controller="applicationCtrl">
 		<header>
-			<% if(user.enabled){%>			
+			<% if(user.enabled){%>
 				<ng-include src="'../client/template/common/header.html'"></ng-include>
 			<% } else{ %>
 				<ng-include src="'../client/template/common/header_signin.html'"></ng-include>
@@ -43,9 +43,9 @@
 			<div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]" >
 				<ng-include src="'../client/template/common/icons_tray.html'"></ng-include>
 			</div>
-			<div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">				
-				<ng-include src="'../client/template/common/node.html'"></ng-include>				
-			</div>			
+			<div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
+				<ng-include src="'../client/template/common/node.html'"></ng-include>
+			</div>
 		</section>
 		<div class="loading" ng-style="{ false:{display:'none'}}[showLoader]">
 			<div class="loader_icon" >
