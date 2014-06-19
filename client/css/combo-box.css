@@ -1,0 +1,60 @@
+.ui-button {
+	margin-left:-1px;
+	padding-top:5px;
+	padding-bottom:1px;
+}
+
+.ui-button-icon-only .ui-button-text {
+	padding:0px;
+}
+
+.ui-autocomplete {
+	font-family: 'OpenSansRegular', Arial, sans-serif;
+	z-index: 500;
+}
+
+.ui-autocomplete-input {
+	height:17px;
+	margin:0;
+	padding:3px 5px 3px 5px;
+	/*border-radius: 12px 0 0 12px;*/
+	border-radius: 0px;
+	border: 0px;
+	font-size: 11px;
+	width: 50px;
+}
+
+.ui-button.ui-widget .ui-button-text {
+	line-height:10px;
+	font-size:2pt;
+}
+
+.ui-menu-item,.demo {
+	font-size:8pt;
+}
+
+button.ui-button-icon-only {
+	height: 17px;
+	width: 17px;
+}
+
+.ui-state-default {
+	background-image: none;
+	border-radius: 0 ;
+}
+
+.ui-state-hover {
+	background-color: #ccc!important;
+	border: 0px;
+}
+
+.ui-corner-all {
+	border-radius: 0px;
+}
+
+.ui-menu .ui-menu-item a { border-color: #fff;} 
+
+.ui-menu .ui-menu-item a:hover {
+	background-image: none;
+	background-color: #ccc;
+} 

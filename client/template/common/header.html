@@ -1,8 +1,20 @@
+<script type="text/javascript" src="../client/js/utils/zoom-combo-box.js"></script>
 <div class="top-header">
   <h1>Network Visualiser - Realtime View</h1>
+
   <p class="time_label">
     {{currentTime | date : 'HH:mm:ss dd/MM/yyyy'}}
   </p>
+  <div class="zoom">
+    <select id="selLanguage">
+      <option value="5">5%</option>
+      <option value="10">10%</option>
+      <option value="25">25%</option>
+      <option value="100">100%</option>
+      <option value="200">200%</option>
+      <option value="400">400%</option>
+    </select>
+  </div>
 </div>
 <ul class="buttons-left">
   <li>
@@ -22,6 +34,9 @@
   <span>{{alert}}</span>
 </div>
 <ul class="buttons-right">
+  <li>
+
+  </li>
   <li>
     <button ng-click="toggleExpandAllLogs()">{{allVaultsExpanded?'Hide All':'Expand All'}}</button>
   </li>
