@@ -10,7 +10,9 @@ var SOCKET_IO_CONFIG = { 'log level': LOG_LEVEL }; //More info - https://github.
 
 io = socket_io.listen(SOCKET_LISTEN_PORT, SOCKET_IO_CONFIG);
 
-io.sockets.on('connection', function(socket) {});
+io.sockets.on('connection', function(socket) {
+  // Empty
+});
 
 exports.broadcastLog = function(data) {
   io.sockets.emit(LOG_CHANNEL_NAME, data);

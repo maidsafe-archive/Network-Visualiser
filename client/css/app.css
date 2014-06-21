@@ -161,10 +161,10 @@ header ul li a {
 }
 
 .top-header p {
+  float: right;
   margin: 0;
   padding: 0.2em 2em 0.1em 2em;
   text-align: right;
-  float: right;
 }
 
 ul.buttons-left {
@@ -200,9 +200,16 @@ button.sign-in a { color: #29578A; }
 button.sign-in:hover a { color: #fff; }
 
 .zoom {
-  float: right;
   display: inline-block;
+  float: right;
   margin-top: 4px;
+}
+
+#non-chrome {
+  color: #fff;
+  display: inline-block;
+  float: right;
+  margin-top: 3px;
 }
 
 section {

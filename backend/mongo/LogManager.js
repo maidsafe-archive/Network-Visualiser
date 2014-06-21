@@ -16,10 +16,12 @@ var LogManager = function(dbConnConnection) {
           dbConn.db.collection(colls[i].name.replace(dbConn.name + '.', ''), function(err, col) {
             col.find(criteria, { __v: 0 }).toArray(function(err, docs) {
               fetched++;
-              if (docs.length > 0)
+              if (docs.length > 0) {
                 results[docs[0].vault_id] = docs;
-              if (fetched == colls.length - 1)
+              }
+              if (fetched == colls.length - 1) {
                 promise.complete(results);
+              }
             });
           });
         }
@@ -32,8 +34,9 @@ var LogManager = function(dbConnConnection) {
         promise.error(err);
       } else {
         var q = coll.find(criteria, HIDE_FIELDS).sort([['ts', 'descending']]);
-        if (max > 0)
+        if (max > 0) {
           q.skip(page * max).limit(max);
+        }
         q.toArray(function(err, data) {
           err ? promise.error(err) : promise.complete(data);
         });
@@ -42,7 +45,9 @@ var LogManager = function(dbConnConnection) {
   };
   this.save = function(data, callback) {
     var promise = new mongoose.Promise;
-    if (callback) promise.addBack(callback);
+    if (callback) {
+      promise.addBack(callback);
+    }
     dbConn.db.collection(utils.transformVaultId(data.vault_id), function(err, coll) {
       if (err) {
         promise.error(err);
@@ -56,13 +61,17 @@ var LogManager = function(dbConnConnection) {
   };
   this.search = function(criteria, callback) {
     var promise = new mongoose.Promise;
-    if (callback) promise.addBack(callback);
+    if (callback) {
+      promise.addBack(callback);
+    }
     searchAllCollections(criteria, promise);
     return promise;
   };
   this.history = function(vaultId, criteria, page, max, callback) {
     var promise = new mongoose.Promise;
-    if (callback) promise.addBack(callback);
+    if (callback) {
+      promise.addBack(callback);
+    }
     vaultHistory(utils.transformVaultId(vaultId), criteria, page, max, promise);
     return promise;
   };

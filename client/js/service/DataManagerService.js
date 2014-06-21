@@ -39,7 +39,9 @@ var DataManagerService = [
             }
           }
         }
-        if (vaultsLoadedObserver) vaultsLoadedObserver(time);
+        if (vaultsLoadedObserver) {
+          vaultsLoadedObserver(time);
+        }
       }, function(err) {
         vaultsLoadedObserver();
       });

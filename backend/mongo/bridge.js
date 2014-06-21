@@ -19,11 +19,12 @@ db.once('open', function callback() {
 exports.addLog = function(log, promise) {
   vaultStatus.updateStatus(log).then(function() {
     vaultStatus.isVaultActive(log).then(function(isActive) {
-      if (isActive || log.action_id == 0 || log.action_id == 18)
+      if (isActive || log.action_id == 0 || log.action_id == 18) {
         vaultLog.save(log, promise);
-      else {
-        if (promise)
+      } else {
+        if (promise) {
           promise('Vault is not active');
+        }
       }
     });
   }, function(err) {

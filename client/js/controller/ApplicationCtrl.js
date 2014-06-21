@@ -11,8 +11,9 @@ var ApplicationCtrl = [
     $scope.currentTime = new Date().getTime();
     setInterval(function() {
       $scope.currentTime += 1000;
-      if (!$scope.$$phase)
+      if (!$scope.$$phase) {
         $scope.$apply();
+      }
     }, 1000);
     $scope.timeline = function() {
       window.open('/client/timeline.html#?ts=' + new Date().toISOString(), '_blank').focus();
@@ -27,8 +28,9 @@ var ApplicationCtrl = [
       $scope.alert = msg;
       setTimeout(function() {
         $scope.alert = null;
-        if (!$scope.$$phase)
+        if (!$scope.$$phase) {
           $scope.$apply();
+        }
       }, 5000);
     };
     $scope.clearLogs = function() {
@@ -46,8 +48,9 @@ var ApplicationCtrl = [
 
     var newVault = function(vault) {
       $scope.vaults.push(vault);
-      if (!$scope.$$phase)
+      if (!$scope.$$phase) {
         $scope.$apply();
+      }
     };
     var onVaultsLoaded = function(time) {
       $scope.showLoader = false;

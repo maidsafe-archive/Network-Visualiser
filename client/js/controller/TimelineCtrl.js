@@ -27,8 +27,9 @@ var TimelineCtrl = [
           $scope.showLoader = true;
         }
         $scope.currentPlayTime = $scope.getPlayTime(parseFloat(newValue));
-        if (!$scope.$$phase)
+        if (!$scope.$$phase) {
           $scope.$apply();
+        }
         if ($scope.autoSeekItervalId) {
           clearTimeout($scope.autoSeekItervalId);
           $scope.autoSeekItervalId = null;
@@ -44,12 +45,15 @@ var TimelineCtrl = [
     $scope.updatePlayingTime = function() {
       $scope.playback.currentState += $scope.playback.incrementalSteps;
       $scope.currentPlayTime += 1000;
-      if (!$scope.$$phase)
+      if (!$scope.$$phase) {
         $scope.$apply();
+      }
     };
     $scope.setStatusAlert = function(msg) {
       $scope.alert = msg;
-      setTimeout(function() { $scope.alert = null; }, 2000);
+      setTimeout(function() {
+        $scope.alert = null;
+      }, 2000);
     };
     $scope.toggleIconsTray = function() {
       $scope.iconsTrayClosed = !$scope.iconsTrayClosed;
@@ -102,8 +106,9 @@ var TimelineCtrl = [
 
     var newVault = function(vault) {
       $scope.vaults.push(vault);
-      if (!$scope.$$phase)
+      if (!$scope.$$phase) {
         $scope.$apply();
+      }
     };
     var onVaultsLoaded = function(time) {
       $scope.showLoader = false;
@@ -111,8 +116,9 @@ var TimelineCtrl = [
         $scope.playerStatus = 'No active vaults';
         setTimeout(function() {
           $scope.playerStatus = '';
-          if (!$scope.$$phase)
+          if (!$scope.$$phase) {
             $scope.$apply();
+          }
         }, 3000);
       }
       if (time) {
@@ -121,15 +127,15 @@ var TimelineCtrl = [
     };
     var updatePlayerStatus = function(status) {
       switch (status) {
-      case 0: //playing
-        $scope.playerStatus = "";
-        $scope.updatePlayingTime();
-        break;
+        case 0: //playing
+          $scope.playerStatus = "";
+          $scope.updatePlayingTime();
+          break;
 
 
-      case 3: //resume
-        $scope.updatePlayingTime();
-        break;
+        case 3: //resume
+          $scope.updatePlayingTime();
+          break;
 
       }
 

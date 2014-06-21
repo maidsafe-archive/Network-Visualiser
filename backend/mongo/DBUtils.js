@@ -66,7 +66,9 @@ var DBUtil = function(dbConnection) {
           outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
         });
         stream.on('close', function() {
-          setTimeout(function() { handler.callback(); }, 1000);
+          setTimeout(function() {
+            handler.callback();
+          }, 1000);
         });
       });
     };

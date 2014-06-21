@@ -25,3 +25,9 @@ build/Release
 node_modules
 vendor
 /gauth.json
+
+# Sln Files
+obj/
+*.njsproj
+*.sln
+*.suo

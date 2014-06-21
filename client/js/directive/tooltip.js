@@ -26,10 +26,14 @@ var ToolTip = [
       });
 
 
-      scope.$watch(function() { return element.attr('tooltip'); }, function(n) {
+      scope.$watch(function() {
+        return element.attr('tooltip');
+      }, function(n) {
         scope.tip = n;
       });
-      scope.$watch(function() { return element.attr('canshow'); }, function(n) {
+      scope.$watch(function() {
+        return element.attr('canshow');
+      }, function(n) {
         scope.enabled = n;
       });
     };

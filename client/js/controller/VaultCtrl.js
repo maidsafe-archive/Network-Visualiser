@@ -35,8 +35,9 @@ var VaultCtrl = [
       $scope.iconsTray = $scope.vaultBehaviour.icons[actionId];
     };
     $scope.addLog = function(log) {
-      if ($scope.logs.length >= $scope.vaultBehaviour.MAX_LOGS)
+      if ($scope.logs.length >= $scope.vaultBehaviour.MAX_LOGS) {
         $scope.logs.shift();
+      }
       $scope.logs.push(log);
     };
     $scope.stateOfVault = function(log) {
@@ -51,8 +52,9 @@ var VaultCtrl = [
       } else {
         $scope.subscriber = null;
         $scope.counter = null;
-        if (!initialLoad)
+        if (!initialLoad) {
           $scope.updateIcons(log.action_id);
+        }
       }
       if (!initialLoad) {
         if (log.action_id == 1 || log.action_id == 2) {
@@ -67,8 +69,9 @@ var VaultCtrl = [
       }
 
       $scope.stateOfVault(log);
-      if (!$scope.$$phase)
+      if (!$scope.$$phase) {
         $scope.$apply();
+      }
       $scope.resetInActivityMonitor();
     };
     $scope.updateProgress = function(progress) {
@@ -79,8 +82,9 @@ var VaultCtrl = [
       $scope.logsOpen = expand ? expand : !$scope.logsOpen;
     };
     $scope.$on('expandVault', function(e, v) {
-      if (v == $scope.logsOpen)
+      if (v == $scope.logsOpen) {
         return;
+      }
       $scope.toggleVaultLogs(v);
     });
     $scope.lastLog = function() {
@@ -88,8 +92,9 @@ var VaultCtrl = [
     };
     $scope.resetInActivityMonitor = function() {
       $scope.flagClearedIcons = false;
-      if ($scope.intervalId)
+      if ($scope.intervalId) {
         clearInterval($scope.intervalId);
+      }
       $scope.intervalId = setInterval(function() {
         if (!$rootScope.playerPaused) {
           $scope.flagClearedIcons = true;
@@ -97,8 +102,9 @@ var VaultCtrl = [
           $scope.personaColour = $scope.PERSONA_COLOUR_TAG + 'na';
           $scope.subscriber = null;
           $scope.counter = null;
-          if (!$scope.$$phase)
+          if (!$scope.$$phase) {
             $scope.$apply();
+          }
         }
 
       }, 5000);

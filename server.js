@@ -1,7 +1,7 @@
 var express = require('express'),
-  passport = require('passport'),
-  util = require('util'),
-  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+    passport = require('passport'),
+    util = require('util'),
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var logController = require('./backend/maidsafe/LogController.js');
 var config = require('./Config.js');

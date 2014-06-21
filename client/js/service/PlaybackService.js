@@ -68,8 +68,9 @@ var PlaybackService = [
       buffering = false;
       populateTimePool(data.data);
       sortTimePool();
-      if (!timerId)
+      if (!timerId) {
         start();
+      }
     };
     var start = function() {
       timerId = setInterval(pushLogs, SPEED);
@@ -91,8 +92,9 @@ var PlaybackService = [
       updateNextPushTime();
     };
     var isEmpty = function(obj) {
-      for (var o in obj)
+      for (var o in obj) {
         return false;
+      }
       return true;
     };
     var loadBuffer = function() {
@@ -114,9 +116,9 @@ var PlaybackService = [
       }
     };
     var updateNextPushTime = function() {
-      if (playEndsAt < nextPushTime)
+      if (playEndsAt < nextPushTime) {
         this.stop();
-      else {
+      } else {
         nextPushTime += SPEED;
       }
       loadBuffer();

@@ -13,8 +13,9 @@ var saveLog = function(req, res) {
     // if(log.value2 && log.value2.length>config.Constants.minLengthForDecode){
     // 	log.value2 = utils.decodeData(log.value2)
     // }
-    if (!log.hasOwnProperty('persona_id'))
-      log.persona_id = config.Constants.persona_na; //NA
+    if (!log.hasOwnProperty('persona_id')) {
+      log.persona_id = config.Constants.persona_na;
+    }
     utils.isValid(log) ? bridge.addLog(log, new Handler.SaveLogHandler(res)) : res.send(500, 'Invalid Parameters');
   } else {
     res.send(500, "Invalid date time format");
@@ -33,10 +34,11 @@ var searchLog = function(req, res) {
 var history = function(req, res) {
   var criteria = url.parse(req.url, true).query;
   var timeCriteria = criteria.ts ? { 'ts': { "$lt": criteria.ts } } : {};
-  if (utils.isPageRequestValid(criteria))
+  if (utils.isPageRequestValid(criteria)) {
     bridge.vaultHistory(criteria.vault_id, timeCriteria, parseInt(criteria.page), parseInt(criteria.max), new Handler.SearchHandler(res));
-  else
+  } else {
     res.send(500, 'Invalid Request');
+  }
 };
 var dropDB = function(req, res) {
   bridge.dropDB();
@@ -54,10 +56,12 @@ var getCurrentActiveVaults = function(req, res) {
       results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
       bridge.vaultHistory(vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs) {
         counter++;
-        if (logs.length > 0)
+        if (logs.length > 0) {
           results[logs[0].vault_id].logs = logs;
-        if (counter >= vaults.length)
+        }
+        if (counter >= vaults.length) {
           res.send(results);
+        }
       });
     }
   });
@@ -74,10 +78,12 @@ var getActiveVaultsAtTime = function(criteria, res) {
           results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
           bridge.vaultHistory(vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
             counter++;
-            if (logs.length > 0 && logs[logs.length - 1] != 18)
+            if (logs.length > 0 && logs[logs.length - 1] != 18) {
               results[logs[0].vault_id].logs = logs;
-            if (counter >= vaults.length)
+            }
+            if (counter >= vaults.length) {
               res.send(results);
+            }
           }, function(err) {
             console.log(err);
           });
@@ -132,8 +138,9 @@ var testLog = function(req, res) {
   if (log.value2 && log.value2.length > config.Constants.minLengthForDecode) {
     log.value2 = utils.decodeData(log.value2);
   }
-  if (!log.hasOwnProperty('persona_id'))
+  if (!log.hasOwnProperty('persona_id')) {
     log.persona_id = config.Constants.persona_na;
+  }
   res.send(200, "Saved");
 };
 exports.saveLog = saveLog;

@@ -7,13 +7,16 @@ var SocketService = [
     var signalObserver;
     socket.on('log', function(data) {
       if ($rootScope.realTime) {
-        setTimeout(function() { dataManager.pushLog(data); }, 1); //threaded so ui is non-blocking
+        setTimeout(function() {
+          dataManager.pushLog(data);
+        }, 1); //threaded so ui is non-blocking
       }
     });
 
     socket.on('signal', function(data) {
-      if (signalObserver)
+      if (signalObserver) {
         signalObserver(data);
+      }
     });
 
     this.start = function() {

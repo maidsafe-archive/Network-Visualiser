@@ -64,14 +64,17 @@ var VaultHealth = function(dbConnection) {
   this.setFirstLogTime = function(firstLogTimeISO) { //as iso string
     firstLogTime = firstLogTimeISO;
     new VaultStatus({ key: 'firstLogTime', value: firstLogTimeISO }).save(function(err, doc) {
-      if (err)
+      if (err) {
         console.log(err);
+      }
     });
     console.log(firstLogTime);
   };
   this.getActiveVaults = function(callback) {
     var promise = new mongoose.Promise;
-    if (callback) promise.addBack(callback);
+    if (callback) {
+      promise.addBack(callback);
+    }
     VaultStatus.find({ status: STATUS.active }, function(err, vaults) {
       err ? promise.error(err) : promise.complete(vaults);
     });
