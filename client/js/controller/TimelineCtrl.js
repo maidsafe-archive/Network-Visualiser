@@ -132,13 +132,10 @@ var TimelineCtrl = [
           $scope.updatePlayingTime();
           break;
 
-
         case 3: //resume
           $scope.updatePlayingTime();
           break;
-
       }
-
     };
     dataManager.onNewVault(newVault);
     dataManager.onVaultsLoaded(onVaultsLoaded);

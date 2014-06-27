@@ -114,9 +114,7 @@ header ul {
   margin: 1.3em 2em 0;
 }
 
-header ul li {
-  float: left;
-}
+header ul li { float: left; }
 
 header ul li a {
   color: #fff;
@@ -152,11 +150,11 @@ header ul li a {
 
 ul.buttons-left { float: left; }
 
-ul.buttons-left li { margin-right: .5em}
+ul.buttons-left li { margin-right: .5em }
 
 ul.buttons-right { float: right; }
 
-ul.buttons-right li { margin-left: .5em}
+ul.buttons-right li { margin-left: .5em }
 
 
 button {
@@ -393,10 +391,10 @@ section div.wrapper div.node div.log_slider ul li {
 
 footer {
   background-color: #5593d7;
+  bottom: 0px;
   height: 50px;
   min-width: 1150px;
   position: absolute;
-  bottom: 0px;
   width: 100%;
 }
 
@@ -416,8 +414,8 @@ footer div.status {
 footer div.status.alert { background: #f78b8b; }
 
 .counter {
-  float: right;
-  margin:0.8em 2.2em;
   color: #fff;
+  float: right;
   font-size: 16px;
+  margin: 0.8em 2.2em;
 }
