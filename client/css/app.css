@@ -41,22 +41,6 @@ header p.title {
   margin: 1em 0em 1em 2em;
 }
 
-header div.status {
-  border-radius: 9px;
-  color: #fff;
-  display: block;
-  float: left;
-  font-family: 'OpenSansRegular', Arial, sans-serif;
-  font-size: 14px;
-  left: 10%;
-  margin: 1em;
-  padding: .34em 1em;
-  position: relative;
-  top: 5px;
-}
-
-header div.status.alert { background: #f78b8b; }
-
 header div.timeline {
   float: left;
   margin: .3em;
@@ -127,12 +111,11 @@ header div.timeline div.player_buttons {
 
 header ul {
   float: right;
-  margin: 1.3em 2.2em 0em 1.5em; /*1.8*/
+  margin: 1.3em 2em 0;
 }
 
 header ul li {
   float: left;
-  margin-left: .5em
 }
 
 header ul li a {
@@ -163,16 +146,17 @@ header ul li a {
 .top-header p {
   float: right;
   margin: 0;
-  padding: 0.2em 2em 0.1em 2em;
+  padding: 0.2em 2.2em 0.1em 1.5em;
   text-align: right;
 }
 
-ul.buttons-left {
-  float: left;
-  margin: 1.3em 2.2em 0em 1.5em; /*1.8*/
-}
+ul.buttons-left { float: left; }
+
+ul.buttons-left li { margin-right: .5em}
 
 ul.buttons-right { float: right; }
+
+ul.buttons-right li { margin-left: .5em}
 
 
 button {
@@ -405,3 +389,35 @@ section div.wrapper div.node div.log_slider ul li {
 }
 
 .loading div.loader_icon img { width: 50px }
+
+
+footer {
+  background-color: #5593d7;
+  height: 50px;
+  min-width: 1150px;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+footer div.status {
+  border-radius: 9px;
+  color: #fff;
+  display: block;
+  float: left;
+  font-family: 'OpenSansRegular', Arial, sans-serif;
+  font-size: 14px;
+  margin: 0.3em 1.5em;
+  padding: .34em 1em;
+  position: relative;
+  top: 5px;
+}
+
+footer div.status.alert { background: #f78b8b; }
+
+.counter {
+  float: right;
+  margin:0.8em 2.2em;
+  color: #fff;
+  font-size: 16px;
+}

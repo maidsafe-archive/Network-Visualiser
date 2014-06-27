@@ -46,8 +46,7 @@
 			<% }%>
 		</header>
 		<section>
-
-			<div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]" >
+			<div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]">
 				<ng-include src="'../client/template/common/icons_tray.html'"></ng-include>
 			</div>
 			<div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
@@ -59,5 +58,8 @@
 				<img src="../client/imgs/loader.gif">
 			</div>
 		</div>
+		<footer>
+			<ng-include src="'../client/template/common/footer.html'"></ng-include>
+		</footer>
 	</body>
 </html>
