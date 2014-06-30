@@ -167,10 +167,9 @@ button {
   display: inline-block;
   float: right;
   font-size: 16px;
-  font-weight: 400;
   padding: 5px 15px 5px 15px;
   text-decoration: none;
-  width: 110px;
+  width: 115px;
 }
 
 button:hover, button.sign-in:hover { background-color: #29578A; }
