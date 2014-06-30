@@ -6,12 +6,13 @@ var express = require('express'),
 var logController = require('./backend/maidsafe/LogController.js');
 var config = require('./Config.js');
 var fs = require('fs');
+var path = require('path');
 var app = express();
 var PORT = config.Constants.serverPort;
 var gAuth;
 var needsAuth = true;
 
-fs.readFile('gauth.json', 'utf8', function(err, data) {
+fs.readFile(path.resolve(__dirname, 'gauth.json'), 'utf8', function(err, data) {
   if (err) {
     console.log('Error: ' + err);
     needsAuth = false;
