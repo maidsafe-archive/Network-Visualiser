@@ -28,13 +28,14 @@ var testLog = function(req, res) {
 };
 exports.register = function(server) {
   server.post('/log', saveLogs);
+  server.post('/import', importLogs);
+
   server.get('/vaults', getActiveVaults);
   server.get('/clearLogs', clearDB);
   server.get('/history', history);
   server.get('/search', search);
   server.get('/export', exportLogs);
   server.get('/firstuptime', firstLogTime);
-  server.post('/import', importLogs);
 
   server.post('/logtest', testLog);
 };

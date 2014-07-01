@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
+var config = require('./../../Config.js');
 
 var LogManager = function(dbConnConnection) {
   var dbConn, LOG_SCHEMA, HIDE_FIELDS;
@@ -33,12 +34,37 @@ var LogManager = function(dbConnConnection) {
       if (err) {
         promise.error(err);
       } else {
+        console.log('criteria: ' + JSON.stringify(criteria));
         var q = coll.find(criteria, HIDE_FIELDS).sort([['ts', 'descending']]);
         if (max > 0) {
           q.skip(page * max).limit(max);
         }
         q.toArray(function(err, data) {
-          err ? promise.error(err) : promise.complete(data);
+          if (err) {
+            promise.error(err);
+            return;
+          }
+          var networkHealthFound = false;
+          for (i in data) {
+            networkHealthFound = data[i].action_id == config.Constants.action_network_health;
+          }
+          if (networkHealthFound) {
+            promise.complete(data);
+            return;
+          }
+          criteria['action_id'] = config.Constants.action_network_health;
+          var healthCursor = coll.find(criteria, HIDE_FIELDS).sort([['ts', 'descending']]).limit(1);
+          healthCursor.toArray(function(healthErr, healthData) {
+            if (healthErr) {
+              promise.error(healthErr);
+              return;
+            }
+            if (healthData.length > 0) {
+              data.push(healthData[0]);
+            }
+
+            promise.complete(data);
+          });
         });
       }
     });

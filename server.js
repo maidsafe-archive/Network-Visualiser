@@ -87,6 +87,14 @@ app.get('/auth', ensureAuthenticated, function(req, res) {
   res.render('index', { user: { enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0, email: req.user._json.email }, socketPort : config.Constants.socketPort });
 });
 
+app.get('/client/timeline', function(req, res) {
+  res.render('timeline', { socketPort : config.Constants.socketPort });
+});
+
+app.get('/client/history', function(req, res) {
+  res.render('history', { socketPort : config.Constants.socketPort });
+});
+
 // GET /auth/google
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  The first step in Google authentication will involve

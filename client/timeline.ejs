@@ -14,7 +14,8 @@
 
     <script type="text/javascript" src="../vendor/angular-rangeslider/angular.rangeSlider.js"></script>
     <link rel="stylesheet" type="text/css" href="../vendor/angular-rangeslider/angular.rangeSlider.css">
-
+    
+    <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
     <script type="text/javascript" src="../client/js/service/SocketService.js"></script>
     <script type="text/javascript" src="../client/js/service/DataManagerService.js"></script>
     <script type="text/javascript" src="../client/js/service/PlaybackService.js"></script>
@@ -39,14 +40,14 @@
   </head>
   <body id="timeline" ng-app="MaidSafe" ng-controller="timelineCtrl">
     <header>
-      <ng-include src="'template/common/timeline_header.html'"></ng-include>
+      <ng-include src="'../client/template/common/timeline_header.html'"></ng-include>
     </header>
     <section>
       <div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]" >
-        <ng-include src="'template/common/icons_tray.html'"></ng-include>
+        <ng-include src="'../client/template/common/icons_tray.html'"></ng-include>
       </div>
       <div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
-        <ng-include src="'template/common/node.html'"></ng-include>
+        <ng-include src="'../client/template/common/node.html'"></ng-include>
       </div>
     </section>
     <div class="loading" ng-style="{ false:{display:'none'}}[showLoader]">

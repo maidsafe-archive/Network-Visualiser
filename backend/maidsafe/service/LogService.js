@@ -56,6 +56,7 @@ var getCurrentActiveVaults = function(req, res) {
       results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
       bridge.vaultHistory(vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs) {
         counter++;
+        // console.log(logs);
         if (logs.length > 0) {
           results[logs[0].vault_id].logs = logs;
         }

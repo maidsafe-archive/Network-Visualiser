@@ -16,7 +16,7 @@ var ApplicationCtrl = [
       }
     }, 1000);
     $scope.timeline = function() {
-      window.open('/client/timeline.html#?ts=' + new Date().toISOString(), '_blank').focus();
+      window.open('/client/timeline#?ts=' + new Date().toISOString(), '_blank').focus();
     };
     $scope.export = function() {
       window.open('/export', '_blank');
@@ -68,6 +68,7 @@ var ApplicationCtrl = [
     dataManager.onNewVault(newVault);
     dataManager.onVaultsLoaded(onVaultsLoaded);
     setTimeout(function() {
+      console.log("Called");
       dataManager.getActiveVaults();
     }, 10);
   }
