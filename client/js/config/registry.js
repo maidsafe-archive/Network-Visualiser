@@ -1,6 +1,6 @@
 var app = angular.module('MaidSafe', ['ui-rangeSlider']).run([
   '$rootScope', '$location', function($rootScope, $location) {
-    $rootScope.socketEndPoint = "http://" + $location.host() + ":8081";
+    $rootScope.socketEndPoint = "http://" + $location.host() + ":" + socketPort;
   }
 ]);
 

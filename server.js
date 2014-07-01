@@ -80,11 +80,11 @@ app.configure(function() {
 
 
 app.get('/', function(req, res) {
-  res.render('index', { user: { enabled: !needsAuth } });
+  res.render('index', { user: { enabled: !needsAuth }, socketPort : config.Constants.socketPort });
 });
 
 app.get('/auth', ensureAuthenticated, function(req, res) {
-  res.render('index', { user: { enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0, email: req.user._json.email } });
+  res.render('index', { user: { enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0, email: req.user._json.email }, socketPort : config.Constants.socketPort });
 });
 
 // GET /auth/google
@@ -125,9 +125,5 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/');
 }
 
-
-app.get('/', function(req, res) {
-  res.render('index');
-});
 logController.register(app);
 app.listen(PORT);

@@ -1,65 +1,66 @@
 <html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="../vendor/normalize.css/normalize.css">
-		<link rel="stylesheet" type="text/css" href="../client/css/app.css">
-		<link rel="stylesheet" type="text/css" href="../client/css/shapes.css">
-		<link rel="stylesheet" type="text/css" href="../client/css/colours.css">
-		<link rel="stylesheet" type="text/css" href="../client/css/fonts.css">
-		<link rel="stylesheet" type="text/css" href="../client/css/slider.css">
-		
+  <head>
+    <link rel="stylesheet" type="text/css" href="../vendor/normalize.css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../client/css/app.css">
+    <link rel="stylesheet" type="text/css" href="../client/css/shapes.css">
+    <link rel="stylesheet" type="text/css" href="../client/css/colours.css">
+    <link rel="stylesheet" type="text/css" href="../client/css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="../client/css/slider.css">
 
-		<script type="text/javascript" src="../vendor/jquery/dist/jquery.min.js"></script>
-		<script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
-		<script type="text/javascript" src="../client/js/socket.io/socket.io.min.js"></script>
 
-		<script type="text/javascript" src="../vendor/angular-rangeslider/angular.rangeSlider.js"></script>
-		<link rel="stylesheet" type="text/css" href="../vendor/angular-rangeslider/angular.rangeSlider.css">
+    <script type="text/javascript" src="../vendor/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../vendor/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../client/js/socket.io/socket.io.min.js"></script>
 
-		<script type="text/javascript" src="../client/js/service/SocketService.js"></script>
-		<script type="text/javascript" src="../client/js/service/DataManagerService.js"></script>
-		<script type="text/javascript" src="../client/js/service/PlaybackService.js"></script>
-		<script type="text/javascript" src="../client/js/service/VaultBehaviourService.js"></script>
-		<script type="text/javascript" src="../client/js/controller/ApplicationCtrl.js"></script>
-		<script type="text/javascript" src="../client/js/controller/TimelineCtrl.js"></script>
-		<script type="text/javascript" src="../client/js/controller/VaultCtrl.js"></script>
-		<script type="text/javascript" src="../client/js/directive/tooltip.js"></script>
-		<script type="text/javascript" src="../client/js/controller/HistoryCtrl.js"></script>
-		<script type="text/javascript" src="../client/js/config/registry.js"></script>
+    <script type="text/javascript" src="../vendor/angular-rangeslider/angular.rangeSlider.js"></script>
+    <link rel="stylesheet" type="text/css" href="../vendor/angular-rangeslider/angular.rangeSlider.css">
 
-		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
+    <script type="text/javascript" src="../client/js/service/SocketService.js"></script>
+    <script type="text/javascript" src="../client/js/service/DataManagerService.js"></script>
+    <script type="text/javascript" src="../client/js/service/PlaybackService.js"></script>
+    <script type="text/javascript" src="../client/js/service/VaultBehaviourService.js"></script>
+    <script type="text/javascript" src="../client/js/controller/ApplicationCtrl.js"></script>
+    <script type="text/javascript" src="../client/js/controller/TimelineCtrl.js"></script>
+    <script type="text/javascript" src="../client/js/controller/VaultCtrl.js"></script>
+    <script type="text/javascript" src="../client/js/directive/tooltip.js"></script>
+    <script type="text/javascript" src="../client/js/controller/HistoryCtrl.js"></script>
+    <script type="text/javascript" src="../client/js/config/registry.js"></script>
+
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 
     <link rel="stylesheet" type="text/css" href="../client/css/combo-box.css">
 
-		<title>Network Visualiser - Realtime View</title>
+    <title>Network Visualiser - Realtime View</title>
 
-		<link rel="shortcut icon" href="../client/imgs/favicon.ico" />
-  	<link rel="icon" type="image/ico" href="../client/imgs/favicon.ico" />
-	</head>
-	<body ng-app="MaidSafe" ng-controller="applicationCtrl">
-		<header>
-			<% if(user.enabled){%>
-				<ng-include src="'../client/template/common/header.html'"></ng-include>
-			<% } else{ %>
-				<ng-include src="'../client/template/common/header_signin.html'"></ng-include>
-			<% }%>
-		</header>
-		<section>
-			<div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]">
-				<ng-include src="'../client/template/common/icons_tray.html'"></ng-include>
-			</div>
-			<div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
-				<ng-include src="'../client/template/common/node.html'"></ng-include>
-			</div>
-		</section>
-		<div class="loading" ng-style="{ false:{display:'none'}}[showLoader]">
-			<div class="loader_icon" >
-				<img src="../client/imgs/loader.gif">
-			</div>
-		</div>
-		<footer>
-			<ng-include src="'../client/template/common/footer.html'"></ng-include>
-		</footer>
-	</body>
+    <link rel="shortcut icon" href="../client/imgs/favicon.ico" />
+    <link rel="icon" type="image/ico" href="../client/imgs/favicon.ico" />
+  </head>
+  <body ng-app="MaidSafe" ng-controller="applicationCtrl">
+    <header>
+      <% if(user.enabled) { %>
+      <ng-include src="'../client/template/common/header.html'"></ng-include>
+      <% } else { %>
+      <ng-include src="'../client/template/common/header_signin.html'"></ng-include>
+      <% } %>
+    </header>
+    <section>
+      <div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]">
+        <ng-include src="'../client/template/common/icons_tray.html'"></ng-include>
+      </div>
+      <div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
+        <ng-include src="'../client/template/common/node.html'"></ng-include>
+      </div>
+    </section>
+    <div class="loading" ng-style="{ false:{display:'none'}}[showLoader]">
+      <div class="loader_icon" >
+        <img src="../client/imgs/loader.gif">
+      </div>
+    </div>
+    <footer>
+      <ng-include src="'../client/template/common/footer.html'"></ng-include>
+    </footer>
+  </body>
 </html>
