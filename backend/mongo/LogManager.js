@@ -34,7 +34,6 @@ var LogManager = function(dbConnConnection) {
       if (err) {
         promise.error(err);
       } else {
-        console.log('criteria: ' + JSON.stringify(criteria));
         var q = coll.find(criteria, HIDE_FIELDS).sort([['ts', 'descending']]);
         if (max > 0) {
           q.skip(page * max).limit(max);
@@ -46,9 +45,16 @@ var LogManager = function(dbConnConnection) {
           }
           var networkHealthFound = false;
           for (i in data) {
-            networkHealthFound = data[i].action_id == config.Constants.action_network_health;
+            if (data[i].action_id == config.Constants.action_network_health) {
+              networkHealthFound = true;
+              break;
+            }
           }
-          if (networkHealthFound) {
+          // console.log('data length: ' + data.length);
+          // console.log('networkHealthFound: ' + networkHealthFound);
+
+          // max is -1 when /history is called
+          if (networkHealthFound || max < 0) {
             promise.complete(data);
             return;
           }
