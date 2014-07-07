@@ -3,7 +3,7 @@ var utils = require('./../maidsafe/utils.js');
 var config = require('./../../Config.js');
 
 var LogManager = function(dbConnConnection) {
-  var dbConn, LOG_SCHEMA, HIDE_FIELDS;
+  var dbConn, HIDE_FIELDS;
 
   dbConn = dbConnConnection;
 
@@ -50,8 +50,6 @@ var LogManager = function(dbConnConnection) {
               break;
             }
           }
-          // console.log('data length: ' + data.length);
-          // console.log('networkHealthFound: ' + networkHealthFound);
 
           // max is -1 when /history is called
           if (networkHealthFound || max < 0) {

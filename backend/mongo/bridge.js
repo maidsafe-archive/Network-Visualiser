@@ -2,6 +2,7 @@ var db, vaultLog, mongoose, logManager, vaultStatus;
 mongoose = require('mongoose');
 logManager = require('./LogManager.js');
 vaultStatus = require('./VaultStatus.js');
+keyValueData = require('./KeyValueData.js');
 dbUtils = require('./DBUtils.js');
 config = require('./../../Config.js');
 
@@ -40,7 +41,7 @@ exports.vaultHistory = function(vaultId, criteria, page, max, promise) {
 };
 exports.dropDB = function() {
   db.db.dropDatabase();
-  vaultStatus.clearFirstLogTime();
+  keyValueData.clearFirstLogTime();
 };
 exports.getActiveVaults = function() {
   return vaultStatus.getActiveVaults();
@@ -49,7 +50,7 @@ exports.getAllVaultNames = function() {
   return vaultStatus.getAllVaultNames();
 };
 exports.firstLogTime = function() {
-  return vaultStatus.getFirstLogTime();
+  return keyValueData.getFirstLogTime();
 };
 exports.exportLogs = function() {
   return dbUtils.exportLogs();

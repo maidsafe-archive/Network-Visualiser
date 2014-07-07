@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
 
-var VaultHealth = function(dbConnection) {
+var VaultHealth = function() {
 
-  var SCHEMA, HIDE_FIELDS, VaultStatus, MODEL_NAME;
+  var SCHEMA, VaultStatus, MODEL_NAME;
   var firstLogTime;
   var STATUS = { active: 'active', dead: "dead" };
-  HIDE_FIELDS = { _id: 0, __v: 0 };
   SCHEMA = {
     last_updated: { type: Date, default: Date.now },
     vault_id: String,
