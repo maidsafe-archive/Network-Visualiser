@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var utils = require('./../maidsafe/utils.js');
 
-var KeyValueStorage = function() {
+var KeyValueStorage = function(dbConnection) {
 
   var SCHEMA, KeyValueData, MODEL_NAME;
   var firstLogTime;
@@ -10,27 +11,33 @@ var KeyValueStorage = function() {
   };
   MODEL_NAME = 'keyValueData';
   KeyValueData = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
+  utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'key');
 
   this.clearFirstLogTime = function() {
     firstLogTime = null;
   };
+  this.hasFirstLogTime = function() {
+    return firstLogTime != null;
+  };
   this.getFirstLogTime = function() {
     return firstLogTime || new Date().toISOString();
   };
-  this.setFirstLogTime = function(firstLogTimeISO) { // ISO string
+  this.setFirstLogTime = function(firstLogTimeISO, promise) { // ISO string
     firstLogTime = firstLogTimeISO;
-    new KeyValueData({ key: 'firstLogTime', value: firstLogTimeISO }).save(function(err, doc) {
-      if (err) {
-        console.log(err);
+    KeyValueData.update({ key: 'firstLogTime' }, { $set : { value: firstLogTimeISO }}, { upsert: true }, function(err, doc) {
+      if (promise) {
+        if (err) {
+          promise.error(err);
+        } else {
+          promise.complete('');
+        }
       }
     });
-    console.log(firstLogTime);
   };
   var setFirstLogTimeFromDB = function() {
     KeyValueData.find({ key: 'firstLogTime' }, function(err, doc) {
-      if (!err && !doc.length == 0) {
+      if (!err && doc.length != 0) {
         firstLogTime = doc[0].value;
-        console.log(firstLogTime);
       }
     });
   };

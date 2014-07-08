@@ -175,7 +175,7 @@ var DBUtil = function(dbConnection) {
 
     return { valid: isValid, msg: errString };
   };
-  var ImportFactory = function(filePath, vaultStatus, logManager, promise, validationCallback) {
+  var ImportFactory = function(filePath, vaultStatus, keyValueData, logManager, promise, validationCallback) {
     var stream = fs.createReadStream(filePath);
     var firstRecord = true;
     var log = {};
@@ -220,13 +220,12 @@ var DBUtil = function(dbConnection) {
         if (validationCallback) {
           validationCallback(validationErrors);
         } else {
-          vaultStatus.setFirstLogTime(new Date(firstLogTime).toISOString());
+          keyValueData.setFirstLogTime(new Date(firstLogTime).toISOString());
           promise.complete('Completed');
         }
       });
-
   };
-  this.importLogs = function(filePath, vaultStatus, logManager) {
+  this.importLogs = function(filePath, vaultStatus, keyValueData, logManager) {
     var promise = new mongoose.Promise;
     var validationCallback = function(errors) {
       if (errors.length > 0) {
@@ -237,10 +236,10 @@ var DBUtil = function(dbConnection) {
         promise.error(err);
       } else {
         dbConn.db.dropDatabase();
-        ImportFactory(filePath, vaultStatus, logManager, promise);
+        ImportFactory(filePath, vaultStatus, keyValueData, logManager, promise);
       }
     };
-    ImportFactory(filePath, vaultStatus, logManager, promise, validationCallback);
+    ImportFactory(filePath, vaultStatus, keyValueData, logManager, promise, validationCallback);
     return promise;
   };
   actionMap = getActionNameMap();

@@ -1,4 +1,4 @@
-var db, vaultLog, mongoose, logManager, vaultStatus;
+var db, vaultLog, mongoose, logManager, vaultStatus, keyValueData, dbUtils;
 mongoose = require('mongoose');
 logManager = require('./LogManager.js');
 vaultStatus = require('./VaultStatus.js');
@@ -14,6 +14,7 @@ db.once('open', function callback() {
   console.log('Mongodb connected successfully');
   vaultLog = logManager.getManager(db);
   vaultStatus = vaultStatus.VaultHealth(db);
+  keyValueData = keyValueData.KeyValueStorage(db);
   dbUtils = dbUtils.getDBUtil(db);
 });
 
@@ -56,5 +57,5 @@ exports.exportLogs = function() {
   return dbUtils.exportLogs();
 };
 exports.importLogs = function(fileName) {
-  return dbUtils.importLogs(fileName, vaultStatus, vaultLog);
+  return dbUtils.importLogs(fileName, vaultStatus, keyValueData, vaultLog);
 };
