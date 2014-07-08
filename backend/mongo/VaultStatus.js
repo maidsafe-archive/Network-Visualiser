@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var keyValueData = require('./KeyValueData.js');
 var utils = require('./../maidsafe/utils.js');
 
 var VaultHealth = function(dbConnection) {
@@ -35,8 +34,6 @@ var VaultHealth = function(dbConnection) {
         if (err) {
           console.log('Failed to update Status for vault - ' + data.vault_id);
           promise.error(err);
-        } else if (!keyValueData.hasFirstLogTime()) {
-          keyValueData.setFirstLogTime(data.last_updated, promise);
         } else {
           promise.complete('');
         }

@@ -4,7 +4,7 @@ var utils = require('./../maidsafe/utils.js');
 var KeyValueStorage = function(dbConnection) {
 
   var SCHEMA, KeyValueData, MODEL_NAME;
-  var firstLogTime;
+  var beginDate;
   SCHEMA = {
     key: String,
     value: String
@@ -13,35 +13,40 @@ var KeyValueStorage = function(dbConnection) {
   KeyValueData = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
   utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'key');
 
-  this.clearFirstLogTime = function() {
-    firstLogTime = null;
+  this.clearBeginDate = function() {
+    beginDate = null;
   };
-  this.hasFirstLogTime = function() {
-    return firstLogTime != null;
+  this.getBeginDateString = function() {
+    return beginDate != null ? beginDate.toISOString() : new Date().toISOString();
   };
-  this.getFirstLogTime = function() {
-    return firstLogTime || new Date().toISOString();
-  };
-  this.setFirstLogTime = function(firstLogTimeISO, promise) { // ISO string
-    firstLogTime = firstLogTimeISO;
-    KeyValueData.update({ key: 'firstLogTime' }, { $set : { value: firstLogTimeISO }}, { upsert: true }, function(err, doc) {
-      if (promise) {
+  this.checkAndUpdateBeginDate = function(newTimeString) { // ISO string
+    var promise = new mongoose.Promise;
+    var newDate = new Date(newTimeString);
+    if (beginDate != null && beginDate.getTime() < newDate.getTime()) {
+      console.log('returned');
+      promise.complete('');
+    } else {
+      KeyValueData.update({ key: 'beginDate' }, { $set: { value: newDate.toISOString() } }, { upsert: true }, function(err, doc) {
         if (err) {
           promise.error(err);
         } else {
+          console.log('updated initial time');
+          beginDate = newDate;
           promise.complete('');
         }
-      }
-    });
+      });
+    }
+
+    return promise;
   };
-  var setFirstLogTimeFromDB = function() {
-    KeyValueData.find({ key: 'firstLogTime' }, function(err, doc) {
+  var getBeginDateFromDB = function() {
+    KeyValueData.find({ key: 'beginDate' }, function(err, doc) {
       if (!err && doc.length != 0) {
-        firstLogTime = doc[0].value;
+        beginDate = new Date(doc[0].value);
       }
     });
   };
-  setFirstLogTimeFromDB();
+  getBeginDateFromDB();
   return this;
 };
 exports.KeyValueStorage = KeyValueStorage;

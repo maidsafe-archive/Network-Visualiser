@@ -20,14 +20,16 @@ db.once('open', function callback() {
 
 exports.addLog = function(log, promise) {
   vaultStatus.updateStatus(log).then(function() {
-    vaultStatus.isVaultActive(log).then(function(isActive) {
-      if (isActive || log.action_id == 0 || log.action_id == 18) {
-        vaultLog.save(log, promise);
-      } else {
-        if (promise) {
-          promise('Vault is not active');
+    keyValueData.checkAndUpdateBeginDate(log.ts).then(function() {
+      vaultStatus.isVaultActive(log).then(function(isActive) {
+        if (isActive || log.action_id == 0 || log.action_id == 18) {
+          vaultLog.save(log, promise);
+        } else {
+          if (promise) {
+            promise('Vault is not active');
+          }
         }
-      }
+      });
     });
   }, function(err) {
     console.log('ERR ::' + err);
@@ -42,7 +44,7 @@ exports.vaultHistory = function(vaultId, criteria, page, max, promise) {
 };
 exports.dropDB = function() {
   db.db.dropDatabase();
-  keyValueData.clearFirstLogTime();
+  keyValueData.clearBeginDate();
 };
 exports.getActiveVaults = function() {
   return vaultStatus.getActiveVaults();
@@ -50,8 +52,8 @@ exports.getActiveVaults = function() {
 exports.getAllVaultNames = function() {
   return vaultStatus.getAllVaultNames();
 };
-exports.firstLogTime = function() {
-  return keyValueData.getFirstLogTime();
+exports.getBeginDateString = function() {
+  return keyValueData.getBeginDateString();
 };
 exports.exportLogs = function() {
   return dbUtils.exportLogs();
