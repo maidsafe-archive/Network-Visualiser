@@ -20,7 +20,7 @@ var VaultHealth = function(dbConnection) {
     return (actionId == 18 || actionId == 0);
   };
   var transformData = function(data) {
-    var temp = { vault_id: data.vault_id, last_updated: new Date(), status: (data.action_id == 0) ? STATUS.active : STATUS.dead};
+    var temp = { vault_id: data.vault_id, last_updated: data.ts, status: (data.action_id == 0) ? STATUS.active : STATUS.dead};
     if (data.action_id == 0) {
       temp.vault_id_full = data.value1;
     }
@@ -36,7 +36,7 @@ var VaultHealth = function(dbConnection) {
           console.log('Failed to update Status for vault - ' + data.vault_id);
           promise.error(err);
         } else if (!keyValueData.hasFirstLogTime()) {
-          keyValueData.setFirstLogTime(data.last_updated.toISOString(), promise);
+          keyValueData.setFirstLogTime(data.last_updated, promise);
         } else {
           promise.complete('');
         }

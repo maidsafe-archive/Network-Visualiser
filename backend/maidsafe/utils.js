@@ -5,8 +5,9 @@ exports.isValid = function(log) {
 exports.formatDate = function(log) {
   try {
     if (log.ts) {
-      if (log.ts.indexOf('GMT') < 0) {
-        log.ts += 'GMT';
+      // console.log(JSON.stringify(log.ts));
+      if (log.ts.indexOf('UTC') < 0) {
+        log.ts += 'UTC';
       }
       log.ts = new Date(log.ts).toISOString();
     } else {
