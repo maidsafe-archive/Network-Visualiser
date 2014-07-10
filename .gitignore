@@ -31,3 +31,4 @@ obj/
 *.njsproj
 *.sln
 *.suo
+.idea/

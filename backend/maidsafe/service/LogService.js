@@ -7,12 +7,6 @@ var fs = require('fs');
 var saveLog = function(req, res) {
   var log = req.body;
   if (utils.formatDate(log)) {
-    // if(log.value1 && log.value1.length>config.Constants.minLengthForDecode){
-    // 	log.value1 = utils.decodeData(log.value1)
-    // }
-    // if(log.value2 && log.value2.length>config.Constants.minLengthForDecode){
-    // 	log.value2 = utils.decodeData(log.value2)
-    // }
     if (!log.hasOwnProperty('persona_id')) {
       log.persona_id = config.Constants.persona_na;
     }
@@ -79,7 +73,7 @@ var getActiveVaultsAtTime = function(criteria, res) {
           results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
           bridge.vaultHistory(vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
             counter++;
-            if (logs.length > 0 && logs[logs.length - 1] != 18) {
+            if (logs.length > 0 && logs[0].action_id != 18) {
               results[logs[0].vault_id].logs = logs;
             }
             if (counter >= vaults.length) {
@@ -101,8 +95,8 @@ var activeVaultsWithRecentLogs = function(req, res) {
     getCurrentActiveVaults(req, res);
   }
 };
-var getFirstLogTime = function(req, res) {
-  res.send(bridge.firstLogTime());
+var getTimelineDates = function(req, res) {
+  res.send(bridge.getTimelineDates());
 };
 var deleteFile = function(path) {
   setTimeout(function() {
@@ -149,7 +143,7 @@ exports.searchLog = searchLog;
 exports.vaultHistory = history;
 exports.clearAll = dropDB;
 exports.getActiveVaults = activeVaultsWithRecentLogs;
-exports.getFirstLogTime = getFirstLogTime;
+exports.getTimelineDates = getTimelineDates;
 exports.exportLogs = exportLogs;
 exports.importLogs = importLogs;
 exports.testLog = testLog;

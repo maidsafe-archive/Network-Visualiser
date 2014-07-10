@@ -1,29 +1,31 @@
 .session {
   border-bottom: 1px solid #dcdcdc;
-  width: 100%;
-  height:75px;
+  height: 75px;
   padding-top: 0.5em;
+  width: 100%;
 }
+
 #sessions .wrapper {
-  position: relative;
   margin: 0 2em;
   padding: 3em 0;
+  position: relative;
 }
-#sessions button { width: 145px;}
+
+#sessions button { width: 145px; }
 
 .toggle_create_session {
+  -moz-border-radius: 5px 0px 5px 5px;
+  -webkit-border-radius: 5px 0px 5px 5px;
   background: #e7e7e7;
-  height: 300px;
+  border-radius: 5px 0px 5px 5px;
   clear: both;
   float: left;
+  height: 300px;
   height: 150px;
   position: absolute;
   right: 2em;
   top: 73px;
   width: 450px;
-  border-radius: 5px 0px 5px 5px;
-  -webkit-border-radius: 5px 0px 5px 5px;
-  -moz-border-radius: 5px 0px 5px 5px;
   z-index: 100;
 }
 
@@ -36,11 +38,11 @@ button.close-icon {
 button.close-icon:hover { background: transparent; }
 
 button.active {
+  -moz-border-radius: 5px 5px 0px 0px;
+  -webkit-border-radius: 5px 5px 0px 0px;
   background: #e7e7e7;
   border-radius: 5px 5px 0px 0px;
-  -webkit-border-radius: 5px 5px 0px 0px;
-  -moz-border-radius: 5px 5px 0px 0px;
-  color: #5a5a5a!important;
+  color: #5a5a5a !important;
 }
 
 .search-box, .close-icon, .search-wrapper {
@@ -54,68 +56,70 @@ button.active {
 }
 
 .session-input {
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
   border: 0px;
+  border: 1px solid #d7d7d7;
   border-radius: 12px;
-  -webkit-border-radius: 12px; 
-  -moz-border-radius: 12px; 
+  box-shadow: none;
   font-size: 14px;
   outline: 0;
-  width: 300px;
-  z-index: 0;
   padding: 8px 10px;
   position: relative;
-  box-shadow: none;
-  border: 1px solid #d7d7d7;
+  width: 300px;
+  z-index: 0;
 }
 
 .submit-session {
-  width: 90px!important;
   padding: 7px 15px;
+  width: 90px !important;
 }
 
 .session-id-output {
+  color: #5a5a5a;
   font-size: 14px;
   margin: 25px 10px;
-  color: #5a5a5a;
 }
 
-.session_info {
-  float: left;
-}
+.session_info { float: left; }
+
 .session_name {
-  font-size:20px;
+  font-size: 20px;
   padding: 0.4em 0;
 }
 
 .session_id {
-  font-size: 12px;
   color: #aaaaaa;
+  font-size: 12px;
 }
+
 .actions {
-  float:right;
+  float: right;
   padding: 0 1em;
 }
 
 a.view {
   background: url('../../client/imgs/view_icon.png') no-repeat top left;
-  width: 26px;
-  height: 15px;
   display: inline-block;
+  height: 15px;
   margin: 1em 1.2em;
+  width: 26px;
 }
-a.view:hover {
-  background-position: bottom left;
-}
+
+a.view:hover { background-position: bottom left; }
 
 a.delete {
   background: url('../../client/imgs/delete_icon.png') no-repeat top left;
-  width: 18px;
-  height: 24px;
   display: inline-block;
+  height: 24px;
   margin: 1em 1.2em;
-}
-a.delete:hover {
-  background-position: bottom left;
+  width: 18px;
 }
 
-footer button { float: left; width: 210px!important; margin:0.5em 1.5em;}
+a.delete:hover { background-position: bottom left; }
+
+footer button {
+  float: left;
+  margin: 0.5em 1.5em;
+  width: 210px !important;
+}

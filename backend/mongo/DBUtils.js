@@ -175,7 +175,7 @@ var DBUtil = function(dbConnection) {
 
     return { valid: isValid, msg: errString };
   };
-  var ImportFactory = function(filePath, vaultStatus, logManager, promise, validationCallback) {
+  var ImportFactory = function(filePath, vaultStatus, keyValueData, logManager, promise, validationCallback) {
     var stream = fs.createReadStream(filePath);
     var firstRecord = true;
     var log = {};
@@ -186,10 +186,12 @@ var DBUtil = function(dbConnection) {
     var SaveLog = function(data) {
       var log = { vault_id: data[0], ts: data[1], action_id: actionMap[data[2]], persona_id: personaMap[data[3]], value1: (data[4] || ''), value2: (data[5] || '') };
       vaultStatus.updateStatus(log).then(function() {
-        vaultStatus.isVaultActive(log).then(function(isActive) {
-          if (isActive || log.action_id == 0 || log.action_id == 18) {
-            logManager.save(log);
-          }
+        keyValueData.checkAndUpdateDates(log).then(function() {
+          vaultStatus.isVaultActive(log).then(function(isActive) {
+            if (isActive || log.action_id == 0 || log.action_id == 18) {
+              logManager.save(log);
+            }
+          });
         });
       }, function(err) {
         console.log('ERR ::' + err);
@@ -220,13 +222,11 @@ var DBUtil = function(dbConnection) {
         if (validationCallback) {
           validationCallback(validationErrors);
         } else {
-          vaultStatus.setFirstLogTime(new Date(firstLogTime).toISOString());
           promise.complete('Completed');
         }
       });
-
   };
-  this.importLogs = function(filePath, vaultStatus, logManager) {
+  this.importLogs = function(filePath, vaultStatus, keyValueData, logManager) {
     var promise = new mongoose.Promise;
     var validationCallback = function(errors) {
       if (errors.length > 0) {
@@ -237,10 +237,10 @@ var DBUtil = function(dbConnection) {
         promise.error(err);
       } else {
         dbConn.db.dropDatabase();
-        ImportFactory(filePath, vaultStatus, logManager, promise);
+        ImportFactory(filePath, vaultStatus, keyValueData, logManager, promise);
       }
     };
-    ImportFactory(filePath, vaultStatus, logManager, promise, validationCallback);
+    ImportFactory(filePath, vaultStatus, keyValueData, logManager, promise, validationCallback);
     return promise;
   };
   actionMap = getActionNameMap();
