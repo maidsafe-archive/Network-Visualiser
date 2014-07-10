@@ -18,7 +18,7 @@ var KeyValueStorage = function(dbConnection) {
     endDate = null;
   };
   this.getTimelineDates = function() {
-    var obj = { 'beginDate' : null, 'endDate' : null};
+    var obj = { 'beginDate': null, 'endDate': null };
     if (beginDate != null) {
       obj['beginDate'] = beginDate.toISOString();
     }

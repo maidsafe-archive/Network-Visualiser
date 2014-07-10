@@ -69,7 +69,7 @@ exports.transformQuery = function(query) {
 exports.ensureUniqueDocInMongo = function(dbConn, collectionName, fieldName) {
   dbConn.db.collection(collectionName, function(err, coll) {
     if (coll) {
-      var ob  = {};
+      var ob = {};
       ob[fieldName] = 1;
       coll.ensureIndex(ob, { unique: true, dropDups: true }, function(errorUpdate, writeSuccess) {
         if (errorUpdate) {
@@ -78,4 +78,4 @@ exports.ensureUniqueDocInMongo = function(dbConn, collectionName, fieldName) {
       });
     }
   });
-}
+};

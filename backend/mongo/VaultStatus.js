@@ -19,7 +19,7 @@ var VaultHealth = function(dbConnection) {
     return (actionId == 18 || actionId == 0);
   };
   var transformData = function(data) {
-    var temp = { vault_id: data.vault_id, last_updated: data.ts, status: (data.action_id == 0) ? STATUS.active : STATUS.dead};
+    var temp = { vault_id: data.vault_id, last_updated: data.ts, status: (data.action_id == 0) ? STATUS.active : STATUS.dead };
     if (data.action_id == 0) {
       temp.vault_id_full = data.value1;
     }

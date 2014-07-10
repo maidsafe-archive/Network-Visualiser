@@ -40,18 +40,14 @@
   </head>
   <body ng-app="MaidSafe" ng-controller="applicationCtrl">
     <header>
-      <% if(user.enabled) { %>
-      <ng-include src="'../client/template/session/header_session.html'"></ng-include>
-      <% } else { %>
-      <ng-include src="'../client/template/session/header_session_signin.html'"></ng-include>
-      <% } %>
+      <ng-include src="'../client/template/session/header.html'"></ng-include>
     </header>
     <section>
       <div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]">
-        <ng-include src="'../client/template/session/icons_tray.html'"></ng-include>
+        <ng-include src="'../client/template/common/icons_tray.html'"></ng-include>
       </div>
       <div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
-        <ng-include src="'../client/template/session/node.html'"></ng-include>
+        <ng-include src="'../client/template/common/node.html'"></ng-include>
       </div>
     </section>
     <div class="loading" ng-style="{ false:{display:'none'}}[showLoader]">
@@ -60,7 +56,7 @@
       </div>
     </div>
     <footer>
-      <ng-include src="'../client/template/session/footer_session.html'"></ng-include>
+      <ng-include src="'../client/template/common/footer.html'"></ng-include>
     </footer>
   </body>
 </html>
