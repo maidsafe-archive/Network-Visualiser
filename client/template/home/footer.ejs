@@ -1,0 +1,6 @@
+<% if(user.enabled) { %>
+<button ng-click="clearPendingSessions()">Clear Pending Sessions</button>
+<label class="counter">Session Count - {{vaults.length}}</label>
+<% } else { %>
+<label class="counter">Session Count - {{vaults.length}}</label>
+<% } %>

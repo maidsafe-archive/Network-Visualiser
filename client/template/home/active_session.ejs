@@ -1,0 +1,33 @@
+<div class="session" ng-class="">
+  <ul>
+  <% if(user.enabled) { %>
+  <!--<li ng-repeat="orderBy:'-ts'">-->
+      <li>
+        <div class="session_info">
+          <div class="session_name">
+            Session 1
+          </div>
+          <div class="session_id">
+            1234567890
+          </div>
+        </div>
+        <div class="actions">
+          <a href="" class="view"></a>
+          <a href="" class="delete"></a>
+        </div>
+      </li>
+  <% } else { %>
+  <!--<li ng-repeat="orderBy:'-ts'" >-->
+      <li>
+        <div class="session_info">
+          <div class="session_name">
+            Session 1
+          </div>
+        </div>
+        <div class="actions">
+          <a href="" class="view"></a>
+        </div>
+      </li>
+  <% } %>
+  </ul>
+</div>

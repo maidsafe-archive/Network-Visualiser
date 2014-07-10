@@ -86,6 +86,17 @@ app.get('/auth', ensureAuthenticated, function(req, res) {
   res.render('index', { user: { enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0, email: req.user._json.email }, socketPort : config.Constants.socketPort });
 });
 
+
+app.get('/client/session', function(req, res) {
+  res.render('session', { user: { enabled: !needsAuth }, socketPort : config.Constants.socketPort });
+});
+
+/*
+app.get('/auth', ensureAuthenticated, function(req, res) {
+  res.render('index', { user: { enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0, email: req.user._json.email }, socketPort : config.Constants.socketPort });
+});
+*/
+
 app.get('/client/timeline', function(req, res) {
   res.render('timeline', { socketPort : config.Constants.socketPort });
 });

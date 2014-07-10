@@ -1,0 +1,32 @@
+<div class="top-header">
+  <h1>Network Visualiser</h1>
+</div>
+<h2>Current Active Sessions</h2>
+<ul class="buttons-right">
+<% if(user.enabled) { %>
+  <li>
+    <button ng-click="import()">Import</button>
+  </li>
+  <li>
+    <button ng-click="toggleIconsTray()" class="create-session">Create Session</button>
+  </li>
+</ul>
+<div class="toggle_create_session">
+  <div class="wrapper">
+    <div class="session-input-wrapper">
+    <form>
+        <input type="text" name="focus" class="session-input" required ng-model="search" placeholder="Please enter a session name..."/>
+        <button class="submit-session" type="submit" value="submit">Create</button>
+      </form>
+    </div>
+    <div class="session-id-output">
+       Session ID - 123456789012345678901234567890
+    </div>
+  </div>
+</div>
+<% } else { %>
+  <li>
+    <button class="sign-in"><a href="/auth/google">Sign In</a></button>
+  </li>
+</ul>
+<% } %>

@@ -133,7 +133,6 @@ header ul li a {
   color: #fff;
   display: inline;
   float: left;
-  ;
   font-family: 'OpenSansLight', Arial, sans-serif;
   font-size: 12px;
   margin: 0;
@@ -146,6 +145,16 @@ header ul li a {
   margin: 0;
   padding: 0.2em 2.2em 0.1em 1.5em;
   text-align: right;
+}
+
+header h2 {
+  font-family: 'OpenSansRegular', Arial, sans-serif;
+  text-transform: uppercase;
+  font-size: 24px;
+  color: #fff;
+  padding: 0em 0em 0 1em;
+  float: left;
+  margin:0.6em 0;
 }
 
 ul.buttons-left { float: left; }
@@ -179,6 +188,8 @@ button.sign-in { background-color: #d6eaff; }
 button.sign-in a { color: #29578A; }
 
 button.sign-in:hover a { color: #fff; }
+
+
 
 .zoom {
   display: inline-block;
