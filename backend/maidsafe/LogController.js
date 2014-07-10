@@ -26,6 +26,9 @@ var getTimelineDates = function(req, res) {
 var createSession = function(req, res) {
   logService.createSession(req, res);
 };
+var getCurrentActiveSessions = function(req, res) {
+  logService.getCurrentActiveSessions(req, res);
+};
 var testLog = function(req, res) {
   logService.testLog(req, res);
 };
@@ -40,6 +43,7 @@ exports.register = function(server) {
   server.get('/search', search);
   server.get('/export', exportLogs);
   server.get('/timelineDates', getTimelineDates);
+  server.get('/currentActiveSessions', getCurrentActiveSessions);
 
   server.post('/logtest', testLog);
 };

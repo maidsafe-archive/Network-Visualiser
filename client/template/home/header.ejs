@@ -23,7 +23,7 @@
           border: 1px solid #ff0000;
           }
         </style>
-        <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="sessionName" ng-pattern="/^[a-zA-Z0-9- .]{1,}$/" ng-class="validateField(createSessionForm.focus)"/>
+        <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="sessionName" ng-pattern="/^[a-zA-Z0-9- ]{1,}$/" ng-class="validateField(createSessionForm.focus)"/>
         <button class="submit-session" ng-click="createSession()">Create</button>
       </form>
     </div>

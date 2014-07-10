@@ -139,13 +139,22 @@ var testLog = function(req, res) {
   res.send(200, "Saved");
 };
 var createSession = function(req, res) {
-  var criteria = req.body;
+  var criteria = JSON.parse(JSON.stringify(req.body));
   if (!criteria || utils.isEmptyObject(criteria)) {
     res.send(500, 'Invalid parameters');
     return;
   }
 
   bridge.createSession(criteria.session_name, new Handler.CreateSessionHandler(res));
+};
+var getCurrentActiveSessions = function(req, res) {
+  bridge.getCurrentActiveSessions().then(function(activeSessions) {
+    if (!activeSessions.length) {
+      res.send(500, "No Active Sessions");
+      return;
+    }
+    res.send(activeSessions);
+  });
 };
 
 exports.saveLog = saveLog;
@@ -157,5 +166,6 @@ exports.getTimelineDates = getTimelineDates;
 exports.exportLogs = exportLogs;
 exports.importLogs = importLogs;
 exports.createSession = createSession;
+exports.getCurrentActiveSessions = getCurrentActiveSessions;
 
 exports.testLog = testLog;
