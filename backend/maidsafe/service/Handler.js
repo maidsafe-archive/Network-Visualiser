@@ -26,6 +26,19 @@ exports.SearchHandler = function(res) {
   };
   return this.promise;
 };
+exports.CreateSessionHandler = function(res) {
+  this.res = res;
+  var onSessionCreated = function(data) {
+    res.send(data);
+  };
+  var onError = function(err) {
+    res.send(500, err.message || err);
+  };
+  this.promise = function(err, data) {
+    err ? onError(err) : onSessionCreated(data);
+  };
+  return this.promise;
+};
 exports.DatabaseCleared = function(res) {
   socket.broadcastSignal("DB_CLEARED");
   res.send("Database cleared");

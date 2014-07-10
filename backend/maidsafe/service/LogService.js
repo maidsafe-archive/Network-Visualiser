@@ -138,6 +138,16 @@ var testLog = function(req, res) {
   }
   res.send(200, "Saved");
 };
+var createSession = function(req, res) {
+  var criteria = req.body;
+  if (!criteria || utils.isEmptyObject(criteria)) {
+    res.send(500, 'Invalid parameters');
+    return;
+  }
+
+  bridge.createSession(criteria.session_name, new Handler.CreateSessionHandler(res));
+};
+
 exports.saveLog = saveLog;
 exports.searchLog = searchLog;
 exports.vaultHistory = history;
@@ -146,4 +156,6 @@ exports.getActiveVaults = activeVaultsWithRecentLogs;
 exports.getTimelineDates = getTimelineDates;
 exports.exportLogs = exportLogs;
 exports.importLogs = importLogs;
+exports.createSession = createSession;
+
 exports.testLog = testLog;

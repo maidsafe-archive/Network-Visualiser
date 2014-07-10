@@ -23,12 +23,16 @@ var importLogs = function(req, res) {
 var getTimelineDates = function(req, res) {
   logService.getTimelineDates(req, res);
 };
+var createSession = function(req, res) {
+  logService.createSession(req, res);
+};
 var testLog = function(req, res) {
   logService.testLog(req, res);
 };
 exports.register = function(server) {
   server.post('/log', saveLogs);
   server.post('/import', importLogs);
+  server.post('/createSession', createSession);
 
   server.get('/vaults', getActiveVaults);
   server.get('/clearLogs', clearDB);

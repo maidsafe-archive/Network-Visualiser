@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
 
-var VaultHealth = function(dbConnection) {
+var VaultMetaData = function(dbConnection) {
 
-  var SCHEMA, VaultStatus, MODEL_NAME;
+  var SCHEMA, VaultInfo, MODEL_NAME;
   var STATUS = { active: 'active', dead: "dead" };
   SCHEMA = {
     last_updated: { type: Date, default: Date.now },
@@ -11,8 +11,8 @@ var VaultHealth = function(dbConnection) {
     vault_id_full: String,
     status: String
   };
-  MODEL_NAME = 'vaultStatus';
-  VaultStatus = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
+  MODEL_NAME = 'vaultInfo';
+  VaultInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
   utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'vault_id');
 
   var canUpdateStatus = function(actionId) {
@@ -30,7 +30,7 @@ var VaultHealth = function(dbConnection) {
     console.log(JSON.stringify(data));
     if (canUpdateStatus(data.action_id)) {
       data = transformData(data);
-      VaultStatus.update({ vault_id: data.vault_id }, data, { upsert: true }, function(err, doc) {
+      VaultInfo.update({ vault_id: data.vault_id }, data, { upsert: true }, function(err, doc) {
         if (err) {
           console.log('Failed to update Status for vault - ' + data.vault_id);
           promise.error(err);
@@ -48,14 +48,14 @@ var VaultHealth = function(dbConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-    VaultStatus.find({ status: STATUS.active }, function(err, vaults) {
+    VaultInfo.find({ status: STATUS.active }, function(err, vaults) {
       err ? promise.error(err) : promise.complete(vaults);
     });
     return promise;
   };
   this.isVaultActive = function(log) {
     var promise = new mongoose.Promise;
-    VaultStatus.findOne({ vault_id: log.vault_id }, function(err, vault) {
+    VaultInfo.findOne({ vault_id: log.vault_id }, function(err, vault) {
       if (!vault) {
         promise.complete(false);
       } else {
@@ -66,7 +66,7 @@ var VaultHealth = function(dbConnection) {
   };
   this.getAllVaultNames = function() {
     var promise = new mongoose.Promise;
-    VaultStatus.find({}, { _id: 0, vault_id: 1, vault_id_full: 1 }, function(err, vaults) {
+    VaultInfo.find({}, { _id: 0, vault_id: 1, vault_id_full: 1 }, function(err, vaults) {
       if (err) {
         promise.error(err);
       } else {
@@ -77,4 +77,4 @@ var VaultHealth = function(dbConnection) {
   };
   return this;
 };
-exports.VaultHealth = VaultHealth;
+exports.VaultMetaData = VaultMetaData;
