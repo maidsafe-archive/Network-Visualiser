@@ -6,9 +6,9 @@ var VaultMetaData = function(dbConnection) {
   var SCHEMA, VaultInfo, MODEL_NAME;
   var STATUS = { active: 'active', dead: "dead" };
   SCHEMA = {
-    last_updated: { type: Date, default: Date.now },
     vault_id: String,
     vault_id_full: String,
+    session_id: String,
     status: String
   };
   MODEL_NAME = 'vaultInfo';
@@ -19,9 +19,10 @@ var VaultMetaData = function(dbConnection) {
     return (actionId == 18 || actionId == 0);
   };
   var transformData = function(data) {
-    var temp = { vault_id: data.vault_id, last_updated: data.ts, status: (data.action_id == 0) ? STATUS.active : STATUS.dead };
+    var temp = { vault_id: data.vault_id, status: (data.action_id == 0) ? STATUS.active : STATUS.dead };
     if (data.action_id == 0) {
       temp.vault_id_full = data.value1;
+      temp.session_id = data.session_id;
     }
     return temp;
   };
