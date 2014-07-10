@@ -14,7 +14,8 @@ var TimelineCtrl = [
     $scope.firstLogtime;
     $scope.playback = { currentState: 0, max_steps: 1000, incrementalSteps: 0 };
     $scope.currentPlayTime = null;
-    $scope.maxTime = $location.search().ts ? new Date($location.search().ts) : new Date();
+    // $scope.maxTime = $location.search().ts ? new Date($location.search().ts) : new Date();
+    $scope.maxTime = new Date();
     $scope.playingTime = new Date();
     socketService.stop();
     $scope.autoSeekItervalId;
@@ -140,13 +141,12 @@ var TimelineCtrl = [
     dataManager.onNewVault(newVault);
     dataManager.onVaultsLoaded(onVaultsLoaded);
     playbackService.onStatusChange(updatePlayerStatus);
-    $http.get('/beginDateString').then(function(res) {
-      $scope.firstLogtime = new Date(res.data).getTime() - 3000; //reducing 3 secondes for the play
+    $http.get('/timelineDates').then(function(res) {
+      $scope.firstLogtime = new Date(res.data.beginDate).getTime() - 3000;
+      $scope.maxTime = new Date(res.data.endDate).getTime() + 10000;
       $scope.playback.incrementalSteps = 1000 / ((new Date($scope.maxTime).getTime() - $scope.firstLogtime) / $scope.playback.max_steps);
       $scope.currentPlayTime = $scope.firstLogtime;
-    }); // setTimeout(function(){
-    // 	dataManager.getActiveVaults()
-    // }, 10)
+    });
     $scope.showLoader = false;
   }
 ]

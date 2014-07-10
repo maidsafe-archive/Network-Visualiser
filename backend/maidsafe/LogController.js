@@ -20,8 +20,8 @@ var exportLogs = function(req, res) {
 var importLogs = function(req, res) {
   logService.importLogs(req, res);
 };
-var getBeginDateString = function(req, res) {
-  logService.getBeginDateString(req, res);
+var getTimelineDates = function(req, res) {
+  logService.getTimelineDates(req, res);
 };
 var testLog = function(req, res) {
   logService.testLog(req, res);
@@ -35,7 +35,7 @@ exports.register = function(server) {
   server.get('/history', history);
   server.get('/search', search);
   server.get('/export', exportLogs);
-  server.get('/beginDateString', getBeginDateString);
+  server.get('/timelineDates', getTimelineDates);
 
   server.post('/logtest', testLog);
 };

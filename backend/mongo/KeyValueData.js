@@ -4,7 +4,7 @@ var utils = require('./../maidsafe/utils.js');
 var KeyValueStorage = function(dbConnection) {
 
   var SCHEMA, KeyValueData, MODEL_NAME;
-  var beginDate;
+  var beginDate, endDate;
   SCHEMA = {
     key: String,
     value: String
@@ -13,40 +13,65 @@ var KeyValueStorage = function(dbConnection) {
   KeyValueData = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
   utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'key');
 
-  this.clearBeginDate = function() {
+  this.clearDates = function() {
     beginDate = null;
+    endDate = null;
   };
-  this.getBeginDateString = function() {
-    return beginDate != null ? beginDate.toISOString() : new Date().toISOString();
+  this.getTimelineDates = function() {
+    var obj = { 'beginDate' : null, 'endDate' : null};
+    if (beginDate != null) {
+      obj['beginDate'] = beginDate.toISOString();
+    }
+    if (endDate != null) {
+      obj['endDate'] = endDate.toISOString();
+    }
+    return obj;
   };
-  this.checkAndUpdateBeginDate = function(newTimeString) { // ISO string
+  this.checkAndUpdateDates = function(log) {
+    // Needs 2 vault Actions with first being a vault started action to set both dates.
+
     var promise = new mongoose.Promise;
-    var newDate = new Date(newTimeString);
-    if (beginDate != null && beginDate.getTime() < newDate.getTime()) {
-      console.log('returned');
-      promise.complete('');
+    var newDate = new Date(log.ts);
+    var newDateTime = newDate.getTime();
+    // make const
+    if (log.action_id == 0 && (beginDate == null || beginDate.getTime() > newDateTime)) {
+      setDate(true, newDate, promise);
+    } else if (beginDate != null && (endDate == null || endDate.getTime() < newDateTime)) {
+      setDate(false, newDate, promise);
     } else {
-      KeyValueData.update({ key: 'beginDate' }, { $set: { value: newDate.toISOString() } }, { upsert: true }, function(err, doc) {
-        if (err) {
-          promise.error(err);
-        } else {
-          console.log('updated initial time');
-          beginDate = newDate;
-          promise.complete('');
-        }
-      });
+      promise.complete('');
     }
 
     return promise;
   };
-  var getBeginDateFromDB = function() {
+  var setDate = function(isBeginDate, newDate, promise) {
+    var obj = {};
+    obj['key'] = isBeginDate ? 'beginDate' : 'endDate';
+    KeyValueData.update(obj, { $set: { value: newDate.toISOString() } }, { upsert: true }, function(err, doc) {
+      if (err) {
+        promise.error(err);
+      } else if (isBeginDate) {
+        beginDate = newDate;
+        promise.complete('');
+      } else {
+        endDate = newDate;
+        promise.complete('');
+      }
+    });
+  };
+  var getDatesFromDB = function() {
     KeyValueData.find({ key: 'beginDate' }, function(err, doc) {
       if (!err && doc.length != 0) {
         beginDate = new Date(doc[0].value);
       }
     });
+    KeyValueData.find({ key: 'endDate' }, function(err, doc) {
+      if (!err && doc.length != 0) {
+        endDate = new Date(doc[0].value);
+      }
+    });
   };
-  getBeginDateFromDB();
+  getDatesFromDB();
   return this;
 };
 exports.KeyValueStorage = KeyValueStorage;

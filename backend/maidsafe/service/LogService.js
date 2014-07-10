@@ -95,8 +95,8 @@ var activeVaultsWithRecentLogs = function(req, res) {
     getCurrentActiveVaults(req, res);
   }
 };
-var getBeginDateString = function(req, res) {
-  res.send(bridge.getBeginDateString());
+var getTimelineDates = function(req, res) {
+  res.send(bridge.getTimelineDates());
 };
 var deleteFile = function(path) {
   setTimeout(function() {
@@ -143,7 +143,7 @@ exports.searchLog = searchLog;
 exports.vaultHistory = history;
 exports.clearAll = dropDB;
 exports.getActiveVaults = activeVaultsWithRecentLogs;
-exports.getBeginDateString = getBeginDateString;
+exports.getTimelineDates = getTimelineDates;
 exports.exportLogs = exportLogs;
 exports.importLogs = importLogs;
 exports.testLog = testLog;
