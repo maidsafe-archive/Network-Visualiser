@@ -10,7 +10,7 @@ var SessionMetaData = function(dbConnection) {
   };
   MODEL_NAME = 'sessionInfo';
   SessionInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
-  utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'session_name');
+  utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'session_id');
 
   var isDuplicateSessionId = function(sessionId, sessions) {
     for (var index in sessions) {

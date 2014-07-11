@@ -21,22 +21,31 @@ db.once('open', function callback() {
 });
 
 exports.addLog = function(log, promise) {
-  vaultInfo.updateStatus(log).then(function() {
-    keyValueData.checkAndUpdateDates(log).then(function() {
+  sessionInfo.validateSessionStatus(log).then(function(isInvalid) { // TODO needs implementation
+    if (isInvalid) {
+      promise('Invalid Session id');
+      return;
+    }
+
+    vaultInfo.updateStatus(log).then(function() {
       vaultInfo.isVaultActive(log).then(function(isActive) {
-        if (isActive || log.action_id == 0 || log.action_id == 18) {
-          vaultLog.save(log, promise);
-        } else {
-          if (promise) {
-            promise('Vault is not active');
-          }
+        if (!isActive) {
+          promise('Vault is not active');
+          return;
         }
+
+        keyValueData.checkAndUpdateDates(log).then(function() {
+          if (isActive || log.action_id == 0 || log.action_id == 18) {
+            vaultLog.save(log, promise);
+          } else {
+            if (promise) {
+              
+            }
+          }
+        });
       });
     });
-  }, function(err) {
-    console.log('ERR ::' + err);
   });
-
 };
 exports.searchLog = function(criteria, promise) {
   vaultLog.search(criteria, promise);

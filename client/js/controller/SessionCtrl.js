@@ -1,5 +1,5 @@
 var SessionCtrl = [
-  '$scope', '$http', function($scope, $http) {
+  '$scope', '$http', 'socketService', function($scope, $http, socketService) {
     $scope.sessionId = '';
     $scope.sessionName = '';
     $scope.activeSessions = [];
@@ -7,9 +7,18 @@ var SessionCtrl = [
     $scope.isCreateSessionInputRequired = true;
     $scope.createSessionErrorMessage = '';
 
-    $http.get('/currentActiveSessions').then(function(result) {
-      $scope.activeSessions = result.data;
+    socketService.setSignalListner(function(signal) {
+      if (signal == 'REFRESH_SESSIONS') {
+        RefreshActiveSessions();
+      }
     });
+
+    this.RefreshActiveSessions = function() {
+      $http.get('/currentActiveSessions').then(function(result) {
+        $scope.activeSessions = result.data;
+      });
+    };
+    RefreshActiveSessions();
 
     $scope.createSession = function() {
       if (!$scope.createSessionForm.focus.$valid)

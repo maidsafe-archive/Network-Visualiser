@@ -1,7 +1,7 @@
 var config = require('./../../Config.js');
 exports.isValid = function(log) {
   var isValid = log.vault_id && log.action_id && log.persona_id;
-  if (log.action_id == 0 && !log.hasOwnProperty('session_id')) {
+  if (log.action_id && log.action_id == 0 && !log.hasOwnProperty('session_id')) {
     isValid = false;
   }
   return isValid;

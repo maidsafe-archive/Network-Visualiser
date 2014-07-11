@@ -4,12 +4,11 @@ var utils = require('./../maidsafe/utils.js');
 var VaultMetaData = function(dbConnection) {
 
   var SCHEMA, VaultInfo, MODEL_NAME;
-  var STATUS = { active: 'active', dead: "dead" };
   SCHEMA = {
     vault_id: String,
     vault_id_full: String,
     session_id: String,
-    status: String
+    is_running: Boolean
   };
   MODEL_NAME = 'vaultInfo';
   VaultInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
@@ -19,7 +18,7 @@ var VaultMetaData = function(dbConnection) {
     return (actionId == 18 || actionId == 0);
   };
   var transformData = function(data) {
-    var temp = { vault_id: data.vault_id, status: (data.action_id == 0) ? STATUS.active : STATUS.dead };
+    var temp = { vault_id: data.vault_id, is_running: data.action_id == 0 };
     if (data.action_id == 0) {
       temp.vault_id_full = data.value1;
       temp.session_id = data.session_id;
@@ -28,7 +27,6 @@ var VaultMetaData = function(dbConnection) {
   };
   this.updateStatus = function(data) {
     var promise = new mongoose.Promise;
-    console.log(JSON.stringify(data));
     if (canUpdateStatus(data.action_id)) {
       data = transformData(data);
       VaultInfo.update({ vault_id: data.vault_id }, data, { upsert: true }, function(err, doc) {
@@ -49,7 +47,7 @@ var VaultMetaData = function(dbConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-    VaultInfo.find({ status: STATUS.active }, function(err, vaults) {
+    VaultInfo.find({ is_running: true }, function(err, vaults) {
       err ? promise.error(err) : promise.complete(vaults);
     });
     return promise;
@@ -60,7 +58,7 @@ var VaultMetaData = function(dbConnection) {
       if (!vault) {
         promise.complete(false);
       } else {
-        err ? promise.error(err) : promise.complete(vault.status == STATUS.active);
+        err ? promise.error(err) : promise.complete(vault.is_running);
       }
     });
     return promise;
