@@ -8,20 +8,21 @@
     <button ng-click="import()">Import</button>
   </li>
   <li>
-    <button ng-click="showCreateSession = !show" class="create-session">Create Session</button>
+    <button ng-click="onCreateSessionTabClicked()" class="create-session">Create Session</button>
   </li>
 </ul>
-<div class="toggle_create_session" ng-show="showCreateSession">
+<div class="toggle_create_session" ng-show="isCreateSessionTabOpen">
   <div class="wrapper">
-    <div class="session-input-wrapper" ng-hide="showSessionForm">
+    <div class="session-input-wrapper" ng-show="isCreateSessionInputRequired">
       <form name="createSessionForm">
-        <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="sessionName" ng-pattern="/^[a-zA-Z0-9- ]{1,}$/" ng-class="validateField(createSessionForm.focus)"/>
-        <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="createSession(); showSessionForm = !show; showSessionOutput = !show" ng-class="{'button-disabled': item.disabled}">Create</button>
-        <div class="valid-input" ng-show="createSessionForm.$valid" ng-class="{'button-disabled': item.disabled}">Session Name Valid</div>
-        <div class="invalid-input" ng-show="createSessionForm.$invalid">Session Name Invalid</div>
+        <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="sessionName" ng-pattern="/^[a-zA-Z0-9- ]{1,}$/" ng-change="createSessionErrorMessage = ''"/>
+        <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="createSession()" ng-class="{'button-disabled': item.disabled}">Create</button>
+        <div ng-class="validateFormInput(createSessionForm.focus)" ng-hide="createSessionForm.$pristine">
+          {{createSessionErrorMessage != '' ? createSessionErrorMessage : (createSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
+        </div>
       </form>
     </div>
-    <div class="session-id-output" ng-show="showSessionOutput">
+    <div class="session-id-output" ng-hide="isCreateSessionInputRequired">
     <h3>Session ID</h3>
       <span class="id-output">
       {{sessionId}}
