@@ -23,11 +23,11 @@ app.configure(function() {
 });
 
 app.get('/', function(req, res) {
-  res.render('index', { user: { enabled: !app.settings.needsAuth }, socketPort: PORT });
+  res.render('sessions', { user: { enabled: !app.settings.needsAuth }, socketPort: PORT });
 });
 
 app.get('/client/viewer', function(req, res) {
-  res.render('session', { socketPort: PORT });
+  res.render('viewer', { socketPort: PORT });
 });
 
 app.get('/client/timeline', function(req, res) {
