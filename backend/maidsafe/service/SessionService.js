@@ -21,3 +21,7 @@ exports.getCurrentActiveSessions = function(req, res) {
     res.send(activeSessions);
   });
 };
+
+exports.clearPendingSessions = function(req, res) {
+  bridge.clearPendingSessions(new Handler.ClearPendingSessionsHandler(res));
+};

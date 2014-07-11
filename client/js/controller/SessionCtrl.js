@@ -44,5 +44,9 @@ var SessionCtrl = [
         $scope.createSessionForm.$setPristine();
       }
     };
+    $scope.clearPendingSessions = function() {
+      $http.get('/clearPendingSessions');
+      console.log('done');
+    };
   }
 ];

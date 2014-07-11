@@ -69,3 +69,6 @@ exports.createSession = function(sessionName, promise) {
 exports.getCurrentActiveSessions = function() {
   return sessionInfo.getCurrentActiveSessions();
 };
+exports.clearPendingSessions = function(promise) {
+  sessionInfo.clearPendingSessions(promise);
+};
