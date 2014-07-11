@@ -92,3 +92,10 @@ exports.generateRandomSessionIdString = function(prefix) {
   });
   return prefix == null ? uuid : prefix + '-' + uuid;
 };
+exports.ensureAuthenticated = function(req, res, next) {
+  if (!req.app.settings.needsAuth || req.isAuthenticated()) {
+    return next();
+  }
+
+  return res.redirect('/');
+};

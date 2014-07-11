@@ -1,4 +1,6 @@
 var logService = require('./service/LogService.js');
+var utils = require('./utils.js');
+
 var saveLogs = function(req, res) {
   logService.saveLog(req, res);
 };
@@ -23,27 +25,19 @@ var importLogs = function(req, res) {
 var getTimelineDates = function(req, res) {
   logService.getTimelineDates(req, res);
 };
-var createSession = function(req, res) {
-  logService.createSession(req, res);
-};
-var getCurrentActiveSessions = function(req, res) {
-  logService.getCurrentActiveSessions(req, res);
-};
 var testLog = function(req, res) {
   logService.testLog(req, res);
 };
 exports.register = function(server) {
   server.post('/log', saveLogs);
-  server.post('/import', importLogs);
-  server.post('/createSession', createSession);
+  server.post('/import', utils.ensureAuthenticated, importLogs);
 
   server.get('/vaults', getActiveVaults);
-  server.get('/clearLogs', clearDB);
+  server.get('/clearLogs', utils.ensureAuthenticated, clearDB);
   server.get('/history', history);
   server.get('/search', search);
   server.get('/export', exportLogs);
   server.get('/timelineDates', getTimelineDates);
-  server.get('/currentActiveSessions', getCurrentActiveSessions);
 
   server.post('/logtest', testLog);
 };
