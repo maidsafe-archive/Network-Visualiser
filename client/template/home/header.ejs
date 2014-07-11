@@ -8,27 +8,24 @@
     <button ng-click="import()">Import</button>
   </li>
   <li>
-    <button ng-click="toggleIconsTray()" class="create-session">Create Session</button>
+    <button ng-click="showCreateSession = !show" class="create-session">Create Session</button>
   </li>
 </ul>
-<div class="toggle_create_session">
+<div class="toggle_create_session" ng-show="showCreateSession">
   <div class="wrapper">
-    <div class="session-input-wrapper">
+    <div class="session-input-wrapper" ng-hide="showSessionForm">
       <form name="createSessionForm">
-        <style>
-          .fieldValid {
-          border: 1px solid #00ff00;
-          }
-          .fieldInvalid {
-          border: 1px solid #ff0000;
-          }
-        </style>
         <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="sessionName" ng-pattern="/^[a-zA-Z0-9- ]{1,}$/" ng-class="validateField(createSessionForm.focus)"/>
-        <button class="submit-session" ng-click="createSession()">Create</button>
+        <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="createSession(); showSessionForm = !show; showSessionOutput = !show" ng-class="{'button-disabled': item.disabled}">Create</button>
+        <div class="valid-input" ng-show="createSessionForm.$valid" ng-class="{'button-disabled': item.disabled}">Session Name Valid</div>
+        <div class="invalid-input" ng-show="createSessionForm.$invalid">Session Name Invalid</div>
       </form>
     </div>
-    <div class="session-id-output">
+    <div class="session-id-output" ng-show="showSessionOutput">
+    <h3>Session ID</h3>
+      <span class="id-output">
       {{sessionId}}
+      </span>
     </div>
   </div>
 </div>
