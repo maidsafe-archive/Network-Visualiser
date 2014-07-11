@@ -48,13 +48,15 @@
       $(container).hide();
       
       $(".create-session").click(function(e) {
-          $(container).slideToggle("fast");
           e.preventDefault();
+     
+          $(this).toggleClass("active");
+          if ($(this).hasClass('active')) {
+            $(container).slideDown("fast");
+          } else {
+            $(container).hide();
+          }
         });
-      });
-      
-      $(".create-session").click(function() {
-        $(this).toggleClass("active");
       });
     </script>
   </body>
