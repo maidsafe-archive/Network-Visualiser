@@ -1,6 +1,10 @@
 var config = require('./../../Config.js');
 exports.isValid = function(log) {
-  return (log.vault_id && log.action_id && log.persona_id);
+  var isValid = log.vault_id && log.action_id && log.persona_id;
+  if (log.action_id == 0 && !log.hasOwnProperty('session_id')) {
+    isValid = false;
+  }
+  return isValid;
 };
 exports.formatDate = function(log) {
   try {
@@ -87,4 +91,11 @@ exports.generateRandomSessionIdString = function(prefix) {
     return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
   });
   return prefix == null ? uuid : prefix + '-' + uuid;
+};
+exports.ensureAuthenticated = function(req, res, next) {
+  if (!req.app.settings.needsAuth || req.isAuthenticated()) {
+    return next();
+  }
+
+  return res.redirect('/');
 };

@@ -66,3 +66,6 @@ exports.importLogs = function(fileName) {
 exports.createSession = function(sessionName, promise) {
   sessionInfo.createSession(sessionName, promise);
 };
+exports.getCurrentActiveSessions = function() {
+  return sessionInfo.getCurrentActiveSessions();
+};

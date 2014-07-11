@@ -4,6 +4,7 @@ var utils = require('./../utils.js');
 var url = require('url');
 var config = require('./../../../Config.js');
 var fs = require('fs');
+
 var saveLog = function(req, res) {
   var log = req.body;
   if (utils.formatDate(log)) {
@@ -138,15 +139,6 @@ var testLog = function(req, res) {
   }
   res.send(200, "Saved");
 };
-var createSession = function(req, res) {
-  var criteria = req.body;
-  if (!criteria || utils.isEmptyObject(criteria)) {
-    res.send(500, 'Invalid parameters');
-    return;
-  }
-
-  bridge.createSession(criteria.session_name, new Handler.CreateSessionHandler(res));
-};
 
 exports.saveLog = saveLog;
 exports.searchLog = searchLog;
@@ -156,6 +148,5 @@ exports.getActiveVaults = activeVaultsWithRecentLogs;
 exports.getTimelineDates = getTimelineDates;
 exports.exportLogs = exportLogs;
 exports.importLogs = importLogs;
-exports.createSession = createSession;
 
 exports.testLog = testLog;

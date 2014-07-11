@@ -15,7 +15,7 @@
   <div class="wrapper">
     <div class="session-input-wrapper" ng-hide="showSessionForm">
       <form name="createSessionForm">
-        <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="sessionName" ng-pattern="/^[a-zA-Z0-9- .]{1,}$/" ng-class="validateField(createSessionForm.focus)" ng-valid=""/>
+        <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="sessionName" ng-pattern="/^[a-zA-Z0-9- ]{1,}$/" ng-class="validateField(createSessionForm.focus)"/>
         <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="createSession(); showSessionForm = !show; showSessionOutput = !show" ng-class="{'button-disabled': item.disabled}">Create</button>
         <div class="valid-input" ng-show="createSessionForm.$valid" ng-class="{'button-disabled': item.disabled}">Session Name Valid</div>
         <div class="invalid-input" ng-show="createSessionForm.$invalid">Session Name Invalid</div>
