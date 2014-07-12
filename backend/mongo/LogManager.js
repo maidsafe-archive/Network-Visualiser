@@ -44,7 +44,7 @@ var LogManager = function(dbConnConnection) {
             return;
           }
           var networkHealthFound = false;
-          for (i in data) {
+          for (var i in data) {
             if (data[i].action_id == config.Constants.action_network_health) {
               networkHealthFound = true;
               break;

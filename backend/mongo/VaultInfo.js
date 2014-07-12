@@ -18,21 +18,25 @@ var VaultMetaData = function(dbConnection) {
     return (actionId == 18 || actionId == 0);
   };
   var transformData = function(data) {
+    if (!canUpdateStatus(data.action_id)) {
+      return {};
+    }
+
     var temp = { vault_id: data.vault_id, is_running: data.action_id == 0 };
     if (data.action_id == 0) {
       temp.vault_id_full = data.value1;
-      temp.session_id = data.session_id;
+      temp.session_id = data.value2;
     }
     return temp;
   };
-  this.updateStatus = function(data) {
+  this.updateVaultStatus = function(data) {
     var promise = new mongoose.Promise;
+    var actionId = data.action_id;
     if (canUpdateStatus(data.action_id)) {
       data = transformData(data);
-      VaultInfo.update({ vault_id: data.vault_id }, data, { upsert: true }, function(err, doc) {
-        if (err) {
-          console.log('Failed to update Status for vault - ' + data.vault_id);
-          promise.error(err);
+      VaultInfo.update({ vault_id: data.vault_id }, data, { upsert: actionId == 0 }, function(err, doc) {
+        if (err || doc == 0) {
+          promise.error(err ? err : 'Vault is not active');
         } else {
           promise.complete('');
         }
@@ -42,6 +46,17 @@ var VaultMetaData = function(dbConnection) {
     }
     return promise;
   };
+  this.getVaultStatus = function(vaultId) {
+    var promise = new mongoose.Promise;
+    VaultInfo.findOne({ vault_id: vaultId }, { is_running: 1, session_id: 1 }, function(err, vaultStatus) {
+      if (!vaultStatus) {
+        promise.complete({});
+      } else {
+        err ? promise.error(err) : promise.complete(vaultStatus);
+      }
+    });
+    return promise;
+  };
   this.getActiveVaults = function(callback) {
     var promise = new mongoose.Promise;
     if (callback) {
@@ -49,17 +64,6 @@ var VaultMetaData = function(dbConnection) {
     }
     VaultInfo.find({ is_running: true }, function(err, vaults) {
       err ? promise.error(err) : promise.complete(vaults);
-    });
-    return promise;
-  };
-  this.isVaultActive = function(log) {
-    var promise = new mongoose.Promise;
-    VaultInfo.findOne({ vault_id: log.vault_id }, function(err, vault) {
-      if (!vault) {
-        promise.complete(false);
-      } else {
-        err ? promise.error(err) : promise.complete(vault.is_running);
-      }
     });
     return promise;
   };

@@ -10,26 +10,28 @@ var SessionCtrl = [
 
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
-        RefreshActiveSessions();
+        refreshActiveSessions();
       }
     });
 
-    this.RefreshActiveSessions = function() {
+    function refreshActiveSessions() {
       $http.get('/currentActiveSessions').then(function(result) {
         $scope.activeSessions = result.data;
       });
     };
-    RefreshActiveSessions();
+
+    refreshActiveSessions();
 
     $scope.createSession = function() {
-      if (!$scope.createSessionForm.focus.$valid)
+      if (!$scope.createSessionForm.focus.$valid) {
         return;
+      }
       console.log("--> Submitting form with Name: " + $scope.sessionName);
       $http({
         url: ("/createSession"),
         method: "POST",
         data: { 'session_name': $scope.sessionName },
-        headers: {'Content-Type': 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
       }).success(function(data) {
         $scope.sessionId = data;
         $scope.isCreateSessionInputRequired = false;
@@ -49,13 +51,13 @@ var SessionCtrl = [
       $scope.isCreateSessionTabOpen = !$scope.isCreateSessionTabOpen;
       if (!$scope.isCreateSessionTabOpen) {
         $scope.isCreateSessionInputRequired = true;
-        $scope.sessionName = '';        
+        $scope.sessionName = '';
         $scope.createSessionErrorMessage = '';
         $scope.createSessionForm.$setPristine();
       }
     };
     $scope.onDeleteSessionClicked = function(sessionName) {
-      $scope.isConfirmDeleteDialogOpen[sessionName]= !$scope.isConfirmDeleteDialogOpen[sessionName];
+      $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
     };
     $scope.deleteSession = function(sessionName) {
       console.log("Deleting Session " + sessionName);
