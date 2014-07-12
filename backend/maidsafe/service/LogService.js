@@ -35,23 +35,19 @@ var history = function(req, res) {
     res.send(500, 'Invalid Request');
   }
 };
-var dropDB = function(req, res) {
-  bridge.dropDB();
-  new Handler.DatabaseCleared(res);
-};
-var getCurrentActiveVaults = function(req, res) {
-  bridge.getActiveVaults().then(function(vaults) {
+var getCurrentActiveVaults = function(req, res, sessionName) {
+  bridge.getActiveVaults(sessionName).then(function(vaults) {
     var counter = 0;
     var results = {};
     if (!vaults.length) {
       res.send(500, "No vaults are active");
       return;
     }
+
     for (var index in vaults) {
       results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
-      bridge.vaultHistory(vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs) {
+      bridge.vaultHistory(sessionName, vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs) {
         counter++;
-        // console.log(logs);
         if (logs.length > 0) {
           results[logs[0].vault_id].logs = logs;
         }
@@ -90,10 +86,15 @@ var getActiveVaultsAtTime = function(criteria, res) {
 };
 var activeVaultsWithRecentLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;
+  if (!criteria || !criteria.hasOwnProperty('sn')) {
+    res.send(500, 'Missing Session Name');
+    return;
+  }
+
   if (criteria.ts) {
     getActiveVaultsAtTime(criteria, res);
   } else {
-    getCurrentActiveVaults(req, res);
+    getCurrentActiveVaults(req, res, criteria.sn);
   }
 };
 var getTimelineDates = function(req, res) {
@@ -143,7 +144,6 @@ var testLog = function(req, res) {
 exports.saveLog = saveLog;
 exports.searchLog = searchLog;
 exports.vaultHistory = history;
-exports.clearAll = dropDB;
 exports.getActiveVaults = activeVaultsWithRecentLogs;
 exports.getTimelineDates = getTimelineDates;
 exports.exportLogs = exportLogs;

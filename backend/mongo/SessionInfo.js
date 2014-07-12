@@ -77,15 +77,24 @@ var SessionMetaData = function(dbConnection) {
     });
     return promise;
   };
+  this.deleteSession = function(sessionName) {
+    var promise = new mongoose.Promise;
+    SessionInfo.findOne({ session_name: sessionName }, { _id: 0, session_id: 1 }, function(err, res) {
+      if (err || !res) {
+        promise.error('Invalid Session');
+        return;
+      }
+
+      SessionInfo.remove({ session_name: sessionName }, function(removeErr, removeRes) {
+        removeErr || removeRes == 0 ? promise.error(removeErr) : promise.complete(res.session_id);
+      });
+    });
+    return promise;
+  };
   this.isValidSessionId = function(log) {
     var promise = new mongoose.Promise;
-    if (log.action_id != 0) {
-      // Assume valid session for non vault started actions
-      promise.complete(true);
-      return promise;
-    }
 
-    SessionInfo.findOne({ session_id: log.value2 }, function(err, res) {
+    SessionInfo.findOne({ session_id: log.session_id }, function(err, res) {
       if (!res) {
         promise.complete(false);
       } else {
@@ -94,9 +103,9 @@ var SessionMetaData = function(dbConnection) {
     });
     return promise;
   };
-  this.updateSessionInfo = function(sessionId, log) {
+  this.updateSessionInfo = function(log) {
     var promise = new mongoose.Promise;
-    SessionInfo.findOneAndUpdate({ session_id: sessionId }, { $set: { is_active: true } }, function(err, currentSession) {
+    SessionInfo.findOneAndUpdate({ session_id: log.session_id }, { $set: { is_active: true } }, function(err, currentSession) {
       if (err) {
         promise.error('Unable to Update Session');
         return;
@@ -114,6 +123,25 @@ var SessionMetaData = function(dbConnection) {
 
     SessionInfo.findOne({ session_name: sessionName }, { beginDate: 1, endDate: 1 }, function(err, res) {
       err ? promise.error(err) : promise.complete(res);
+    });
+    return promise;
+  };
+  this.getSessionIdForName = function(sessionName) {
+    var promise = new mongoose.Promise;
+
+    SessionInfo.findOne({ session_name: sessionName }, { _id: 0, session_id: 1 }, function(err, res) {
+      err || !res ? promise.error(err) : promise.complete(res.session_id);
+    });
+    return promise;
+  };
+  this.getSessionNameForId = function(sessionId, callback) {
+    var promise = new mongoose.Promise;
+    if (callback) {
+      promise.addBack(callback);
+    }
+
+    SessionInfo.findOne({ session_id: sessionId }, { _id: 0, session_name: 1 }, function(err, res) {
+      err || !res ? promise.error(err) : promise.complete(res.session_name);
     });
     return promise;
   };

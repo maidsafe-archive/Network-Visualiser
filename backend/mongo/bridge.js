@@ -26,14 +26,23 @@ exports.addLog = function(log, promise) {
     }
 
     vaultInfo.updateVaultStatus(log).then(function() {
-      vaultInfo.getVaultStatus(log.vault_id).then(function(vaultStatus) {
-        if (utils.isEmptyObject(vaultStatus) || (!vaultStatus.is_running && log.action_id != 18)) {
+      vaultInfo.isVaultActive(log).then(function(isActive) {
+        if (!isActive && log.action_id != 18) {
           promise('Vault is not active');
           return;
         }
 
-        sessionInfo.updateSessionInfo(vaultStatus.session_id, log).then(function() {
-          vaultLog.save(log, promise);
+        sessionInfo.updateSessionInfo(log).then(function() {
+          vaultLog.save(log).then(function(data) {
+            sessionInfo.getSessionNameForId(log.session_id).then(function(sessionName) {
+              if (!data || !sessionName) {
+                promise('Error adding log');
+              } else {
+                data.session_name = sessionName;
+                promise(null, data);
+              }
+            });
+          });
         });
       });
     }, function(updateStatusError) {
@@ -44,15 +53,31 @@ exports.addLog = function(log, promise) {
 exports.searchLog = function(criteria, promise) {
   vaultLog.search(criteria, promise);
 };
-exports.vaultHistory = function(vaultId, criteria, page, max, promise) {
-  return vaultLog.history(vaultId, criteria, page, max, promise);
+exports.vaultHistory = function(sessionName, vaultId, criteria, page, max, callback) {
+  var promise = new mongoose.Promise;
+  if (callback) {
+    promise.addBack(callback);
+  }
+
+  sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+    vaultLog.history(sessionId, vaultId, criteria, page, max).then(function(res) {
+      promise.complete(res);
+    });
+  }, function(err) {
+    promise.error(err);
+  });
+  return promise;
 };
-exports.dropDB = function() {
-  db.db.dropDatabase();
-  // keyValueData.clearDates();
-};
-exports.getActiveVaults = function() {
-  return vaultInfo.getActiveVaults();
+exports.getActiveVaults = function(sessionName) {
+  var promise = new mongoose.Promise;
+  sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+    vaultInfo.getActiveVaults(sessionId).then(function(vaults) {
+      promise.complete(vaults);
+    });
+  }, function(err) {
+    promise.complete('');
+  });
+  return promise;
 };
 exports.getAllVaultNames = function() {
   return vaultInfo.getAllVaultNames();
@@ -74,4 +99,13 @@ exports.getCurrentActiveSessions = function() {
 };
 exports.clearPendingSessions = function(promise) {
   sessionInfo.clearPendingSessions(promise);
+};
+exports.deleteSession = function(sessionName, promise) {
+  sessionInfo.deleteSession(sessionName).then(function(sessionId) {
+    vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {
+      vaultLog.deleteVaultsInSession(sessionId, removedVaultIds, promise);
+    });
+  }, function(err) {
+    promise(err);
+  });
 };

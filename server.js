@@ -4,7 +4,8 @@ var userAuth = require('./backend/auth/UserAuth.js');
 var logController = require('./backend/maidsafe/LogController.js');
 var sessionController = require('./backend/maidsafe/SessionController.js');
 var config = require('./Config.js');
-var PORT = config.Constants.serverPort;
+var serverPort = config.Constants.serverPort;
+var socketPort = config.Constants.socketPort;
 
 var app = express();
 
@@ -23,23 +24,23 @@ app.configure(function() {
 });
 
 app.get('/', function(req, res) {
-  res.render('sessions', { user: { enabled: !app.settings.needsAuth }, socketPort: PORT });
+  res.render('sessions', { user: { enabled: !app.settings.needsAuth }, socketPort: socketPort });
 });
 
 app.get('/client/viewer', function(req, res) {
-  res.render('viewer', { socketPort: PORT });
+  res.render('viewer', { socketPort: socketPort });
 });
 
 app.get('/client/timeline', function(req, res) {
-  res.render('timeline', { socketPort: PORT });
+  res.render('timeline', { socketPort: socketPort });
 });
 
 app.get('/client/history', function(req, res) {
-  res.render('history', { socketPort: PORT });
+  res.render('history', { socketPort: socketPort });
 });
 
 userAuth.setupAuthCallbacks(app);
 
 sessionController.register(app);
 logController.register(app);
-app.listen(PORT);
+app.listen(serverPort);

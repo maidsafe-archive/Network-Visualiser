@@ -52,7 +52,17 @@ exports.ClearPendingSessionsHandler = function(res) {
   };
   return this.promise;
 };
-exports.DatabaseCleared = function(res) {
-  socket.broadcastSignal("DB_CLEARED");
-  res.send("Database cleared");
+exports.DeleteSessionHandler = function(res) {
+  this.res = res;
+  var onSessionDeleted = function(data) {
+    socket.broadcastSignal("REFRESH_SESSIONS");
+    res.send('Session deleted');
+  };
+  var onError = function(err) {
+    res.send(500, err.message || err);
+  };
+  this.promise = function(err, data) {
+    err ? onError(err) : onSessionDeleted(data);
+  };
+  return this.promise;
 };

@@ -1,5 +1,6 @@
 var ApplicationCtrl = [
-  '$scope', '$rootScope', 'dataManager', 'socketService', function($scope, $rootScope, dataManager, socketService) {
+  '$scope', '$rootScope', '$location', 'dataManager', 'socketService', function($scope, $rootScope, $location, dataManager, socketService) {
+    $rootScope.sessionName = $location.search().sn;
 
     $scope.iconsTrayClosed = true;
 
@@ -21,9 +22,6 @@ var ApplicationCtrl = [
     $scope.export = function() {
       window.open('/export', '_blank');
     };
-    $scope.import = function() {
-      window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
-    };
     $scope.setStatusAlert = function(msg) {
       $scope.alert = msg;
       setTimeout(function() {
@@ -33,17 +31,14 @@ var ApplicationCtrl = [
         }
       }, 5000);
     };
-    $scope.clearLogs = function() {
-      //	if(confirm("This operation will clear all the logs on the server. Proceed clearing logs?")){
-      dataManager.clearLogs(); //	}
-    };
-    socketService.setSignalListner(function(signal) {
+
+    /*socketService.setSignalListner(function(signal) {
       if (signal == 'DB_CLEARED') {
         $scope.vaults = []; //clear the present state
         dataManager.clearState();
         $scope.setStatusAlert('Logs were cleared');
       }
-    });
+    });*/
 
 
     var newVault = function(vault) {
