@@ -137,6 +137,7 @@ button[disabled] { background: #cacaca;}
 .actions {
   float: right;
   padding: 0 1em;
+  position: relative;
 }
 
 .fieldValid {
@@ -169,9 +170,13 @@ a.delete:hover { background-position: bottom left; }
 .confirm-delete {
   border: 1px solid #dcdcdc;
   background: #fff;
-  padding: 10px;
+  padding: 5px;
   width: 110px;
   text-align: center;
+  position: absolute;
+  top: -7px;
+  left: 7px;
+  clear: both;
 }
 
 a.yes-btn {
@@ -183,6 +188,10 @@ a.yes-btn {
   text-decoration: none;
   text-transform: uppercase;
 }
+a.yes-btn:hover {
+  background:#38c266;
+}
+
 a.no-btn {
   padding: 5px 0px;
   width: 45px;
@@ -194,7 +203,9 @@ a.no-btn {
   margin-left:5px;
   margin-top: 10px;
 }
-
+a.no-btn:hover {
+  background:#ca2f2b;
+}
 footer button {
   float: left;
   margin: 0.5em 1.5em;

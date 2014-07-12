@@ -6,6 +6,7 @@ var SessionCtrl = [
     $scope.isCreateSessionTabOpen = false;
     $scope.isCreateSessionInputRequired = true;
     $scope.createSessionErrorMessage = '';
+    $scope.isConfirmDeleteDialogOpen = {};
 
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
@@ -48,10 +49,16 @@ var SessionCtrl = [
       $scope.isCreateSessionTabOpen = !$scope.isCreateSessionTabOpen;
       if (!$scope.isCreateSessionTabOpen) {
         $scope.isCreateSessionInputRequired = true;
-        $scope.sessionName = '';
+        $scope.sessionName = '';        
         $scope.createSessionErrorMessage = '';
         $scope.createSessionForm.$setPristine();
       }
+    };
+    $scope.onDeleteSessionClicked = function(sessionName) {
+      $scope.isConfirmDeleteDialogOpen[sessionName]= !$scope.isConfirmDeleteDialogOpen[sessionName];
+    };
+    $scope.deleteSession = function(sessionName) {
+      console.log("Deleting Session " + sessionName);
     };
     $scope.clearPendingSessions = function() {
       $http.get('/clearPendingSessions');

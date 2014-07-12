@@ -14,13 +14,12 @@
       <div class="actions">
         <a href="/client/viewer#?session_name={{activeSession.session_name}}" class="view"></a>
 <% if(user.enabled) { %>
-        <a href="" class="delete"></a>
-        <!--
-        <div class="confirm-delete">
+        <a href="" class="delete" ng-click="onDeleteSessionClicked(activeSession.session_name)"></a>
+        <div class="confirm-delete" ng-show="isConfirmDeleteDialogOpen[activeSession.session_name]">
         Are you sure you want to delete?
-          <a href="" class="yes-btn">Yes</a>
-          <a href=""class="no-btn">No</a>
-        </div>-->
+          <a href="" class="yes-btn" ng-click="deleteSession(activeSession.session_name)">Yes</a>
+          <a href="" class="no-btn" ng-click="onDeleteSessionClicked(activeSession.session_name)">No</a>
+        </div>
 <% } %>
       </div>
     </li>
