@@ -39,6 +39,10 @@ app.get('/client/history', function(req, res) {
   res.render('history', { socketPort: socketPort });
 });
 
+app.get('/client/search', function(req, res) {
+  res.render('search', { socketPort: socketPort });
+});
+
 userAuth.setupAuthCallbacks(app);
 
 sessionController.register(app);

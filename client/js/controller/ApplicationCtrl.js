@@ -22,6 +22,9 @@ var ApplicationCtrl = [
     $scope.export = function() {
       window.open('/export?sn=' + $rootScope.sessionName, '_blank');
     };
+    $scope.search = function() {
+      window.open('/client/search#?sn=' + $rootScope.sessionName, '_blank').focus();
+    };
     $scope.setStatusAlert = function(msg) {
       $scope.alert = msg;
       setTimeout(function() {
