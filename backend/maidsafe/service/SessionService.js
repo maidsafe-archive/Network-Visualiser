@@ -36,3 +36,13 @@ exports.deleteSession = function(req, res) {
 
   bridge.deleteSession(criteria.sn, new Handler.DeleteSessionHandler(res));
 };
+
+exports.deletePendingSession = function(req, res) {
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
+    res.send(500, 'Invalid Request');
+    return;
+  }
+
+  bridge.deletePendingSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+};

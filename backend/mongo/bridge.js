@@ -121,3 +121,6 @@ exports.deleteSession = function(sessionName, promise) {
     promise(err);
   });
 };
+exports.deletePendingSession = function(sessionName, promise) {
+  sessionInfo.deleteSession(sessionName, promise);
+};

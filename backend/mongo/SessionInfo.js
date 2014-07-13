@@ -77,8 +77,12 @@ var SessionMetaData = function(dbConnection) {
     });
     return promise;
   };
-  this.deleteSession = function(sessionName) {
+  this.deleteSession = function(sessionName, callback) {
     var promise = new mongoose.Promise;
+    if (callback) {
+      promise.addBack(callback);
+    }
+
     SessionInfo.findOne({ session_name: sessionName }, { _id: 0, session_id: 1 }, function(err, res) {
       if (err || !res) {
         promise.error('Invalid Session');

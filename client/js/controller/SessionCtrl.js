@@ -37,10 +37,16 @@ var SessionCtrl = [
       window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
     };
     $scope.deleteSession = function(sessionName) {
-      $http.get('/deleteSession?sn=' + sessionName);
+      for (var i in $scope.activeSessions) {
+        if ($scope.activeSessions[i].session_name == sessionName) {
+          $http.get('/deleteSession?sn=' + sessionName);
+          return;
+        }
+      }
+      $http.get('/deletePendingSession?sn=' + sessionName);
     };
     $scope.clearPendingSessions = function() {
-      $http.get('/clearPendingSessions');
+      $http.get('/clearAllPendingSessions');
     };
 
     $scope.createSession = function() {
