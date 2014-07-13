@@ -63,7 +63,6 @@ var ApplicationCtrl = [
     dataManager.onNewVault(newVault);
     dataManager.onVaultsLoaded(onVaultsLoaded);
     setTimeout(function() {
-      console.log("Called");
       dataManager.getActiveVaults();
     }, 10);
   }

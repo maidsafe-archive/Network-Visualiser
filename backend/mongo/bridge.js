@@ -50,8 +50,10 @@ exports.addLog = function(log, promise) {
     });
   });
 };
-exports.searchLog = function(criteria, promise) {
-  vaultLog.search(criteria, promise);
+exports.searchLog = function(sessionName, criteria, promise) {
+  sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+    vaultLog.search(sessionId, criteria, promise);
+  });
 };
 exports.vaultHistory = function(sessionName, vaultId, criteria, page, max, callback) {
   var promise = new mongoose.Promise;

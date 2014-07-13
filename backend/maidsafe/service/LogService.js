@@ -18,12 +18,12 @@ var saveLog = function(req, res) {
 };
 var searchLog = function(req, res) {
   var criteria = url.parse(req.url, true).query;
-  if (!criteria || utils.isEmptyObject(criteria)) {
+  if (!criteria || utils.isEmptyObject(criteria) || !utils.hasSessionName(criteria)) {
     res.send(500, 'Invalid search criteria');
     return;
   } else {
     var offset = new Date(criteria.ts).getTime() + ((criteria.offset || 1) * 60000);
-    bridge.searchLog({ 'ts': { "$gt": criteria.ts, '$lt': new Date(offset).toISOString() } }, new Handler.SearchHandler(res));
+    bridge.searchLog(criteria.sn, { 'ts': { "$gt": criteria.ts, '$lt': new Date(offset).toISOString() } }, new Handler.SearchHandler(res));
   }
 };
 var history = function(req, res) {
