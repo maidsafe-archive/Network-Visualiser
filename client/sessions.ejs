@@ -25,12 +25,12 @@
     <script type="text/javascript" src="../client/js/controller/HistoryCtrl.js"></script>
     <script type="text/javascript" src="../client/js/config/registry.js"></script>
 
-    <title>Network Visualiser - Realtime View</title>
+    <title>Network Visualiser - Sessions View</title>
 
     <link rel="shortcut icon" href="../client/imgs/favicon.ico" />
     <link rel="icon" type="image/ico" href="../client/imgs/favicon.ico" />
   </head>
-  <body ng-app="MaidSafe" ng-controller="sessionCtrl" id="sessions">
+  <body ng-app="MaidSafe" ng-controller="sessionCtrl" id="sessions" ng-app="myapp">
     <header>
       <% include ../client/template/sessions/header.ejs %>
     </header>
@@ -59,5 +59,13 @@
         });
       });
     </script>
+    <script>
+    angular.module("myapp", [])
+            .controller("MyController", function($scope) {
+                $scope.myForm = {};
+                $scope.myForm.firstName = "Jakob";
+                $scope.myForm.lastName  = "Jenkov";
+            } );
+</script>
   </body>
 </html>

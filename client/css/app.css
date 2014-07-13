@@ -140,6 +140,11 @@ header ul li a {
   text-transform: uppercase;
 }
 
+.top-header h1 a {
+  color: #fff;
+  text-decoration: none;
+}
+
 .top-header p {
   float: right;
   margin: 0;

@@ -119,8 +119,10 @@ button[disabled] { background: #cacaca;}
   padding: 8px 10px;
   width: 100%;
   border-radius: 8px;
-  height: 20px;
+  height: 38px;
+  border: none;
 }
+
 
 .session_info { float: left; }
 
