@@ -1,6 +1,7 @@
 var bridge = require('./../../../backend/mongo/bridge.js');
 var Handler = require('./Handler.js');
 var utils = require('./../utils.js');
+var url = require('url');
 
 exports.createSession = function(req, res) {
   var criteria = JSON.parse(JSON.stringify(req.body));
@@ -20,4 +21,18 @@ exports.getCurrentActiveSessions = function(req, res) {
     }
     res.send(activeSessions);
   });
+};
+
+exports.clearPendingSessions = function(req, res) {
+  bridge.clearPendingSessions(new Handler.ClearPendingSessionsHandler(res));
+};
+
+exports.deleteSession = function(req, res) {
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
+    res.send(500, 'Invalid Request');
+    return;
+  }
+
+  bridge.deleteSession(criteria.sn, new Handler.DeleteSessionHandler(res));
 };

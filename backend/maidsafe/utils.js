@@ -1,7 +1,7 @@
 var config = require('./../../Config.js');
 exports.isValid = function(log) {
   var isValid = log.vault_id && log.action_id && log.persona_id;
-  if (log.action_id == 0 && !log.hasOwnProperty('session_id')) {
+  if (!log.hasOwnProperty('session_id')) {
     isValid = false;
   }
   return isValid;
@@ -90,7 +90,7 @@ exports.generateRandomSessionIdString = function(prefix) {
     d = Math.floor(d / 16);
     return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
   });
-  return prefix == null ? uuid : prefix + '-' + uuid;
+  return prefix == null ? uuid : prefix + uuid;
 };
 exports.ensureAuthenticated = function(req, res, next) {
   if (!req.app.settings.needsAuth || req.isAuthenticated()) {
@@ -98,4 +98,17 @@ exports.ensureAuthenticated = function(req, res, next) {
   }
 
   return res.redirect('/');
+};
+exports.hasSessionName = function(criteria) {
+  return criteria && criteria.hasOwnProperty('sn');
+};
+exports.filterSessionVaultNames = function(sessionId, dbConnName, collections) {
+  var sessionVaultNames = [];
+  for (var i in collections) {
+    var collName = collections[i].name.replace(dbConnName + '.', '');
+    if (collName.indexOf(sessionId) == 0) {
+      sessionVaultNames.push(collName);
+    }
+  }
+  return sessionVaultNames;
 };

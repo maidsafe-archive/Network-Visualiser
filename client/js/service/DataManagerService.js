@@ -28,7 +28,7 @@ var DataManagerService = [
       }
     };
     var activeVaults = function(time) {
-      $http.get('/vaults?' + (time ? ('ts=' + time) : '')).then(function(result) {
+      $http.get('/vaults?' + ('sn=' + $rootScope.sessionName) + (time ? ('&ts=' + time) : '')).then(function(result) {
         var vaults = result.data;
         for (var key in vaults) {
           if (vaults[key].logs && vaults[key].logs.length > 0) {
@@ -46,9 +46,6 @@ var DataManagerService = [
         vaultsLoadedObserver();
       });
     };
-    var clearLogs = function() {
-      $http.get('/clearLogs');
-    };
     var getLogsFromQueue = function(vaultId) {
       var logs = vaultsInDisplay[vaultId].queue;
       vaultsInDisplay[vaultId].queue = [];
@@ -59,7 +56,6 @@ var DataManagerService = [
     };
     this.getActiveVaults = activeVaults;
     this.pushLog = addLogToPool;
-    this.clearLogs = clearLogs;
     this.getLogsFromQueue = getLogsFromQueue;
     this.setLogListner = setLogListner;
     this.clearState = clear;

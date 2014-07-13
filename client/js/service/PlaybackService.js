@@ -1,5 +1,5 @@
 var PlaybackService = [
-  '$http', '$filter', 'dataManager', function($http, $filter, dataManager) {
+  '$rootScope', '$http', '$filter', 'dataManager', function($rootScope, $http, $filter, dataManager) {
 
     var _playbackTime;
     var timerId = 0;
@@ -111,7 +111,8 @@ var PlaybackService = [
         if (isEmpty(buffer_pool) && !buffering) {
           buffering = true;
           lastBufferedTime += (BUFFER_MINUTES * 60000);
-          $http.get('/search?offset=' + BUFFER_MINUTES + '&ts=' + new Date(lastBufferedTime).toISOString()).then(prepareData, onNetworkError);
+          console.log('mmm - ' + $rootScope.sessionName);
+          $http.get('/search?offset=' + BUFFER_MINUTES + '&ts=' + new Date(lastBufferedTime).toISOString() + '&sn=' + $rootScope.sessionName).then(prepareData, onNetworkError);
         }
       }
     };
@@ -128,7 +129,7 @@ var PlaybackService = [
       clearAll();
       nextPushTime = new Date(time).getTime();
       lastBufferedTime = nextPushTime;
-      $http.get('/search?offset=' + BUFFER_MINUTES + '&ts=' + time).then(prepareData, onNetworkError);
+      $http.get('/search?offset=' + BUFFER_MINUTES + '&ts=' + time + '&sn=' + $rootScope.sessionName).then(prepareData, onNetworkError);
     };
     this.pause = function() {
       setPlayerStatus(status.pause);

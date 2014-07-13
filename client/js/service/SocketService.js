@@ -1,12 +1,14 @@
 var SocketService = [
   '$rootScope', 'dataManager', function($rootScope, dataManager) {
     $rootScope.realTime = true;
+    $rootScope.sessionName = '';
 
     var socket = io.connect($rootScope.socketEndPoint);
 
     var signalObserver;
+
     socket.on('log', function(data) {
-      if ($rootScope.realTime) {
+      if ($rootScope.realTime && data.session_name == $rootScope.sessionName) {
         setTimeout(function() {
           dataManager.pushLog(data);
         }, 1); //threaded so ui is non-blocking

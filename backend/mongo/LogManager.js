@@ -8,29 +8,31 @@ var LogManager = function(dbConnConnection) {
   dbConn = dbConnConnection;
 
   HIDE_FIELDS = { _id: 0, __v: 0 };
-  var searchAllCollections = function(criteria, promise) {
+  var formatCollectionName = function(sessionId, vaultId) {
+    return sessionId + '_' + utils.transformVaultId(vaultId);
+  };
+  var searchAllCollections = function(sessionId, criteria, promise) {
     var results = {};
     dbConn.db.collectionNames(function(e, colls) {
       var fetched = 0;
-      for (i in colls) {
-        if (colls[i].name.indexOf('system.index') < 0) { //} || colls[i].name.indexOf('vaultStatus')<0){
-          dbConn.db.collection(colls[i].name.replace(dbConn.name + '.', ''), function(err, col) {
-            col.find(criteria, { __v: 0 }).toArray(function(err, docs) {
-              fetched++;
-              if (docs.length > 0) {
-                results[docs[0].vault_id] = docs;
-              }
-              if (fetched == colls.length - 1) {
-                promise.complete(results);
-              }
-            });
+      var sessionVaultNames = utils.filterSessionVaultNames(sessionId, dbConn.name, colls);
+      for (i in sessionVaultNames) {
+        dbConn.db.collection(sessionVaultNames[i], function(er, col) {
+          col.find(criteria, { __v: 0 }).toArray(function(err, docs) {
+            fetched++;
+            if (docs.length > 0) {
+              results[docs[0].vault_id] = docs;
+            }
+            if (fetched == sessionVaultNames.length - 1) {
+              promise.complete(results);
+            }
           });
-        }
+        });
       }
     });
   };
-  var vaultHistory = function(vaultId, criteria, page, max, promise) {
-    dbConn.db.collection(vaultId, function(err, coll) {
+  var vaultHistory = function(collectionName, criteria, page, max, promise) {
+    dbConn.db.collection(collectionName, function(err, coll) {
       if (err) {
         promise.error(err);
       } else {
@@ -44,7 +46,7 @@ var LogManager = function(dbConnConnection) {
             return;
           }
           var networkHealthFound = false;
-          for (i in data) {
+          for (var i in data) {
             if (data[i].action_id == config.Constants.action_network_health) {
               networkHealthFound = true;
               break;
@@ -78,31 +80,60 @@ var LogManager = function(dbConnConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-    dbConn.db.collection(utils.transformVaultId(data.vault_id), function(err, coll) {
+    dbConn.db.collection(formatCollectionName(data.session_id, data.vault_id), function(err, coll) {
       if (err) {
         promise.error(err);
       } else {
-        coll.save(data, function(err, docs) {
-          err ? promise.error(err) : promise.complete(data);
+        coll.save(data, function(saveErr, docs) {
+          saveErr ? promise.error(saveErr) : promise.complete(data);
         });
       }
     });
     return promise;
   };
-  this.search = function(criteria, callback) {
+  this.deleteVaultsInSession = function(sessionId, vaultIds, callback) {
     var promise = new mongoose.Promise;
     if (callback) {
       promise.addBack(callback);
     }
-    searchAllCollections(criteria, promise);
+
+    var deletedCount = 0;
+    for (var i in vaultIds) {
+      dbConn.db.collection(formatCollectionName(sessionId, vaultIds[i].vault_id), function(err, coll) {
+        if (err) {
+          promise(err);
+          return;
+        }
+
+        coll.drop(function(e, res) {
+          if (e) {
+            promise.error(e);
+            return;
+          }
+
+          deletedCount++;
+          if (deletedCount == vaultIds.length - 1) {
+            promise.complete('');
+          }
+        });
+      });
+    }
     return promise;
   };
-  this.history = function(vaultId, criteria, page, max, callback) {
+  this.search = function(sessionId, criteria, callback) {
     var promise = new mongoose.Promise;
     if (callback) {
       promise.addBack(callback);
     }
-    vaultHistory(utils.transformVaultId(vaultId), criteria, page, max, promise);
+    searchAllCollections(sessionId, criteria, promise);
+    return promise;
+  };
+  this.history = function(sessionId, vaultId, criteria, page, max, callback) {
+    var promise = new mongoose.Promise;
+    if (callback) {
+      promise.addBack(callback);
+    }
+    vaultHistory(formatCollectionName(sessionId, vaultId), criteria, page, max, promise);
     return promise;
   };
   return this;

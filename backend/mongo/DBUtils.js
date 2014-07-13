@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var fs = require('fs');
 var csv = require('fast-csv');
+var utils = require('./../maidsafe/utils.js');
+
 var DBUtil = function(dbConnection) {
   var dbConn = dbConnection;
   var actionMap, personaMap;
@@ -57,10 +59,10 @@ var DBUtil = function(dbConnection) {
     };
     return this;
   };
-  var VaultToCSV = function(vaultId, outStream, handler) {
-
+  // ReSharper disable once InconsistentNaming
+  var VaultToCSV = function(formattedCollectionName, outStream, handler) {
     var writeToStream = function() {
-      dbConn.db.collection(vaultId, function(err, col) {
+      dbConn.db.collection(formattedCollectionName, function(err, col) {
         var stream = col.find({}, { __id: 0, __v: 0 }).stream();
         stream.on('data', function(doc) {
           outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
@@ -74,7 +76,8 @@ var DBUtil = function(dbConnection) {
     };
     writeToStream();
   };
-  var ExportHelper = function(promise) {
+  // ReSharper disable once InconsistentNaming
+  var ExportHelper = function(sessionId, promise) {
     var outStream;
     var handler;
     var isReady = false;
@@ -88,11 +91,11 @@ var DBUtil = function(dbConnection) {
       if (outStream && isReady) {
         outStream.write("Vault_Id,Timestamp,Action,Persona,Value1,Value2\n");
         dbConn.db.collectionNames(function(e, colls) {
-          handler.setTotalCount(colls.length - 2); //2 = index + vaultStatus tables in the db
-          for (var i in colls) {
-            if (colls[i].name.indexOf('system.index') < 0 && colls[i].name.indexOf('vaultStatus') < 0) {
-              new VaultToCSV(colls[i].name.replace(dbConn.name + '.', ''), outStream, handler);
-            }
+          var sessionVaultNames = utils.filterSessionVaultNames(sessionId, dbConn.name, colls);
+          handler.setTotalCount(sessionVaultNames.length);
+          for (var index in sessionVaultNames) {
+            // ReSharper disable once WrongExpressionStatement
+            new VaultToCSV(sessionVaultNames[index], outStream, handler);
           }
         });
       }
@@ -110,11 +113,15 @@ var DBUtil = function(dbConnection) {
     this.stream.once('open', streamReadyCallback);
     return this;
   };
-  this.exportLogs = function() {
+  this.exportLogs = function(sessionName, sessionInfo) {
     var promise = new mongoose.Promise;
-    var helper = new ExportHelper(promise);
-    var outFile = createTempFile(helper.streamReady);
-    helper.setOutStream(outFile.stream);
+    sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+      var helper = new ExportHelper(sessionId, promise);
+      var outFile = createTempFile(helper.streamReady);
+      helper.setOutStream(outFile.stream);
+    }, function(err) {
+      promise.error(err);
+    });
     return promise;
   };
   var getActionNameMap = function() {
@@ -150,7 +157,10 @@ var DBUtil = function(dbConnection) {
     }
     if (log.ts) {
       try {
-        new Date(log.ts) == "Invalid Date" ? addErrorMessage("Invalid Timestamp") : null;
+        var tempDate = new Date(log.ts);
+        if (tempDate == "Invalid Date") {
+          addErrorMessage("Invalid Timestamp");
+        }
       } catch (e) {
         addErrorMessage("Invalid Timestamp");
       }
@@ -175,58 +185,55 @@ var DBUtil = function(dbConnection) {
 
     return { valid: isValid, msg: errString };
   };
-  var ImportFactory = function(filePath, vaultInfo, keyValueData, logManager, promise, validationCallback) {
+  var importFactory = function(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise, validationCallback) {
     var stream = fs.createReadStream(filePath);
-    var firstRecord = true;
-    var log = {};
-    var firstLogTime;
-    var temp;
     var validationErrors = [];
     var lineNumber = 0;
+
+    // ReSharper disable once InconsistentNaming - Constructor func
     var SaveLog = function(data) {
-      var log = { vault_id: data[0], ts: data[1], action_id: actionMap[data[2]], persona_id: personaMap[data[3]], value1: (data[4] || ''), value2: (data[5] || '') };
-      vaultInfo.updateStatus(log).then(function() {
-        keyValueData.checkAndUpdateDates(log).then(function() {
-          vaultInfo.isVaultActive(log).then(function(isActive) {
-            if (isActive || log.action_id == 0 || log.action_id == 18) {
-              logManager.save(log);
-            }
-          });
+      var actionId = actionMap[data[2]];
+      var log = {
+        vault_id: data[0],
+        ts: data[1],
+        session_id: sessionId,
+        action_id: actionId,
+        persona_id: personaMap[data[3]],
+        value1: (data[4] || ''),
+        value2: (data[5] || '')
+      };
+      vaultInfo.updateVaultStatus(log).then(function () {
+        // we assume imported logs hold valid info. Thus stream the intake in parallel.
+        sessionInfo.updateSessionInfo(log).then(function() {
+          logManager.save(log);
         });
-      }, function(err) {
-        console.log('ERR ::' + err);
       });
     };
-    csv.fromStream(stream)
-      .on("record", function(data) {
-        lineNumber++;
-        if (firstRecord) {
-          firstRecord = false;
-        } else {
-          if (validationCallback) {
-            temp = importValidator(data);
-            if (!temp.valid) {
-              temp.lineNumber = lineNumber;
-              validationErrors.push(temp);
-            }
-          } else {
-            temp = new Date(data[1]).getTime();
-            if (!firstLogTime || firstLogTime > temp) {
-              firstLogTime = temp;
-            }
-            new SaveLog(data);
-          }
+
+    csv.fromStream(stream).on("record", function(data) {
+      if (lineNumber++ == 0) {
+        return;
+      }
+
+      if (validationCallback) {
+        var errorInfo = importValidator(data);
+        if (!errorInfo.valid) {
+          errorInfo.lineNumber = lineNumber;
+          validationErrors.push(errorInfo);
         }
-      })
-      .on("end", function() {
-        if (validationCallback) {
-          validationCallback(validationErrors);
-        } else {
-          promise.complete('Completed');
-        }
-      });
+      } else {
+        // ReSharper disable once WrongExpressionStatement
+        new SaveLog(data);
+      }
+    }).on("end", function() {
+      if (validationCallback) {
+        validationCallback(validationErrors);
+      } else {
+        promise.complete('Added to Server Queue.');
+      }
+    });
   };
-  this.importLogs = function(filePath, vaultInfo, keyValueData, logManager) {
+  this.importLogs = function(filePath, vaultInfo, sessionInfo, logManager) {
     var promise = new mongoose.Promise;
     var validationCallback = function(errors) {
       if (errors.length > 0) {
@@ -236,11 +243,14 @@ var DBUtil = function(dbConnection) {
         }
         promise.error(err);
       } else {
-        dbConn.db.dropDatabase();
-        ImportFactory(filePath, vaultInfo, keyValueData, logManager, promise);
+        // TODO(Viv) remove this temp name gen to a proper format or get it from the user
+        var sessionName = utils.generateRandomSessionIdString("Imported - ");
+        sessionInfo.createSession(sessionName).then(function(sessionId) {
+          importFactory(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise);
+        });
       }
     };
-    ImportFactory(filePath, vaultInfo, keyValueData, logManager, promise, validationCallback);
+    importFactory(filePath, '', vaultInfo, sessionInfo, logManager, promise, validationCallback);
     return promise;
   };
   actionMap = getActionNameMap();

@@ -17,8 +17,8 @@ exports.initAuth = function(server, callback) {
     needsAuth = false;
     return needsAuth;
   }
-    
-  gAuth = JSON.parse(data);
+
+  gAuth = JSON.parse(fileContent);
 
   //   Use the GoogleStrategy within Passport.
   //   Strategies in Passport require a `verify` function, which accept
@@ -39,7 +39,7 @@ exports.initAuth = function(server, callback) {
       });
     }
   ));
-  
+
   // API Access link for creating client ID and secret:
   // https://code.google.com/apis/console/
   // Passport session setup.
@@ -71,11 +71,15 @@ exports.setupAuthCallbacks = function(server) {
   if (!needsAuth) {
     return;
   }
-  
+
   server.get('/auth', utils.ensureAuthenticated, function(req, res) {
-    res.render('index', { user: { enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0,
-                                  email: req.user._json.email },
-                          socketPort: config.Constants.socketPort });
+    res.render('index', {
+      user: {
+        enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0,
+        email: req.user._json.email
+      },
+      socketPort: config.Constants.socketPort
+    });
   });
 
   // GET /auth/google
@@ -83,7 +87,7 @@ exports.setupAuthCallbacks = function(server) {
   //   request.  The first step in Google authentication will involve
   //   redirecting the user to google.com.  After authorization, Google
   //   will redirect the user back to this application
-  server.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email']}), function(req, res) {
+  server.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }), function(req, res) {
     // The request will be redirected to Google for authentication, so this
     // function will not be called.
   });
@@ -94,6 +98,6 @@ exports.setupAuthCallbacks = function(server) {
   //   login page.  Otherwise, the primary route function function will be called,
   //   which, in this example, will redirect the user to the home page.
   server.get('/googlecallback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
-      res.redirect('/auth');
+    res.redirect('/auth');
   });
 };

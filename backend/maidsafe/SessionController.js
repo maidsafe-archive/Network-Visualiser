@@ -7,8 +7,16 @@ var createSession = function(req, res) {
 var getCurrentActiveSessions = function(req, res) {
   sessionService.getCurrentActiveSessions(req, res);
 };
+var clearPendingSessions = function(req, res) {
+  sessionService.clearPendingSessions(req, res);
+};
+var deleteSession = function(req, res) {
+  sessionService.deleteSession(req, res);
+};
 exports.register = function(server) {
-  server.post('/createSession', createSession);
+  server.post('/createSession', utils.ensureAuthenticated, createSession);
 
-  server.get('/currentActiveSessions', utils.ensureAuthenticated, getCurrentActiveSessions);
+  server.get('/currentActiveSessions', getCurrentActiveSessions);
+  server.get('/deleteSession', utils.ensureAuthenticated, deleteSession);
+  server.get('/clearPendingSessions', utils.ensureAuthenticated, clearPendingSessions);
 };

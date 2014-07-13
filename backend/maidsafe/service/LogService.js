@@ -28,30 +28,31 @@ var searchLog = function(req, res) {
 };
 var history = function(req, res) {
   var criteria = url.parse(req.url, true).query;
+  if (!utils.hasSessionName(criteria)) {
+    res.send(500, 'Missing Session Name');
+    return;
+  }
+
   var timeCriteria = criteria.ts ? { 'ts': { "$lt": criteria.ts } } : {};
   if (utils.isPageRequestValid(criteria)) {
-    bridge.vaultHistory(criteria.vault_id, timeCriteria, parseInt(criteria.page), parseInt(criteria.max), new Handler.SearchHandler(res));
+    bridge.vaultHistory(criteria.sn, criteria.vault_id, timeCriteria, parseInt(criteria.page), parseInt(criteria.max), new Handler.SearchHandler(res));
   } else {
     res.send(500, 'Invalid Request');
   }
 };
-var dropDB = function(req, res) {
-  bridge.dropDB();
-  new Handler.DatabaseCleared(res);
-};
-var getCurrentActiveVaults = function(req, res) {
-  bridge.getActiveVaults().then(function(vaults) {
+var getCurrentActiveVaults = function(req, res, sessionName) {
+  bridge.getActiveVaults(sessionName).then(function(vaults) {
     var counter = 0;
     var results = {};
     if (!vaults.length) {
       res.send(500, "No vaults are active");
       return;
     }
+
     for (var index in vaults) {
       results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
-      bridge.vaultHistory(vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs) {
+      bridge.vaultHistory(sessionName, vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs) {
         counter++;
-        // console.log(logs);
         if (logs.length > 0) {
           results[logs[0].vault_id].logs = logs;
         }
@@ -62,8 +63,8 @@ var getCurrentActiveVaults = function(req, res) {
     }
   });
 };
-var getActiveVaultsAtTime = function(criteria, res) {
-  bridge.getAllVaultNames().then(function(vaults) {
+var getActiveVaultsAtTime = function(criteria, res, sessionName) {
+  bridge.getAllVaultNames(sessionName).then(function(vaults) {
     var results = {};
     var counter = 0;
     if (vaults.length == 0) {
@@ -72,7 +73,7 @@ var getActiveVaultsAtTime = function(criteria, res) {
       for (var index in vaults) {
         if (vaults[index].vault_id) {
           results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
-          bridge.vaultHistory(vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
+          bridge.vaultHistory(sessionName, vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
             counter++;
             if (logs.length > 0 && logs[0].action_id != 18) {
               results[logs[0].vault_id].logs = logs;
@@ -90,22 +91,42 @@ var getActiveVaultsAtTime = function(criteria, res) {
 };
 var activeVaultsWithRecentLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;
+  if (!utils.hasSessionName(criteria)) {
+    res.send(500, 'Missing Session Name');
+    return;
+  }
+
   if (criteria.ts) {
-    getActiveVaultsAtTime(criteria, res);
+    getActiveVaultsAtTime(criteria, res, criteria.sn);
   } else {
-    getCurrentActiveVaults(req, res);
+    getCurrentActiveVaults(req, res, criteria.sn);
   }
 };
 var getTimelineDates = function(req, res) {
-  res.send(bridge.getTimelineDates());
+  var criteria = url.parse(req.url, true).query;
+  if (!utils.hasSessionName(criteria)) {
+    res.send(500, 'Missing Session Name');
+    return;
+  }
+  bridge.getTimelineDates(criteria.sn).then(function(dates) {
+    res.send(dates);
+  }, function(err) {
+    res.send(500, err);
+  });
 };
 var deleteFile = function(path) {
   setTimeout(function() {
     fs.unlinkSync(path);
   }, 60000); //after 1 minute
 };
-var exportLogs = function(req, res) {
-  bridge.exportLogs().then(function(path) {
+var exportLogs = function (req, res) {
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || !criteria.hasOwnProperty('sn')) {
+    res.send(500, 'Missing Session Name');
+    return;
+  }
+
+  bridge.exportLogs(criteria.sn).then(function(path) {
     res.download(path);
     deleteFile(path);
   });
@@ -143,7 +164,6 @@ var testLog = function(req, res) {
 exports.saveLog = saveLog;
 exports.searchLog = searchLog;
 exports.vaultHistory = history;
-exports.clearAll = dropDB;
 exports.getActiveVaults = activeVaultsWithRecentLogs;
 exports.getTimelineDates = getTimelineDates;
 exports.exportLogs = exportLogs;

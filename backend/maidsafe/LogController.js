@@ -10,9 +10,6 @@ var search = function(req, res) {
 var getActiveVaults = function(req, res) {
   logService.getActiveVaults(req, res);
 };
-var clearDB = function(req, res) {
-  logService.clearAll(req, res);
-};
 var history = function(req, res) {
   logService.vaultHistory(req, res);
 };
@@ -33,7 +30,6 @@ exports.register = function(server) {
   server.post('/import', utils.ensureAuthenticated, importLogs);
 
   server.get('/vaults', getActiveVaults);
-  server.get('/clearLogs', utils.ensureAuthenticated, clearDB);
   server.get('/history', history);
   server.get('/search', search);
   server.get('/export', exportLogs);
