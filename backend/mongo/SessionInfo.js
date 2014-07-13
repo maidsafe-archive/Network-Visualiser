@@ -55,12 +55,12 @@ var SessionMetaData = function(dbConnection) {
     });
     return promise;
   };
-  this.getCurrentActiveSessions = function(callback) {
+  this.getCurrentSessions = function(callback) {
     var promise = new mongoose.Promise;
     if (callback) {
       promise.addBack(callback);
     }
-    SessionInfo.find({ is_active: true }, { session_id: 1, session_name: 1 }, function(err, res) {
+    SessionInfo.find({}, { _id: 0 }, function(err, res) {
       // TODO(Viv) Filter returned data based on req.isAuth()
       err ? promise.error(err) : promise.complete(res);
     });
@@ -103,12 +103,16 @@ var SessionMetaData = function(dbConnection) {
     });
     return promise;
   };
-  this.updateSessionInfo = function(log) {
+  this.updateSessionInfo = function(log, refreshSessionsCallback) {
     var promise = new mongoose.Promise;
-    SessionInfo.findOneAndUpdate({ session_id: log.session_id }, { $set: { is_active: true } }, function(err, currentSession) {
+    SessionInfo.findOneAndUpdate({ session_id: log.session_id }, { $set: { is_active: true } }, { new: false }, function(err, currentSession) {
       if (err) {
         promise.error('Unable to Update Session');
         return;
+      }
+
+      if (!currentSession.is_active && refreshSessionsCallback) {
+        refreshSessionsCallback();
       }
 
       checkAndUpdateDates(log, currentSession, promise);

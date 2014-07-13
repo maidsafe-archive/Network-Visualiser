@@ -4,6 +4,7 @@ var SessionCtrl = [
     $scope.sessionId = '';
     $scope.sessionName = '';
     $scope.activeSessions = [];
+    $scope.pendingSessions = [];
     $scope.isCreateSessionTabOpen = false;
     $scope.isCreateSessionInputRequired = true;
     $scope.createSessionErrorMessage = '';
@@ -11,20 +12,25 @@ var SessionCtrl = [
 
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
-        refreshActiveSessions();
+        refreshCurrentSessions();
         return;
       }
     });
 
-    function refreshActiveSessions() {
-      $http.get('/currentActiveSessions').then(function(result) {
-        $scope.activeSessions = result.data;
+    function refreshCurrentSessions() {
+      $http.get('/currentSessions').then(function(result) {
+        $scope.activeSessions = result.data.filter(function(item) {
+          return item.is_active;
+        });
+        $scope.pendingSessions = result.data.filter(function(item) {
+          return !item.is_active;
+        });
       }, function(err) {
         $scope.activeSessions = {};
       });
     };
 
-    refreshActiveSessions();
+    refreshCurrentSessions();
 
 
     $scope.importLogs = function() {
@@ -41,7 +47,7 @@ var SessionCtrl = [
       if (!$scope.createSessionForm.focus.$valid) {
         return;
       }
-      console.log("--> Submitting form with Name: " + $scope.sessionName);
+
       $http({
         url: ("/createSession"),
         method: "POST",

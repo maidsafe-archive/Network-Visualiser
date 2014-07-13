@@ -23,7 +23,7 @@ var LogManager = function(dbConnConnection) {
             if (docs.length > 0) {
               results[docs[0].vault_id] = docs;
             }
-            if (fetched == sessionVaultNames.length - 1) {
+            if (fetched == sessionVaultNames.length) {
               promise.complete(results);
             }
           });
@@ -110,9 +110,8 @@ var LogManager = function(dbConnConnection) {
             promise.error(e);
             return;
           }
-
           deletedCount++;
-          if (deletedCount == vaultIds.length - 1) {
+          if (deletedCount == vaultIds.length) {
             promise.complete('');
           }
         });
@@ -120,7 +119,7 @@ var LogManager = function(dbConnConnection) {
     }
     return promise;
   };
-  this.search = function(sessionId, criteria, callback) {
+  this.selectLogs = function(sessionId, criteria, callback) {
     var promise = new mongoose.Promise;
     if (callback) {
       promise.addBack(callback);

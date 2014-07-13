@@ -7,24 +7,43 @@ var fs = require('fs');
 
 var saveLog = function(req, res) {
   var log = req.body;
-  if (utils.formatDate(log)) {
-    if (!log.hasOwnProperty('persona_id')) {
-      log.persona_id = config.Constants.persona_na;
-    }
-    utils.isValid(log) ? bridge.addLog(log, new Handler.SaveLogHandler(res)) : res.send(500, 'Invalid Parameters');
-  } else {
+  if (!utils.formatDate(log)) {
     res.send(500, "Invalid date time format");
+    return;
   }
+
+  if (!log.hasOwnProperty('persona_id')) {
+    log.persona_id = config.Constants.persona_na;
+  }
+
+  if (!utils.isValid(log)) {
+    res.send(500, 'Invalid Parameters');
+    return;
+  }
+
+  var handler = new Handler.SaveLogHandler(res);
+  bridge.addLog(log, handler.promise, handler.refreshSessionsCallback);
 };
-var searchLog = function(req, res) {
+var selectLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;
   if (!criteria || utils.isEmptyObject(criteria) || !utils.hasSessionName(criteria)) {
-    res.send(500, 'Invalid search criteria');
+    res.send(500, 'Invalid select criteria');
     return;
-  } else {
-    var offset = new Date(criteria.ts).getTime() + ((criteria.offset || 1) * 60000);
-    bridge.searchLog(criteria.sn, { 'ts': { "$gt": criteria.ts, '$lt': new Date(offset).toISOString() } }, new Handler.SearchHandler(res));
   }
+
+  var offset = new Date(criteria.ts).getTime() + ((criteria.offset || 1) * 60000);
+  bridge.selectLogs(criteria.sn, { 'ts': { "$gt": criteria.ts, '$lt': new Date(offset).toISOString() } }, new Handler.SelectLogsHandler(res));
+};
+var searchLogs = function(req, res) {
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || !utils.hasSessionName(criteria) || !criteria.hasOwnProperty('query')) {
+    res.send(500, 'Invalid Search');
+    return;
+  }
+
+  // TODO Create criteria from request and perform a simple select
+  var searchCriteria = {};
+  // bridge.selectLogs(criteria.sn, , new Handler.SelectLogsHandler(res));
 };
 var history = function(req, res) {
   var criteria = url.parse(req.url, true).query;
@@ -35,7 +54,7 @@ var history = function(req, res) {
 
   var timeCriteria = criteria.ts ? { 'ts': { "$lt": criteria.ts } } : {};
   if (utils.isPageRequestValid(criteria)) {
-    bridge.vaultHistory(criteria.sn, criteria.vault_id, timeCriteria, parseInt(criteria.page), parseInt(criteria.max), new Handler.SearchHandler(res));
+    bridge.vaultHistory(criteria.sn, criteria.vault_id, timeCriteria, parseInt(criteria.page), parseInt(criteria.max), new Handler.SelectLogsHandler(res));
   } else {
     res.send(500, 'Invalid Request');
   }
@@ -119,7 +138,7 @@ var deleteFile = function(path) {
     fs.unlinkSync(path);
   }, 60000); //after 1 minute
 };
-var exportLogs = function (req, res) {
+var exportLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;
   if (!criteria || !criteria.hasOwnProperty('sn')) {
     res.send(500, 'Missing Session Name');
@@ -136,8 +155,10 @@ var importLogs = function(req, res) {
     var fileName = "Import_" + new Date().getTime() + '.csv';
     fs.writeFile(fileName, data, function(err) {
       bridge.importLogs(fileName).then(function() {
-        res.send('Imported');
+        var handler = new Handler.SaveLogHandler();
+        res.send('Added to Import Queue');
         deleteFile(fileName);
+        handler.refreshSessionsCallback();
       }, function(err) {
         res.send(err.message);
         deleteFile(fileName);
@@ -147,7 +168,6 @@ var importLogs = function(req, res) {
 };
 var testLog = function(req, res) {
   var log = req.body;
-  console.log(log);
   utils.formatDate(log);
   if (log.value1 && log.value1.length > config.Constants.minLengthForDecode) {
     log.value1 = utils.decodeData(log.value1);
@@ -162,7 +182,8 @@ var testLog = function(req, res) {
 };
 
 exports.saveLog = saveLog;
-exports.searchLog = searchLog;
+exports.selectLogs = selectLogs;
+exports.searchLogs = searchLogs;
 exports.vaultHistory = history;
 exports.getActiveVaults = activeVaultsWithRecentLogs;
 exports.getTimelineDates = getTimelineDates;
