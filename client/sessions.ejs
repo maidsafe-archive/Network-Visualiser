@@ -36,7 +36,21 @@
       <% include ../client/template/sessions/header.ejs %>
     </header>
     <section>
-      <div class="wrapper">
+      <div class="wrapper current-list">
+        <div class="list-header">
+          <h2>Current Active Sessions</h2>
+          <div class="session-count-label">{{activeSessions.length ? activeSessions.length : 0}}</div>
+        </div>
+        <% include ../client/template/sessions/session_item.ejs %>
+      </div>
+      <div class="wrapper pending-list">
+        <div class="list-header">
+          <% if(user.enabled) { %>
+          <a href="" ng-click="clearPendingSessions()" class="clear-all">Clear All</a>
+          <% } %>
+          <h2>Pending Sessions</h2>
+          <div class="session-count-label">{{activeSessions.length ? activeSessions.length : 0}}</div>
+        </div>
         <% include ../client/template/sessions/session_item.ejs %>
       </div>
     </section>
@@ -60,13 +74,5 @@
         });
       });
     </script>
-    <script>
-    angular.module("myapp", [])
-            .controller("MyController", function($scope) {
-                $scope.myForm = {};
-                $scope.myForm.firstName = "Jakob";
-                $scope.myForm.lastName  = "Jenkov";
-            } );
-</script>
   </body>
 </html>

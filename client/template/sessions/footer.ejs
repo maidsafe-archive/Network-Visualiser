@@ -1,4 +1,3 @@
-<% if(user.enabled) { %>
-<button ng-click="clearPendingSessions()">Clear Pending Sessions</button>
-<% } %>
-<label class="counter">Session Count - {{activeSessions.length ? activeSessions.length : 0}}</label>
+<div class="status" ng-class="{true:'alert'}[alert != null]">
+  <span>{{alert}}</span>
+</div>
