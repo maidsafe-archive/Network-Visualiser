@@ -1,7 +1,6 @@
 <div class="top-header">
-  <h1>Network Visualiser</h1>
+  <h1><a href="/">Network Visualiser - Sessions View</a></h1>
 </div>
-<h2>Current Active Sessions</h2>
 <ul class="buttons-right">
 <% if(user.enabled) { %>
   <li>
@@ -24,9 +23,7 @@
     </div>
     <div class="session-id-output" ng-hide="isCreateSessionInputRequired">
     <h3>Session ID</h3>
-      <span class="id-output">
-      {{sessionId}}
-      </span>
+      <input ng-value="sessionId" class="id-output" readonly>
     </div>
   </div>
 </div>

@@ -99,12 +99,14 @@ table tr td {
 
 table tr td div { word-break: break-word; }
 
-.timestamp-head { width: 230px; }
+.timestamp-head {width: 230px;}
 
-.persona-head { width: 170px; }
+.persona-head {width: 170px;}
 
-.action-head { width: 150px; }
+.vault-id-head {width: 170px;}
 
-.value1-head { width: 34% }
+.action-head {width: 150px;}
 
-.value2-head { width: 34% }
+.value1-head {width: 34%;}
+
+.value2-head {width: 34%;}

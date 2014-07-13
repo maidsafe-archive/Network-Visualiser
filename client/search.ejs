@@ -29,13 +29,13 @@
     <link rel="shortcut icon" href="imgs/favicon.ico" />
     <link rel="icon" type="image/ico" href="imgs/favicon.ico" />
 
-    <title>Network Visualiser - History View</title>
+    <title>Network Visualiser - Search View</title>
   </head>
   <body ng-app="MaidSafe">
     <header>
-      <div class="history" ng-controller="historyCtrl">
+      <div class="history" ng-controller="searchCtrl">
         <div class="top-header">
-          <h1><a href="/">Network Visualiser - History View - {{vaultId}}</a></h1>
+          <h1><a href="/">Network Visualiser - Search View - {{vaultId}}</a></h1>
           <p class="time_label">
             <span>Snapshot at {{ asOfDate | date : 'HH:mm:ss, dd/MM/yyyy'}}<span>
           </p>
@@ -45,7 +45,7 @@
             <form id="search-filter">
               <input type="text" style="font-weight: none; text-align: center;" name="focus" class="search-box" required ng-model="search" placeholder="Type text to filter"/>
 
-              <button id="clear" class="close-icon reset" type="reset" ng-click="search = ''"></button>
+              <button id="clear" class="close-icon reset" type="reset"></button>
             </form>
           </div>
         </div>
@@ -54,6 +54,7 @@
             <thead>
               <td class="timestamp-head">Timestamp</td>
               <td class="persona-head">Persona</td>
+              <td class="vault-id-head">Vault ID</td>
               <td class="action-head">Action</td>
               <td class="value1-head">Value 1</td>
               <td class="value2-head">Value 2</td>
@@ -66,14 +67,17 @@
                 {{log.p = vaultBehaviour.personas[log.persona_id]}}
               </td>
               <td style="width: 10%">
+                {{log.p = vaultBehaviour.personas[log.persona_id]}}
+              </td>
+              <td style="width: 10%">
                 {{log.a = vaultBehaviour.actions[log.action_id]}}
               </td>
-              <td style="width: 35%;">
+              <td style="width: 30%;">
                 <div>
                   {{log.value1}}
                 </div>
               </td>
-              <td style="width: 35%">
+              <td style="width: 30%">
                 <div>
                   {{log.value2}}
                 </div>

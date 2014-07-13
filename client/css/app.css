@@ -140,6 +140,11 @@ header ul li a {
   text-transform: uppercase;
 }
 
+.top-header h1 a {
+  color: #fff;
+  text-decoration: none;
+}
+
 .top-header p {
   float: right;
   margin: 0;
@@ -279,7 +284,6 @@ section div.icons ul li span {
 
 section div.wrapper {
   bottom: 0px;
-  clear: both;
   margin-left: 2em;
   overflow: auto;
   padding: .343em;
