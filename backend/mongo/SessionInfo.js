@@ -121,8 +121,8 @@ var SessionMetaData = function(dbConnection) {
       promise.addBack(callback);
     }
 
-    SessionInfo.findOne({ session_name: sessionName }, { beginDate: 1, endDate: 1 }, function(err, res) {
-      err ? promise.error(err) : promise.complete(res);
+    SessionInfo.findOne({ session_name: sessionName }, { _id: 0, beginDate: 1, endDate: 1 }, function(err, res) {
+      err || !res ? promise.error('No times recorded') : promise.complete(res);
     });
     return promise;
   };

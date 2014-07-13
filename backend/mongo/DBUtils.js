@@ -91,14 +91,7 @@ var DBUtil = function(dbConnection) {
       if (outStream && isReady) {
         outStream.write("Vault_Id,Timestamp,Action,Persona,Value1,Value2\n");
         dbConn.db.collectionNames(function(e, colls) {
-          var sessionVaultNames = [];
-          for (var i in colls) {
-            var collName = colls[i].name.replace(dbConn.name + '.', '');
-            if (collName.indexOf(sessionId) == 0) {
-              sessionVaultNames.push(collName);
-            }
-          }
-
+          var sessionVaultNames = utils.filterSessionVaultNames(sessionId, dbConn.name, colls);
           handler.setTotalCount(sessionVaultNames.length);
           for (var index in sessionVaultNames) {
             // ReSharper disable once WrongExpressionStatement

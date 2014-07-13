@@ -11,25 +11,23 @@ var LogManager = function(dbConnConnection) {
   var formatCollectionName = function(sessionId, vaultId) {
     return sessionId + '_' + utils.transformVaultId(vaultId);
   };
-  var searchAllCollections = function(criteria, promise) {
+  var searchAllCollections = function(sessionId, criteria, promise) {
     var results = {};
     dbConn.db.collectionNames(function(e, colls) {
       var fetched = 0;
-      for (var i in colls) {
-        if (colls[i].name.indexOf('system.index') < 0) {
-          console.log("Needs to be Verified - " + colls[i]);
-          dbConn.db.collection(colls[i].name.replace(dbConn.name + '.', ''), function(err, col) {
-            col.find(criteria, { __v: 0 }).toArray(function(err, docs) {
-              fetched++;
-              if (docs.length > 0) {
-                results[docs[0].vault_id] = docs;
-              }
-              if (fetched == colls.length - 1) {
-                promise.complete(results);
-              }
-            });
+      var sessionVaultNames = utils.filterSessionVaultNames(sessionId, dbConn.name, colls);
+      for (i in sessionVaultNames) {
+        dbConn.db.collection(sessionVaultNames[i], function(er, col) {
+          col.find(criteria, { __v: 0 }).toArray(function(err, docs) {
+            fetched++;
+            if (docs.length > 0) {
+              results[docs[0].vault_id] = docs;
+            }
+            if (fetched == sessionVaultNames.length - 1) {
+              promise.complete(results);
+            }
           });
-        }
+        });
       }
     });
   };
@@ -122,12 +120,12 @@ var LogManager = function(dbConnConnection) {
     }
     return promise;
   };
-  this.search = function(criteria, callback) {
+  this.search = function(sessionId, criteria, callback) {
     var promise = new mongoose.Promise;
     if (callback) {
       promise.addBack(callback);
     }
-    searchAllCollections(criteria, promise);
+    searchAllCollections(sessionId, criteria, promise);
     return promise;
   };
   this.history = function(sessionId, vaultId, criteria, page, max, callback) {

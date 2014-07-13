@@ -28,9 +28,14 @@ var searchLog = function(req, res) {
 };
 var history = function(req, res) {
   var criteria = url.parse(req.url, true).query;
+  if (!utils.hasSessionName(criteria)) {
+    res.send(500, 'Missing Session Name');
+    return;
+  }
+
   var timeCriteria = criteria.ts ? { 'ts': { "$lt": criteria.ts } } : {};
   if (utils.isPageRequestValid(criteria)) {
-    bridge.vaultHistory(criteria.vault_id, timeCriteria, parseInt(criteria.page), parseInt(criteria.max), new Handler.SearchHandler(res));
+    bridge.vaultHistory(criteria.sn, criteria.vault_id, timeCriteria, parseInt(criteria.page), parseInt(criteria.max), new Handler.SearchHandler(res));
   } else {
     res.send(500, 'Invalid Request');
   }
@@ -86,7 +91,7 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
 };
 var activeVaultsWithRecentLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;
-  if (!criteria || !criteria.hasOwnProperty('sn')) {
+  if (!utils.hasSessionName(criteria)) {
     res.send(500, 'Missing Session Name');
     return;
   }
@@ -98,7 +103,16 @@ var activeVaultsWithRecentLogs = function(req, res) {
   }
 };
 var getTimelineDates = function(req, res) {
-  res.send(bridge.getTimelineDates());
+  var criteria = url.parse(req.url, true).query;
+  if (!utils.hasSessionName(criteria)) {
+    res.send(500, 'Missing Session Name');
+    return;
+  }
+  bridge.getTimelineDates(criteria.sn).then(function(dates) {
+    res.send(dates);
+  }, function(err) {
+    res.send(500, err);
+  });
 };
 var deleteFile = function(path) {
   setTimeout(function() {

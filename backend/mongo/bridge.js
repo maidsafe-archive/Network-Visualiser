@@ -85,7 +85,7 @@ exports.getAllVaultNames = function (sessionName) {
     vaultInfo.getAllVaultNames(sessionId).then(function (vaults) {
       promise.complete(vaults);
     });
-  }, function (err) {
+  }, function () {
     promise.complete('');
   });
   return promise;

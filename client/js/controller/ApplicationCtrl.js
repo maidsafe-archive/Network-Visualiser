@@ -17,7 +17,7 @@ var ApplicationCtrl = [
       }
     }, 1000);
     $scope.timeline = function() {
-      window.open('/client/timeline', '_blank').focus();
+      window.open('/client/timeline#?sn=' + $rootScope.sessionName, '_blank').focus();
     };
     $scope.export = function() {
       window.open('/export?sn=' + $rootScope.sessionName, '_blank');

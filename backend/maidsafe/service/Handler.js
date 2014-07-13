@@ -55,6 +55,7 @@ exports.ClearPendingSessionsHandler = function(res) {
 exports.DeleteSessionHandler = function(res) {
   this.res = res;
   var onSessionDeleted = function(data) {
+    console.log("Sending Refresh sessions signal");
     socket.broadcastSignal("REFRESH_SESSIONS");
     res.send('Session deleted');
   };

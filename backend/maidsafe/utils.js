@@ -99,3 +99,16 @@ exports.ensureAuthenticated = function(req, res, next) {
 
   return res.redirect('/');
 };
+exports.hasSessionName = function(criteria) {
+  return criteria && criteria.hasOwnProperty('sn');
+};
+exports.filterSessionVaultNames = function(sessionId, dbConnName, collections) {
+  var sessionVaultNames = [];
+  for (var i in collections) {
+    var collName = collections[i].name.replace(dbConnName + '.', '');
+    if (collName.indexOf(sessionId) == 0) {
+      sessionVaultNames.push(collName);
+    }
+  }
+  return sessionVaultNames;
+};

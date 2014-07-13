@@ -28,7 +28,7 @@ var DataManagerService = [
       }
     };
     var activeVaults = function(time) {
-      $http.get('/vaults?' + ('sn=' + $rootScope.sessionName) + (time ? ('ts=' + time) : '')).then(function(result) {
+      $http.get('/vaults?' + ('sn=' + $rootScope.sessionName) + (time ? ('&ts=' + time) : '')).then(function(result) {
         var vaults = result.data;
         for (var key in vaults) {
           if (vaults[key].logs && vaults[key].logs.length > 0) {
