@@ -79,14 +79,22 @@ exports.getActiveVaults = function(sessionName) {
   });
   return promise;
 };
-exports.getAllVaultNames = function() {
-  return vaultInfo.getAllVaultNames();
+exports.getAllVaultNames = function (sessionName) {
+  var promise = new mongoose.Promise;
+  sessionInfo.getSessionIdForName(sessionName).then(function (sessionId) {
+    vaultInfo.getAllVaultNames(sessionId).then(function (vaults) {
+      promise.complete(vaults);
+    });
+  }, function (err) {
+    promise.complete('');
+  });
+  return promise;
 };
 exports.getTimelineDates = function(sessionName, promise) {
   return sessionInfo.getTimelineDates(sessionName, promise);
 };
-exports.exportLogs = function() {
-  return dbUtils.exportLogs();
+exports.exportLogs = function(sessionName) {
+  return dbUtils.exportLogs(sessionName, sessionInfo);
 };
 exports.importLogs = function(fileName) {
   return dbUtils.importLogs(fileName, vaultInfo, sessionInfo, vaultLog);

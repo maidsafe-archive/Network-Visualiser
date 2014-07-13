@@ -62,9 +62,9 @@ var VaultMetaData = function(dbConnection) {
     });
     return promise;
   };
-  this.getAllVaultNames = function() {
+  this.getAllVaultNames = function(sessionId) {
     var promise = new mongoose.Promise;
-    VaultInfo.find({}, { _id: 0, vault_id: 1, vault_id_full: 1 }, function(err, vaults) {
+    VaultInfo.find({ session_id: sessionId }, { _id: 0, vault_id: 1, vault_id_full: 1 }, function(err, vaults) {
       if (err) {
         promise.error(err);
       } else {

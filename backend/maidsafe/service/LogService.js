@@ -58,8 +58,8 @@ var getCurrentActiveVaults = function(req, res, sessionName) {
     }
   });
 };
-var getActiveVaultsAtTime = function(criteria, res) {
-  bridge.getAllVaultNames().then(function(vaults) {
+var getActiveVaultsAtTime = function(criteria, res, sessionName) {
+  bridge.getAllVaultNames(sessionName).then(function(vaults) {
     var results = {};
     var counter = 0;
     if (vaults.length == 0) {
@@ -68,7 +68,7 @@ var getActiveVaultsAtTime = function(criteria, res) {
       for (var index in vaults) {
         if (vaults[index].vault_id) {
           results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
-          bridge.vaultHistory(vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
+          bridge.vaultHistory(sessionName, vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
             counter++;
             if (logs.length > 0 && logs[0].action_id != 18) {
               results[logs[0].vault_id].logs = logs;
@@ -92,7 +92,7 @@ var activeVaultsWithRecentLogs = function(req, res) {
   }
 
   if (criteria.ts) {
-    getActiveVaultsAtTime(criteria, res);
+    getActiveVaultsAtTime(criteria, res, criteria.sn);
   } else {
     getCurrentActiveVaults(req, res, criteria.sn);
   }
@@ -105,8 +105,14 @@ var deleteFile = function(path) {
     fs.unlinkSync(path);
   }, 60000); //after 1 minute
 };
-var exportLogs = function(req, res) {
-  bridge.exportLogs().then(function(path) {
+var exportLogs = function (req, res) {
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || !criteria.hasOwnProperty('sn')) {
+    res.send(500, 'Missing Session Name');
+    return;
+  }
+
+  bridge.exportLogs(criteria.sn).then(function(path) {
     res.download(path);
     deleteFile(path);
   });

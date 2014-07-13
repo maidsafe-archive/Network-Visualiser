@@ -20,7 +20,7 @@ var ApplicationCtrl = [
       window.open('/client/timeline', '_blank').focus();
     };
     $scope.export = function() {
-      window.open('/export', '_blank');
+      window.open('/export?sn=' + $rootScope.sessionName, '_blank');
     };
     $scope.setStatusAlert = function(msg) {
       $scope.alert = msg;

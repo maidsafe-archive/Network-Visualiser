@@ -59,10 +59,10 @@ var DBUtil = function(dbConnection) {
     };
     return this;
   };
-  var VaultToCSV = function(vaultId, outStream, handler) {
-
+  // ReSharper disable once InconsistentNaming
+  var VaultToCSV = function(formattedCollectionName, outStream, handler) {
     var writeToStream = function() {
-      dbConn.db.collection(vaultId, function(err, col) {
+      dbConn.db.collection(formattedCollectionName, function(err, col) {
         var stream = col.find({}, { __id: 0, __v: 0 }).stream();
         stream.on('data', function(doc) {
           outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
@@ -76,7 +76,8 @@ var DBUtil = function(dbConnection) {
     };
     writeToStream();
   };
-  var ExportHelper = function(promise) {
+  // ReSharper disable once InconsistentNaming
+  var ExportHelper = function(sessionId, promise) {
     var outStream;
     var handler;
     var isReady = false;
@@ -90,11 +91,18 @@ var DBUtil = function(dbConnection) {
       if (outStream && isReady) {
         outStream.write("Vault_Id,Timestamp,Action,Persona,Value1,Value2\n");
         dbConn.db.collectionNames(function(e, colls) {
-          handler.setTotalCount(colls.length - 2); //2 = index + vaultStatus tables in the db
+          var sessionVaultNames = [];
           for (var i in colls) {
-            if (colls[i].name.indexOf('system.index') < 0 && colls[i].name.indexOf('vaultStatus') < 0) {
-              new VaultToCSV(colls[i].name.replace(dbConn.name + '.', ''), outStream, handler);
+            var collName = colls[i].name.replace(dbConn.name + '.', '');
+            if (collName.indexOf(sessionId) == 0) {
+              sessionVaultNames.push(collName);
             }
+          }
+
+          handler.setTotalCount(sessionVaultNames.length);
+          for (var index in sessionVaultNames) {
+            // ReSharper disable once WrongExpressionStatement
+            new VaultToCSV(sessionVaultNames[index], outStream, handler);
           }
         });
       }
@@ -112,11 +120,15 @@ var DBUtil = function(dbConnection) {
     this.stream.once('open', streamReadyCallback);
     return this;
   };
-  this.exportLogs = function() {
+  this.exportLogs = function(sessionName, sessionInfo) {
     var promise = new mongoose.Promise;
-    var helper = new ExportHelper(promise);
-    var outFile = createTempFile(helper.streamReady);
-    helper.setOutStream(outFile.stream);
+    sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+      var helper = new ExportHelper(sessionId, promise);
+      var outFile = createTempFile(helper.streamReady);
+      helper.setOutStream(outFile.stream);
+    }, function(err) {
+      promise.error(err);
+    });
     return promise;
   };
   var getActionNameMap = function() {
@@ -197,19 +209,11 @@ var DBUtil = function(dbConnection) {
         value1: (data[4] || ''),
         value2: (data[5] || '')
       };
-
-      vaultInfo.updateVaultStatus(log).then(function() {
-        vaultInfo.isVaultActive(log).then(function(isActive) {
-          if (!isActive && log.action_id != 18) {
-            return;
-          }
-
-          sessionInfo.updateSessionInfo(log).then(function() {
-            logManager.save(log);
-          });
+      vaultInfo.updateVaultStatus(log).then(function () {
+        // we assume imported logs hold valid info. Thus stream the intake in parallel.
+        sessionInfo.updateSessionInfo(log).then(function() {
+          logManager.save(log);
         });
-      }, function(updateStatusError) {
-        console.log('Import Error: ' + updateStatusError);
       });
     };
 
@@ -232,7 +236,7 @@ var DBUtil = function(dbConnection) {
       if (validationCallback) {
         validationCallback(validationErrors);
       } else {
-        promise.complete('Completed');
+        promise.complete('Added to Server Queue.');
       }
     });
   };
