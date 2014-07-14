@@ -1,10 +1,11 @@
 <div class="top-header">
   <h1><a href="/">Network Visualiser - Sessions View</a></h1>
 </div>
-<ul class="buttons-right">
+<ul class="buttons-left">
 <% if(user.enabled) { %>
   <li>
-    <button ng-click="importLogs()">Import</button>
+    <!--<button ng-click="importLogs()">Import</button>-->
+    <button ng-click="importLogsClicked()" class="import-logs">Import</button>
   </li>
   <li>
     <button ng-click="onCreateSessionTabClicked()" class="create-session">Create Session</button>
@@ -16,6 +17,15 @@
 <% } %>
 </ul>
 <% if(user.enabled) { %>
+<div class="toggle_import_logs" ng-show="isImportLogsTabOpen">
+  <div class="wrapper">
+    <form id="uploadForm" enctype="multipart/form-data" action="/import" method="post">
+      <input type="file" id="userPhotoInput" name="logFile" class="import-log-choose"/>
+      <button type="submit">Import</button>
+    </form>
+  </div>
+</div>
+
 <div class="toggle_create_session" ng-show="isCreateSessionTabOpen">
   <div class="wrapper">
     <div class="session-input-wrapper" ng-show="isCreateSessionInputRequired">

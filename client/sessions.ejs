@@ -80,5 +80,22 @@
         });
       });
     </script>
+    <script>
+      $(function() {
+      var container_import = $(".toggle_import_logs");
+      $(container_import).hide();
+      
+      $(".import-logs").click(function(e) {
+          e.preventDefault();
+     
+          $(this).toggleClass("active");
+          if ($(this).hasClass('active')) {
+            $(container_import).slideDown("fast");
+          } else {
+            $(container_import).hide();
+          }
+        });
+      });
+    </script>
   </body>
 </html>

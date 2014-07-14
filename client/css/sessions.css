@@ -85,29 +85,34 @@
 
 #sessions button { width: 145px; }
 
-.toggle_create_session {
-  -moz-border-radius: 5px 0px 5px 5px;
-  -webkit-border-radius: 5px 0px 5px 5px;
+.toggle_create_session, .toggle_import_logs {
+  -moz-border-radius: 0px 5px 5px 5px;
+  -webkit-border-radius: 0px 5px 5px 5px;
   background: #e7e7e7;
-  border-radius: 5px 0px 5px 5px;
+  border-radius: 0px 5px 5px 5px;
   clear: both;
   float: left;
-  height: 300px;
-  height: 150px;
   position: absolute;
-  right: 2em;
-  top: 73px;
-  width: 450px;
   z-index: 100;
 }
 
-button.close-icon {
-  bottom: 27px;
-  right: 30px;
-  width: auto;
+.toggle_create_session {
+  height: 150px;
+  left: 14.6em;
+  top: 72px;
+  width: 450px;
 }
 
-button.close-icon:hover { background: transparent; }
+.toggle_import_logs {
+  height: 210px;
+  left: 2em;
+  top: 72px;
+  width: 450px;
+}
+
+.toggle_create_session .wrapper, .toggle_import_logs .wrapper {
+  width: 90%!important;
+}
 
 button.active {
   -moz-border-radius: 5px 5px 0px 0px;
@@ -130,23 +135,47 @@ button[disabled] { background: #cacaca;}
 }
 
 .session-input {
-  -moz-border-radius: 12px;
-  -webkit-border-radius: 12px;
-  border: 0px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   border: 1px solid #d7d7d7;
-  border-radius: 12px;
   box-shadow: none;
   font-size: 14px;
   outline: 0;
   padding: 8px 10px;
   position: relative;
-  width: 300px;
+  width: 395px;
   z-index: 0;
+}
+
+.import-log-choose {
+  font-size: 14px;
+}
+
+.row { height: 100px;}
+
+.percent {
+    position: absolute; width: 300px; height: 14px; z-index: 1; text-align: center; font-size: 0.8em; color: white;
+}
+.progress-bar {
+    width: 300px; height: 14px;
+    border-radius: 10px;
+    border: 1px solid #CCC;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#6666cc), to(#4b4b95));
+    border-image: initial;
+}
+.uploaded {
+    padding: 0;
+    height: 14px;
+    border-radius: 10px;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#66cc00), to(#4b9500));
+    border-image: initial;
 }
 
 .submit-session {
   padding: 7px 15px;
   width: 90px !important;
+  margin-top: 10px
 }
 
 .valid-input {
@@ -196,16 +225,32 @@ button[disabled] { background: #cacaca;}
 }
 
 
-.session_info { float: left; }
+.session_info {
+  float: left;
+  width: 90%;
+}
 
 .session_name {
+  padding: 0px;
+  height: 20px;
+  border-radius: 0x;
+  width: 90%;
   font-size: 20px;
   padding: 0.4em 0;
+  height: 50px;
+  border: 0px;
+  background: transparent;
 }
 
 .session_id {
+  padding: 0px;
+  height: 20px;
+  border-radius: 0x;
+  width: 90%;
   color: #aaaaaa;
   font-size: 12px;
+  border: 0px;
+  background: transparent;
 }
 
 .actions {
