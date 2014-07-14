@@ -99,6 +99,9 @@ var SessionCtrl = [
         $scope.createSessionForm.$setPristine();
       }
     };
+    $scope.importLogsClicked = function() {
+      $scope.isImportLogsTabOpen = !$scope.isImportLogsTabOpen;
+    };
     $scope.onDeleteSessionClicked = function(sessionName) {
       $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
     };
