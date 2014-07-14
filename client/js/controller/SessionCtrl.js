@@ -6,6 +6,7 @@ var SessionCtrl = [
     $scope.activeSessions = [];
     $scope.pendingSessions = [];
     $scope.isCreateSessionTabOpen = false;
+    $scope.isImportLogsTabOpen = false;
     $scope.isCreateSessionInputRequired = true;
     $scope.createSessionErrorMessage = '';
     $scope.isConfirmDeleteDialogOpen = {};
@@ -100,6 +101,7 @@ var SessionCtrl = [
       return "valid-input";
     };
     $scope.onCreateSessionTabClicked = function() {
+      $scope.isImportLogsTabOpen = false;
       $scope.isCreateSessionTabOpen = !$scope.isCreateSessionTabOpen;
       if (!$scope.isCreateSessionTabOpen) {
         $scope.isCreateSessionInputRequired = true;
@@ -107,6 +109,10 @@ var SessionCtrl = [
         $scope.createSessionErrorMessage = '';
         $scope.createSessionForm.$setPristine();
       }
+    };
+    $scope.importLogsClicked = function() {
+      $scope.isCreateSessionTabOpen = false;
+      $scope.isImportLogsTabOpen = !$scope.isImportLogsTabOpen;
     };
     $scope.onDeleteSessionClicked = function(sessionName, event) {
       $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];

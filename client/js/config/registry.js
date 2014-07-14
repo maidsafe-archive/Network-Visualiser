@@ -1,8 +1,11 @@
-var app = angular.module('MaidSafe', ['ui-rangeSlider', 'ngClipboard']);
+var app = angular.module('MaidSafe', ['ui-rangeSlider', 'ngClipboard', 'flow']);
 
 app.config([
-  'ngClipProvider', function(ngClipProvider) {
+  'ngClipProvider', 'flowFactoryProvider', function(ngClipProvider, flowFactoryProvider) {
     ngClipProvider.setPath("../../../vendor/zeroclipboard/dist/ZeroClipboard.swf");
+    flowFactoryProvider.on('catchAll', function(event) {
+      console.log(event);
+    });
   }
 ]);
 

@@ -231,6 +231,8 @@ var DBUtil = function(dbConnection) {
       } else {
         promise.complete('Added to Server Queue.');
       }
+    }).on("error", function() {
+      promise.error('Invalid File');
     });
   };
   this.importLogs = function(filePath, vaultInfo, sessionInfo, logManager) {

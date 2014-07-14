@@ -135,8 +135,9 @@ var getTimelineDates = function(req, res) {
 };
 var deleteFile = function(path) {
   setTimeout(function() {
+    console.log('unlink');
     fs.unlinkSync(path);
-  }, 60000); //after 1 minute
+  }, 30000); //after 1 minute
 };
 var exportLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;
@@ -151,17 +152,28 @@ var exportLogs = function(req, res) {
   });
 };
 var importLogs = function(req, res) {
-  fs.readFile(req.files.logFile.path, function(err, data) {
+  fs.readFile(req.files.file.path, function(err, data) {
     var fileName = "Import_" + new Date().getTime() + '.csv';
     fs.writeFile(fileName, data, function(err) {
+      if (err) {
+        console.log('reply');
+        res.writeHead(413, {'Content-Type': 'text/plain'});
+        res.end('Invalid File');
+        return;
+      }
+
       bridge.importLogs(fileName).then(function() {
         var handler = new Handler.SaveLogHandler();
         res.send('Added to Import Queue');
         deleteFile(fileName);
         handler.refreshSessionsCallback();
-      }, function(err) {
-        res.send(err.message);
+      }, function(errorMsg) {
         deleteFile(fileName);
+        console.log('reply 2');
+        if (!res.finished) {
+          res.writeHead(413, { 'Content-Type': 'text/plain' });
+          res.end('Invalid File');
+        }
       });
     });
   });
