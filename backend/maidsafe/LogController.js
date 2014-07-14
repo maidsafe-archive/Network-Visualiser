@@ -4,8 +4,11 @@ var utils = require('./utils.js');
 var saveLogs = function(req, res) {
   logService.saveLog(req, res);
 };
-var search = function(req, res) {
-  logService.searchLog(req, res);
+var selectLogs = function(req, res) {
+  logService.selectLogs(req, res);
+};
+var searchLogs = function(req, res) {
+  logService.searchLogs(req, res);
 };
 var getActiveVaults = function(req, res) {
   logService.getActiveVaults(req, res);
@@ -31,7 +34,9 @@ exports.register = function(server) {
 
   server.get('/vaults', getActiveVaults);
   server.get('/history', history);
-  server.get('/search', search);
+  server.get('/selectLogs', selectLogs);
+
+  // server.get('/searchLogs', searchLogs); // Needs implementation in LogService
   server.get('/export', exportLogs);
   server.get('/timelineDates', getTimelineDates);
 

@@ -18,7 +18,7 @@ db.once('open', function callback() {
   dbUtils = dbUtils.getDBUtil(db);
 });
 
-exports.addLog = function(log, promise) {
+exports.addLog = function(log, promise, refreshSessionsCallback) {
   sessionInfo.isValidSessionId(log).then(function(isValid) {
     if (!isValid) {
       promise('Invalid Session Id');
@@ -32,7 +32,7 @@ exports.addLog = function(log, promise) {
           return;
         }
 
-        sessionInfo.updateSessionInfo(log).then(function() {
+        sessionInfo.updateSessionInfo(log, refreshSessionsCallback).then(function() {
           vaultLog.save(log).then(function(data) {
             sessionInfo.getSessionNameForId(log.session_id).then(function(sessionName) {
               if (!data || !sessionName) {
@@ -50,8 +50,10 @@ exports.addLog = function(log, promise) {
     });
   });
 };
-exports.searchLog = function(criteria, promise) {
-  vaultLog.search(criteria, promise);
+exports.selectLogs = function(sessionName, criteria, promise) {
+  sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+    vaultLog.selectLogs(sessionId, criteria, promise);
+  });
 };
 exports.vaultHistory = function(sessionName, vaultId, criteria, page, max, callback) {
   var promise = new mongoose.Promise;
@@ -79,13 +81,13 @@ exports.getActiveVaults = function(sessionName) {
   });
   return promise;
 };
-exports.getAllVaultNames = function (sessionName) {
+exports.getAllVaultNames = function(sessionName) {
   var promise = new mongoose.Promise;
-  sessionInfo.getSessionIdForName(sessionName).then(function (sessionId) {
-    vaultInfo.getAllVaultNames(sessionId).then(function (vaults) {
+  sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+    vaultInfo.getAllVaultNames(sessionId).then(function(vaults) {
       promise.complete(vaults);
     });
-  }, function () {
+  }, function() {
     promise.complete('');
   });
   return promise;
@@ -102,8 +104,8 @@ exports.importLogs = function(fileName) {
 exports.createSession = function(sessionName, promise) {
   sessionInfo.createSession(sessionName, promise);
 };
-exports.getCurrentActiveSessions = function() {
-  return sessionInfo.getCurrentActiveSessions();
+exports.getCurrentSessions = function() {
+  return sessionInfo.getCurrentSessions();
 };
 exports.clearPendingSessions = function(promise) {
   sessionInfo.clearPendingSessions(promise);
@@ -112,8 +114,13 @@ exports.deleteSession = function(sessionName, promise) {
   sessionInfo.deleteSession(sessionName).then(function(sessionId) {
     vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {
       vaultLog.deleteVaultsInSession(sessionId, removedVaultIds, promise);
+    }, function(err) {
+      promise(err);
     });
   }, function(err) {
     promise(err);
   });
+};
+exports.deletePendingSession = function(sessionName, promise) {
+  sessionInfo.deleteSession(sessionName, promise);
 };

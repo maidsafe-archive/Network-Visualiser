@@ -1,4 +1,9 @@
 var socket = require('./../../socket/Socket.js');
+
+
+var emitRefreshSessions = function() {
+  socket.broadcastSignal("REFRESH_SESSIONS");
+};
 exports.SaveLogHandler = function(res) {
   this.res = res;
   var onLogSaved = function(data) {
@@ -11,9 +16,12 @@ exports.SaveLogHandler = function(res) {
   this.promise = function(err, data) {
     err ? onDatabaseError(err) : onLogSaved(data);
   };
-  return this.promise;
+  this.refreshSessionsCallback = function() {
+    emitRefreshSessions();
+  };
+  return this;
 };
-exports.SearchHandler = function(res) {
+exports.SelectLogsHandler = function(res) {
   this.res = res;
   var onComplete = function(data) {
     res.send(data);
@@ -29,6 +37,7 @@ exports.SearchHandler = function(res) {
 exports.CreateSessionHandler = function(res) {
   this.res = res;
   var onSessionCreated = function(data) {
+    emitRefreshSessions();
     res.send(data);
   };
   var onError = function(err) {
@@ -55,9 +64,7 @@ exports.ClearPendingSessionsHandler = function(res) {
 exports.DeleteSessionHandler = function(res) {
   this.res = res;
   var onSessionDeleted = function(data) {
-    console.log("Sending Refresh sessions signal");
-    socket.broadcastSignal("REFRESH_SESSIONS");
-    res.send('Session deleted');
+    res.send('Session Deleted');
   };
   var onError = function(err) {
     res.send(500, err.message || err);

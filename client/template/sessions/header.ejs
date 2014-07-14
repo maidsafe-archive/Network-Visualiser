@@ -9,7 +9,13 @@
   <li>
     <button ng-click="onCreateSessionTabClicked()" class="create-session">Create Session</button>
   </li>
+<% } else { %>
+  <li>
+    <button class="sign-in"><a href="/auth/google">Sign In</a></button>
+  </li>
+<% } %>
 </ul>
+<% if(user.enabled) { %>
 <div class="toggle_create_session" ng-show="isCreateSessionTabOpen">
   <div class="wrapper">
     <div class="session-input-wrapper" ng-show="isCreateSessionInputRequired">
@@ -27,9 +33,4 @@
     </div>
   </div>
 </div>
-<% } else { %>
-  <li>
-    <button class="sign-in"><a href="/auth/google">Sign In</a></button>
-  </li>
-</ul>
 <% } %>

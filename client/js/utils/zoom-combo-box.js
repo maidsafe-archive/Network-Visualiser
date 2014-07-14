@@ -7,7 +7,6 @@ function isValidQuery(searchParameter) {
   var matches = regExp.exec(searchParameter);
   if (matches != null) {
     $(".wrapper").css({ "zoom": matches[1] + "%" });
-    console.log("called");
   }
 }
 

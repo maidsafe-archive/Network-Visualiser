@@ -202,7 +202,7 @@ var DBUtil = function(dbConnection) {
         value1: (data[4] || ''),
         value2: (data[5] || '')
       };
-      vaultInfo.updateVaultStatus(log).then(function () {
+      vaultInfo.updateVaultStatus(log).then(function() {
         // we assume imported logs hold valid info. Thus stream the intake in parallel.
         sessionInfo.updateSessionInfo(log).then(function() {
           logManager.save(log);

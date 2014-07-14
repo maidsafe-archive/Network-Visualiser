@@ -4,44 +4,73 @@ var SessionCtrl = [
     $scope.sessionId = '';
     $scope.sessionName = '';
     $scope.activeSessions = [];
+    $scope.pendingSessions = [];
     $scope.isCreateSessionTabOpen = false;
     $scope.isCreateSessionInputRequired = true;
     $scope.createSessionErrorMessage = '';
     $scope.isConfirmDeleteDialogOpen = {};
+    $scope.alert = null;
 
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
-        refreshActiveSessions();
+        console.log('received refresh');
+        refreshCurrentSessions();
         return;
       }
     });
 
-    function refreshActiveSessions() {
-      $http.get('/currentActiveSessions').then(function(result) {
-        $scope.activeSessions = result.data;
-      }, function(err) {
-        $scope.activeSessions = {};
-      });
+    $scope.setStatusAlert = function(msg) {
+      $scope.alert = msg;
+      setTimeout(function() {
+        $scope.alert = null;
+        if (!$scope.$$phase) {
+          $scope.$apply();
+        }
+      }, 5000);
     };
 
-    refreshActiveSessions();
-
+    function refreshCurrentSessions() {
+      $http.get('/currentSessions').then(function(result) {
+        $scope.activeSessions = result.data.filter(function(item) {
+          return item.is_active;
+        });
+        $scope.pendingSessions = result.data.filter(function(item) {
+          return !item.is_active;
+        });
+      }, function(err) {
+        $scope.activeSessions = {};
+        $scope.pendingSessions = {};
+        $scope.setStatusAlert('No Current Sessions');
+      });
+    };
+    refreshCurrentSessions();
 
     $scope.importLogs = function() {
       window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
     };
-    $scope.deleteSession = function(sessionName) {
-      $http.get('/deleteSession?sn=' + sessionName);
+    $scope.openViewer = function(sessionName) {
+      window.location.href = "/client/viewer#?sn=" + sessionName;
     };
+    $scope.deleteSession = function(sessionName) {
+      var endPoint = '/deleteSession';
+      for (var i in $scope.pendingSessions) {
+        if ($scope.pendingSessions[i].session_name == sessionName) {
+          endPoint = '/deletePendingSession';
+          break;
+        }
+      }
+      $http.get(endPoint + '?sn=' + sessionName).success(refreshCurrentSessions).error($scope.setStatusAlert);
+    };
+
     $scope.clearPendingSessions = function() {
-      $http.get('/clearPendingSessions');
+      $http.get('/clearAllPendingSessions').success(refreshCurrentSessions).error($scope.setStatusAlert);
     };
 
     $scope.createSession = function() {
       if (!$scope.createSessionForm.focus.$valid) {
         return;
       }
-      console.log("--> Submitting form with Name: " + $scope.sessionName);
+
       $http({
         url: ("/createSession"),
         method: "POST",
@@ -52,7 +81,6 @@ var SessionCtrl = [
         $scope.isCreateSessionInputRequired = false;
       }).error(function(err) {
         $scope.createSessionErrorMessage = err;
-        console.log(err);
       });
     };
     $scope.validateFormInput = function(ngModelController) {

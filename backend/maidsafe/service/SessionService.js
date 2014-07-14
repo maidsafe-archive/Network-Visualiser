@@ -13,8 +13,8 @@ exports.createSession = function(req, res) {
   bridge.createSession(criteria.session_name, new Handler.CreateSessionHandler(res));
 };
 
-exports.getCurrentActiveSessions = function(req, res) {
-  bridge.getCurrentActiveSessions().then(function(activeSessions) {
+exports.getCurrentSessions = function(req, res) {
+  bridge.getCurrentSessions().then(function(activeSessions) {
     if (!activeSessions.length) {
       res.send(500, "No Active Sessions");
       return;
@@ -35,4 +35,14 @@ exports.deleteSession = function(req, res) {
   }
 
   bridge.deleteSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+};
+
+exports.deletePendingSession = function(req, res) {
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
+    res.send(500, 'Invalid Request');
+    return;
+  }
+
+  bridge.deletePendingSession(criteria.sn, new Handler.DeleteSessionHandler(res));
 };

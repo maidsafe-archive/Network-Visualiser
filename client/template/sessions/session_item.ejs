@@ -1,23 +1,23 @@
-<div class="session" ng-repeat="activeSession in activeSessions | orderBy:'session_name'">
+<div class="session" ng-click="session.is_active ? openViewer(session.session_name) : ''">
   <ul>
     <li>
       <div class="session_info">
         <div class="session_name">
-          {{activeSession.session_name}}
+          {{session.session_name}}
         </div>
 <% if(user.enabled) { %>
         <div class="session_id">
-          {{activeSession.session_id}}
+          {{session.session_id}}
         </div>
 <% } %>
       </div>
       <div class="actions">
 <% if(user.enabled) { %>
-        <a href="" class="delete" ng-click="onDeleteSessionClicked(activeSession.session_name)"></a>
-        <div class="confirm-delete" ng-show="isConfirmDeleteDialogOpen[activeSession.session_name]">
+        <a href="" class="delete" ng-click="onDeleteSessionClicked(session.session_name)"></a>
+        <div class="confirm-delete" ng-show="isConfirmDeleteDialogOpen[session.session_name]">
         <p>Sure?</p>
-          <a href="" class="yes-btn" ng-click="deleteSession(activeSession.session_name)">Yes</a>
-          <a href="" class="no-btn" ng-click="onDeleteSessionClicked(activeSession.session_name)">No</a>
+          <a href="" class="yes-btn" ng-click="deleteSession(session.session_name)">Yes</a>
+          <a href="" class="no-btn" ng-click="onDeleteSessionClicked(session.session_name)">No</a>
         </div>
 <% } %>
       </div>
