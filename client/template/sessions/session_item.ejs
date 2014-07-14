@@ -1,24 +1,26 @@
-<ul>
-  <li>
-    <div class="session_info">
-      <div class="session_name">
-        {{session.session_name}}
-      </div>
+<div class="session" ng-click="session.is_active ? openViewer(session.session_name) : ''">
+  <ul>
+    <li>
+      <div class="session_info">
+        <div class="session_name">
+          {{session.session_name}}
+        </div>
 <% if(user.enabled) { %>
-      <div class="session_id">
-        {{session.session_id}}
-      </div>
+        <div class="session_id">
+          {{session.session_id}}
+        </div>
 <% } %>
-    </div>
-    <div class="actions">
+      </div>
+      <div class="actions">
 <% if(user.enabled) { %>
-      <a href="" class="delete" ng-click="onDeleteSessionClicked(session.session_name)"></a>
-      <div class="confirm-delete" ng-show="isConfirmDeleteDialogOpen[session.session_name]">
-      <p>Sure?</p>
-        <a href="" class="yes-btn" ng-click="deleteSession(session.session_name)">Yes</a>
-        <a href="" class="no-btn" ng-click="onDeleteSessionClicked(session.session_name)">No</a>
-      </div>
+        <a href="" class="delete" ng-click="onDeleteSessionClicked(session.session_name)"></a>
+        <div class="confirm-delete" ng-show="isConfirmDeleteDialogOpen[session.session_name]">
+        <p>Sure?</p>
+          <a href="" class="yes-btn" ng-click="deleteSession(session.session_name)">Yes</a>
+          <a href="" class="no-btn" ng-click="onDeleteSessionClicked(session.session_name)">No</a>
+        </div>
 <% } %>
-    </div>
-  </li>
-</ul>
+      </div>
+    </li>
+  </ul>
+</div>

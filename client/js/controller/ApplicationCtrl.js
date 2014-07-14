@@ -35,15 +35,6 @@ var ApplicationCtrl = [
       }, 5000);
     };
 
-    /*socketService.setSignalListner(function(signal) {
-      if (signal == 'DB_CLEARED') {
-        $scope.vaults = []; //clear the present state
-        dataManager.clearState();
-        $scope.setStatusAlert('Logs were cleared');
-      }
-    });*/
-
-
     var newVault = function(vault) {
       $scope.vaults.push(vault);
       if (!$scope.$$phase) {

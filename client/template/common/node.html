@@ -15,7 +15,10 @@
         </li>
       </ul>
     </div>
-    <div class="progress" ng-class="{true:'vault_start'}[logs[logs.length-1].action_id==0 || networkHealth < 0]" tooltip="Network Health is {{networkHealth}}%" canshow="true">
+    <div class="progress"
+         ng-class="{true:'vault_start'}[networkHealth <= 0]"
+         tooltip="Network Health is {{networkHealth}}%"
+         canshow="{{logs[logs.length-1].action_id != 18}}">
       <div ng-style="progressLevel"></div>
     </div>
     <div class="info" ng-class="personaColour">

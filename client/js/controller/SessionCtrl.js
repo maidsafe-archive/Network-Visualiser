@@ -9,13 +9,25 @@ var SessionCtrl = [
     $scope.isCreateSessionInputRequired = true;
     $scope.createSessionErrorMessage = '';
     $scope.isConfirmDeleteDialogOpen = {};
+    $scope.alert = null;
 
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
+        console.log('received refresh');
         refreshCurrentSessions();
         return;
       }
     });
+
+    $scope.setStatusAlert = function(msg) {
+      $scope.alert = msg;
+      setTimeout(function() {
+        $scope.alert = null;
+        if (!$scope.$$phase) {
+          $scope.$apply();
+        }
+      }, 5000);
+    };
 
     function refreshCurrentSessions() {
       $http.get('/currentSessions').then(function(result) {
@@ -27,26 +39,31 @@ var SessionCtrl = [
         });
       }, function(err) {
         $scope.activeSessions = {};
+        $scope.pendingSessions = {};
+        $scope.setStatusAlert('No Current Sessions');
       });
     };
-
     refreshCurrentSessions();
-
 
     $scope.importLogs = function() {
       window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
     };
+    $scope.openViewer = function(sessionName) {
+      window.location.href = "/client/viewer#?sn=" + sessionName;
+    };
     $scope.deleteSession = function(sessionName) {
-      for (var i in $scope.activeSessions) {
-        if ($scope.activeSessions[i].session_name == sessionName) {
-          $http.get('/deleteSession?sn=' + sessionName);
-          return;
+      var endPoint = '/deleteSession';
+      for (var i in $scope.pendingSessions) {
+        if ($scope.pendingSessions[i].session_name == sessionName) {
+          endPoint = '/deletePendingSession';
+          break;
         }
       }
-      $http.get('/deletePendingSession?sn=' + sessionName);
+      $http.get(endPoint + '?sn=' + sessionName).success(refreshCurrentSessions).error($scope.setStatusAlert);
     };
+
     $scope.clearPendingSessions = function() {
-      $http.get('/clearAllPendingSessions');
+      $http.get('/clearAllPendingSessions').success(refreshCurrentSessions).error($scope.setStatusAlert);
     };
 
     $scope.createSession = function() {
@@ -64,7 +81,6 @@ var SessionCtrl = [
         $scope.isCreateSessionInputRequired = false;
       }).error(function(err) {
         $scope.createSessionErrorMessage = err;
-        console.log(err);
       });
     };
     $scope.validateFormInput = function(ngModelController) {

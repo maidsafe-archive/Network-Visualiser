@@ -38,10 +38,10 @@
     <section>
       <div class="wrapper current-list">
         <div class="list-header">
-          <h2>Current Active Sessions</h2>
+          <h2>Active Sessions</h2>
           <div class="session-count-label">{{activeSessions.length ? activeSessions.length : 0}}</div>
         </div>
-        <div class="session" ng-repeat="session in activeSessions | orderBy:'session_name'">
+        <div ng-repeat="session in activeSessions | orderBy:'session_name'">
           <% include ../client/template/sessions/session_item.ejs %>
         </div>
       </div>
@@ -53,7 +53,7 @@
           <h2>Pending Sessions</h2>
           <div class="session-count-label">{{pendingSessions.length ? pendingSessions.length : 0}}</div>
         </div>
-        <div class="session" ng-repeat="session in pendingSessions | orderBy:'session_name'">
+        <div ng-repeat="session in pendingSessions | orderBy:'session_name'">
           <% include ../client/template/sessions/session_item.ejs %>
         </div>
       </div>

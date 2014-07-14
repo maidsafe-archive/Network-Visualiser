@@ -82,7 +82,6 @@ var SessionMetaData = function(dbConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-
     SessionInfo.findOne({ session_name: sessionName }, { _id: 0, session_id: 1 }, function(err, res) {
       if (err || !res) {
         promise.error('Invalid Session');

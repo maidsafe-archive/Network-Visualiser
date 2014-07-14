@@ -42,6 +42,10 @@ var VaultCtrl = [
     };
     $scope.stateOfVault = function(log) {
       $scope.isActive = (log.action_id != 18);
+      if (!$scope.isActive) {
+        $scope.networkHealth = 0;
+        $scope.updateProgress($scope.networkHealth);
+      }
     };
     $scope.logRecieved = function(log, initialLoad) {
       $scope.addLog(log);
