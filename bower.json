@@ -6,6 +6,8 @@
     "normalize.css":"latest",
     "angular-rangeslider":"latest",
     "jquery":"latest",
-    "animate.css":"latest"
+    "animate.css":"latest",
+    "ng-clip":"latest",
+    "zeroclipboard":"latest"
   }
 }
