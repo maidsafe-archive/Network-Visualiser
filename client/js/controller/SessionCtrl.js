@@ -43,7 +43,15 @@ var SessionCtrl = [
         $scope.setStatusAlert('No Current Sessions');
       });
     };
+
     refreshCurrentSessions();
+
+    function cancelEventPropagation(event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }
 
     $scope.importLogs = function() {
       window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
@@ -51,7 +59,8 @@ var SessionCtrl = [
     $scope.openViewer = function(sessionName) {
       window.location.href = "/client/viewer#?sn=" + sessionName;
     };
-    $scope.deleteSession = function(sessionName) {
+    $scope.deleteSession = function(sessionName, event) {
+      cancelEventPropagation(event);
       var endPoint = '/deleteSession';
       for (var i in $scope.pendingSessions) {
         if ($scope.pendingSessions[i].session_name == sessionName) {
@@ -99,8 +108,9 @@ var SessionCtrl = [
         $scope.createSessionForm.$setPristine();
       }
     };
-    $scope.onDeleteSessionClicked = function(sessionName) {
+    $scope.onDeleteSessionClicked = function(sessionName, event) {
       $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
+      cancelEventPropagation(event);
     };
   }
 ];
