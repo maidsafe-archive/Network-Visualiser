@@ -1,4 +1,6 @@
 var express = require('express');
+var connectMultiparty = require('connect-multiparty');
+var methodOverride = require('method-override');
 
 var userAuth = require('./backend/auth/UserAuth.js');
 var logController = require('./backend/maidsafe/LogController.js');
@@ -9,19 +11,19 @@ var socketPort = config.Constants.socketPort;
 
 var app = express();
 
-app.configure(function() {
-  app.set('needsAuth', userAuth.initAuth(app));
-  app.set('views', __dirname + '/client');
-  app.set('view engine', 'ejs');
-  // app.use(express.logger());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({ secret: 'maidsafelogs' }));
-  userAuth.configureAuth(app);
-  app.use(app.router);
-  app.use(express.static(__dirname));
-});
+app.set('needsAuth', userAuth.initAuth(app));
+app.set('views', __dirname + '/client');
+app.set('view engine', 'ejs');
+app.use(express.cookieParser());
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(connectMultiparty());
+app.use(methodOverride());
+app.use(express.session({ secret: 'maidsafelogs' }));
+userAuth.configureAuth(app);
+app.use(app.router);
+app.use(express.static(__dirname));
+
 
 app.get('/', function(req, res) {
   res.render('sessions', { user: { enabled: !app.settings.needsAuth }, socketPort: socketPort });
