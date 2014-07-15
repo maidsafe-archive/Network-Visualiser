@@ -158,8 +158,7 @@ var exportLogs = function(req, res) {
     deleteFile(path);
   });
 };
-var importLogs = function(req, res) {
-  console.log('sn: ' + JSON.stringify(req.body));
+var importLogs = function (req, res) {
   fs.readFile(req.files.file.path, function(err, data) {
     var fileName = "Import_" + new Date().getTime() + '.csv';
     fs.writeFile(fileName, data, function(err) {
@@ -168,7 +167,7 @@ var importLogs = function(req, res) {
         return;
       }
 
-      bridge.importLogs(fileName).then(function() {
+      bridge.importLogs(req.body.sn, fileName).then(function() {
         var handler = new Handler.SaveLogHandler();
         res.send('Added to Import Queue');
         deleteFile(fileName);

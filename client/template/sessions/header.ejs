@@ -40,10 +40,11 @@
           <input type="text" name="createSessionInput" class="session-input" required placeholder="Please enter a session name..."
                  ng-model="createTab.sessionName" ng-pattern="sessionNamePattern" ng-change="createTab.errorMessage = ''" />
           <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="onCreateSession()">Create</button>
-          <!--<div ng-class="{'valid-input':createSessionForm.$valid, 'invalid-input':createSessionForm.$invalid, {strike}['strike']}">
-            {{createTab.errorMessage != '' ? createTab.errorMessage : (createSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
-          </div>-->
         </form>
+        <div ng-class="{true:'valid-input', false:'invalid-input'}[createTab.errorMessage == '' && createSessionForm.$valid]"
+             ng-hide="createSessionForm.$pristine">
+          {{createTab.errorMessage != '' ? createTab.errorMessage : (createSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
+        </div>
       </div>
       <div class="session-id-output" ng-hide="createTab.inputRequired">
         <h3>Session ID</h3>

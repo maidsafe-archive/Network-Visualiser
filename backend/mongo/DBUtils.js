@@ -236,7 +236,7 @@ var DBUtil = function(dbConnection) {
       promise.error('Invalid File');
     });
   };
-  this.importLogs = function(filePath, vaultInfo, sessionInfo, logManager) {
+  this.importLogs = function(sessionName, filePath, vaultInfo, sessionInfo, logManager) {
     var promise = new mongoose.Promise;
     var validationCallback = function(errors) {
       if (errors.length > 0) {
@@ -246,10 +246,10 @@ var DBUtil = function(dbConnection) {
         }
         promise.error(err);
       } else {
-        // TODO(Viv) remove this temp name gen to a proper format or get it from the user
-        var sessionName = utils.generateRandomSessionIdString("Imported - ");
         sessionInfo.createSession(sessionName).then(function(sessionId) {
           importFactory(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise);
+        }, function(createSessionError) {
+          promise.error(createSessionError);
         });
       }
     };

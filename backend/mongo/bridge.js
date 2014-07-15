@@ -101,8 +101,8 @@ exports.getTimelineDates = function(sessionName, promise) {
 exports.exportLogs = function(sessionName) {
   return dbUtils.exportLogs(sessionName, sessionInfo);
 };
-exports.importLogs = function(fileName) {
-  return dbUtils.importLogs(fileName, vaultInfo, sessionInfo, vaultLog);
+exports.importLogs = function(sessionName, fileName) {
+  return dbUtils.importLogs(sessionName, fileName, vaultInfo, sessionInfo, vaultLog);
 };
 exports.createSession = function(sessionName, promise) {
   sessionInfo.createSession(sessionName, promise);

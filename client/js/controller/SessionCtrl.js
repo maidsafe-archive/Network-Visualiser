@@ -106,7 +106,7 @@ var SessionCtrl = [
     };
     
     $scope.onCreateSession = function() {
-      if (!$scope.createSessionForm.focus.$valid) {
+      if (!$scope.createSessionForm.createSessionInput.$valid) {
         return;
       }
 
@@ -129,14 +129,14 @@ var SessionCtrl = [
       $scope.upload = $upload.upload({
         url: '/import',
         method: 'POST',
-        data: $scope.importTab.sessionName,
+        data: { sn: $scope.importTab.sessionName },
         file: $scope.importTab.file,
       }).then(function(response) {
-        $scope.isInProgress = false;
-        $scope.setStatusAlert(response);
-        $scope.onImportTabClicked();
+        $scope.importTab.inProgress = false;
+        $scope.setStatusAlert(response.data);
+        $scope.onImportSessionTabClicked();
       }, function(response) {
-        $scope.isInProgress = false;
+        $scope.importTab.inProgress = false;
         $scope.importTab.errorMessage = response.data;
       });
     };
