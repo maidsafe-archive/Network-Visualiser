@@ -24,6 +24,7 @@
     <div class="info" ng-class="personaColour">
       <p tooltip="{{fullVaultName}}" canshow="true">{{vaultName.substring(0,6) | uppercase}}</p>
       <img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
+      <a class="host-name-btn"></a>
     </div>
   </div>
   <div class="log_slider" ng-class="{false:'close', true:personaColour+'_alpha'}[logsOpen]">
