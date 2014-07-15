@@ -8,9 +8,11 @@
   },
   "devDependencies":{
     "express":"3.x",
-    "mongoose":"3.8.X",
+    "mongoose":"3.8.x",
     "socket.io":"0.9",
     "bower":"latest",
+    "connect-multiparty": "1.x",
+    "method-override": "1.x",
     "fast-csv":"latest",
     "forever":"latest",
     "ejs":"latest",
