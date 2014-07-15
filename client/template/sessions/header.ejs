@@ -18,21 +18,21 @@
 </ul>
 <% if(user.enabled) { %>
 <div class="toggle_import_logs" ng-show="isImportLogsTabOpen">
-  <div flow-init="">
-    <button flow-btn>Select File</button>
-    <span><br/>Name: {{$flow.files[$flow.files.length - 1].name}}</span>
-    <span ng-show="isInProgress">
-      <br/>{{'UPLOADING!!!'}}<br/>
-  </span>
-    <span>
-      <br/>Success: {{fileSuccessMessage}}</span>
-    <span>
-      <br/>Failure: {{fileErrorMessage}}<br/>
-  </span>
-    <!-- Start of Remove Me -->
-    <input type="text" ng-model="importSessionName" placeholder="Session Name" width="50"/>
-    <!-- End of Remove Me -->
-    <button ng-click="uploadLog($flow.files[$flow.files.length - 1].file)">Upload</button>
+  <div flow-init="" class="wrapper">
+    <form name="importLogForm">
+      <button class="select-file" ng-click="toggle = toggle" flow-btn>Select File</button>
+      <div class="filename" ng-hide="toggle">{{$flow.files[$flow.files.length - 1].name}}</div>
+      <!--
+      <div class="valid-input" ng-show="">{{fileSuccessMessage}}</div>
+      <div class="invalid-input" ng-show="">{{fileErrorMessage}}</div>
+      -->
+      <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="importSessionName" ng-pattern="/^[a-zA-Z0-9- ]{1,}$/" ng-change="importLogErrorMessage = ''"/>
+      <div ng-class="validateFormInput(importLogForm.focus)" ng-hide="importLogForm.$pristine || isInProgress"> {{importLogErrorMessage != '' ? importLogErrorMessage : (importLogForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}</div>
+
+      <div ng-show="isInProgress" class="loader"></div>
+      <button class="upload" ng-click="uploadLog($flow.files[$flow.files.length - 1].file)" ng-disabled="importLogForm.$invalid || $flow.files.length == 0">Upload</button>
+    </form> 
+  </div>
 </div>
 
 <div class="toggle_create_session" ng-show="isCreateSessionTabOpen">
@@ -40,7 +40,9 @@
     <div class="session-input-wrapper" ng-show="isCreateSessionInputRequired">
       <form name="createSessionForm">
         <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="sessionName" ng-pattern="/^[a-zA-Z0-9- ]{1,}$/" ng-change="createSessionErrorMessage = ''"/>
+
         <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="createSession()" ng-class="{'button-disabled': item.disabled}">Create</button>
+
         <div ng-class="validateFormInput(createSessionForm.focus)" ng-hide="createSessionForm.$pristine">
           {{createSessionErrorMessage != '' ? createSessionErrorMessage : (createSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
         </div>

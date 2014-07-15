@@ -14,6 +14,7 @@ var SessionCtrl = [
     $scope.fileErrorMessage = '';
     $scope.fileSuccessMessage = '';
     $scope.importSessionName = '';
+    $scope.importLogErrorMessage = '';
 
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
@@ -100,7 +101,12 @@ var SessionCtrl = [
       if ($scope.createSessionErrorMessage != '' || ngModelController.$invalid) {
         return "invalid-input";
       }
-
+      return "valid-input";
+    };
+    $scope.validateImportForm = function(ngModelController) {
+      if ($scope.importLogErrorMessage != '' || ngModelController.$invalid) {
+        return "invalid-input";
+      }
       return "valid-input";
     };
     $scope.onCreateSessionTabClicked = function() {
@@ -116,6 +122,11 @@ var SessionCtrl = [
     $scope.importLogsClicked = function() {
       $scope.isCreateSessionTabOpen = false;
       $scope.isImportLogsTabOpen = !$scope.isImportLogsTabOpen;
+      if (!$scope.isImportLogsTabOpen) {
+        $scope.sessionName = '';
+        $scope.importLogErrorMessage = '';
+        $scope.importLogForm.$setPristine();
+      }
     };
     $scope.onDeleteSessionClicked = function(sessionName, event) {
       $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
