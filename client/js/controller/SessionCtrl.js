@@ -1,29 +1,34 @@
 var SessionCtrl = [
   '$scope', '$http', '$upload', 'socketService', function($scope, $http, $upload, socketService) {
 
-    $scope.sessionId = '';
-    $scope.sessionName = '';
     $scope.activeSessions = [];
     $scope.pendingSessions = [];
-    $scope.isCreateSessionTabOpen = false;
-    $scope.isImportLogsTabOpen = false;
-    $scope.isCreateSessionInputRequired = true;
-    $scope.createSessionErrorMessage = '';
     $scope.isConfirmDeleteDialogOpen = {};
     $scope.alert = null;
-    $scope.fileErrorMessage = '';
-    $scope.fileSuccessMessage = '';
-    $scope.importSessionName = '';
-    $scope.importLogErrorMessage = '';
+    $scope.sessionNamePattern = /^[a-zA-Z0-9- ]{1,}$/;
+    $scope.createTab = {
+      sessionName: '',
+      sessionId: '',
+      isOpen: false,
+      inputRequired: true,
+      errorMessage: '',
+      isValid: null
+    };
+    $scope.importTab = {
+      sessionName: '',
+      file: null,
+      sessionId: '',
+      isOpen: false,
+      errorMessage: '',
+      inProgress: null
+    };
 
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
-        console.log('received refresh');
         refreshCurrentSessions();
         return;
       }
     });
-
     $scope.setStatusAlert = function(msg) {
       $scope.alert = msg;
       setTimeout(function() {
@@ -33,7 +38,6 @@ var SessionCtrl = [
         }
       }, 5000);
     };
-
     function refreshCurrentSessions() {
       $http.get('/currentSessions').then(function(result) {
         $scope.activeSessions = result.data.filter(function(item) {
@@ -48,16 +52,12 @@ var SessionCtrl = [
         $scope.setStatusAlert('No Current Sessions');
       });
     };
-
-    refreshCurrentSessions();
-
     function cancelEventPropagation(event) {
       if (event) {
         event.stopPropagation();
         event.preventDefault();
       }
     }
-
     $scope.importLogs = function() {
       window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
     };
@@ -75,12 +75,37 @@ var SessionCtrl = [
       }
       $http.get(endPoint + '?sn=' + sessionName).success(refreshCurrentSessions).error($scope.setStatusAlert);
     };
-
+    $scope.onDeleteSessionClicked = function(sessionName, event) {
+      $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
+      cancelEventPropagation(event);
+    };
     $scope.clearPendingSessions = function() {
       $http.get('/clearAllPendingSessions').success(refreshCurrentSessions).error($scope.setStatusAlert);
     };
+    
+    $scope.onCreateSessionTabClicked = function() {
+      $scope.importTab.isOpen = false;
+      $scope.createTab.isOpen = !$scope.createTab.isOpen;
+      if (!$scope.createTab.isOpen) {
+        $scope.createTab.inputRequired = true;
+        $scope.createTab.sessionName = '';
+        $scope.createTab.errorMessage = '';
+        $scope.createSessionForm.$setPristine();
+      }
+    };
 
-    $scope.createSession = function() {
+    $scope.onImportSessionTabClicked = function() {
+      $scope.createTab.isOpen = false;
+      $scope.importTab.isOpen = !$scope.importTab.isOpen;
+      if (!$scope.importTab.isOpen) {
+        $scope.importTab.sessionName = '';
+        $scope.importTab.file = null;
+        $scope.importTab.errorMessage = '';
+        $scope.importSessionForm.$setPristine();
+      }
+    };
+    
+    $scope.onCreateSession = function() {
       if (!$scope.createSessionForm.focus.$valid) {
         return;
       }
@@ -88,68 +113,34 @@ var SessionCtrl = [
       $http({
         url: ("/createSession"),
         method: "POST",
-        data: { 'session_name': $scope.sessionName },
+        data: { 'session_name': $scope.createTab.sessionName },
         headers: { 'Content-Type': 'application/json' }
       }).success(function(data) {
-        $scope.sessionId = data;
-        $scope.isCreateSessionInputRequired = false;
+        $scope.createTab.sessionId = data;
+        $scope.createTab.inputRequired = false;
       }).error(function(err) {
-        $scope.createSessionErrorMessage = err;
+        $scope.createTab.errorMessage = err;
       });
     };
-    $scope.validateFormInput = function(ngModelController) {
-      if ($scope.createSessionErrorMessage != '' || ngModelController.$invalid) {
-        return "invalid-input";
-      }
-      return "valid-input";
-    };
-    $scope.validateImportForm = function(ngModelController) {
-      if ($scope.importLogErrorMessage != '' || ngModelController.$invalid) {
-        return "invalid-input";
-      }
-      return "valid-input";
-    };
-    $scope.onCreateSessionTabClicked = function() {
-      $scope.isImportLogsTabOpen = false;
-      $scope.isCreateSessionTabOpen = !$scope.isCreateSessionTabOpen;
-      if (!$scope.isCreateSessionTabOpen) {
-        $scope.isCreateSessionInputRequired = true;
-        $scope.sessionName = '';
-        $scope.createSessionErrorMessage = '';
-        $scope.createSessionForm.$setPristine();
-      }
-    };
-    $scope.importLogsClicked = function() {
-      $scope.isCreateSessionTabOpen = false;
-      $scope.isImportLogsTabOpen = !$scope.isImportLogsTabOpen;
-      if (!$scope.isImportLogsTabOpen) {
-        $scope.sessionName = '';
-        $scope.importLogErrorMessage = '';
-        $scope.importLogForm.$setPristine();
-      }
-    };
-    $scope.onDeleteSessionClicked = function(sessionName, event) {
-      $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
-      cancelEventPropagation(event);
-    };
 
-    $scope.uploadLog = function(uploadFile) {
-      $scope.fileErrorMessage = '';
-      $scope.fileSuccessMessage = '';
-      $scope.isInProgress = true;
+    $scope.onImportSession = function() {
+      $scope.importTab.errorMessage = '';
+      $scope.importTab.inProgress = true;
       $scope.upload = $upload.upload({
         url: '/import',
         method: 'POST',
-        data: $scope.importSessionName,
-        file: uploadFile,
+        data: $scope.importTab.sessionName,
+        file: $scope.importTab.file,
       }).then(function(response) {
         $scope.isInProgress = false;
-        $scope.fileSuccessMessage = response.data;
+        $scope.setStatusAlert(response);
+        $scope.onImportTabClicked();
       }, function(response) {
-        if (response.status > 0) {
-          $scope.fileErrorMessage = response.status + ': ' + response.data;
-        }
+        $scope.isInProgress = false;
+        $scope.importTab.errorMessage = response.data;
       });
     };
+
+    refreshCurrentSessions();
   }
 ];

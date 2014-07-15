@@ -2,56 +2,53 @@
   <h1><a href="/">Network Visualiser - Sessions View</a></h1>
 </div>
 <ul class="buttons-left">
-<% if(user.enabled) { %>
-  <li>
-    <!--<button ng-click="importLogs()">Import</button>-->
-    <button ng-click="importLogsClicked()" class="import-logs" ng-class="{true:'active'}[isImportLogsTabOpen]">Import</button>
-  </li>
-  <li>
-    <button ng-click="onCreateSessionTabClicked()" class="create-session" ng-class="{true:'active'}[isCreateSessionTabOpen]">Create Session</button>
-  </li>
-<% } else { %>
-  <li>
-    <button class="sign-in"><a href="/auth/google">Sign In</a></button>
-  </li>
-<% } %>
+  <% if( user.enabled) { %>
+    <li>
+      <button ng-click="onCreateSessionTabClicked()" class="create-session" ng-class="{true:'active'}[createTab.isOpen]">Create Session</button>
+    </li>
+    <li>
+      <button ng-click="onImportSessionTabClicked()" class="import-logs" ng-class="{true:'active'}[importTab.isOpen]">Import</button>
+    </li>
+    <% } else { %>
+      <li>
+        <button class="sign-in"><a href="/auth/google">Sign In</a></button>
+      </li>
+      <% } %>
 </ul>
-<% if(user.enabled) { %>
-<div class="toggle_import_logs" ng-show="isImportLogsTabOpen">
-  <div flow-init="" class="wrapper">
-    <form name="importLogForm">
-      <button class="select-file" ng-click="toggle = toggle" flow-btn>Select File</button>
-      <div class="filename" ng-hide="toggle">{{$flow.files[$flow.files.length - 1].name}}</div>
-      <!--
-      <div class="valid-input" ng-show="">{{fileSuccessMessage}}</div>
-      <div class="invalid-input" ng-show="">{{fileErrorMessage}}</div>
-      -->
-      <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="importSessionName" ng-pattern="/^[a-zA-Z0-9- ]{1,}$/" ng-change="importLogErrorMessage = ''"/>
-      <div ng-class="validateFormInput(importLogForm.focus)" ng-hide="importLogForm.$pristine || isInProgress"> {{importLogErrorMessage != '' ? importLogErrorMessage : (importLogForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}</div>
-
-      <div ng-show="isInProgress" class="loader"></div>
-      <button class="upload" ng-click="uploadLog($flow.files[$flow.files.length - 1].file)" ng-disabled="importLogForm.$invalid || $flow.files.length == 0">Upload</button>
-    </form> 
-  </div>
-</div>
-
-<div class="toggle_create_session" ng-show="isCreateSessionTabOpen">
-  <div class="wrapper">
-    <div class="session-input-wrapper" ng-show="isCreateSessionInputRequired">
-      <form name="createSessionForm">
-        <input type="text" name="focus" class="session-input" required placeholder="Please enter a session name..." ng-model="sessionName" ng-pattern="/^[a-zA-Z0-9- ]{1,}$/" ng-change="createSessionErrorMessage = ''"/>
-
-        <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="createSession()" ng-class="{'button-disabled': item.disabled}">Create</button>
-
-        <div ng-class="validateFormInput(createSessionForm.focus)" ng-hide="createSessionForm.$pristine">
-          {{createSessionErrorMessage != '' ? createSessionErrorMessage : (createSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
+<% if( user.enabled) { %>
+  <div class="toggle_import_logs" ng-show="importTab.isOpen">
+    <div class="wrapper">
+      <form name="importSessionForm">
+        <button flow-init="" flow-file-added="importTab.file = $file.file" flow-btn class="select-file">Select File</button>
+        <div class="filename">{{importTab.file.name}}</div>
+        <input type="text" name="importSessionInput" class="session-input" required placeholder="Please enter a session name..."
+               ng-model="importTab.sessionName" ng-pattern="sessionNamePattern" ng-change="importTab.errorMessage = ''" />
+        <div ng-class="{true:'valid-input', false:'invalid-input'}[importTab.errorMessage == '' && importSessionForm.$valid]"
+             ng-hide="importSessionForm.$pristine || importTab.inProgress">
+          {{importTab.errorMessage != '' ? importTab.errorMessage : (importSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
         </div>
+        <div ng-show="importTab.inProgress" class="loader"></div>
+        <button class="upload" ng-click="onImportSession()" ng-disabled="importSessionForm.$invalid || importTab.file == null">Upload</button>
       </form>
     </div>
-    <div class="session-id-output" ng-hide="isCreateSessionInputRequired">
-    <h3>Session ID</h3>
-      <input ng-value="sessionId" class="id-output" readonly>
+  </div>
+
+  <div class="toggle_create_session" ng-show="createTab.isOpen">
+    <div class="wrapper">
+      <div class="session-input-wrapper" ng-show="createTab.inputRequired">
+        <form name="createSessionForm">
+          <input type="text" name="createSessionInput" class="session-input" required placeholder="Please enter a session name..."
+                 ng-model="createTab.sessionName" ng-pattern="sessionNamePattern" ng-change="createTab.errorMessage = ''" />
+          <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="onCreateSession()">Create</button>
+          <!--<div ng-class="{'valid-input':createSessionForm.$valid, 'invalid-input':createSessionForm.$invalid, {strike}['strike']}">
+            {{createTab.errorMessage != '' ? createTab.errorMessage : (createSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
+          </div>-->
+        </form>
+      </div>
+      <div class="session-id-output" ng-hide="createTab.inputRequired">
+        <h3>Session ID</h3>
+        <input ng-value="createTab.sessionId" class="id-output" readonly>
+      </div>
     </div>
   </div>
-</div>
-<% } %>
+  <% } %>
