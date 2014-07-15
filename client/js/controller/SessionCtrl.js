@@ -1,5 +1,5 @@
 var SessionCtrl = [
-  '$scope', '$http', 'socketService', function($scope, $http, socketService) {
+  '$scope', '$http', '$upload', 'socketService', function($scope, $http, $upload, socketService) {
 
     $scope.sessionId = '';
     $scope.sessionName = '';
@@ -11,6 +11,9 @@ var SessionCtrl = [
     $scope.createSessionErrorMessage = '';
     $scope.isConfirmDeleteDialogOpen = {};
     $scope.alert = null;
+    $scope.fileErrorMessage = '';
+    $scope.fileSuccessMessage = '';
+    $scope.importSessionName = '';
 
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
@@ -117,6 +120,25 @@ var SessionCtrl = [
     $scope.onDeleteSessionClicked = function(sessionName, event) {
       $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
       cancelEventPropagation(event);
+    };
+
+    $scope.uploadLog = function(uploadFile) {
+      $scope.fileErrorMessage = '';
+      $scope.fileSuccessMessage = '';
+      $scope.isInProgress = true;
+      $scope.upload = $upload.upload({
+        url: '/import',
+        method: 'POST',
+        data: $scope.importSessionName,
+        file: uploadFile,
+      }).then(function(response) {
+        $scope.isInProgress = false;
+        $scope.fileSuccessMessage = response.data;
+      }, function(response) {
+        if (response.status > 0) {
+          $scope.fileErrorMessage = response.status + ': ' + response.data;
+        }
+      });
     };
   }
 ];

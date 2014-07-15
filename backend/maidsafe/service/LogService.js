@@ -135,7 +135,6 @@ var getTimelineDates = function(req, res) {
 };
 var deleteFile = function(path) {
   setTimeout(function() {
-    console.log('unlink');
     fs.unlinkSync(path);
   }, 30000); //after 1 minute
 };
@@ -152,13 +151,12 @@ var exportLogs = function(req, res) {
   });
 };
 var importLogs = function(req, res) {
+  console.log('sn: ' + JSON.stringify(req.body));
   fs.readFile(req.files.file.path, function(err, data) {
     var fileName = "Import_" + new Date().getTime() + '.csv';
     fs.writeFile(fileName, data, function(err) {
       if (err) {
-        console.log('reply');
-        res.writeHead(413, {'Content-Type': 'text/plain'});
-        res.end('Invalid File');
+        res.send(500, 'Invalid File');
         return;
       }
 
@@ -167,13 +165,9 @@ var importLogs = function(req, res) {
         res.send('Added to Import Queue');
         deleteFile(fileName);
         handler.refreshSessionsCallback();
-      }, function(errorMsg) {
+      }, function() {
         deleteFile(fileName);
-        console.log('reply 2');
-        if (!res.finished) {
-          res.writeHead(413, { 'Content-Type': 'text/plain' });
-          res.end('Invalid File');
-        }
+        res.send(500, 'Invalid File');
       });
     });
   });

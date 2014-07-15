@@ -9,6 +9,7 @@
     "animate.css":"latest",
     "ng-clip":"latest",
     "zeroclipboard":"latest",
-    "ng-flow":"latest"
+    "ng-flow":"latest",
+    "ng-file-upload":"latest"
   }
 }

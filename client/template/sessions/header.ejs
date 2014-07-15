@@ -18,27 +18,21 @@
 </ul>
 <% if(user.enabled) { %>
 <div class="toggle_import_logs" ng-show="isImportLogsTabOpen">
-  <div flow-init="{target: '/import', singleFile: true}"
-       flow-file-success="isInProgress = false; $flow.files[$flow.files.length - 1].msg = $message;"
-       flow-file-error="isInProgress = false; fileErrorMessage = $message;"
-       flow-file-progress="isInProgress = true">
+  <div flow-init="">
     <button flow-btn>Select File</button>
     <span><br/>Name: {{$flow.files[$flow.files.length - 1].name}}</span>
     <span ng-show="isInProgress">
-      <br/>IN PROGRESS!!!!!<br/>
+      <br/>{{'UPLOADING!!!'}}<br/>
   </span>
     <span>
-      <br/>Success: {{$flow.files[$flow.files.length - 1].msg}}</span>
+      <br/>Success: {{fileSuccessMessage}}</span>
     <span>
       <br/>Failure: {{fileErrorMessage}}<br/>
   </span>
-    <button ng-click="$flow.upload()">Upload</button>
-  <!--<div class="wrapper">
-    <form id="uploadForm" enctype="multipart/form-data" action="/import" method="post">
-      <input type="file" id="userPhotoInput" name="logFile" class="import-log-choose"/>
-      <button type="submit">Import</button>
-    </form>
-  </div>-->
+    <!-- Start of Remove Me -->
+    <input type="text" ng-model="importSessionName" placeholder="Session Name" width="50"/>
+    <!-- End of Remove Me -->
+    <button ng-click="uploadLog($flow.files[$flow.files.length - 1].file)">Upload</button>
 </div>
 
 <div class="toggle_create_session" ng-show="isCreateSessionTabOpen">
