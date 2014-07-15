@@ -69,7 +69,11 @@ var getCurrentActiveVaults = function(req, res, sessionName) {
     }
 
     for (var index in vaults) {
-      results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
+      results[vaults[index].vault_id] = {
+        vault_id_full: vaults[index].vault_id_full,
+        host_name: vaults[index].host_name,
+        logs: []
+      };
       bridge.vaultHistory(sessionName, vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs) {
         counter++;
         if (logs.length > 0) {
@@ -91,7 +95,11 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
     } else {
       for (var index in vaults) {
         if (vaults[index].vault_id) {
-          results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
+          results[vaults[index].vault_id] = {
+            vault_id_full: vaults[index].vault_id_full,
+            host_name: vaults[index].host_name,
+            logs: []
+          };
           bridge.vaultHistory(sessionName, vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
             counter++;
             if (logs.length > 0 && logs[0].action_id != 18) {

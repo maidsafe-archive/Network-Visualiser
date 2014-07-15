@@ -75,12 +75,12 @@ var LogManager = function(dbConnConnection) {
       }
     });
   };
-  this.save = function(data, callback) {
+  this.save = function(sessionId, data, callback) {
     var promise = new mongoose.Promise;
     if (callback) {
       promise.addBack(callback);
     }
-    dbConn.db.collection(formatCollectionName(data.session_id, data.vault_id), function(err, coll) {
+    dbConn.db.collection(formatCollectionName(sessionId, data.vault_id), function(err, coll) {
       if (err) {
         promise.error(err);
       } else {

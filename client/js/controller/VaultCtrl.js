@@ -5,6 +5,7 @@ var VaultCtrl = [
     $scope.progressLevel;
     $scope.vaultName;
     $scope.fullVaultName;
+    $scope.hostName;
     $scope.logs;
     $scope.vaultBehaviour = vaultBehaviour;
     $scope.iconsTray;
@@ -70,6 +71,10 @@ var VaultCtrl = [
 
       if (!$scope.fullVaultName && (log.action_id == 0 || log.hasOwnProperty('vault_id_full'))) {
         $scope.fullVaultName = log.vault_id_full || log.value1;
+      }
+
+      if (!$scope.hostName && (log.action_id == 0 || log.hasOwnProperty('host_name'))) {
+        $scope.hostName = log.host_name || log.value2;
       }
 
       $scope.stateOfVault(log);

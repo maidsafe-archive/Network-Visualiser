@@ -205,7 +205,8 @@ var DBUtil = function(dbConnection) {
       vaultInfo.updateVaultStatus(log).then(function() {
         // we assume imported logs hold valid info. Thus stream the intake in parallel.
         sessionInfo.updateSessionInfo(log).then(function() {
-          logManager.save(log);
+          delete log.session_id;
+          logManager.save(sessionId, log);
         });
       });
     };

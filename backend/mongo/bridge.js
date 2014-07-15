@@ -33,8 +33,11 @@ exports.addLog = function(log, promise, refreshSessionsCallback) {
         }
 
         sessionInfo.updateSessionInfo(log, refreshSessionsCallback).then(function() {
-          vaultLog.save(log).then(function(data) {
-            sessionInfo.getSessionNameForId(log.session_id).then(function(sessionName) {
+
+          var sessionId = log.session_id;
+          delete log.session_id;
+          vaultLog.save(sessionId, log).then(function(data) {
+            sessionInfo.getSessionNameForId(sessionId).then(function(sessionName) {
               if (!data || !sessionName) {
                 promise('Error adding log');
               } else {
