@@ -1,15 +1,19 @@
 var SessionCtrl = [
-  '$scope', '$http', 'socketService', function($scope, $http, socketService) {
+  '$scope', '$http', '$upload', 'socketService', function($scope, $http, $upload, socketService) {
 
     $scope.sessionId = '';
     $scope.sessionName = '';
     $scope.activeSessions = [];
     $scope.pendingSessions = [];
     $scope.isCreateSessionTabOpen = false;
+    $scope.isImportLogsTabOpen = false;
     $scope.isCreateSessionInputRequired = true;
     $scope.createSessionErrorMessage = '';
     $scope.isConfirmDeleteDialogOpen = {};
     $scope.alert = null;
+    $scope.fileErrorMessage = '';
+    $scope.fileSuccessMessage = '';
+    $scope.importSessionName = '';
 
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
@@ -43,7 +47,15 @@ var SessionCtrl = [
         $scope.setStatusAlert('No Current Sessions');
       });
     };
+
     refreshCurrentSessions();
+
+    function cancelEventPropagation(event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }
 
     $scope.importLogs = function() {
       window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
@@ -51,7 +63,8 @@ var SessionCtrl = [
     $scope.openViewer = function(sessionName) {
       window.location.href = "/client/viewer#?sn=" + sessionName;
     };
-    $scope.deleteSession = function(sessionName) {
+    $scope.deleteSession = function(sessionName, event) {
+      cancelEventPropagation(event);
       var endPoint = '/deleteSession';
       for (var i in $scope.pendingSessions) {
         if ($scope.pendingSessions[i].session_name == sessionName) {
@@ -91,6 +104,7 @@ var SessionCtrl = [
       return "valid-input";
     };
     $scope.onCreateSessionTabClicked = function() {
+      $scope.isImportLogsTabOpen = false;
       $scope.isCreateSessionTabOpen = !$scope.isCreateSessionTabOpen;
       if (!$scope.isCreateSessionTabOpen) {
         $scope.isCreateSessionInputRequired = true;
@@ -100,10 +114,31 @@ var SessionCtrl = [
       }
     };
     $scope.importLogsClicked = function() {
+      $scope.isCreateSessionTabOpen = false;
       $scope.isImportLogsTabOpen = !$scope.isImportLogsTabOpen;
     };
-    $scope.onDeleteSessionClicked = function(sessionName) {
+    $scope.onDeleteSessionClicked = function(sessionName, event) {
       $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
+      cancelEventPropagation(event);
+    };
+
+    $scope.uploadLog = function(uploadFile) {
+      $scope.fileErrorMessage = '';
+      $scope.fileSuccessMessage = '';
+      $scope.isInProgress = true;
+      $scope.upload = $upload.upload({
+        url: '/import',
+        method: 'POST',
+        data: $scope.importSessionName,
+        file: uploadFile,
+      }).then(function(response) {
+        $scope.isInProgress = false;
+        $scope.fileSuccessMessage = response.data;
+      }, function(response) {
+        if (response.status > 0) {
+          $scope.fileErrorMessage = response.status + ': ' + response.data;
+        }
+      });
     };
   }
 ];

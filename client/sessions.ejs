@@ -10,6 +10,11 @@
     <script type="text/javascript" src="../client/js/socket.io/socket.io.min.js"></script>
 
     <script type="text/javascript" src="../vendor/angular-rangeslider/angular.rangeSlider.js"></script>
+    <script type="text/javascript" src="../vendor/zeroclipboard/dist/ZeroClipboard.min.js"></script>
+    <script type="text/javascript" src="../vendor/ng-clip/dest/ng-clip.min.js"></script>
+    <script type="text/javascript" src="../vendor/ng-flow/dist/ng-flow-standalone.min.js"></script>
+    <script type="text/javascript" src="../vendor/ng-file-upload/angular-file-upload.js"></script>
+    <script type="text/javascript" src="../vendor/ng-file-upload/angular-file-upload-shim.js"></script>
     <link rel="stylesheet" type="text/css" href="../vendor/angular-rangeslider/angular.rangeSlider.css">
 
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
@@ -64,34 +69,26 @@
     <script>
       $(function() {
       var container = $(".toggle_create_session");
+      var container_import = $(".toggle_import_logs");
+
       $(container).hide();
+      $(container_import).hide();
+
+      function toggleSlide(buttonItem, parentItem, e) {
+        e.preventDefault();
+
+        if ($(buttonItem).hasClass('active')) {
+          $(parentItem).hide();
+          $(parentItem).slideDown("fast");
+        }
+      };
       
       $(".create-session").click(function(e) {
-          e.preventDefault();
-     
-          $(this).toggleClass("active");
-          if ($(this).hasClass('active')) {
-            $(container).slideDown("fast");
-          } else {
-            $(container).hide();
-          }
+          toggleSlide(this, container, e);
         });
-      });
-    </script>
-    <script>
-      $(function() {
-      var container_import = $(".toggle_import_logs");
-      $(container_import).hide();
-      
+
       $(".import-logs").click(function(e) {
-          e.preventDefault();
-     
-          $(this).toggleClass("active");
-          if ($(this).hasClass('active')) {
-            $(container_import).slideDown("fast");
-          } else {
-            $(container_import).hide();
-          }
+          toggleSlide(this, container_import, e);
         });
       });
     </script>

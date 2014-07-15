@@ -136,7 +136,7 @@ var getTimelineDates = function(req, res) {
 var deleteFile = function(path) {
   setTimeout(function() {
     fs.unlinkSync(path);
-  }, 60000); //after 1 minute
+  }, 30000); //after 1 minute
 };
 var exportLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;
@@ -151,17 +151,23 @@ var exportLogs = function(req, res) {
   });
 };
 var importLogs = function(req, res) {
-  fs.readFile(req.files.logFile.path, function(err, data) {
+  console.log('sn: ' + JSON.stringify(req.body));
+  fs.readFile(req.files.file.path, function(err, data) {
     var fileName = "Import_" + new Date().getTime() + '.csv';
     fs.writeFile(fileName, data, function(err) {
+      if (err) {
+        res.send(500, 'Invalid File');
+        return;
+      }
+
       bridge.importLogs(fileName).then(function() {
         var handler = new Handler.SaveLogHandler();
         res.send('Added to Import Queue');
         deleteFile(fileName);
         handler.refreshSessionsCallback();
-      }, function(err) {
-        res.send(err.message);
+      }, function() {
         deleteFile(fileName);
+        res.send(500, 'Invalid File');
       });
     });
   });

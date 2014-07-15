@@ -5,10 +5,10 @@
 <% if(user.enabled) { %>
   <li>
     <!--<button ng-click="importLogs()">Import</button>-->
-    <button ng-click="importLogsClicked()" class="import-logs">Import</button>
+    <button ng-click="importLogsClicked()" class="import-logs" ng-class="{true:'active'}[isImportLogsTabOpen]">Import</button>
   </li>
   <li>
-    <button ng-click="onCreateSessionTabClicked()" class="create-session">Create Session</button>
+    <button ng-click="onCreateSessionTabClicked()" class="create-session" ng-class="{true:'active'}[isCreateSessionTabOpen]">Create Session</button>
   </li>
 <% } else { %>
   <li>
@@ -18,12 +18,21 @@
 </ul>
 <% if(user.enabled) { %>
 <div class="toggle_import_logs" ng-show="isImportLogsTabOpen">
-  <div class="wrapper">
-    <form id="uploadForm" enctype="multipart/form-data" action="/import" method="post">
-      <input type="file" id="userPhotoInput" name="logFile" class="import-log-choose"/>
-      <button type="submit">Import</button>
-    </form>
-  </div>
+  <div flow-init="">
+    <button flow-btn>Select File</button>
+    <span><br/>Name: {{$flow.files[$flow.files.length - 1].name}}</span>
+    <span ng-show="isInProgress">
+      <br/>{{'UPLOADING!!!'}}<br/>
+  </span>
+    <span>
+      <br/>Success: {{fileSuccessMessage}}</span>
+    <span>
+      <br/>Failure: {{fileErrorMessage}}<br/>
+  </span>
+    <!-- Start of Remove Me -->
+    <input type="text" ng-model="importSessionName" placeholder="Session Name" width="50"/>
+    <!-- End of Remove Me -->
+    <button ng-click="uploadLog($flow.files[$flow.files.length - 1].file)">Upload</button>
 </div>
 
 <div class="toggle_create_session" ng-show="isCreateSessionTabOpen">

@@ -1,4 +1,12 @@
-var app = angular.module('MaidSafe', ['ui-rangeSlider']).run([
+var app = angular.module('MaidSafe', ['ui-rangeSlider', 'ngClipboard', 'flow', 'angularFileUpload']);
+
+app.config([
+  'ngClipProvider', function(ngClipProvider) {
+    ngClipProvider.setPath("../../../vendor/zeroclipboard/dist/ZeroClipboard.swf");
+  }
+]);
+
+app.run([
   '$rootScope', '$location', function($rootScope, $location) {
     $rootScope.socketEndPoint = "http://" + $location.host() + ":" + socketPort;
   }
