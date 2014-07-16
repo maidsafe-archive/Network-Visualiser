@@ -13,6 +13,7 @@ app.run([
 ]);
 
 app.directive('tooltip', ToolTip);
+app.directive('fileDialog', FileDialog);
 app.service('dataManager', DataManagerService);
 app.service('vaultBehaviour', VaultBehaviourService);
 app.service('socketService', SocketService);

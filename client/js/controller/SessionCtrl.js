@@ -17,6 +17,7 @@ var SessionCtrl = [
     $scope.importTab = {
       sessionName: '',
       file: null,
+      fileError: '',
       sessionId: '',
       isOpen: false,
       errorMessage: '',
