@@ -136,7 +136,7 @@
   width: 70px;
 }
 
-.play-btn:hover { background: #29578A url(../imgs/icon-play.png) no-repeat 0 -2px; }
+.play-btn:hover {background: #29578A url(../imgs/icon-play.png) no-repeat 0 -2px;}
 
 .pause-btn {
   background: #87b7ec url(../imgs/icon-pause.png) no-repeat -4px -2px;
@@ -145,7 +145,7 @@
   width: 70px;
 }
 
-.pause-btn:hover { background: #29578A url(../imgs/icon-pause.png) no-repeat -4px -2px; }
+.pause-btn:hover {background: #29578A url(../imgs/icon-pause.png) no-repeat -4px -2px;}
 
 .resume-btn {
   background: #87b7ec url(../imgs/icon-resume.png) no-repeat 0 -2px;
@@ -154,4 +154,17 @@
   width: 70px;
 }
 
-.resume-btn:hover { background: #29578A url(../imgs/icon-resume.png) no-repeat 0 -2px; }
+.resume-btn:hover {background: #29578A url(../imgs/icon-resume.png) no-repeat 0 -2px;}
+
+.host-name-btn {
+  background: url('../imgs/icons/host-name.png') no-repeat 0 0;
+  display: block;
+  width: 20px;
+  height: 20px;
+  float: right;
+  background-size: 20px 20px;
+  margin: 0px 5px;
+}
+.host-name-btn:active {background: url('../imgs/icons/host-name-down.png') no-repeat 0 0;
+  background-size: 20px 20px;
+}
