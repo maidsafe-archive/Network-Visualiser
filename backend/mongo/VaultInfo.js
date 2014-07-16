@@ -7,6 +7,7 @@ var VaultMetaData = function(dbConnection) {
   SCHEMA = {
     vault_id: String,
     vault_id_full: String,
+    host_name: String,
     session_id: String,
     is_running: Boolean
   };
@@ -20,6 +21,7 @@ var VaultMetaData = function(dbConnection) {
     var temp = { vault_id: data.vault_id, is_running: data.action_id == 0, session_id: data.session_id };
     if (data.action_id == 0) {
       temp.vault_id_full = data.value1;
+      temp.host_name = data.value2;
     }
     return temp;
   };
@@ -57,14 +59,14 @@ var VaultMetaData = function(dbConnection) {
       promise.addBack(callback);
     }
 
-    VaultInfo.find({ session_id: sessionId }, { _id: 0, vault_id: 1, vault_id_full: 1 }, function(err, vaults) {
+    VaultInfo.find({ session_id: sessionId }, { _id: 0, vault_id: 1, vault_id_full: 1, host_name: 1 }, function(err, vaults) {
       promise.complete(vaults);
     });
     return promise;
   };
   this.getAllVaultNames = function(sessionId) {
     var promise = new mongoose.Promise;
-    VaultInfo.find({ session_id: sessionId }, { _id: 0, vault_id: 1, vault_id_full: 1 }, function(err, vaults) {
+    VaultInfo.find({ session_id: sessionId }, { _id: 0, vault_id: 1, vault_id_full: 1, host_name: 1 }, function(err, vaults) {
       if (err) {
         promise.error(err);
       } else {

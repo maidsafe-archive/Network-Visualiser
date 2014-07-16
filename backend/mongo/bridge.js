@@ -33,8 +33,11 @@ exports.addLog = function(log, promise, refreshSessionsCallback) {
         }
 
         sessionInfo.updateSessionInfo(log, refreshSessionsCallback).then(function() {
-          vaultLog.save(log).then(function(data) {
-            sessionInfo.getSessionNameForId(log.session_id).then(function(sessionName) {
+
+          var sessionId = log.session_id;
+          delete log.session_id;
+          vaultLog.save(sessionId, log).then(function(data) {
+            sessionInfo.getSessionNameForId(sessionId).then(function(sessionName) {
               if (!data || !sessionName) {
                 promise('Error adding log');
               } else {
@@ -98,8 +101,8 @@ exports.getTimelineDates = function(sessionName, promise) {
 exports.exportLogs = function(sessionName) {
   return dbUtils.exportLogs(sessionName, sessionInfo);
 };
-exports.importLogs = function(fileName) {
-  return dbUtils.importLogs(fileName, vaultInfo, sessionInfo, vaultLog);
+exports.importLogs = function(sessionName, fileName) {
+  return dbUtils.importLogs(sessionName, fileName, vaultInfo, sessionInfo, vaultLog);
 };
 exports.createSession = function(sessionName, promise) {
   sessionInfo.createSession(sessionName, promise);

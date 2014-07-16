@@ -69,7 +69,11 @@ var getCurrentActiveVaults = function(req, res, sessionName) {
     }
 
     for (var index in vaults) {
-      results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
+      results[vaults[index].vault_id] = {
+        vault_id_full: vaults[index].vault_id_full,
+        host_name: vaults[index].host_name,
+        logs: []
+      };
       bridge.vaultHistory(sessionName, vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs) {
         counter++;
         if (logs.length > 0) {
@@ -91,7 +95,11 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
     } else {
       for (var index in vaults) {
         if (vaults[index].vault_id) {
-          results[vaults[index].vault_id] = { vault_id_full: vaults[index].vault_id_full, logs: [] };
+          results[vaults[index].vault_id] = {
+            vault_id_full: vaults[index].vault_id_full,
+            host_name: vaults[index].host_name,
+            logs: []
+          };
           bridge.vaultHistory(sessionName, vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
             counter++;
             if (logs.length > 0 && logs[0].action_id != 18) {
@@ -150,8 +158,7 @@ var exportLogs = function(req, res) {
     deleteFile(path);
   });
 };
-var importLogs = function(req, res) {
-  console.log('sn: ' + JSON.stringify(req.body));
+var importLogs = function (req, res) {
   fs.readFile(req.files.file.path, function(err, data) {
     var fileName = "Import_" + new Date().getTime() + '.csv';
     fs.writeFile(fileName, data, function(err) {
@@ -160,7 +167,7 @@ var importLogs = function(req, res) {
         return;
       }
 
-      bridge.importLogs(fileName).then(function() {
+      bridge.importLogs(req.body.sn, fileName).then(function() {
         var handler = new Handler.SaveLogHandler();
         res.send('Added to Import Queue');
         deleteFile(fileName);

@@ -35,6 +35,7 @@ var DataManagerService = [
             var logs = vaults[key].logs.reverse();
             for (var index in logs) {
               logs[index].vault_id_full = vaults[key].vault_id_full;
+              logs[index].host_name = vaults[key].host_name;
               addLogToPool(logs[index]);
             }
           }

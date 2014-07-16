@@ -98,14 +98,14 @@
 
 .toggle_create_session {
   height: 150px;
-  left: 14.6em;
+  left: 2em;
   top: 72px;
   width: 450px;
 }
 
 .toggle_import_logs {
   height: 200px;
-  left: 2em;
+  left: 14.6em;
   top: 72px;
   width: 450px;
 }
@@ -185,6 +185,7 @@ button.select-file {
   padding-left: 30px;
   margin-top: 15px;
   float: left;
+  display: block;
 }
 .invalid-input {
   background: url('../../client/imgs/validation_icons.png') no-repeat bottom left;
@@ -195,6 +196,7 @@ button.select-file {
   padding-left: 30px;
   margin-top: 15px;
   float: left;
+  display: block;
 }
 
 .session-id-output {
