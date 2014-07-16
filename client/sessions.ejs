@@ -41,21 +41,21 @@
       <% include ../client/template/sessions/header.ejs %>
     </header>
     <section>
-      <div class="wrapper current-list">
+      <div class="wrapper my-list">
         <div class="list-header">
-          <h2>Active Sessions</h2>
+          <h2>My Sessions</h2>
           <div class="session-count-label">{{activeSessions.length ? activeSessions.length : 0}}</div>
         </div>
         <div ng-repeat="session in activeSessions | orderBy:'session_name'">
           <% include ../client/template/sessions/session_item.ejs %>
         </div>
       </div>
-      <div class="wrapper pending-list">
+      <div class="wrapper other-list">
         <div class="list-header">
           <% if(user.enabled) { %>
           <a href="" ng-click="clearPendingSessions()" class="clear-all">Clear All</a>
           <% } %>
-          <h2>Pending Sessions</h2>
+          <h2>Other Sessions</h2>
           <div class="session-count-label">{{pendingSessions.length ? pendingSessions.length : 0}}</div>
         </div>
         <div ng-repeat="session in pendingSessions | orderBy:'session_name'">

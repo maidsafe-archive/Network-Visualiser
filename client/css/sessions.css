@@ -5,21 +5,29 @@
   padding:0.5em 1.5em;
 }
 
-.current-list .session {
+.session,
+.session_info,
+.session_name,
+.session_id,
+.session_email {
   cursor: pointer;
 }
-.current-list  .session:hover {
-  background:#e3eef9 ;  
+.session:hover {
+  background:rgba(85,147,215,0.14); ;  
+}
+
+.other-list .session {
+  height: 100px;
 }
 
 #sessions .wrapper {
-  margin: 0 2em;
+  margin: 0 2em 7em 2em;
   padding-top: 3em;
   position: relative;
   width: 44%;
   float: left;
 }
-.current-list {
+.my-list {
   margin-right: 40px!important;
 }
 
@@ -29,15 +37,15 @@
   margin-bottom: 30px;
 }
 
-.current-list .list-header  {
+.my-list .list-header  {
   border-bottom: 2px solid #5593D7;
 }
 
-.pending-list .list-header  {
+.other-list .list-header  {
   border-bottom: 2px solid #6F7070;
 }
 
-.current-list h2 {
+.my-list h2 {
   font-size: 28px;
   color: #5593D7;
   padding-bottom: 5px;
@@ -45,7 +53,7 @@
   margin: 0px;
 }
 
-.pending-list h2 {
+.other-list h2 {
   font-size: 28px;
   color: #6F7070; 
   padding-bottom: 5px;
@@ -75,11 +83,11 @@
   margin: 3px 20px;
 }
 
-.current-list .session-count-label {
+.my-list .session-count-label {
   background:#5593D7;
 }
 
-.pending-list .session-count-label {
+.other-list .session-count-label {
   background:#6F7070;
 }
 
@@ -148,6 +156,7 @@ button[disabled] { background: #cacaca;}
   z-index: 0;
 }
 
+
 button.select-file {
   float: left;  
   width: 110px!important;
@@ -163,6 +172,15 @@ button.select-file {
   height:32px;
   margin-left: 20px;
   margin-top: 6px;
+  word-wrap: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -icab-text-overflow: ellipsis;
+  -khtml-text-overflow: ellipsis;
+  -moz-text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .upload {
@@ -219,10 +237,24 @@ button.select-file {
   float: left;
   background: #fff;
   padding: 8px 10px;
-  width: 100%;
-  border-radius: 8px;
-  height: 38px;
+  width: 90%;
+  border-radius: 8px 0px 0px 8px;
+  -moz-border-radius: 8px 0px 0px 8px;
+  -webkit-border-radius: 8px 0px 0px 8px;
+  height: 35px;
   border: none;
+}
+
+button.copy-clipboard {
+  border-radius: 0px 5px 5px 0px;
+  -moz-border-radius: 0px 5px 5px 0px;
+  -webkit-border-radius: 0px 5px 5px 0px;
+  /*border: 1px solid #A9A9AA;*/
+  background:rgba(85,147,215,0.35) url('../imgs/copy_clipboard_icon.png') no-repeat top left;
+  display: block;
+  width: 35px!important;
+  height: 35px;
+  float: left;
 }
 
 
@@ -252,6 +284,49 @@ button.select-file {
   font-size: 12px;
   border: 0px;
   background: transparent;
+}
+
+.my-list .session_email {
+  display: none!important;  
+}
+
+.session_email {
+  padding: 0px 0px 7px 20px;
+  height: 20px;
+  border-radius: 0x;
+  width: 90%;
+  color: #6F7070;
+  font-size: 12px;
+  border: 0px;
+  background: transparent url('../imgs/user_email_icon.png') no-repeat 0 0;
+}
+
+.session.disabled {
+  background:rgba(199,200,201,0.14); 
+  color: #ACADAD;
+}
+
+.session.disabled,
+.session.disabled .session_info,
+.session.disabled .session_name,
+.session.disabled .session_id,
+.session.disabled .session_email {
+  cursor: default;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.session.disabled:hover {
+  background:rgba(199,200,201,0.14);  
+}
+
+.session.disabled .session_email {
+  color: #ACADAD;
+  background: transparent url('../imgs/user_email_icon_disabled.png') no-repeat 0 0; 
 }
 
 .actions {
