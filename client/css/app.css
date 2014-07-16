@@ -408,7 +408,7 @@ footer {
   bottom: 0px;
   height: 50px;
   min-width: 1150px;
-  position: absolute;
+  position: fixed;
   width: 100%;
 }
 

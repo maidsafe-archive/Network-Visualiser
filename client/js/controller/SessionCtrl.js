@@ -47,6 +47,9 @@ var SessionCtrl = [
         $scope.pendingSessions = result.data.filter(function(item) {
           return !item.is_active;
         });
+        if (!item.is_active) {
+          item.is_disabled;
+        };
       }, function(err) {
         $scope.activeSessions = {};
         $scope.pendingSessions = {};
