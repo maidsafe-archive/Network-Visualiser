@@ -9,7 +9,7 @@
 .session_info,
 .session_name,
 .session_id,
-.session_email {
+.session_created_by {
   cursor: pointer;
 }
 .session:hover {
@@ -286,11 +286,11 @@ button.copy-clipboard {
   background: transparent;
 }
 
-.my-list .session_email {
+.my-list .session_created_by {
   display: none!important;  
 }
 
-.session_email {
+.session_created_by {
   padding: 0px 0px 7px 20px;
   height: 20px;
   border-radius: 0x;
@@ -310,7 +310,7 @@ button.copy-clipboard {
 .session.disabled .session_info,
 .session.disabled .session_name,
 .session.disabled .session_id,
-.session.disabled .session_email {
+.session.disabled .session_created_by {
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -324,7 +324,7 @@ button.copy-clipboard {
   background:rgba(199,200,201,0.14);  
 }
 
-.session.disabled .session_email {
+.session.disabled .session_created_by {
   color: #ACADAD;
   background: transparent url('../imgs/user_email_icon_disabled.png') no-repeat 0 0; 
 }
