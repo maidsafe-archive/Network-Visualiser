@@ -93,6 +93,11 @@ exports.generateRandomSessionIdString = function(prefix) {
   return prefix == null ? uuid : prefix + uuid;
 };
 exports.ensureAuthenticated = function(req, res, next) {
+  // Temp
+  if (req.user && req.user._json) {
+    console.log(req.user._json.email);
+  }
+
   if (!req.app.settings.needsAuth || req.isAuthenticated()) {
     return next();
   }

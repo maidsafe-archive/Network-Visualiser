@@ -73,7 +73,8 @@ exports.setupAuthCallbacks = function(server) {
   }
 
   server.get('/auth', utils.ensureAuthenticated, function(req, res) {
-    res.render('index', {
+    console.log('/auth called' + req.user._json.email);
+    res.render('sessions', {
       user: {
         enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0,
         email: req.user._json.email
@@ -98,6 +99,7 @@ exports.setupAuthCallbacks = function(server) {
   //   login page.  Otherwise, the primary route function function will be called,
   //   which, in this example, will redirect the user to the home page.
   server.get('/googlecallback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
+    console.log('callback called');
     res.redirect('/auth');
   });
 };

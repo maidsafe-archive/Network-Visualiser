@@ -22,5 +22,5 @@ exports.register = function(server) {
   server.get('/currentSessions', getCurrentSessions);
   server.get('/deleteSession', utils.ensureAuthenticated, deleteSession);
   server.get('/deletePendingSession', utils.ensureAuthenticated, deletePendingSession);
-  server.get('/clearAllPendingSessions', utils.ensureAuthenticated, clearPendingSessions);
+  // server.get('/clearAllPendingSessions', utils.ensureAuthenticated, clearPendingSessions);
 };

@@ -80,9 +80,6 @@ var SessionCtrl = [
       $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
       cancelEventPropagation(event);
     };
-    $scope.clearPendingSessions = function() {
-      $http.get('/clearAllPendingSessions').success(refreshCurrentSessions).error($scope.setStatusAlert);
-    };
     
     $scope.onCreateSessionTabClicked = function() {
       $scope.importTab.isOpen = false;
