@@ -17,6 +17,7 @@ var SessionCtrl = [
     $scope.importTab = {
       sessionName: '',
       file: null,
+      fileError: '',
       sessionId: '',
       isOpen: false,
       errorMessage: '',
@@ -46,9 +47,6 @@ var SessionCtrl = [
         $scope.pendingSessions = result.data.filter(function(item) {
           return !item.is_active;
         });
-        if (!item.is_active) {
-          item.is_disabled;
-        };
       }, function(err) {
         $scope.activeSessions = {};
         $scope.pendingSessions = {};

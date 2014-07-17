@@ -1,10 +1,4 @@
-var app = angular.module('MaidSafe', ['ui-rangeSlider', 'ngClipboard', 'flow', 'angularFileUpload']);
-
-app.config([
-  'ngClipProvider', function(ngClipProvider) {
-    ngClipProvider.setPath("../../../vendor/zeroclipboard/dist/ZeroClipboard.swf");
-  }
-]);
+var app = angular.module('MaidSafe', ['ui-rangeSlider', 'angularFileUpload']);
 
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {
@@ -13,6 +7,8 @@ app.run([
 ]);
 
 app.directive('tooltip', ToolTip);
+app.directive('fileDialog', FileDialog);
+app.directive('clipCopy', ClipCopy);
 app.service('dataManager', DataManagerService);
 app.service('vaultBehaviour', VaultBehaviourService);
 app.service('socketService', SocketService);

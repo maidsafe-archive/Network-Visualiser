@@ -16,41 +16,46 @@
       <% } %>
 </ul>
 <% if( user.enabled) { %>
-  <div class="toggle_import_logs" ng-show="importTab.isOpen">
-    <div class="wrapper">
-      <form name="importSessionForm">
-        <button flow-init="" flow-file-added="importTab.file = $file.file" flow-btn class="select-file">Select File</button>
-        <div class="filename">{{importTab.file.name}}</div>
-        <input type="text" name="importSessionInput" class="session-input" required placeholder="Please enter a session name..."
-               ng-model="importTab.sessionName" ng-pattern="sessionNamePattern" ng-change="importTab.errorMessage = ''" />
-        <div ng-class="{true:'valid-input', false:'invalid-input'}[importTab.errorMessage == '' && importSessionForm.$valid]"
-             ng-hide="importSessionForm.$pristine || importTab.inProgress">
-          {{importTab.errorMessage != '' ? importTab.errorMessage : (importSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
-        </div>
-        <div ng-show="importTab.inProgress" class="loader"></div>
-        <button class="upload" ng-click="onImportSession()" ng-disabled="importSessionForm.$invalid || importTab.file == null">Upload</button>
+<div class="toggle_create_session" ng-show="createTab.isOpen">
+  <div class="wrapper">
+    <div class="session-input-wrapper" ng-show="createTab.inputRequired">
+      <form name="createSessionForm">
+        <input type="text" name="createSessionInput" class="session-input" required placeholder="Please enter a session name..."
+                ng-model="createTab.sessionName" ng-pattern="sessionNamePattern" ng-change="createTab.errorMessage = ''" />
+        <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="onCreateSession()">Create</button>
       </form>
-    </div>
-  </div>
-
-  <div class="toggle_create_session" ng-show="createTab.isOpen">
-    <div class="wrapper">
-      <div class="session-input-wrapper" ng-show="createTab.inputRequired">
-        <form name="createSessionForm">
-          <input type="text" name="createSessionInput" class="session-input" required placeholder="Please enter a session name..."
-                 ng-model="createTab.sessionName" ng-pattern="sessionNamePattern" ng-change="createTab.errorMessage = ''" />
-          <button class="submit-session" ng-disabled="createSessionForm.$invalid" ng-click="onCreateSession()">Create</button>
-        </form>
-        <div ng-class="{true:'valid-input', false:'invalid-input'}[createTab.errorMessage == '' && createSessionForm.$valid]"
-             ng-hide="createSessionForm.$pristine">
-          {{createTab.errorMessage != '' ? createTab.errorMessage : (createSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
-        </div>
-      </div>
-      <div class="session-id-output" ng-hide="createTab.inputRequired">
-        <h3>Session ID</h3>
-        <input ng-value="createTab.sessionId" class="id-output" readonly>
-        <button class="copy-clipboard" clip-copy="sessionId"></button>
+      <div ng-class="{true:'valid-input', false:'invalid-input'}[createTab.errorMessage == '' && createSessionForm.$valid]"
+            ng-hide="createSessionForm.$pristine">
+        {{createTab.errorMessage != '' ? createTab.errorMessage : (createSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
       </div>
     </div>
+    <div class="session-id-output" ng-hide="createTab.inputRequired">
+      <h3>Session ID</h3>
+      <input ng-value="createTab.sessionId" class="id-output" readonly>
+      <button class="copy-clipboard" clip-copy clip-text="{{createTab.sessionId}}"></button>
+    </div>
   </div>
-  <% } %>
+</div>
+<div class="toggle_import_logs" ng-show="importTab.isOpen">
+  <div class="wrapper">
+    <form name="importSessionForm">
+      <file-dialog button-content="Select File"
+                   button-class="select-file"
+                   is-single-file="true"
+                   max-file-size-mb="15"
+                   error-message="importTab.fileError"
+                   selected-file="importTab.file">
+      </file-dialog>
+      <div class="filename" ng-class="{true:'invalid-input'}[importTab.fileError != '']">{{importTab.fileError == '' ? importTab.file.name : importTab.fileError}}</div>
+      <input type="text" name="importSessionInput" class="session-input" required="" placeholder="Please enter a session name..."
+              ng-model="importTab.sessionName" ng-pattern="sessionNamePattern" ng-change="importTab.errorMessage = ''" />
+      <div ng-class="{true:'valid-input', false:'invalid-input'}[importTab.errorMessage == '' && importSessionForm.$valid]"
+            ng-hide="importSessionForm.$pristine || importTab.inProgress">
+        {{importTab.errorMessage != '' ? importTab.errorMessage : (importSessionForm.$valid ? 'Valid Session Name' : 'Invalid Session Name')}}
+      </div>
+      <div ng-show="importTab.inProgress" class="loader"></div>
+      <button class="upload" ng-click="onImportSession()" ng-disabled="importSessionForm.$invalid || importTab.file == null">Upload</button>
+    </form>
+  </div>
+</div>
+<% } %>
