@@ -20,10 +20,6 @@ exports.initAuth = function(server, callback) {
 
   gAuth = JSON.parse(fileContent);
 
-  //   Use the GoogleStrategy within Passport.
-  //   Strategies in Passport require a `verify` function, which accept
-  //   credentials (in this case, an accessToken, refreshToken, and Google
-  //   profile), and invoke a callback with a user object.
   passport.use(new GoogleStrategy({
       clientID: gAuth.CLIENT_ID,
       clientSecret: gAuth.CLIENT_SECRET,
@@ -40,13 +36,6 @@ exports.initAuth = function(server, callback) {
     }
   ));
 
-  // API Access link for creating client ID and secret:
-  // https://code.google.com/apis/console/
-  // Passport session setup.
-  // To support persistent login sessions, Passport needs to be able to
-  // serialize users into and deserialize users out of the session.  Typically,
-  // this will be as simple as storing the user ID when serializing, and finding
-  // the user by ID when deserializing.
   passport.serializeUser(function(user, done) {
     done(null, user);
   });
@@ -83,23 +72,48 @@ exports.setupAuthCallbacks = function(server) {
     });
   });
 
-  // GET /auth/google
-  //   Use passport.authenticate() as route middleware to authenticate the
-  //   request.  The first step in Google authentication will involve
-  //   redirecting the user to google.com.  After authorization, Google
-  //   will redirect the user back to this application
   server.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }), function(req, res) {
     // The request will be redirected to Google for authentication, so this
     // function will not be called.
   });
 
-  // GET /auth/google/callback
-  //   Use passport.authenticate() as route middleware to authenticate the
-  //   request.  If authentication fails, the user will be redirected back to the
-  //   login page.  Otherwise, the primary route function function will be called,
-  //   which, in this example, will redirect the user to the home page.
   server.get('/googlecallback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
-    console.log('callback called');
     res.redirect('/auth');
   });
+};
+
+exports.appendUserInfo = function(req, res, next) {
+  var userInfo = {
+    isAuthenticated: false,
+    isMaidSafeUser: false,
+    mailAddress: ''
+  };
+
+  if (!needsAuth) {
+    userInfo = {
+      isAuthenticated: true,
+      isMaidSafeUser: true,
+      mailAddress: 'debug.mail@maidsafe.net'
+    };
+  } else if (req.isAuthenticated()) {
+    var mailId = this.user._json.email;
+    if (mailId.indexOf(gAuth.MAIDSAFE_USER) > 0) {
+      userInfo = {
+        isAuthenticated: true,
+        isMaidSafeUser: true,
+        mailAddress: mailId
+      };
+    } else {
+      for (var index in gAuth.WHITELIST_USERS) {
+        if (mailId.indexOf(gAuth.WHITELIST_USERS[index]) > 0) {
+          userInfo.isAuthenticated = true;
+          userInfo.mailAddress = mailId;
+          break;
+        }
+      }
+    }
+  }
+
+  req._userInfo = userInfo;
+  return next();
 };

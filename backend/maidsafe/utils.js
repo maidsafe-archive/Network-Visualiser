@@ -1,4 +1,6 @@
 var config = require('./../../Config.js');
+var fs = require('fs');
+
 exports.isValid = function(log) {
   var isValid = log.vault_id && log.action_id && log.persona_id;
   if (!log.hasOwnProperty('session_id')) {
@@ -9,7 +11,6 @@ exports.isValid = function(log) {
 exports.formatDate = function(log) {
   try {
     if (log.ts) {
-      // console.log(JSON.stringify(log.ts));
       if (log.ts.indexOf('UTC') < 0) {
         log.ts += 'UTC';
       }
@@ -93,12 +94,7 @@ exports.generateRandomSessionIdString = function(prefix) {
   return prefix == null ? uuid : prefix + uuid;
 };
 exports.ensureAuthenticated = function(req, res, next) {
-  // Temp
-  if (req.user && req.user._json) {
-    console.log(req.user._json.email);
-  }
-
-  if (!req.app.settings.needsAuth || req.isAuthenticated()) {
+  if (req._userInfo && req._userInfo.isAuthenticated) {
     return next();
   }
 
@@ -116,4 +112,9 @@ exports.filterSessionVaultNames = function(sessionId, dbConnName, collections) {
     }
   }
   return sessionVaultNames;
+};
+exports.deleteFile = function(path) {
+  setTimeout(function() {
+    fs.unlinkSync(path);
+  }, 30000);
 };

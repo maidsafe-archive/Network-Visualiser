@@ -110,9 +110,6 @@ exports.createSession = function(sessionName, promise) {
 exports.getCurrentSessions = function() {
   return sessionInfo.getCurrentSessions();
 };
-exports.clearPendingSessions = function(promise) {
-  sessionInfo.clearPendingSessions(promise);
-};
 exports.deleteSession = function(sessionName, promise) {
   sessionInfo.deleteSession(sessionName).then(function(sessionId) {
     vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {

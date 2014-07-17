@@ -66,17 +66,6 @@ var SessionMetaData = function(dbConnection) {
     });
     return promise;
   };
-  this.clearPendingSessions = function(callback) {
-    var promise = new mongoose.Promise;
-    if (callback) {
-      promise.addBack(callback);
-    }
-
-    SessionInfo.remove({ is_active: false }, function(err, res) {
-      err ? promise.error(err) : promise.complete(res);
-    });
-    return promise;
-  };
   this.deleteSession = function(sessionName, callback) {
     var promise = new mongoose.Promise;
     if (callback) {

@@ -19,9 +19,6 @@ var history = function(req, res) {
 var exportLogs = function(req, res) {
   logService.exportLogs(req, res);
 };
-var importLogs = function(req, res) {
-  logService.importLogs(req, res);
-};
 var getTimelineDates = function(req, res) {
   logService.getTimelineDates(req, res);
 };
@@ -30,7 +27,6 @@ var testLog = function(req, res) {
 };
 exports.register = function(server) {
   server.post('/log', saveLogs);
-  server.post('/import', utils.ensureAuthenticated, importLogs);
 
   server.get('/vaults', getActiveVaults);
   server.get('/history', history);

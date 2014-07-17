@@ -2,6 +2,7 @@ var bridge = require('./../../../backend/mongo/bridge.js');
 var Handler = require('./Handler.js');
 var utils = require('./../utils.js');
 var url = require('url');
+var fs = require('fs');
 
 exports.createSession = function(req, res) {
   var criteria = JSON.parse(JSON.stringify(req.body));
@@ -13,6 +14,28 @@ exports.createSession = function(req, res) {
   bridge.createSession(criteria.session_name, new Handler.CreateSessionHandler(res));
 };
 
+exports.importSession = function (req, res) {
+  fs.readFile(req.files.file.path, function(err, data) {
+    var fileName = "Import_" + new Date().getTime() + '.csv';
+    fs.writeFile(fileName, data, function(err) {
+      if (err) {
+        res.send(500, 'Invalid File');
+        return;
+      }
+
+      bridge.importLogs(req.body.sn, fileName).then(function() {
+        var handler = new Handler.SaveLogHandler();
+        res.send('Added to Import Queue');
+        utils.deleteFile(fileName);
+        handler.refreshSessionsCallback();
+      }, function() {
+        utils.deleteFile(fileName);
+        res.send(500, 'Invalid File');
+      });
+    });
+  });
+};
+
 exports.getCurrentSessions = function(req, res) {
   bridge.getCurrentSessions().then(function(activeSessions) {
     if (!activeSessions.length) {
@@ -21,10 +44,6 @@ exports.getCurrentSessions = function(req, res) {
     }
     res.send(activeSessions);
   });
-};
-
-exports.clearPendingSessions = function(req, res) {
-  bridge.clearPendingSessions(new Handler.ClearPendingSessionsHandler(res));
 };
 
 exports.deleteSession = function(req, res) {

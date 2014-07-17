@@ -3,7 +3,6 @@ var Handler = require('./Handler.js');
 var utils = require('./../utils.js');
 var url = require('url');
 var config = require('./../../../Config.js');
-var fs = require('fs');
 
 var saveLog = function(req, res) {
   var log = req.body;
@@ -141,11 +140,6 @@ var getTimelineDates = function(req, res) {
     res.send(500, err);
   });
 };
-var deleteFile = function(path) {
-  setTimeout(function() {
-    fs.unlinkSync(path);
-  }, 30000); //after 1 minute
-};
 var exportLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;
   if (!criteria || !criteria.hasOwnProperty('sn')) {
@@ -155,28 +149,7 @@ var exportLogs = function(req, res) {
 
   bridge.exportLogs(criteria.sn).then(function(path) {
     res.download(path);
-    deleteFile(path);
-  });
-};
-var importLogs = function (req, res) {
-  fs.readFile(req.files.file.path, function(err, data) {
-    var fileName = "Import_" + new Date().getTime() + '.csv';
-    fs.writeFile(fileName, data, function(err) {
-      if (err) {
-        res.send(500, 'Invalid File');
-        return;
-      }
-
-      bridge.importLogs(req.body.sn, fileName).then(function() {
-        var handler = new Handler.SaveLogHandler();
-        res.send('Added to Import Queue');
-        deleteFile(fileName);
-        handler.refreshSessionsCallback();
-      }, function() {
-        deleteFile(fileName);
-        res.send(500, 'Invalid File');
-      });
-    });
+    utils.deleteFile(path);
   });
 };
 var testLog = function(req, res) {
@@ -201,6 +174,5 @@ exports.vaultHistory = history;
 exports.getActiveVaults = activeVaultsWithRecentLogs;
 exports.getTimelineDates = getTimelineDates;
 exports.exportLogs = exportLogs;
-exports.importLogs = importLogs;
 
 exports.testLog = testLog;
