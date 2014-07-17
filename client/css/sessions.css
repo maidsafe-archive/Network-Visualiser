@@ -1,8 +1,8 @@
 .session {
   border-bottom: 1px solid #dcdcdc;
-  height: 75px;
+  height: 100px;
   width: 93%;
-  padding:0.5em 1.5em;
+  padding: 0.5em 1.5em;
 }
 
 .session,
@@ -12,12 +12,9 @@
 .session_created_by {
   cursor: pointer;
 }
-.session:hover {
-  background:rgba(85,147,215,0.14); ;  
-}
 
-.other-list .session {
-  height: 100px;
+.session:hover {
+  background: rgba(85, 147, 215, 0.14);;
 }
 
 #sessions .wrapper {
@@ -27,8 +24,9 @@
   width: 44%;
   float: left;
 }
-.my-list {
-  margin-right: 40px!important;
+
+.active-list {
+  margin-right: 40px !important;
 }
 
 .list-header {
@@ -37,15 +35,15 @@
   margin-bottom: 30px;
 }
 
-.my-list .list-header  {
+.active-list .list-header {
   border-bottom: 2px solid #5593D7;
 }
 
-.other-list .list-header  {
+.pending-list .list-header {
   border-bottom: 2px solid #6F7070;
 }
 
-.my-list h2 {
+.active-list h2 {
   font-size: 28px;
   color: #5593D7;
   padding-bottom: 5px;
@@ -53,9 +51,9 @@
   margin: 0px;
 }
 
-.other-list h2 {
+.pending-list h2 {
   font-size: 28px;
-  color: #6F7070; 
+  color: #6F7070;
   padding-bottom: 5px;
   float: left;
   margin: 0px;
@@ -63,7 +61,7 @@
 
 .clear-all {
   text-transform: uppercase;
-  color:#E8605E;
+  color: #E8605E;
   font-size: 18px;
   text-decoration: none;
   float: right;
@@ -75,7 +73,7 @@
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  padding: 5px 10px; 
+  padding: 5px 10px;
   display: block;
   float: left;
   color: #fff;
@@ -83,15 +81,17 @@
   margin: 3px 20px;
 }
 
-.my-list .session-count-label {
-  background:#5593D7;
+.active-list .session-count-label {
+  background: #5593D7;
 }
 
-.other-list .session-count-label {
-  background:#6F7070;
+.pending-list .session-count-label {
+  background: #6F7070;
 }
 
-#sessions button { width: 145px; }
+#sessions button {
+  width: 145px;
+}
 
 .toggle_create_session, .toggle_import_logs {
   -moz-border-radius: 0px 5px 5px 5px;
@@ -119,7 +119,7 @@
 }
 
 .toggle_create_session .wrapper, .toggle_import_logs .wrapper {
-  width: 90%!important;
+  width: 90% !important;
 }
 
 button.active {
@@ -130,7 +130,9 @@ button.active {
   color: #5a5a5a !important;
 }
 
-button[disabled] { background: #cacaca;}
+button[disabled] {
+  background: #cacaca;
+}
 
 .search-box, .close-icon, .search-wrapper {
   padding: 8px 10px;
@@ -156,20 +158,19 @@ button[disabled] { background: #cacaca;}
   z-index: 0;
 }
 
-
 button.select-file {
-  float: left;  
-  width: 110px!important;
+  float: left;
+  width: 110px !important;
   margin-bottom: 20px;
 }
 
 .filename {
   font-size: 16px;
-  color:#6F7070;
+  color: #6F7070;
   display: inline-block;;
   float: left;
   width: 260px;
-  height:32px;
+  height: 32px;
   margin-left: 20px;
   margin-top: 6px;
   word-wrap: normal;
@@ -184,8 +185,8 @@ button.select-file {
 }
 
 .upload {
-  margin:15px 10px;
-  width: 100px!important;
+  margin: 15px 10px;
+  width: 100px !important;
 }
 
 .submit-session {
@@ -205,6 +206,7 @@ button.select-file {
   float: left;
   display: block;
 }
+
 .invalid-input {
   background: url('../../client/imgs/validation_icons.png') no-repeat bottom left;
   width: 50%;
@@ -250,13 +252,12 @@ button.copy-clipboard {
   -moz-border-radius: 0px 5px 5px 0px;
   -webkit-border-radius: 0px 5px 5px 0px;
   /*border: 1px solid #A9A9AA;*/
-  background:rgba(85,147,215,0.35) url('../imgs/copy_clipboard_icon.png') no-repeat top left;
+  background: rgba(85, 147, 215, 0.35) url('../imgs/copy_clipboard_icon.png') no-repeat top left;
   display: block;
-  width: 35px!important;
+  width: 35px !important;
   height: 35px;
   float: left;
 }
-
 
 .session_info {
   float: left;
@@ -287,7 +288,7 @@ button.copy-clipboard {
 }
 
 .my-list .session_created_by {
-  display: none!important;  
+  display: none !important;
 }
 
 .session_created_by {
@@ -301,16 +302,20 @@ button.copy-clipboard {
   background: transparent url('../imgs/user_email_icon.png') no-repeat 0 0;
 }
 
-.session.disabled {
-  background:rgba(199,200,201,0.14); 
+.pending-list .session {
+  background: rgba(199, 200, 201, 0.14);
   color: #ACADAD;
 }
 
-.session.disabled,
-.session.disabled .session_info,
-.session.disabled .session_name,
-.session.disabled .session_id,
-.session.disabled .session_created_by {
+.pending-list .session .session_name {
+  color: #0A0A0A;
+}
+
+.pending-list .session,
+.pending-list .session .session_info,
+.pending-list .session .session_name,
+.pending-list .session .session_id,
+.pending-list .session .session_created_by {
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -320,13 +325,13 @@ button.copy-clipboard {
   user-select: none;
 }
 
-.session.disabled:hover {
-  background:rgba(199,200,201,0.14);  
+.pending-list .session:hover {
+  background: rgba(199, 200, 201, 0.14);
 }
 
-.session.disabled .session_created_by {
+.pending-list .session .session_created_by {
   color: #ACADAD;
-  background: transparent url('../imgs/user_email_icon_disabled.png') no-repeat 0 0; 
+  background: transparent url('../imgs/user_email_icon_disabled.png') no-repeat 0 0;
 }
 
 .actions {
@@ -339,6 +344,7 @@ button.copy-clipboard {
 .fieldValid {
   border: 1px solid #25c766;
 }
+
 .fieldInvalid {
   border: 1px solid #e66161;
 }
@@ -351,7 +357,9 @@ a.view {
   width: 26px;
 }
 
-a.view:hover { background-position: bottom left; }
+a.view:hover {
+  background-position: bottom left;
+}
 
 a.delete {
   background: url('../../client/imgs/delete_icon.png') no-repeat top left;
@@ -361,7 +369,9 @@ a.delete {
   width: 18px;
 }
 
-a.delete:hover { background-position: bottom left; }
+a.delete:hover {
+  background-position: bottom left;
+}
 
 .confirm-delete {
   border: 1px solid #dcdcdc;
@@ -375,7 +385,10 @@ a.delete:hover { background-position: bottom left; }
   clear: both;
 }
 
-.confirm-delete p { margin: 0; padding: 0;}
+.confirm-delete p {
+  margin: 0;
+  padding: 0;
+}
 
 a.yes-btn {
   padding: 5px 0px;
@@ -386,8 +399,9 @@ a.yes-btn {
   text-decoration: none;
   text-transform: uppercase;
 }
+
 a.yes-btn:hover {
-  background:#38c266;
+  background: #38c266;
 }
 
 a.no-btn {
@@ -398,12 +412,14 @@ a.no-btn {
   color: #fff;
   text-decoration: none;
   text-transform: uppercase;
-  margin-left:5px;
+  margin-left: 5px;
   margin-top: 10px;
 }
+
 a.no-btn:hover {
-  background:#ca2f2b;
+  background: #ca2f2b;
 }
+
 footer button {
   float: left;
   margin: 0.5em 1.5em;
@@ -424,6 +440,7 @@ footer button {
   -webkit-animation: load6 1.7s infinite ease;
   animation: load6 1.7s infinite ease;
 }
+
 @-webkit-keyframes load6 {
   0% {
     -webkit-transform: rotate(0deg);
@@ -446,6 +463,7 @@ footer button {
     box-shadow: -0.11em -0.83em 0 -0.4em #ffffff, -0.11em -0.83em 0 -0.42em #ffffff, -0.11em -0.83em 0 -0.44em #ffffff, -0.11em -0.83em 0 -0.46em #ffffff, -0.11em -0.83em 0 -0.477em #ffffff;
   }
 }
+
 @keyframes load6 {
   0% {
     -webkit-transform: rotate(0deg);
