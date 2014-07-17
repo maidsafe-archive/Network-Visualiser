@@ -1,11 +1,13 @@
 .session-wrapper {
   padding: 6px 15px;
 }
+
 .session {
   border-bottom: 1px solid #dcdcdc;
   height: 111px;
   width: 100%;
 }
+
 /*
 .session,
 .session_info,
@@ -15,10 +17,10 @@
   cursor: pointer;
 } */
 
+/*
 .session:hover {
   background: rgba(85, 147, 215, 0.14);;
-}
-
+}*/
 #sessions .wrapper {
   margin: 0 2em 7em 2em;
   padding-top: 3em;
@@ -275,7 +277,7 @@ button.copy-clipboard.zeroclipboard-is-active {
 
 .session_info {
   float: left;
-  width: 80%;
+  width: 75%;
 }
 
 .session_name {
@@ -394,15 +396,18 @@ a.delete:hover {
   background-position: bottom left;
 }
 
+.pending-list .confirm-delete {left: -74px;}
+
+
 .confirm-delete {
   border: 1px solid #dcdcdc;
   background: #fff;
-  padding: 28px 10px 28px;
+  padding: 28px 12px 29px;
   width: 110px;
   text-align: center;
   position: absolute;
-  top: -21px;
-  left: -67px;
+  top: -19px;
+  left: -14px;
   clear: both;
 }
 
