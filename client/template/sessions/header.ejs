@@ -44,6 +44,7 @@
                    is-single-file="true"
                    max-file-size-mb="15"
                    error-message="importTab.fileError"
+                   reset-input-file="importTab.resetInputFile"
                    selected-file="importTab.file">
       </file-dialog>
       <div class="filename" ng-class="{true:'invalid-input'}[importTab.fileError != '']">{{importTab.fileError == '' ? importTab.file.name : importTab.fileError}}</div>

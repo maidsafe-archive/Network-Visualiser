@@ -22,7 +22,8 @@ var SessionCtrl = [
       sessionId: '',
       isOpen: false,
       errorMessage: '',
-      inProgress: null
+      inProgress: null,
+      resetInputFile: false
     };
 
     $scope.init = function(user) {
@@ -145,10 +146,12 @@ var SessionCtrl = [
         file: $scope.importTab.file,
       }).then(function(response) {
         $scope.importTab.inProgress = false;
+        $scope.importTab.resetInputFile = true;
         $scope.setStatusAlert(response.data);
         $scope.onImportSessionTabClicked();
       }, function(response) {
         $scope.importTab.inProgress = false;
+        $scope.importTab.resetInputFile = true;
         $scope.importTab.errorMessage = response.data;
       });
     };

@@ -1,23 +1,18 @@
 var FileDialog = [
   function() {
+    var buttonElement = null;
+    var inputElement = null;
 
     var fileDialogLink = function(scope, element, attr, ctrls) {
-      var buttonElement = element.find('button');
-      var inputElement = element.find('input');
+      buttonElement = element.find('button');
+      resetFileInput(scope);
 
-      inputElement.bind("click", function(event) {
-        event.stopPropagation();
-      });
       buttonElement.bind("click", function(event) {
         event.stopPropagation();
-        inputElement.click();
+        if (inputElement) {
+          inputElement.click();
+        }
       });
-
-      if (scope.isSingleFile) {
-        inputElement.removeAttr("multiple");
-      } else {
-        inputElement.attr("multiple", "multiple");
-      }
 
       scope.setError = function(msg) {
         scope.$apply(function() {
@@ -33,6 +28,41 @@ var FileDialog = [
         });
       };
 
+      scope.$watch('resetInputFile', function() {
+        if (scope.resetInputFile) {
+          resetFileInput(scope);
+        }
+      });
+    };
+
+    var resetFileInput = function(scope) {
+      if (inputElement != null) {
+        inputElement.remove();
+      }
+
+      var input = document.createElement("input");
+      var inputAttr = document.createAttribute("type");
+      inputAttr.nodeValue = "file";
+      input.setAttributeNode(inputAttr);
+
+      inputAttr = document.createAttribute("style");
+      inputAttr.nodeValue = "visibility:hidden; height: 0px;";
+      input.setAttributeNode(inputAttr);
+
+
+      if (!scope.isSingleFile) {
+        inputAttr = document.createAttribute("multiple");
+        inputAttr.nodeValue = "multiple";
+        input.setAttributeNode(inputAttr);
+      }
+
+      buttonElement.after(input);
+      inputElement = angular.element(input);
+
+      inputElement.bind("click", function(event) {
+        event.stopPropagation();
+      });
+
       inputElement.bind('change', function(e) {
         if (!e.target.files.length) {
           return;
@@ -46,6 +76,8 @@ var FileDialog = [
 
         scope.setFile(file);
       });
+
+      scope.resetInputFile = false;
     };
 
     return {
@@ -57,9 +89,10 @@ var FileDialog = [
         isSingleFile: '@',
         maxFileSizeMb: '@',
         selectedFile: '=',
-        errorMessage: '='
+        errorMessage: '=',
+        resetInputFile: '='
       },
-      template: '<span><button class="{{buttonClass}}">{{buttonContent}}</button><input type="file" style="visibility:hidden; height: 0px;" /></span>',
+      template: '<span><button class="{{buttonClass}}">{{buttonContent}}</button></span>',
       link: fileDialogLink
     };
   }
