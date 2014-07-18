@@ -158,13 +158,15 @@
 
 .host-name-btn {
   background: url('../imgs/icons/host-name.png') no-repeat 0 0;
-  display: block;
   width: 20px;
   height: 20px;
-  float: right;
+  display: block;
+  float: right!important;
   background-size: 20px 20px;
   margin: 0px 5px;
 }
 .host-name-btn:active {background: url('../imgs/icons/host-name-down.png') no-repeat 0 0;
   background-size: 20px 20px;
 }
+
+

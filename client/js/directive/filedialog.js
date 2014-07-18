@@ -59,7 +59,7 @@ var FileDialog = [
         selectedFile: '=',
         errorMessage: '='
       },
-      template: '<span><button class="{{buttonClass}}">{{buttonContent}}</button><input type="file" style="visibility:hidden" /></span>',
+      template: '<span><button class="{{buttonClass}}">{{buttonContent}}</button><input type="file" style="visibility:hidden; height: 0px;" /></span>',
       link: fileDialogLink
     };
   }

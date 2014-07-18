@@ -1,23 +1,26 @@
-<div class="session" ng-click="session.is_active ? openViewer(session.session_name) : ''" ng-class="{true:'disabled'}[!session.is_active]">
-  <ul>
-    <li>
-      <div class="session_info">
-        <input ng-value="session.session_name" class="session_name" readonly>
-<% if(user.enabled) { %>
-        <input class="session_created_by" ng-value="session.created_by" readonly>
-        <input ng-value="session.session_id" class="session_id" readonly>
-<% } %>
-      </div>
-      <div class="actions">
-<% if(user.enabled) { %>
-        <a href="" class="delete" ng-click="onDeleteSessionClicked(session.session_name, $event)"></a>
-        <div class="confirm-delete" ng-show="isConfirmDeleteDialogOpen[session.session_name]" ng-click="$event.stopPropagation();">
-        <p>Sure?</p>
-          <a href="" class="yes-btn" ng-click="deleteSession(session.session_name, $event)">Yes</a>
-          <a href="" class="no-btn" ng-click="onDeleteSessionClicked(session.session_name, $event)">No</a>
+<div class="session">
+  <div class="session-wrapper">
+    <ul>
+      <li>
+        <div class="session_info">
+          <input ng-value="session.session_name" class="session_name" readonly>
+  <% if(user.enabled) { %>
+          <input class="session_created_by" ng-value="session.created_by" readonly>
+          <input ng-value="session.session_id" class="session_id" readonly>
+  <% } %>
         </div>
-<% } %>
-      </div>
-    </li>
-  </ul>
+        <div class="actions">
+  <% if(user.enabled) { %>
+          <a href="" class="view" ng-click="openViewer(session.session_name)"></a>
+          <a href="" class="delete" ng-click="onDeleteSessionClicked(session.session_name, $event)"></a>
+          <div class="confirm-delete" ng-show="isConfirmDeleteDialogOpen[session.session_name]" ng-click="$event.stopPropagation();">
+          <p>Are you sure?</p>
+            <a href="" class="yes-btn" ng-click="deleteSession(session.session_name, $event)">Yes</a>
+            <a href="" class="no-btn" ng-click="onDeleteSessionClicked(session.session_name, $event)">No</a>
+          </div>
+  <% } %>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
