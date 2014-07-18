@@ -154,17 +154,24 @@ var exportLogs = function(req, res) {
 };
 var testLog = function(req, res) {
   var log = req.body;
-  utils.formatDate(log);
-  if (log.value1 && log.value1.length > config.Constants.minLengthForDecode) {
-    log.value1 = utils.decodeData(log.value1);
+
+  if (!utils.formatDate(log)) {
+    res.send(500, "Invalid date time format");
+    return;
   }
-  if (log.value2 && log.value2.length > config.Constants.minLengthForDecode) {
-    log.value2 = utils.decodeData(log.value2);
+
+  if (!utils.isValid(log)) {
+    res.send(500, "Invalid Parameters");
+    return;
   }
-  if (!log.hasOwnProperty('persona_id')) {
-    log.persona_id = config.Constants.persona_na;
+
+  var expectedSessionId = '54ca73ce-0c3c-4155-c9e3-c89d74ad5602';
+
+  if (log.session_id != expectedSessionId) {
+    res.send(500, "Invalid Session");
+  } else {
+    res.send(200, "Saved");
   }
-  res.send(200, "Saved");
 };
 
 exports.saveLog = saveLog;

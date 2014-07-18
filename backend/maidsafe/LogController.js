@@ -36,5 +36,5 @@ exports.register = function(server) {
   server.get('/export', exportLogs);
   server.get('/timelineDates', getTimelineDates);
 
-  server.post('/logtest', testLog);
+  server.post('/testlog', testLog);
 };

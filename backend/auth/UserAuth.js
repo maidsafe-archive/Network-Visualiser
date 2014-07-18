@@ -70,7 +70,7 @@ var setUserInfo = function(req, res, next) {
       mailAddress: 'debug.mail@maidsafe.net'
     };
   } else if (req.isAuthenticated()) {
-    var mailId = this.user._json.email;
+    var mailId = req.user._json.email;
     if (mailId.indexOf(gAuth.MAIDSAFE_USER) > 0) {
       userInfo = {
         isAuthenticated: true,
