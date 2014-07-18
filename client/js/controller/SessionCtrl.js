@@ -67,6 +67,9 @@ var SessionCtrl = [
       }
     }
 
+    $scope.onSignInClicked = function() {
+      window.location.href = "/auth/google";
+    };
     $scope.importLogs = function() {
       window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
     };
