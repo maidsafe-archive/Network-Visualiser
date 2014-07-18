@@ -1,6 +1,7 @@
 var SessionCtrl = [
   '$scope', '$http', '$upload', 'socketService', function($scope, $http, $upload, socketService) {
 
+    $scope.userInfo = {};
     $scope.activeSessions = [];
     $scope.pendingSessions = [];
     $scope.isConfirmDeleteDialogOpen = {};
@@ -24,6 +25,10 @@ var SessionCtrl = [
       inProgress: null
     };
 
+    $scope.init = function(user) {
+      $scope.userInfo = JSON.parse(JSON.stringify(user));
+    };
+
     socketService.setSignalListner(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
         refreshCurrentSessions();
@@ -39,6 +44,7 @@ var SessionCtrl = [
         }
       }, 5000);
     };
+
     function refreshCurrentSessions() {
       $http.get('/currentSessions').then(function(result) {
         $scope.activeSessions = result.data.filter(function(item) {
@@ -53,12 +59,14 @@ var SessionCtrl = [
         $scope.setStatusAlert('No Current Sessions');
       });
     };
+
     function cancelEventPropagation(event) {
       if (event) {
         event.stopPropagation();
         event.preventDefault();
       }
     }
+
     $scope.importLogs = function() {
       window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
     };
@@ -74,13 +82,16 @@ var SessionCtrl = [
           break;
         }
       }
-      $http.get(endPoint + '?sn=' + sessionName).success(refreshCurrentSessions).error($scope.setStatusAlert);
+      $http.get(endPoint + '?sn=' + sessionName).success(refreshCurrentSessions).error(function(errorMessage) {
+        $scope.setStatusAlert(errorMessage);
+        $scope.isConfirmDeleteDialogOpen[sessionName] = false;
+      });
     };
     $scope.onDeleteSessionClicked = function(sessionName, event) {
       $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
       cancelEventPropagation(event);
     };
-    
+
     $scope.onCreateSessionTabClicked = function() {
       $scope.importTab.isOpen = false;
       $scope.createTab.isOpen = !$scope.createTab.isOpen;
@@ -102,7 +113,7 @@ var SessionCtrl = [
         $scope.importSessionForm.$setPristine();
       }
     };
-    
+
     $scope.onCreateSession = function() {
       if (!$scope.createSessionForm.createSessionInput.$valid) {
         return;

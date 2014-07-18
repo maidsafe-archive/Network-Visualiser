@@ -236,7 +236,7 @@ var DBUtil = function(dbConnection) {
       promise.error('Invalid File');
     });
   };
-  this.importLogs = function(sessionName, filePath, vaultInfo, sessionInfo, logManager) {
+  this.importLogs = function(sessionName, createdBy, filePath, vaultInfo, sessionInfo, logManager) {
     var promise = new mongoose.Promise;
     var validationCallback = function(errors) {
       if (errors.length > 0) {
@@ -246,7 +246,7 @@ var DBUtil = function(dbConnection) {
         }
         promise.error(err);
       } else {
-        sessionInfo.createSession(sessionName).then(function(sessionId) {
+        sessionInfo.createSession(sessionName, createdBy).then(function(sessionId) {
           importFactory(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise);
         }, function(createSessionError) {
           promise.error(createSessionError);

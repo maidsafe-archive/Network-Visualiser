@@ -93,13 +93,6 @@ exports.generateRandomSessionIdString = function(prefix) {
   });
   return prefix == null ? uuid : prefix + uuid;
 };
-exports.ensureAuthenticated = function(req, res, next) {
-  if (req._userInfo && req._userInfo.isAuthenticated) {
-    return next();
-  }
-
-  return res.redirect('/');
-};
 exports.hasSessionName = function(criteria) {
   return criteria && criteria.hasOwnProperty('sn');
 };

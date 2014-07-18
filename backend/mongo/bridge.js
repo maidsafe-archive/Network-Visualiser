@@ -101,14 +101,17 @@ exports.getTimelineDates = function(sessionName, promise) {
 exports.exportLogs = function(sessionName) {
   return dbUtils.exportLogs(sessionName, sessionInfo);
 };
-exports.importLogs = function(sessionName, fileName) {
-  return dbUtils.importLogs(sessionName, fileName, vaultInfo, sessionInfo, vaultLog);
+exports.importLogs = function(sessionName, createdBy, fileName) {
+  return dbUtils.importLogs(sessionName, createdBy, fileName, vaultInfo, sessionInfo, vaultLog);
 };
-exports.createSession = function(sessionName, promise) {
-  sessionInfo.createSession(sessionName, promise);
+exports.createSession = function(sessionName, createdBy, promise) {
+  sessionInfo.createSession(sessionName, createdBy, promise);
 };
-exports.getCurrentSessions = function() {
-  return sessionInfo.getCurrentSessions();
+exports.getCurrentSessions = function(userInfo) {
+  return sessionInfo.getCurrentSessions(userInfo);
+};
+exports.getSessionCreatedByForName = function(sessionName) {
+  return sessionInfo.getSessionCreatedByForName(sessionName);
 };
 exports.deleteSession = function(sessionName, promise) {
   sessionInfo.deleteSession(sessionName).then(function(sessionId) {

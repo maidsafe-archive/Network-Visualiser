@@ -97,7 +97,8 @@ var VaultBehaviourService = [
       14: generalFormaterWithVaule1,
       15: generalFormaterWithBothVaules,
       16: generalFormaterWithVaule1,
-      17: generalFormaterWithVaule1
+      17: generalFormaterWithVaule1,
+      18: generalFormaterWithVaule1
     };
     service.formatMessage = function(log) {
       return (formaters[log.action_id] || generalFormater)(log);

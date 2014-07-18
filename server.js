@@ -25,8 +25,8 @@ app.use(app.router);
 app.use(express.static(__dirname));
 
 
-app.get('/', function(req, res) {
-  res.render('sessions', { user: { enabled: !app.settings.needsAuth }, socketPort: socketPort });
+app.get('/', userAuth.appendUserInfo, function(req, res) {
+  res.render('sessions', { userInfo: req._userInfo, socketPort: socketPort });
 });
 
 app.get('/client/viewer', function(req, res) {

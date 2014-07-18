@@ -4,21 +4,24 @@
       <li>
         <div class="session_info">
           <input ng-value="session.session_name" class="session_name" readonly>
-  <% if(user.enabled) { %>
+<% if (userInfo.isAuthenticated) { %>
           <input class="session_created_by" ng-value="session.created_by" readonly>
           <input ng-value="session.session_id" class="session_id" readonly>
-  <% } %>
+ <% } %>
         </div>
         <div class="actions">
-  <% if(user.enabled) { %>
           <a href="" class="view" ng-click="openViewer(session.session_name)"></a>
-          <a href="" class="delete" ng-click="onDeleteSessionClicked(session.session_name, $event)"></a>
+<% if (userInfo.isAuthenticated) { %>
+          <a href=""
+             class="delete"
+             ng-click="onDeleteSessionClicked(session.session_name, $event)"
+             ng-show="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by"></a>
           <div class="confirm-delete" ng-show="isConfirmDeleteDialogOpen[session.session_name]" ng-click="$event.stopPropagation();">
           <p>Are you sure?</p>
             <a href="" class="yes-btn" ng-click="deleteSession(session.session_name, $event)">Yes</a>
             <a href="" class="no-btn" ng-click="onDeleteSessionClicked(session.session_name, $event)">No</a>
           </div>
-  <% } %>
+<% } %>
         </div>
       </li>
     </ul>

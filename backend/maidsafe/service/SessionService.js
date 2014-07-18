@@ -5,16 +5,26 @@ var url = require('url');
 var fs = require('fs');
 
 exports.createSession = function(req, res) {
+  if (!req._userInfo || !req._userInfo.isAuthenticated) {
+    res.send(500, 'Invalid Authentication');
+    return;
+  }
+
   var criteria = JSON.parse(JSON.stringify(req.body));
   if (!criteria || !criteria.hasOwnProperty('session_name')) {
     res.send(500, 'Invalid parameters');
     return;
   }
 
-  bridge.createSession(criteria.session_name, new Handler.CreateSessionHandler(res));
+  bridge.createSession(criteria.session_name, req._userInfo.mailAddress, new Handler.CreateSessionHandler(res));
 };
 
-exports.importSession = function (req, res) {
+exports.importSession = function(req, res) {
+  if (!req._userInfo || !req._userInfo.isAuthenticated) {
+    res.send(500, 'Invalid Authentication');
+    return;
+  }
+
   fs.readFile(req.files.file.path, function(err, data) {
     var fileName = "Import_" + new Date().getTime() + '.csv';
     fs.writeFile(fileName, data, function(err) {
@@ -23,7 +33,7 @@ exports.importSession = function (req, res) {
         return;
       }
 
-      bridge.importLogs(req.body.sn, fileName).then(function() {
+      bridge.importLogs(req.body.sn, req._userInfo.mailAddress, fileName).then(function() {
         var handler = new Handler.SaveLogHandler();
         res.send('Added to Import Queue');
         utils.deleteFile(fileName);
@@ -37,7 +47,7 @@ exports.importSession = function (req, res) {
 };
 
 exports.getCurrentSessions = function(req, res) {
-  bridge.getCurrentSessions().then(function(activeSessions) {
+  bridge.getCurrentSessions(req._userInfo).then(function(activeSessions) {
     if (!activeSessions.length) {
       res.send(500, "No Active Sessions");
       return;
@@ -47,21 +57,53 @@ exports.getCurrentSessions = function(req, res) {
 };
 
 exports.deleteSession = function(req, res) {
+  if (!req._userInfo || !req._userInfo.isAuthenticated) {
+    res.send(500, 'Invalid Authentication');
+    return;
+  }
+
   var criteria = url.parse(req.url, true).query;
   if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
     res.send(500, 'Invalid Request');
     return;
   }
 
-  bridge.deleteSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+  if (req._userInfo.isMaidSafeUser) {
+    bridge.deleteSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+    return;
+  }
+
+  bridge.getSessionCreatedByForName(criteria.sn).then(function(createdBy) {
+    if (createdBy == req._userInfo.mailAddress) {
+      bridge.deleteSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+    } else {
+      res.send(500, 'Invalid Authentication');
+    }
+  });
 };
 
 exports.deletePendingSession = function(req, res) {
+  if (!req._userInfo || !req._userInfo.isAuthenticated) {
+    res.send(500, 'Invalid Authentication');
+    return;
+  }
+
   var criteria = url.parse(req.url, true).query;
   if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
     res.send(500, 'Invalid Request');
     return;
   }
 
-  bridge.deletePendingSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+  if (req._userInfo.isMaidSafeUser) {
+    bridge.deletePendingSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+    return;
+  }
+
+  bridge.getSessionCreatedByForName(criteria.sn).then(function(createdBy) {
+    if (createdBy == req._userInfo.mailAddress) {
+      bridge.deletePendingSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+    } else {
+      res.send(500, 'Invalid Authentication');
+    }
+  });
 };

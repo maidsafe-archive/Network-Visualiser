@@ -6,6 +6,7 @@ var SessionMetaData = function(dbConnection) {
   SCHEMA = {
     session_id: String,
     session_name: String,
+    created_by: String,
     is_active: Boolean,
     beginDate: String,
     endDate: String
@@ -14,7 +15,7 @@ var SessionMetaData = function(dbConnection) {
   SessionInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
   utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'session_id');
 
-  this.createSession = function(sessionName, callback) {
+  this.createSession = function(sessionName, createdBy, callback) {
     var promise = new mongoose.Promise;
     if (callback) {
       promise.addBack(callback);
@@ -44,7 +45,7 @@ var SessionMetaData = function(dbConnection) {
       } while (currentSessions.length > 0 && isDuplicateSessionId(randomId, currentSessions));
 
 
-      var newSession = new SessionInfo({ session_id: randomId, session_name: nameTrimmed, is_active: false });
+      var newSession = new SessionInfo({ session_id: randomId, session_name: nameTrimmed, created_by: createdBy, is_active: false });
       newSession.save(function(errSave, resSave) {
         if (errSave) {
           promise.error(errSave);
@@ -55,14 +56,47 @@ var SessionMetaData = function(dbConnection) {
     });
     return promise;
   };
-  this.getCurrentSessions = function(callback) {
+  this.getCurrentSessions = function(userInfo, callback) {
     var promise = new mongoose.Promise;
     if (callback) {
       promise.addBack(callback);
     }
-    SessionInfo.find({}, { _id: 0 }, function(err, res) {
-      // TODO(Viv) Filter returned data based on req.isAuth()
-      err ? promise.error(err) : promise.complete(res);
+
+    var fullResultsCriteria = { _id: 0, session_id: 1, session_name: 1, created_by: 1, is_active: 1 };
+    var restrictedResultsCriteria = { _id: 0, session_name: 1, created_by: 1, is_active: 1 };
+
+    if (userInfo.isMaidSafeUser) {
+      SessionInfo.find({}, fullResultsCriteria, function(err, res) {
+        err ? promise.error(err) : promise.complete(res);
+      });
+      return promise;
+    }
+
+    if (!userInfo.isAuthenticated) {
+      SessionInfo.find({}, restrictedResultsCriteria, function(err, res) {
+        err ? promise.error(err) : promise.complete(res);
+      });
+      return promise;
+    }
+
+    SessionInfo.find({ created_by: userInfo.mailAddress }, fullResultsCriteria, function(err, res) {
+      if (err) {
+        promise.error(err);
+        return;
+      }
+
+      SessionInfo.find({ created_by: { $ne: userInfo.mailAddress } }, restrictedResultsCriteria, function(errSpecific, selectSessions) {
+        if (errSpecific) {
+          promise.error(errSpecific);
+          return;
+        }
+
+        for (var index in res) {
+          selectSessions.push(res[index]);
+        }
+
+        promise.complete(selectSessions);
+      });
     });
     return promise;
   };
@@ -141,7 +175,14 @@ var SessionMetaData = function(dbConnection) {
     });
     return promise;
   };
+  this.getSessionCreatedByForName = function(sessionName) {
+    var promise = new mongoose.Promise;
 
+    SessionInfo.findOne({ session_name: sessionName }, { _id: 0, created_by: 1 }, function(err, res) {
+      err || !res ? promise.error(err) : promise.complete(res.created_by);
+    });
+    return promise;
+  };
   var isDuplicateSessionId = function(sessionId, sessions) {
     for (var index in sessions) {
       if (sessions[index].session_id == sessionId) {

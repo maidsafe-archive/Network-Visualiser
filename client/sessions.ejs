@@ -36,7 +36,7 @@
     <link rel="shortcut icon" href="../client/imgs/favicon.ico" />
     <link rel="icon" type="image/ico" href="../client/imgs/favicon.ico" />
   </head>
-  <body ng-app="MaidSafe" ng-controller="sessionCtrl" id="sessions" ng-app="myapp">
+  <body ng-app="MaidSafe" ng-controller="sessionCtrl" ng-init="init(<%= JSON.stringify(userInfo) %>)" id="sessions" ng-app="myapp">
     <header>
       <% include ../client/template/sessions/header.ejs %>
     </header>

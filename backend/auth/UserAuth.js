@@ -56,33 +56,7 @@ exports.configureAuth = function(server) {
   server.use(passport.session());
 };
 
-exports.setupAuthCallbacks = function(server) {
-  if (!needsAuth) {
-    return;
-  }
-
-  server.get('/auth', utils.ensureAuthenticated, function(req, res) {
-    console.log('/auth called' + req.user._json.email);
-    res.render('sessions', {
-      user: {
-        enabled: req.user._json.email.indexOf(gAuth.VALIDATION_STRING) > 0,
-        email: req.user._json.email
-      },
-      socketPort: config.Constants.socketPort
-    });
-  });
-
-  server.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }), function(req, res) {
-    // The request will be redirected to Google for authentication, so this
-    // function will not be called.
-  });
-
-  server.get('/googlecallback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
-    res.redirect('/auth');
-  });
-};
-
-exports.appendUserInfo = function(req, res, next) {
+var setUserInfo = function(req, res, next) {
   var userInfo = {
     isAuthenticated: false,
     isMaidSafeUser: false,
@@ -116,4 +90,28 @@ exports.appendUserInfo = function(req, res, next) {
 
   req._userInfo = userInfo;
   return next();
+};
+
+exports.appendUserInfo = setUserInfo;
+
+exports.setupAuthCallbacks = function(server) {
+  if (!needsAuth) {
+    return;
+  }
+
+  server.get('/auth', setUserInfo, function(req, res) {
+    res.render('sessions', {
+      userInfo: req._userInfo,
+      socketPort: config.Constants.socketPort
+    });
+  });
+
+  server.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }), function(req, res) {
+    // The request will be redirected to Google for authentication, so this
+    // function will not be called.
+  });
+
+  server.get('/googlecallback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
+    res.redirect('/auth');
+  });
 };

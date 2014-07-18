@@ -1,21 +1,21 @@
 <div class="top-header">
-  <h1><a href="/">Network Visualiser - Sessions View</a></h1>
+  <h1><a href="/">Network Visualiser - Sessions View{{userInfo.isAuthenticated ? ' (' + userInfo.mailAddress + ')' : ''}}</a></h1>
 </div>
 <ul class="buttons-left">
-  <% if( user.enabled) { %>
-    <li>
-      <button ng-click="onCreateSessionTabClicked()" class="create-session" ng-class="{true:'active'}[createTab.isOpen]">Create Session</button>
-    </li>
-    <li>
-      <button ng-click="onImportSessionTabClicked()" class="import-logs" ng-class="{true:'active'}[importTab.isOpen]">Import</button>
-    </li>
-    <% } else { %>
-      <li>
-        <button class="sign-in"><a href="/auth/google">Sign In</a></button>
-      </li>
-      <% } %>
+<% if (userInfo.isAuthenticated) { %>
+  <li>
+    <button ng-click="onCreateSessionTabClicked()" class="create-session" ng-class="{true:'active'}[createTab.isOpen]">Create Session</button>
+  </li>
+  <li>
+    <button ng-click="onImportSessionTabClicked()" class="import-logs" ng-class="{true:'active'}[importTab.isOpen]">Import</button>
+  </li>
+<% } else { %>
+  <li>
+    <button class="sign-in"><a href="/auth/google">Sign In</a></button>
+  </li>
+<% } %>
 </ul>
-<% if( user.enabled) { %>
+<% if (userInfo.isAuthenticated) { %>
 <div class="toggle_create_session" ng-show="createTab.isOpen">
   <div class="wrapper">
     <div class="session-input-wrapper" ng-show="createTab.inputRequired">
