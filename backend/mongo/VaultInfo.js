@@ -21,13 +21,12 @@ var VaultMetaData = function(dbConnection) {
     var temp = { vault_id: data.vault_id, is_running: data.action_id == 0, session_id: data.session_id };
     if (data.action_id == 0) {
       temp.vault_id_full = data.value1;
-      temp.host_name = data.value2;
+      temp.host_name = data.value2 || '';
     }
     return temp;
   };
   this.updateVaultStatus = function(data) {
     var promise = new mongoose.Promise;
-    var actionId = data.action_id;
     if (canUpdateStatus(data.action_id)) {
       data = transformData(data);
       VaultInfo.update({ vault_id: data.vault_id, session_id: data.session_id }, data, { upsert: true }, function(err, doc) {

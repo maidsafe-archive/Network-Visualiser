@@ -74,7 +74,7 @@ var VaultCtrl = [
       }
 
       if (!$scope.hostName && (log.action_id == 0 || log.hasOwnProperty('host_name'))) {
-        $scope.hostName = log.host_name || log.value2;
+        $scope.hostName = log.host_name || log.value2 || '';
       }
 
       $scope.stateOfVault(log);
