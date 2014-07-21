@@ -40,6 +40,7 @@ var DBUtil = function(dbConnection) {
     9: 'Cachehandler',
     10: 'NA'
   };
+  // ReSharper disable once InconsistentNaming
   var ExportHandler = function(promise) {
     var fetched = 0;
     var max = 0;
@@ -47,14 +48,16 @@ var DBUtil = function(dbConnection) {
     this.setTotalCount = function(count) {
       max = count;
     };
-    this.setFile = function(outStream_) {
-      outStream = outStream_;
+    this.setFile = function(outFileStream) {
+      outStream = outFileStream;
+      outStream.on('finish', function() {
+        promise.complete(outStream.path);
+      });
     };
     this.callback = function() {
       fetched++;
       if (fetched == max) {
         outStream.end();
-        promise.complete(outStream.path);
       }
     };
     return this;
@@ -68,9 +71,7 @@ var DBUtil = function(dbConnection) {
           outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
         });
         stream.on('close', function() {
-          setTimeout(function() {
-            handler.callback();
-          }, 1000);
+          handler.callback();
         });
       });
     };
