@@ -1,5 +1,6 @@
 exports.Constants = {
   mongo_con: 'mongodb://localhost:27017/maidsafe_logs',
+  authPath: '../../../../../auth/next/gauth.json',
   landingPage: '/client/sessions.html',
   paging: { max: 200 },
   serverPort: 8080,
