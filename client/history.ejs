@@ -36,57 +36,55 @@
 
     <title>Network Visualiser - History View</title>
   </head>
-  <body ng-app="MaidSafe">
+  <body ng-app="MaidSafe" ng-controller="historyCtrl">
     <header>
-      <div class="history" ng-controller="historyCtrl">
-        <div class="top-header">
-          <h1><a href="/">Network Visualiser - History View - {{vaultId}}</a></h1>
-          <p class="time_label">
-            <span>Snapshot at {{ asOfDate | date : 'HH:mm:ss, dd/MM/yyyy'}}<span>
-          </p>
-        </div>
-        <div class="info">
-          <div class="search-wrapper">
-            <form id="search-filter">
-              <input type="text" style="font-weight: none; text-align: center;" name="focus" class="search-box" required ng-model="search" placeholder="Type text to filter"/>
+      <div class="top-header">
+        <h1><a href="/">Network Visualiser - History View - {{vaultId}}</a></h1>
+        <p class="time_label">
+          <span>Snapshot at {{ asOfDate | date : 'HH:mm:ss, dd/MM/yyyy'}}<span>
+        </p>
+      </div>
+      <div class="info">
+        <div class="search-wrapper">
+          <form id="search-filter">
+            <input type="text" style="font-weight: none; text-align: center;" name="focus" class="search-box" required ng-model="search" placeholder="Type text to filter"/>
 
-              <button id="clear" class="close-icon reset" type="reset" ng-click="search = ''"></button>
-            </form>
-          </div>
-        </div>
-        <div>
-          <table>
-            <thead>
-              <td class="timestamp-head">Timestamp</td>
-              <td class="persona-head">Persona</td>
-              <td class="action-head">Action</td>
-              <td class="value1-head">Value 1</td>
-              <td class="value2-head">Value 2</td>
-            </thead>
-            <tr ng-repeat="log in logs | filter:search">
-              <td style="width: 12.5%">
-                {{log.ts = (log.ts | date:'MMM dd yy HH:mm.ss.sss')}}
-              </td>
-              <td style="width: 10%">
-                {{log.p = vaultBehaviour.personas[log.persona_id]}}
-              </td>
-              <td style="width: 10%">
-                {{log.a = vaultBehaviour.actions[log.action_id]}}
-              </td>
-              <td style="width: 35%;">
-                <div>
-                  {{log.value1}}
-                </div>
-              </td>
-              <td style="width: 35%">
-                <div>
-                  {{log.value2}}
-                </div>
-              </td>
-            </tr>
-          </table>
+            <button id="clear" class="close-icon reset" type="reset" ng-click="search = ''"></button>
+          </form>
         </div>
       </div>
     </header>
+    <section>
+      <table>
+        <thead>
+          <td class="timestamp-head">Timestamp</td>
+          <td class="persona-head">Persona</td>
+          <td class="action-head">Action</td>
+          <td class="value1-head">Value 1</td>
+          <td class="value2-head">Value 2</td>
+        </thead>
+        <tr ng-repeat="log in logs | filter:search">
+          <td style="width: 12.5%">
+            {{log.ts = (log.ts | date:'MMM dd yy HH:mm.ss.sss')}}
+          </td>
+          <td style="width: 10%">
+            {{log.p = vaultBehaviour.personas[log.persona_id]}}
+          </td>
+          <td style="width: 10%">
+            {{log.a = vaultBehaviour.actions[log.action_id]}}
+          </td>
+          <td style="width: 35%;">
+            <div>
+              {{log.value1}}
+            </div>
+          </td>
+          <td style="width: 35%">
+            <div>
+              {{log.value2}}
+            </div>
+          </td>
+        </tr>
+      </table>
+    </section>
   </body>
 </html>
