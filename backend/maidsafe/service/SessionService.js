@@ -36,10 +36,10 @@ exports.importSession = function(req, res) {
       bridge.importLogs(req.body.sn, req._userInfo.mailAddress, fileName).then(function() {
         var handler = new Handler.SaveLogHandler();
         res.send('Added to Import Queue');
-        utils.deleteFile(fileName);
+        fs.unlinkSync(path);
         handler.refreshSessionsCallback();
       }, function() {
-        utils.deleteFile(fileName);
+        fs.unlinkSync(path);
         res.send(500, 'Invalid File');
       });
     });

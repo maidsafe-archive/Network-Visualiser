@@ -106,8 +106,3 @@ exports.filterSessionVaultNames = function(sessionId, dbConnName, collections) {
   }
   return sessionVaultNames;
 };
-exports.deleteFile = function(path) {
-  setTimeout(function() {
-    fs.unlinkSync(path);
-  }, 30000);
-};

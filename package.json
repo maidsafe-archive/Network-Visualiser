@@ -18,6 +18,7 @@
     "forever":"latest",
     "ejs":"latest",
     "passport":"latest",
-    "passport-google-oauth":"latest"
+    "passport-google-oauth":"latest",
+    "easy-zip":"latest"
   }
 }

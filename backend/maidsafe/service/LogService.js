@@ -3,6 +3,8 @@ var Handler = require('./Handler.js');
 var utils = require('./../utils.js');
 var url = require('url');
 var config = require('./../../../Config.js');
+var fs = require('fs');
+var EasyZip = require('easy-zip').EasyZip;
 
 var saveLog = function(req, res) {
   var log = req.body;
@@ -148,8 +150,16 @@ var exportLogs = function(req, res) {
   }
 
   bridge.exportLogs(criteria.sn).then(function(path) {
-    res.download(path);
-    utils.deleteFile(path);
+    var zipPath = path.replace(".csv", ".zip");
+    var zip = new EasyZip();
+    zip.addFile(criteria.sn + ' - Logs.csv', path, function() {
+      zip.writeToFile(zipPath, function() {
+        fs.unlinkSync(path);
+        res.download(zipPath, criteria.sn + ' - Logs.zip', function() {
+          fs.unlinkSync(zipPath);
+        });
+      });
+    });
   });
 };
 var testLog = function(req, res) {
