@@ -215,9 +215,9 @@ button.sign-in:hover a { color: #fff; }
 }
 
 section {
-  bottom: 0px;
+  bottom: 50px; /* Corresponds to the footer height */
   position: absolute;
-  top: 90px; /*Corresponds to the header height plus 20px*/
+  top: 90px; /* Corresponds to the header height plus 20px */
   width: 100%;
 }
 
@@ -367,7 +367,6 @@ section div.wrapper div.node div.log_slider {
   position: relative;
   top: -2px;
   width: 100%;
-  z-index: 200;
 }
 
 section div.wrapper div.node div.log_slider ul li {
