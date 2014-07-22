@@ -8,7 +8,7 @@ var ApplicationCtrl = [
     $scope.allVaultsExpanded = false;
 
     $scope.showLoader = true;
-    $scope.alert;
+    $scope.alert = null;
     $scope.currentTime = new Date().getTime();
     setInterval(function() {
       $scope.currentTime += 1000;
@@ -59,5 +59,12 @@ var ApplicationCtrl = [
     setTimeout(function() {
       dataManager.getActiveVaults();
     }, 10);
+
+    $scope.limit = 30;
+    $scope.loadMore = function() {
+      console.log('called');
+      $scope.limit += 20;
+      console.log('New limit: ' + $scope.limit);
+    };
   }
 ];

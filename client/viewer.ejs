@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="../vendor/normalize.css/normalize.css">
@@ -14,6 +15,7 @@
     <script type="text/javascript" src="../vendor/zeroclipboard/dist/ZeroClipboard.min.js"></script>
     <script type="text/javascript" src="../vendor/ng-file-upload/angular-file-upload.js"></script>
     <script type="text/javascript" src="../vendor/ng-file-upload/angular-file-upload-shim.js"></script>
+    <script type="text/javascript" src="../vendor/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../vendor/angular-rangeslider/angular.rangeSlider.css">
 
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
@@ -43,7 +45,7 @@
     <link rel="shortcut icon" href="../client/imgs/favicon.ico" />
     <link rel="icon" type="image/ico" href="../client/imgs/favicon.ico" />
   </head>
-  <body ng-app="MaidSafe" ng-controller="applicationCtrl">
+  <body ng-app="MaidSafe" ng-controller="applicationCtrl" infinite-scroll-parent="true">
     <header>
       <ng-include src="'../client/template/viewer/header.html'"></ng-include>
     </header>
@@ -51,7 +53,7 @@
       <div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]">
         <ng-include src="'../client/template/common/icons_tray.html'"></ng-include>
       </div>
-      <div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
+      <div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]" infinite-scroll='loadMore()' infinite-scroll-distance='2'>
         <ng-include src="'../client/template/common/node.html'"></ng-include>
       </div>
     </section>

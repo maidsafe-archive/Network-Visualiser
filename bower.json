@@ -8,6 +8,7 @@
     "jquery":"latest",
     "animate.css":"latest",
     "zeroclipboard":"latest",
-    "ng-file-upload":"latest"
+    "ng-file-upload":"latest",
+    "ngInfiniteScroll":"latest"
   }
 }
