@@ -3,7 +3,7 @@
     <ul>
       <li>
         <div class="session_info">
-          <input ng-value="session.session_name" class="session_name" readonly>
+          <input ng-value="session.session_name" ng-click="openViewer(session.session_name)" class="session_name" readonly >
 <% if (userInfo.isAuthenticated) { %>
           <input class="session_created_by" ng-value="session.created_by" readonly>
           <input ng-value="session.session_id" class="session_id" readonly>

@@ -283,8 +283,8 @@ button.copy-clipboard.zeroclipboard-is-active {
 .session_name {
   padding: 0px;
   height: 20px;
-  border-radius: 0x;
-  width: 90%;
+  border-radius: 0px;
+  max-width: 90%;
   font-size: 20px;
   padding: 0.4em 0;
   height: 50px;
@@ -299,6 +299,7 @@ button.copy-clipboard.zeroclipboard-is-active {
   -moz-text-overflow: ellipsis;
   -webkit-text-overflow: ellipsis;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .session_id {
@@ -378,6 +379,8 @@ a.view {
   height: 15px;
   margin: 2.4em 1.2em;
   width: 26px;
+  position: absolute;
+  right: 50px;
 }
 
 a.view:hover {
