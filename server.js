@@ -1,4 +1,5 @@
 var express = require('express');
+var MongoStore = require('connect-mongo')(express);
 var connectMultiparty = require('connect-multiparty');
 var methodOverride = require('method-override');
 
@@ -19,7 +20,13 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(connectMultiparty());
 app.use(methodOverride());
-app.use(express.session({ secret: 'maidsafelogs' }));
+app.use(express.session({
+  store: new MongoStore({
+    url: config.Constants.mongo_con + '/nodeSessions'
+  }),
+  cookie: { maxAge: 3600000 },
+  secret: 'maidsafelogs'
+}));
 userAuth.configureAuth(app);
 app.use(app.router);
 app.use(express.static(__dirname));

@@ -9,6 +9,7 @@
   "devDependencies":{
     "express":"3.x",
     "mongoose":"3.8.x",
+    "connect-mongo":"0.4.x",
     "socket.io":"0.9",
     "bower":"latest",
     "connect-multiparty": "1.x",
