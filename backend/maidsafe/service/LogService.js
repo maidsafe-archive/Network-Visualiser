@@ -4,7 +4,7 @@ var utils = require('./../utils.js');
 var url = require('url');
 var config = require('./../../../Config.js');
 var fs = require('fs');
-var EasyZip = require('easy-zip').EasyZip;
+var archiver = require('archiver');
 
 var saveLog = function(req, res) {
   var log = req.body;
@@ -151,15 +151,22 @@ var exportLogs = function(req, res) {
 
   bridge.exportLogs(criteria.sn).then(function(path) {
     var zipPath = path.replace(".csv", ".zip");
-    var zip = new EasyZip();
-    zip.addFile(criteria.sn + ' - Logs.csv', path, function() {
-      zip.writeToFile(zipPath, function() {
-        fs.unlinkSync(path);
-        res.download(zipPath, criteria.sn + ' - Logs.zip', function() {
-          fs.unlinkSync(zipPath);
-        });
+    var output = fs.createWriteStream(zipPath);
+    var archive = archiver('zip');
+
+    output.on('close', function() {
+      fs.unlinkSync(path);
+      res.download(zipPath, criteria.sn + ' - Logs.zip', function() {
+        fs.unlinkSync(zipPath);
       });
     });
+
+    archive.on('error', function(err) {
+      res.send(err);
+    });
+
+    archive.pipe(output);
+    archive.append(fs.createReadStream(path), { name: criteria.sn + ' - Logs.csv' }).finalize();
   });
 };
 var testLog = function(req, res) {

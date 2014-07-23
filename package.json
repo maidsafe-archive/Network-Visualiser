@@ -20,6 +20,6 @@
     "ejs":"latest",
     "passport":"latest",
     "passport-google-oauth":"latest",
-    "easy-zip":"latest"
+    "archiver":"latest"
   }
 }

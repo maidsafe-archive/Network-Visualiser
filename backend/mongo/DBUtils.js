@@ -68,7 +68,7 @@ var DBUtil = function(dbConnection) {
     var promise = new mongoose.Promise;
     var fileName = "Logs_" + new Date().getTime() + ".csv";
     fs.writeFile(fileName, "Vault_Id,Timestamp,Action,Persona,Value1,Value2\n", function(err) {
-      if(err) {
+      if (err) {
         promise.error(err);
       } else {
         promise.complete(fileName);
@@ -100,14 +100,14 @@ var DBUtil = function(dbConnection) {
   };
   var getActionNameMap = function() {
     var map = {};
-    for(var key in ACTION_TO_STRING) {
+    for (var key in ACTION_TO_STRING) {
       map[ACTION_TO_STRING[key]] = key;
     }
     return map;
   };
   var getPersonaNameMap = function() {
     var map = {};
-    for(var key in PERSONA_TO_STRING) {
+    for (var key in PERSONA_TO_STRING) {
       map[PERSONA_TO_STRING[key]] = key;
     }
     return map;
@@ -123,36 +123,36 @@ var DBUtil = function(dbConnection) {
       errString += ((errString == '' ? errString : ', ') + msg);
       isValid = false;
     };
-    if(!log.vault_id || log.vault_id == '') {
+    if (!log.vault_id || log.vault_id == '') {
       addErrorMessage("Vault Id is empty");
     }
-    if(!log.ts) {
+    if (!log.ts) {
       addErrorMessage("Timestamp is empty");
     }
-    if(log.ts) {
+    if (log.ts) {
       try {
         var tempDate = new Date(log.ts);
-        if(tempDate == "Invalid Date") {
+        if (tempDate == "Invalid Date") {
           addErrorMessage("Invalid Timestamp");
         }
-      } catch(e) {
+      } catch (e) {
         addErrorMessage("Invalid Timestamp");
       }
     }
-    if(!log.action_id) {
+    if (!log.action_id) {
       addErrorMessage("Action Id is empty or invalid - spell check");
     }
-    if(log.action_id) {
+    if (log.action_id) {
       try {
         parseInt(log.action_id);
-      } catch(e) {
+      } catch (e) {
         addErrorMessage('Invalid Action Id');
       }
     }
-    if(log.persona_id) {
+    if (log.persona_id) {
       try {
         parseInt(log.action_id);
-      } catch(e) {
+      } catch (e) {
         addErrorMessage('Invalid Persona Id');
       }
     }
@@ -186,13 +186,13 @@ var DBUtil = function(dbConnection) {
     };
 
     csv.fromStream(stream).on("record", function(data) {
-      if(lineNumber++ == 0) {
+      if (lineNumber++ == 0) {
         return;
       }
 
-      if(validationCallback) {
+      if (validationCallback) {
         var errorInfo = importValidator(data);
-        if(!errorInfo.valid) {
+        if (!errorInfo.valid) {
           errorInfo.lineNumber = lineNumber;
           validationErrors.push(errorInfo);
         }
@@ -201,7 +201,7 @@ var DBUtil = function(dbConnection) {
         new SaveLog(data);
       }
     }).on("end", function() {
-      if(validationCallback) {
+      if (validationCallback) {
         validationCallback(validationErrors);
       } else {
         promise.complete('Added to Server Queue.');
@@ -213,9 +213,9 @@ var DBUtil = function(dbConnection) {
   this.importLogs = function(sessionName, createdBy, filePath, vaultInfo, sessionInfo, logManager) {
     var promise = new mongoose.Promise;
     var validationCallback = function(errors) {
-      if(errors.length > 0) {
+      if (errors.length > 0) {
         var err = '';
-        for(var i = 0; i < errors.length; i++) {
+        for (var i = 0; i < errors.length; i++) {
           err += (errors[i].lineNumber + ' : ' + errors[i].msg + '</br>');
         }
         promise.error(err);
