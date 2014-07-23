@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var fs = require('fs');
 var csv = require('fast-csv');
 var utils = require('./../maidsafe/utils.js');
+var async = require('async');
+var Transform = require('stream').Transform;
 
 var DBUtil = function(dbConnection) {
   var dbConn = dbConnection;
@@ -40,86 +42,57 @@ var DBUtil = function(dbConnection) {
     9: 'Cachehandler',
     10: 'NA'
   };
-  // ReSharper disable once InconsistentNaming
-  var ExportHandler = function(promise) {
-    var fetched = 0;
-    var max = 0;
-    var outStream;
-    this.setTotalCount = function(count) {
-      max = count;
-    };
-    this.setFile = function(outFileStream) {
-      outStream = outFileStream;
-      outStream.on('finish', function() {
-        promise.complete(outStream.path);
-      });
-    };
-    this.callback = function() {
-      fetched++;
-      if (fetched == max) {
-        outStream.end();
-      }
-    };
-    return this;
-  };
-  // ReSharper disable once InconsistentNaming
-  var VaultToCSV = function(formattedCollectionName, outStream, handler) {
-    var writeToStream = function() {
-      dbConn.db.collection(formattedCollectionName, function(err, col) {
-        var stream = col.find({}, { __id: 0, __v: 0 }).stream();
-        stream.on('data', function(doc) {
-          outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
-        });
-        stream.on('close', function() {
-          handler.callback();
-        });
-      });
-    };
-    writeToStream();
-  };
-  // ReSharper disable once InconsistentNaming
-  var ExportHelper = function(sessionId, promise) {
-    var outStream;
-    var handler;
-    var isReady = false;
-    this.setOutStream = function(stream) {
-      outStream = stream;
-      handler = new ExportHandler(promise);
-      handler.setFile(outStream);
-      convert();
-    };
-    var convert = function() {
-      if (outStream && isReady) {
-        outStream.write("Vault_Id,Timestamp,Action,Persona,Value1,Value2\n");
-        dbConn.db.collectionNames(function(e, colls) {
-          var sessionVaultNames = utils.filterSessionVaultNames(sessionId, dbConn.name, colls);
-          handler.setTotalCount(sessionVaultNames.length);
-          for (var index in sessionVaultNames) {
-            // ReSharper disable once WrongExpressionStatement
-            new VaultToCSV(sessionVaultNames[index], outStream, handler);
-          }
-        });
-      }
-    };
-    this.streamReady = function(fd) {
-      isReady = true;
-      convert();
-    };
 
-    return this;
+  function createParser() {
+    var parser = new Transform({ objectMode: true });
+    parser._transform = function(doc, encoding, done) {
+      this.push(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
+      done();
+    };
+    return parser;
+  }
+
+  var appendCollectionToFile = function(formattedCollectionName, fileName) {
+    var promise = new mongoose.Promise;
+    var outStream = fs.createWriteStream(fileName, { 'flags': 'a' });
+    dbConn.db.collection(formattedCollectionName, function(err, col) {
+      var stream = col.find({}, { __id: 0, __v: 0 }).stream();
+      var res = stream.pipe(createParser()).pipe(outStream);
+      res.on('finish', function() {
+        promise.complete('');
+      });
+    });
+    return promise;
   };
-  var createTempFile = function(streamReadyCallback) {
-    this.fileName = "Logs_" + new Date().getTime() + ".csv";
-    this.stream = fs.createWriteStream(this.fileName);
-    this.stream.once('open', streamReadyCallback);
-    return this;
+  var setupExportFile = function() {
+    var promise = new mongoose.Promise;
+    var fileName = "Logs_" + new Date().getTime() + ".csv";
+    fs.writeFile(fileName, "Vault_Id,Timestamp,Action,Persona,Value1,Value2\n", function(err) {
+      if(err) {
+        promise.error(err);
+      } else {
+        promise.complete(fileName);
+      }
+    });
+    return promise;
   };
   this.exportLogs = function(sessionName, sessionInfo) {
     var promise = new mongoose.Promise;
     sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
-      var helper = new ExportHelper(sessionId, promise);
-      var outFile = createTempFile(helper.streamReady);
-      helper.setOutStream(outFile.stream);
+      setupExportFile().then(function(fileName) {
+        dbConn.db.collectionNames(function(e, colls) {
+          var sessionVaultNames = utils.filterSessionVaultNames(sessionId, dbConn.name, colls);
+          async.forEachSeries(sessionVaultNames, function(vaultName, callback) {
+            appendCollectionToFile(vaultName, fileName).then(function() {
+              callback();
+            }, function() {
+              callback('Export Failed');
+            });
+          }, function(err) {
+            err ? promise.error(err) : promise.complete(fileName);
+          });
+        });
+      });
     }, function(err) {
       promise.error(err);
     });
@@ -127,14 +100,14 @@ var DBUtil = function(dbConnection) {
   };
   var getActionNameMap = function() {
     var map = {};
-    for (var key in ACTION_TO_STRING) {
+    for(var key in ACTION_TO_STRING) {
       map[ACTION_TO_STRING[key]] = key;
     }
     return map;
   };
   var getPersonaNameMap = function() {
     var map = {};
-    for (var key in PERSONA_TO_STRING) {
+    for(var key in PERSONA_TO_STRING) {
       map[PERSONA_TO_STRING[key]] = key;
     }
     return map;
@@ -150,36 +123,36 @@ var DBUtil = function(dbConnection) {
       errString += ((errString == '' ? errString : ', ') + msg);
       isValid = false;
     };
-    if (!log.vault_id || log.vault_id == '') {
+    if(!log.vault_id || log.vault_id == '') {
       addErrorMessage("Vault Id is empty");
     }
-    if (!log.ts) {
+    if(!log.ts) {
       addErrorMessage("Timestamp is empty");
     }
-    if (log.ts) {
+    if(log.ts) {
       try {
         var tempDate = new Date(log.ts);
-        if (tempDate == "Invalid Date") {
+        if(tempDate == "Invalid Date") {
           addErrorMessage("Invalid Timestamp");
         }
-      } catch (e) {
+      } catch(e) {
         addErrorMessage("Invalid Timestamp");
       }
     }
-    if (!log.action_id) {
+    if(!log.action_id) {
       addErrorMessage("Action Id is empty or invalid - spell check");
     }
-    if (log.action_id) {
+    if(log.action_id) {
       try {
         parseInt(log.action_id);
-      } catch (e) {
+      } catch(e) {
         addErrorMessage('Invalid Action Id');
       }
     }
-    if (log.persona_id) {
+    if(log.persona_id) {
       try {
         parseInt(log.action_id);
-      } catch (e) {
+      } catch(e) {
         addErrorMessage('Invalid Persona Id');
       }
     }
@@ -213,13 +186,13 @@ var DBUtil = function(dbConnection) {
     };
 
     csv.fromStream(stream).on("record", function(data) {
-      if (lineNumber++ == 0) {
+      if(lineNumber++ == 0) {
         return;
       }
 
-      if (validationCallback) {
+      if(validationCallback) {
         var errorInfo = importValidator(data);
-        if (!errorInfo.valid) {
+        if(!errorInfo.valid) {
           errorInfo.lineNumber = lineNumber;
           validationErrors.push(errorInfo);
         }
@@ -228,7 +201,7 @@ var DBUtil = function(dbConnection) {
         new SaveLog(data);
       }
     }).on("end", function() {
-      if (validationCallback) {
+      if(validationCallback) {
         validationCallback(validationErrors);
       } else {
         promise.complete('Added to Server Queue.');
@@ -240,9 +213,9 @@ var DBUtil = function(dbConnection) {
   this.importLogs = function(sessionName, createdBy, filePath, vaultInfo, sessionInfo, logManager) {
     var promise = new mongoose.Promise;
     var validationCallback = function(errors) {
-      if (errors.length > 0) {
+      if(errors.length > 0) {
         var err = '';
-        for (var i = 0; i < errors.length; i++) {
+        for(var i = 0; i < errors.length; i++) {
           err += (errors[i].lineNumber + ' : ' + errors[i].msg + '</br>');
         }
         promise.error(err);
