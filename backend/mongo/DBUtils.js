@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var fs = require('fs');
 var csv = require('fast-csv');
 var utils = require('./../maidsafe/utils.js');
+var async = require('async');
 
 var DBUtil = function(dbConnection) {
   var dbConn = dbConnection;
@@ -51,12 +52,15 @@ var DBUtil = function(dbConnection) {
     this.setFile = function(outFileStream) {
       outStream = outFileStream;
       outStream.on('finish', function() {
+        console.log('Completing promise');
         promise.complete(outStream.path);
       });
     };
     this.callback = function() {
       fetched++;
+      console.log('Fetched: ' + fetched);
       if (fetched == max) {
+        console.log('Sending End');
         outStream.end();
       }
     };
@@ -71,11 +75,31 @@ var DBUtil = function(dbConnection) {
           outStream.write(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
         });
         stream.on('close', function() {
+
           handler.callback();
         });
       });
     };
     writeToStream();
+  };
+  var Transform = require('stream').Transform;
+  function createParser () {
+    var parser = new Transform({objectMode: true});
+    parser._transform = function(doc, encoding, done) {
+        this.push(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
+        done();
+    };
+    return parser;
+}
+  var temp = function(formattedCollectionName, fileName) {
+    var promise = new mongoose.Promise;
+    var outStream = fs.createWriteStream(fileName, {'flags': 'a'});
+    dbConn.db.collection(formattedCollectionName, function(err, col) {
+      var stream = col.find({}, { __id: 0, __v: 0 }).stream();
+      var r = stream.pipe(createParser()).pipe(outStream);
+      r.on('finish', function () { promise.complete(''); });
+    });
+    return promise;
   };
   // ReSharper disable once InconsistentNaming
   var ExportHelper = function(sessionId, promise) {
@@ -93,11 +117,26 @@ var DBUtil = function(dbConnection) {
         outStream.write("Vault_Id,Timestamp,Action,Persona,Value1,Value2\n");
         dbConn.db.collectionNames(function(e, colls) {
           var sessionVaultNames = utils.filterSessionVaultNames(sessionId, dbConn.name, colls);
+          // sessionVaultNames = sessionVaultNames.slice(0, 1);
           handler.setTotalCount(sessionVaultNames.length);
-          for (var index in sessionVaultNames) {
-            // ReSharper disable once WrongExpressionStatement
-            new VaultToCSV(sessionVaultNames[index], outStream, handler);
-          }
+          console.log('Total Count: ' + sessionVaultNames.length);
+          var count = 0;
+          async.forEachSeries(sessionVaultNames, function(vaultName, callback) {
+            count++;
+            console.log('Starting ' + count);
+            temp(vaultName, outStream).then(function() {
+              console.log('Ending: ' + count);
+              callback();
+            }, function() {
+              console.log('Error on: ' + count);
+              callback('err');
+            });
+          });
+
+          //for (var index in sessionVaultNames) {
+          //  // ReSharper disable once WrongExpressionStatement
+          //  new VaultToCSV(sessionVaultNames[index], outStream, handler);
+          //}
         });
       }
     };
@@ -114,12 +153,47 @@ var DBUtil = function(dbConnection) {
     this.stream.once('open', streamReadyCallback);
     return this;
   };
+  var t1 = function() {
+    var promise = new mongoose.Promise;
+    var fileName = "Logs_" + new Date().getTime() + ".csv";
+    fs.writeFile(fileName, "Vault_Id,Timestamp,Action,Persona,Value1,Value2\n", function(err) {
+      if(err) {
+        promise.error(err);
+      } else {
+        promise.complete(fileName);
+      }
+    });
+    return promise;
+  };
   this.exportLogs = function(sessionName, sessionInfo) {
     var promise = new mongoose.Promise;
     sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
-      var helper = new ExportHelper(sessionId, promise);
+      console.log('Session Id: ' + sessionId);
+      t1().then(function(fileName) {
+        dbConn.db.collectionNames(function(e, colls) {
+          var sessionVaultNames = utils.filterSessionVaultNames(sessionId, dbConn.name, colls);
+          // sessionVaultNames = sessionVaultNames.slice(0, 1);
+          // handler.setTotalCount(sessionVaultNames.length);
+          console.log('Total Count: ' + sessionVaultNames.length);
+          var count = 0;
+          async.forEachSeries(sessionVaultNames, function(vaultName, callback) {
+            count++;
+            console.log('Starting ' + count);
+            temp(vaultName, fileName).then(function() {
+              console.log('Ending: ' + count);
+              callback();
+            }, function() {
+              console.log('Error on: ' + count);
+              callback('err');
+            });
+          }, function() {
+            promise.complete(fileName);
+          });
+        });
+      });
+      /*var helper = new ExportHelper(sessionId, promise);
       var outFile = createTempFile(helper.streamReady);
-      helper.setOutStream(outFile.stream);
+      helper.setOutStream(outFile.stream);*/
     }, function(err) {
       promise.error(err);
     });

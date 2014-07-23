@@ -12,6 +12,7 @@
     "connect-mongo":"0.4.x",
     "socket.io":"0.9",
     "bower":"latest",
+    "async":"latest",
     "connect-multiparty": "1.x",
     "method-override": "1.x",
     "fast-csv":"latest",
