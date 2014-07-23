@@ -79,7 +79,7 @@ var SessionCtrl = [
     };
     $scope.deleteSession = function(sessionName, event) {
       cancelEventPropagation(event);
-      var endPoint = '/deleteSession';
+      var endPoint = '/deleteActiveSession';
       for (var i in $scope.pendingSessions) {
         if ($scope.pendingSessions[i].session_name == sessionName) {
           endPoint = '/deletePendingSession';

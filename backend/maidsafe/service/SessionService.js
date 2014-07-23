@@ -69,13 +69,13 @@ exports.deleteSession = function(req, res) {
   }
 
   if (req._userInfo.isMaidSafeUser) {
-    bridge.deleteSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+    bridge.deleteActiveSession(criteria.sn, new Handler.DeleteSessionHandler(res));
     return;
   }
 
   bridge.getSessionCreatedByForName(criteria.sn).then(function(createdBy) {
     if (createdBy == req._userInfo.mailAddress) {
-      bridge.deleteSession(criteria.sn, new Handler.DeleteSessionHandler(res));
+      bridge.deleteActiveSession(criteria.sn, new Handler.DeleteSessionHandler(res));
     } else {
       res.send(500, 'Invalid Authentication');
     }

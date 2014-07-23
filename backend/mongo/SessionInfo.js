@@ -112,8 +112,21 @@ var SessionMetaData = function(dbConnection) {
       }
 
       SessionInfo.remove({ session_name: sessionName }, function(removeErr, removeRes) {
-        removeErr || removeRes == 0 ? promise.error(removeErr) : promise.complete(res.session_id);
+        removeErr || removeRes == 0 ? promise.error(removeErr || 'Invalid Session') : promise.complete(res.session_id);
       });
+    });
+    return promise;
+  };
+  this.clearActiveSession = function(sessionName, callback) {
+    var promise = new mongoose.Promise;
+    if (callback) {
+      promise.addBack(callback);
+    }
+
+    var queryCriteria = { session_name: sessionName, is_active: true };
+    var updateCriteria = { $set: { is_active: false }, $unset: { beginDate: 1, endDate: 1 } };
+    SessionInfo.findOneAndUpdate(queryCriteria, updateCriteria, function(err, session) {
+      err || !session ? promise.error(err || 'Invalid Session') : promise.complete(session.session_id);
     });
     return promise;
   };
@@ -205,7 +218,7 @@ var SessionMetaData = function(dbConnection) {
     var newDate = new Date(log.ts);
     var newDateTime = newDate.getTime();
 
-    if (log.action_id == 0 && (currentBeginDate == null || currentBeginDate.getTime() > newDateTime)) {
+    if ((log.action_id == 0 || log.action_id == 18) && (currentBeginDate == null || currentBeginDate.getTime() > newDateTime)) {
       setDate(currentSession.session_id, true, newDate, promise);
     } else if (currentBeginDate != null && (currentEndDate == null || currentEndDate.getTime() < newDateTime)) {
       setDate(currentSession.session_id, false, newDate, promise);

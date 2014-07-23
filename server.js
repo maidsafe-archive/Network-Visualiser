@@ -6,6 +6,7 @@ var methodOverride = require('method-override');
 var userAuth = require('./backend/auth/UserAuth.js');
 var logController = require('./backend/maidsafe/LogController.js');
 var sessionController = require('./backend/maidsafe/SessionController.js');
+var ciManager = require('./backend/maidsafe/CIManager.js');
 var config = require('./Config.js');
 var serverPort = config.Constants.serverPort;
 var socketPort = config.Constants.socketPort;
@@ -53,7 +54,7 @@ app.get('/client/search', function(req, res) {
 });
 
 userAuth.setupAuthCallbacks(app);
-
 sessionController.register(app);
 logController.register(app);
+ciManager.startChecker();
 app.listen(serverPort);

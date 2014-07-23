@@ -74,3 +74,4 @@ exports.DeleteSessionHandler = function(res) {
   };
   return this.promise;
 };
+exports.refreshSessions = emitRefreshSessions;
