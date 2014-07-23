@@ -77,17 +77,14 @@ var VaultMetaData = function(dbConnection) {
   this.deleteVaultInfoForSession = function(sessionId) {
     var promise = new mongoose.Promise;
     VaultInfo.find({ session_id: sessionId }, { _id: 0, vault_id: 1 }, function(err, vaults) {
-      if (err) {
-        promise.error(err);
+      if (err || vaults.length == 0) {
+        promise.error(err || 'No Info found');
         return;
       }
 
       VaultInfo.remove({ session_id: sessionId }, function(removeErr, removeRes) {
-        removeErr || removeRes == 0 ? promise.error(removeErr) : promise.complete(vaults);
+        removeErr || removeRes == 0 ? promise.error(removeErr || 'Remove Vault Info failed') : promise.complete(vaults);
       });
-
-      promise.complete(vaults);
-
     });
     return promise;
   };

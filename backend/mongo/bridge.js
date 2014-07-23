@@ -113,7 +113,10 @@ exports.getCurrentSessions = function(userInfo) {
 exports.getSessionCreatedByForName = function(sessionName) {
   return sessionInfo.getSessionCreatedByForName(sessionName);
 };
-exports.deleteSession = function(sessionName, promise) {
+exports.getSessionIdForName = function(sessionName) {
+  return sessionInfo.getSessionIdForName(sessionName);
+};
+exports.deleteActiveSession = function(sessionName, promise) {
   sessionInfo.deleteSession(sessionName).then(function(sessionId) {
     vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {
       vaultLog.deleteVaultsInSession(sessionId, removedVaultIds, promise);
@@ -126,4 +129,26 @@ exports.deleteSession = function(sessionName, promise) {
 };
 exports.deletePendingSession = function(sessionName, promise) {
   sessionInfo.deleteSession(sessionName, promise);
+};
+exports.clearSession = function(sessionName) {
+  var promise = new mongoose.Promise;
+  if (db._readyState != 1) {
+    promise.error('Db Not connected');
+    return promise;
+  }
+
+  sessionInfo.clearActiveSession(sessionName).then(function(sessionId) {
+    vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {
+      vaultLog.deleteVaultsInSession(sessionId, removedVaultIds).then(function(res) {
+        promise.complete(res);
+      }, function(err) {
+        promise.error(err);
+      });
+    }, function(err) {
+      promise.error(err);
+    });
+  }, function(err) {
+    promise.error(err);
+  });
+  return promise;
 };

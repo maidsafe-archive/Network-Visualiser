@@ -1,4 +1,4 @@
-var app = angular.module('MaidSafe', ['ui-rangeSlider', 'angularFileUpload']);
+var app = angular.module('MaidSafe', ['ui-rangeSlider', 'angularFileUpload', 'infinite-scroll']);
 
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {

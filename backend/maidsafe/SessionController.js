@@ -11,8 +11,8 @@ var importSession = function(req, res) {
 var getCurrentSessions = function(req, res) {
   sessionService.getCurrentSessions(req, res);
 };
-var deleteSession = function(req, res) {
-  sessionService.deleteSession(req, res);
+var deleteActiveSession = function(req, res) {
+  sessionService.deleteActiveSession(req, res);
 };
 var deletePendingSession = function(req, res) {
   sessionService.deletePendingSession(req, res);
@@ -22,6 +22,6 @@ exports.register = function(server) {
   server.post('/import', userAuth.appendUserInfo, importSession);
 
   server.get('/currentSessions', userAuth.appendUserInfo, getCurrentSessions);
-  server.get('/deleteSession', userAuth.appendUserInfo, deleteSession);
+  server.get('/deleteActiveSession', userAuth.appendUserInfo, deleteActiveSession);
   server.get('/deletePendingSession', userAuth.appendUserInfo, deletePendingSession);
 };

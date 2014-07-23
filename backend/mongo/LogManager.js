@@ -97,11 +97,16 @@ var LogManager = function(dbConnConnection) {
       promise.addBack(callback);
     }
 
+    if (vaultIds.length == 0) {
+      promise.error('No VaultId\'s provided');
+      return promise;
+    }
+
     var deletedCount = 0;
     for (var i in vaultIds) {
       dbConn.db.collection(formatCollectionName(sessionId, vaultIds[i].vault_id), function(err, coll) {
         if (err) {
-          promise(err);
+          promise.error(err);
           return;
         }
 
