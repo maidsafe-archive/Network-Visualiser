@@ -146,7 +146,7 @@ var exportLogs = function(req, res) {
     res.send(500, 'Missing Session Name');
     return;
   }
-  console.log('starting export');
+
   bridge.exportLogs(criteria.sn).then(function(path) {
     res.download(path);
     utils.deleteFile(path);
