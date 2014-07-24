@@ -12,10 +12,11 @@
         <div class="actions">
           <a href="" class="view" ng-click="openViewer(session.session_name)"></a>
 <% if (userInfo.isAuthenticated) { %>
-          <!--<a href="" ng-click="export()" class="export"></a>-->
-          <div class="list-loader">loading</div>
-          <!--<a href="" class="export-download"></a>-->
-
+          <div ng-if="session.is_active" class="export-section">
+            <a href="" ng-click="onExportSessionClicked(session.session_name)" class="export" ng-if="exportStatus[session.session_name].status == 'ready' || exportStatus[session.session_name] == null"></a>
+            <div class="export-loader" ng-if="exportStatus[session.session_name].status == 'progress'"></div>
+            <a href="" class="export-download" ng-click="onDownloadExportClicked(session.session_name)" ng-if="exportStatus[session.session_name].status == 'download'"></a>
+          </div>
           <a href=""
              class="delete"
              ng-click="onDeleteSessionClicked(session.session_name, $event)"

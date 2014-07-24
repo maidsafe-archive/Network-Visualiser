@@ -122,10 +122,14 @@ app.controller('sessionCtrl', [
     };
 
     $scope.onExportSessionClicked = function(sessionName) {
+      if (!$scope.exportStatus[sessionName]) {
+        $scope.exportStatus[sessionName] = {};
+      }
+
       $scope.exportStatus[sessionName].status = 'progress';
       $http.get('/backend/requestExport?sn=' + sessionName).then(function(result) {
         $scope.exportStatus[sessionName].status = 'download';
-        $scope.exportStatus[sessionName].fname = result;
+        $scope.exportStatus[sessionName].fname = result.data;
       }, function() {
         $scope.setStatusAlert('Prepare Export Failed');
         $scope.exportStatus[sessionName].status = 'ready';
@@ -133,7 +137,7 @@ app.controller('sessionCtrl', [
     };
 
     $scope.onDownloadExportClicked = function(sessionName) {
-      window.open('/backend/downloadExport?sn=' + $rootScope.sessionName + '&fname=' + $scope.exportStatus[sessionName].fname, '_blank');
+      window.open('/backend/downloadExport?sn=' + sessionName + '&fname=' + $scope.exportStatus[sessionName].fname, '_blank');
       $scope.exportStatus[sessionName].status = 'ready';
       $scope.exportStatus[sessionName].fname = '';
     };

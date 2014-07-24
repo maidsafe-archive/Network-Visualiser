@@ -388,6 +388,10 @@ a.view:hover {
   background-position: bottom left;
 }
 
+.export-section {
+    display: inline;
+}
+
 a.export {
   background: url('/imgs/sessions/export_icon.png') no-repeat top left;
   display: inline-block;
@@ -410,6 +414,8 @@ a.export-download {
   height: 24px;
   margin: 2.1em 1.2em;
   width: 26px;
+  position: absolute;
+  right: 47px;
   cursor: pointer;
 }
 
@@ -430,7 +436,7 @@ a.delete:hover {
   background-position: bottom left;
 }
 
-.pending-list .confirm-delete {left: -74px;}
+.pending-list .confirm-delete {left: -114px;}
 
 .pending-list .export,
 .pending-list .export-download { display: none;}
@@ -441,11 +447,11 @@ a.delete:hover {
   border: 1px solid #dcdcdc;
   background: #fff;
   padding: 28px 12px 29px;
-  width: 110px;
+  width: 150px;
   text-align: center;
   position: absolute;
   top: -19px;
-  left: -14px;
+  left: -112px;
   clear: both;
 }
 
@@ -453,6 +459,8 @@ a.delete:hover {
   margin: 0;
   padding: 0;
 }
+
+
 
 a.yes-btn {
   padding: 5px 0px;
@@ -553,9 +561,9 @@ footer button {
   }
 }
 
-.list-loader,
-.list-loader:before,
-.list-loader:after {
+.export-loader,
+.export-loader:before,
+.export-loader:after {
   background: #87B7EC;
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
@@ -566,16 +574,16 @@ footer button {
   right: 27px;
   top: 10px;
 }
-.list-loader:before,
-.list-loader:after {
+.export-loader:before,
+.export-loader:after {
   position: absolute;
   top: 0;
   content: '';
 }
-.list-loader:before {
+.export-loader:before {
   left: -1.5em;
 }
-.list-loader {
+.export-loader {
   text-indent: -9999em;
   margin: 5em auto;
   position: relative;
@@ -583,7 +591,7 @@ footer button {
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
 }
-.list-loader:after {
+.export-loader:after {
   left: 1.5em;
   -webkit-animation-delay: -0.32s;
   animation-delay: -0.32s;
