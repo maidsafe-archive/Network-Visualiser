@@ -142,7 +142,7 @@ var TimelineCtrl = [
     dataManager.onNewVault(newVault);
     dataManager.onVaultsLoaded(onVaultsLoaded);
     playbackService.onStatusChange(updatePlayerStatus);
-    $http.get('/timelineDates?sn=' + $rootScope.sessionName).then(function(res) {
+    $http.get('/backend/timelineDates?sn=' + $rootScope.sessionName).then(function(res) {
       $scope.firstLogtime = new Date(res.data.beginDate).getTime() - 3000;
       $scope.maxTime = new Date(res.data.endDate).getTime() + 10000;
       $scope.playback.incrementalSteps = 1000 / ((new Date($scope.maxTime).getTime() - $scope.firstLogtime) / $scope.playback.max_steps);

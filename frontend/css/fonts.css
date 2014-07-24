@@ -19,3 +19,6 @@
        url('fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
        url('fonts/OpenSans-Regular-webfont.svg#OpenSansRegular') format('svg');
 }
+.scott {
+    background:red;
+}

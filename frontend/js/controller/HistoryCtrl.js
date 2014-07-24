@@ -5,7 +5,7 @@ var HistoryCtrl = [
     $scope.logs = [];
     $scope.vaultBehaviour = vaultBehaviour;
     $scope.asOfDate = new Date();
-    $http({ url: ("/history?&max=-1&vault_id=" + $scope.vaultId + '&sn=' + $scope.sessionName), method: "GET" }).success(function(data) {
+    $http({ url: ("/backend/history?&max=-1&vault_id=" + $scope.vaultId + '&sn=' + $scope.sessionName), method: "GET" }).success(function(data) {
       $scope.logs = data;
     });
   }

@@ -3,7 +3,7 @@ var ClipCopy = [
 
     var clipCopyLink = function(scope, element, attr, ctrls) {
       ZeroClipboard.config({
-        swfPath: "../../../vendor/zeroclipboard/dist/ZeroClipboard.swf",
+        swfPath: "../../components/zeroclipboard/dist/ZeroClipboard.swf",
         trustedDomains: ["*"],
         allowScriptAccess: "always",
         forceHandCursor: true

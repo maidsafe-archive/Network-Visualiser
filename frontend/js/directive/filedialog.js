@@ -42,17 +42,17 @@ var FileDialog = [
 
       var input = document.createElement("input");
       var inputAttr = document.createAttribute("type");
-      inputAttr.nodeValue = "file";
+      inputAttr.value = "file";
       input.setAttributeNode(inputAttr);
 
       inputAttr = document.createAttribute("style");
-      inputAttr.nodeValue = "visibility:hidden; height: 0px;";
+      inputAttr.value = "visibility:hidden; height: 0px;";
       input.setAttributeNode(inputAttr);
 
 
       if (!scope.isSingleFile) {
         inputAttr = document.createAttribute("multiple");
-        inputAttr.nodeValue = "multiple";
+        inputAttr.value = "multiple";
         input.setAttributeNode(inputAttr);
       }
 

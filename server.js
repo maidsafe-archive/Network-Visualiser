@@ -14,7 +14,7 @@ var socketPort = config.Constants.socketPort;
 var app = express();
 
 app.set('needsAuth', userAuth.initAuth(app));
-app.set('views', __dirname + '/client');
+app.set('views', __dirname + '/frontend');
 app.set('view engine', 'ejs');
 app.use(express.cookieParser());
 app.use(express.json());
@@ -30,26 +30,26 @@ app.use(express.session({
 }));
 userAuth.configureAuth(app);
 app.use(app.router);
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + '/frontend'));
 
 
 app.get('/', userAuth.appendUserInfo, function(req, res) {
   res.render('sessions', { userInfo: req._userInfo, socketPort: socketPort });
 });
 
-app.get('/client/viewer', function(req, res) {
+app.get('/viewer', function(req, res) {
   res.render('viewer', { socketPort: socketPort });
 });
 
-app.get('/client/timeline', function(req, res) {
+app.get('/timeline', function(req, res) {
   res.render('timeline', { socketPort: socketPort });
 });
 
-app.get('/client/history', function(req, res) {
+app.get('/history', function(req, res) {
   res.render('history', { socketPort: socketPort });
 });
 
-app.get('/client/search', function(req, res) {
+app.get('/search', function(req, res) {
   res.render('search', { socketPort: socketPort });
 });
 

@@ -28,13 +28,13 @@ var testLog = function(req, res) {
 exports.register = function(server) {
   server.post('/log', saveLogs);
 
-  server.get('/vaults', getActiveVaults);
-  server.get('/history', history);
-  server.get('/selectLogs', selectLogs);
+  server.get('/backend/vaults', getActiveVaults);
+  server.get('/backend/history', history);
+  server.get('/backend/selectLogs', selectLogs);
 
   // server.get('/searchLogs', searchLogs); // Needs implementation in LogService
-  server.get('/export', exportLogs);
-  server.get('/timelineDates', getTimelineDates);
+  server.get('/backend/export', exportLogs);
+  server.get('/backend/timelineDates', getTimelineDates);
 
   server.post('/testlog', testLog);
 };

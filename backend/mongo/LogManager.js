@@ -53,7 +53,7 @@ var LogManager = function(dbConnConnection) {
             }
           }
 
-          // max is -1 when /history is called
+          // max is -1 when /backend/history is called
           if (networkHealthFound || max < 0) {
             promise.complete(data);
             return;

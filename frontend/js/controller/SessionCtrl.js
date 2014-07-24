@@ -47,7 +47,7 @@ var SessionCtrl = [
     };
 
     function refreshCurrentSessions() {
-      $http.get('/currentSessions').then(function(result) {
+      $http.get('/backend/currentSessions').then(function(result) {
         $scope.activeSessions = result.data.filter(function(item) {
           return item.is_active;
         });
@@ -79,10 +79,10 @@ var SessionCtrl = [
     };
     $scope.deleteSession = function(sessionName, event) {
       cancelEventPropagation(event);
-      var endPoint = '/deleteActiveSession';
+      var endPoint = '/backend/deleteActiveSession';
       for (var i in $scope.pendingSessions) {
         if ($scope.pendingSessions[i].session_name == sessionName) {
-          endPoint = '/deletePendingSession';
+          endPoint = '/backend/deletePendingSession';
           break;
         }
       }
@@ -124,7 +124,7 @@ var SessionCtrl = [
       }
 
       $http({
-        url: ("/createSession"),
+        url: ("/backend/createSession"),
         method: "POST",
         data: { 'session_name': $scope.createTab.sessionName },
         headers: { 'Content-Type': 'application/json' }
@@ -140,7 +140,7 @@ var SessionCtrl = [
       $scope.importTab.errorMessage = '';
       $scope.importTab.inProgress = true;
       $scope.upload = $upload.upload({
-        url: '/import',
+        url: '/backend/import',
         method: 'POST',
         data: { sn: $scope.importTab.sessionName },
         file: $scope.importTab.file,

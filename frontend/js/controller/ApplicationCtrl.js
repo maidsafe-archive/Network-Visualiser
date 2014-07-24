@@ -20,7 +20,7 @@ var ApplicationCtrl = [
       window.open('/client/timeline#?sn=' + $rootScope.sessionName, '_blank').focus();
     };
     $scope.export = function() {
-      window.open('/export?sn=' + $rootScope.sessionName, '_blank');
+      window.open('/backend/export?sn=' + $rootScope.sessionName, '_blank');
     };
     $scope.search = function() {
       window.open('/client/search#?sn=' + $rootScope.sessionName, '_blank').focus();

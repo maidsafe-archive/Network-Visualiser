@@ -18,10 +18,10 @@ var deletePendingSession = function(req, res) {
   sessionService.deletePendingSession(req, res);
 };
 exports.register = function(server) {
-  server.post('/createSession', userAuth.appendUserInfo, createSession);
-  server.post('/import', userAuth.appendUserInfo, importSession);
+  server.post('/backend/createSession', userAuth.appendUserInfo, createSession);
+  server.post('/backend/import', userAuth.appendUserInfo, importSession);
 
-  server.get('/currentSessions', userAuth.appendUserInfo, getCurrentSessions);
-  server.get('/deleteActiveSession', userAuth.appendUserInfo, deleteActiveSession);
-  server.get('/deletePendingSession', userAuth.appendUserInfo, deletePendingSession);
+  server.get('/backend/currentSessions', userAuth.appendUserInfo, getCurrentSessions);
+  server.get('/backend/deleteActiveSession', userAuth.appendUserInfo, deleteActiveSession);
+  server.get('/backend/deletePendingSession', userAuth.appendUserInfo, deletePendingSession);
 };
