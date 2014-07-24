@@ -1,4 +1,20 @@
-var TimelineCtrl = [
+var app = angular.module('MaidSafe', ['ui-rangeSlider']);
+
+app.run([
+  '$rootScope', '$location', function($rootScope, $location) {
+    $rootScope.socketEndPoint = "http://" + $location.host() + ":" + socketPort;
+  }
+]);
+
+app.directive('clipCopy', ClipCopy);
+app.directive('tooltip', ToolTip);
+app.service('dataManager', DataManagerService);
+app.service('vaultBehaviour', VaultBehaviourService);
+app.service('socketService', SocketService);
+app.service('playbackService', PlaybackService);
+app.controller('vaultCtrl', VaultCtrl);
+
+app.controller('timelineCtrl', [
   '$scope', '$rootScope', '$location', '$http', 'dataManager', 'playbackService', 'socketService', function($scope, $rootScope, $location, $http, dataManager, playbackService, socketService) {
     $rootScope.sessionName = $location.search().sn;
 
@@ -65,7 +81,7 @@ var TimelineCtrl = [
       $rootScope.$broadcast('expandVault', $scope.allVaultsExpanded);
     };
     $scope.getPlayTime = function(playFrom) {
-      var time = $scope.maxTime.getTime();
+      var time = $scope.maxTime;
       var date = new Date(time - ((($scope.playback.max_steps - playFrom) / $scope.playback.max_steps) * (time - $scope.firstLogtime)));
       return date.getTime();
     };
@@ -144,7 +160,8 @@ var TimelineCtrl = [
     playbackService.onStatusChange(updatePlayerStatus);
     $http.get('/backend/timelineDates?sn=' + $rootScope.sessionName).then(function(res) {
       $scope.firstLogtime = new Date(res.data.beginDate).getTime() - 3000;
-      $scope.maxTime = new Date(res.data.endDate).getTime() + 10000;
+      var maxDate = res.data.endDate ? new Date(res.data.endDate) : new Date();
+      $scope.maxTime = maxDate.getTime() + 10000;
       $scope.playback.incrementalSteps = 1000 / ((new Date($scope.maxTime).getTime() - $scope.firstLogtime) / $scope.playback.max_steps);
       $scope.currentPlayTime = $scope.firstLogtime;
     }, function(err) {
@@ -153,4 +170,4 @@ var TimelineCtrl = [
     });
     $scope.showLoader = false;
   }
-]
+]);

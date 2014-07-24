@@ -1,5 +1,21 @@
-var ApplicationCtrl = [
+var app = angular.module('MaidSafe', []);
+
+app.run([
+  '$rootScope', '$location', function($rootScope, $location) {
+    $rootScope.socketEndPoint = "http://" + $location.host() + ":" + socketPort;
+  }
+]);
+
+app.directive('clipCopy', ClipCopy);
+app.directive('tooltip', ToolTip);
+app.service('dataManager', DataManagerService);
+app.service('vaultBehaviour', VaultBehaviourService);
+app.service('socketService', SocketService);
+app.controller('vaultCtrl', VaultCtrl);
+
+app.controller('applicationCtrl', [
   '$scope', '$rootScope', '$location', 'dataManager', 'socketService', function($scope, $rootScope, $location, dataManager, socketService) {
+
     $rootScope.sessionName = $location.search().sn;
 
     $scope.iconsTrayClosed = true;
@@ -17,13 +33,13 @@ var ApplicationCtrl = [
       }
     }, 1000);
     $scope.timeline = function() {
-      window.open('/client/timeline#?sn=' + $rootScope.sessionName, '_blank').focus();
+      window.open('/timeline#?sn=' + $rootScope.sessionName, '_blank').focus();
     };
     $scope.export = function() {
       window.open('/backend/export?sn=' + $rootScope.sessionName, '_blank');
     };
     $scope.search = function() {
-      window.open('/client/search#?sn=' + $rootScope.sessionName, '_blank').focus();
+      window.open('/search#?sn=' + $rootScope.sessionName, '_blank').focus();
     };
     $scope.setStatusAlert = function(msg) {
       $scope.alert = msg;
@@ -60,4 +76,4 @@ var ApplicationCtrl = [
       dataManager.getActiveVaults();
     }, 10);
   }
-];
+]);

@@ -23,7 +23,7 @@
     </div>
     <div class="info" ng-class="personaColour">
       <p tooltip="{{fullVaultName}}" canshow="true">{{vaultName.substring(0,6) | uppercase}}</p>
-      <img ng-src="../client/imgs/icons/{{stateIcon}}" ng-click="toggleVaultLogs()">
+      <img ng-src="../../imgs/viewer/{{stateIcon}}" ng-click="toggleVaultLogs()">
       <a class="host-name-btn" clip-copy clip-text="{{hostName == '' ? 'Unknown' : hostName}}" title="{{hostName}}" ng-hide="hostName == ''"></a>
     </div>
   </div>
@@ -39,7 +39,7 @@
       </li>
     </ul>
     <div class="see_history">
-      <a target="_blank" ng-href="/client/history#?id={{vaultName}}&sn={{$root.sessionName}}">See All</a>
+      <a target="_blank" ng-href="/history#?id={{vaultName}}&sn={{$root.sessionName}}">See All</a>
     </div>
   </div>
 </div>
