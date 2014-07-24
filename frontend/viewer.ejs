@@ -19,7 +19,7 @@
     <script type="text/javascript" src="js/service/SocketService.js"></script>
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
     <script type="text/javascript" src="js/controller/VaultCtrl.js"></script>
-    <script type="text/javascript" src="js/controller/ApplicationCtrl.js"></script>
+    <script type="text/javascript" src="js/controller/ViewerCtrl.js"></script>
 
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
@@ -31,7 +31,7 @@
     <link rel="shortcut icon" href="imgs/favicon.ico" />
     <link rel="icon" type="image/ico" href="imgs/favicon.ico" />
   </head>
-  <body ng-app="MaidSafe" ng-controller="applicationCtrl">
+  <body ng-app="MaidSafe" ng-controller="viewerCtrl">
     <header>
       <ng-include src="'template/viewer/header.html'"></ng-include>
     </header>

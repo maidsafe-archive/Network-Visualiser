@@ -18,6 +18,7 @@ app.controller('sessionCtrl', [
     $scope.activeSessions = [];
     $scope.pendingSessions = [];
     $scope.isConfirmDeleteDialogOpen = {};
+    $scope.exportStatus = {};
     $scope.alert = null;
     $scope.sessionNamePattern = /^[a-zA-Z0-9- ]{1,}$/;
     $scope.createTab = {
@@ -118,6 +119,23 @@ app.controller('sessionCtrl', [
         $scope.createTab.errorMessage = '';
         $scope.createSessionForm.$setPristine();
       }
+    };
+
+    $scope.onExportSessionClicked = function(sessionName) {
+      $scope.exportStatus[sessionName].status = 'progress';
+      $http.get('/backend/requestExport?sn=' + sessionName).then(function(result) {
+        $scope.exportStatus[sessionName].status = 'download';
+        $scope.exportStatus[sessionName].fname = result;
+      }, function() {
+        $scope.setStatusAlert('Prepare Export Failed');
+        $scope.exportStatus[sessionName].status = 'ready';
+      });
+    };
+
+    $scope.onDownloadExportClicked = function(sessionName) {
+      window.open('/backend/downloadExport?sn=' + $rootScope.sessionName + '&fname=' + $scope.exportStatus[sessionName].fname, '_blank');
+      $scope.exportStatus[sessionName].status = 'ready';
+      $scope.exportStatus[sessionName].fname = '';
     };
 
     $scope.onImportSessionTabClicked = function() {

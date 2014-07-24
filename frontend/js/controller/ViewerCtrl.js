@@ -13,7 +13,7 @@ app.service('vaultBehaviour', VaultBehaviourService);
 app.service('socketService', SocketService);
 app.controller('vaultCtrl', VaultCtrl);
 
-app.controller('applicationCtrl', [
+app.controller('viewerCtrl', [
   '$scope', '$rootScope', '$location', 'dataManager', 'socketService', function($scope, $rootScope, $location, dataManager, socketService) {
 
     $rootScope.sessionName = $location.search().sn;
@@ -34,9 +34,6 @@ app.controller('applicationCtrl', [
     }, 1000);
     $scope.timeline = function() {
       window.open('/timeline#?sn=' + $rootScope.sessionName, '_blank').focus();
-    };
-    $scope.export = function() {
-      window.open('/backend/export?sn=' + $rootScope.sessionName, '_blank');
     };
     $scope.search = function() {
       window.open('/search#?sn=' + $rootScope.sessionName, '_blank').focus();
