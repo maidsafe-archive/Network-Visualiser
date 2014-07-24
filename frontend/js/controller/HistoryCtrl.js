@@ -1,4 +1,7 @@
-var HistoryCtrl = [
+var app = angular.module('MaidSafe', []);
+app.service('vaultBehaviour', VaultBehaviourService);
+
+app.controller('historyCtrl', [
   '$scope', '$location', '$http', 'vaultBehaviour', function($scope, $location, $http, vaultBehaviour) {
     $scope.sessionName = $location.search().sn;
     $scope.vaultId = $location.search().id;
@@ -9,4 +12,4 @@ var HistoryCtrl = [
       $scope.logs = data;
     });
   }
-];
+]);

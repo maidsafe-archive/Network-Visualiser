@@ -4,6 +4,7 @@
   "dependencies":{
     "angular":"1.2.X",
     "jquery":"latest",
+    "socket.io-client":"0.9",
     "normalize.css":"latest",
     "angular-rangeslider":"latest",
     "zeroclipboard":"latest",

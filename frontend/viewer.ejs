@@ -8,21 +8,22 @@
 
     <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="components/angular/angular.min.js"></script>
-    <script type="text/javascript" src="js/socket.io/socket.io.min.js"></script>
+    <script type="text/javascript" src="components/socket.io-client/dist/socket.io.min.js"></script>
 
+    <script type="text/javascript" src="components/zeroclipboard/dist/ZeroClipboard.min.js"></script>
 
-
-    <script type="text/javascript" src="js/service/DataManagerService.js"></script>
-    <script type="text/javascript" src="js/service/SocketService.js"></script>
+    <script type="text/javascript" src="js/directive/clipcopy.js"></script>
     <script type="text/javascript" src="js/directive/tooltip.js"></script>
+    <script type="text/javascript" src="js/service/DataManagerService.js"></script>
+    <script type="text/javascript" src="js/service/VaultBehaviourService.js"></script>
+    <script type="text/javascript" src="js/service/SocketService.js"></script>
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
-    <script type="text/javascript" src="js/controller/ApplicationCtrl.js"></script>
     <script type="text/javascript" src="js/controller/VaultCtrl.js"></script>
+    <script type="text/javascript" src="js/controller/ApplicationCtrl.js"></script>
 
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
-
     <link rel="stylesheet" type="text/css" href="css/combo-box.css">
 
     <title>Network Visualiser - Realtime View</title>
