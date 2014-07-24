@@ -1,6 +1,6 @@
 var VaultBehaviourService = [
   function() {
-    service = this;
+    var service = this;
 
     service.MAX_LOGS = 3; //Max logs retained for showing on info click
 
@@ -65,7 +65,7 @@ var VaultBehaviourService = [
       2: [6, 7],
       3: [1, 2,]
     };
-    var generalFormater = function(log) {
+    var generalFormat = function(log) {
       return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ';
     };
     var trim = function(txt) {
@@ -74,34 +74,34 @@ var VaultBehaviourService = [
       }
       return txt;
     };
-    var generalFormaterWithVaule1 = function(log) {
+    var formatWithOneValue = function(log) {
       return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + trim(log.value1);
     };
-    var generalFormaterWithBothVaules = function(log) {
+    var formatWithTwoValues = function(log) {
       return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + trim(log.value1) + " : " + trim(log.value2);
     };
-    var formaters = {
-      1: generalFormaterWithVaule1,
-      2: generalFormaterWithVaule1,
-      3: generalFormaterWithVaule1,
-      4: generalFormaterWithBothVaules,
-      5: generalFormaterWithBothVaules,
-      6: generalFormaterWithVaule1,
-      7: generalFormaterWithVaule1,
-      8: generalFormaterWithBothVaules,
-      9: generalFormaterWithVaule1,
-      10: generalFormaterWithVaule1,
-      11: generalFormaterWithVaule1,
-      12: generalFormaterWithVaule1,
-      13: generalFormaterWithVaule1,
-      14: generalFormaterWithVaule1,
-      15: generalFormaterWithBothVaules,
-      16: generalFormaterWithVaule1,
-      17: generalFormaterWithVaule1,
-      18: generalFormaterWithVaule1
+    var formats = {
+      1: formatWithOneValue,
+      2: formatWithOneValue,
+      3: formatWithOneValue,
+      4: formatWithTwoValues,
+      5: formatWithTwoValues,
+      6: formatWithOneValue,
+      7: formatWithOneValue,
+      8: formatWithTwoValues,
+      9: formatWithOneValue,
+      10: formatWithOneValue,
+      11: formatWithOneValue,
+      12: formatWithOneValue,
+      13: formatWithOneValue,
+      14: formatWithOneValue,
+      15: formatWithTwoValues,
+      16: formatWithOneValue,
+      17: formatWithOneValue,
+      18: formatWithOneValue
     };
     service.formatMessage = function(log) {
-      return (formaters[log.action_id] || generalFormater)(log);
+      return (formats[log.action_id] || generalFormat)(log);
     };
     service.canShowToolTip = function(shape, actionId) {
       return tootips[shape].indexOf(parseInt(actionId)) > -1;
