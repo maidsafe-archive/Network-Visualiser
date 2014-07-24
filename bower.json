@@ -3,12 +3,11 @@
   "version":"0.0.1",
   "dependencies":{
     "angular":"1.2.X",
+    "jquery":"latest",
     "normalize.css":"latest",
     "angular-rangeslider":"latest",
-    "jquery":"latest",
-    "animate.css":"latest",
     "zeroclipboard":"latest",
     "ng-file-upload":"latest",
-    "ngInfiniteScroll":"latest"
+    "animate.css":"latest"
   }
 }

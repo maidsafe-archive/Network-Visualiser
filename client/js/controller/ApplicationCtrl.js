@@ -59,12 +59,5 @@ var ApplicationCtrl = [
     setTimeout(function() {
       dataManager.getActiveVaults();
     }, 10);
-
-    $scope.limit = 30;
-    $scope.loadMore = function() {
-      console.log('called');
-      $scope.limit += 20;
-      console.log('New limit: ' + $scope.limit);
-    };
   }
 ];
