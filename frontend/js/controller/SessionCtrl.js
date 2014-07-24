@@ -88,7 +88,7 @@ app.controller('sessionCtrl', [
       window.open("/client/template/import.html", "", "width=500, height=200, location=no, top=200px, left=500px");
     };
     $scope.openViewer = function(sessionName) {
-      window.location.href = "/client/viewer#?sn=" + sessionName;
+      window.location.href = "/viewer#?sn=" + sessionName;
     };
     $scope.deleteSession = function(sessionName, event) {
       cancelEventPropagation(event);

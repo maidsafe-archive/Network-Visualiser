@@ -202,7 +202,7 @@ button.select-file {
 }
 
 .valid-input {
-  background: url('../../client/imgs/validation_icons.png') no-repeat top left;
+  background: url('/imgs/sessions/validation_icons.png') no-repeat top left;
   width: 50%;
   height: 23px;
   color: #25c766;
@@ -214,7 +214,7 @@ button.select-file {
 }
 
 .invalid-input {
-  background: url('../../client/imgs/validation_icons.png') no-repeat bottom left;
+  background: url('/imgs/sessions/validation_icons.png') no-repeat bottom left;
   width: 50%;
   height: 23px;
   color: #e66161;
@@ -258,7 +258,7 @@ button.copy-clipboard {
   -moz-border-radius: 0px 5px 5px 0px;
   -webkit-border-radius: 0px 5px 5px 0px;
   /*border: 1px solid #A9A9AA;*/
-  background: rgba(85, 147, 215, 0.35) url('../imgs/copy_clipboard_icon.png') no-repeat top left;
+  background: rgba(85, 147, 215, 0.35) url('/imgs/sessions/copy_clipboard_icon.png') no-repeat top left;
   display: block;
   width: 35px !important;
   height: 35px;
@@ -267,11 +267,11 @@ button.copy-clipboard {
 }
 
 button.copy-clipboard.zeroclipboard-is-hover {
-  background: rgba(85, 147, 215, 1) url('../imgs/copy_clipboard_icon.png') no-repeat bottom left;
+  background: rgba(85, 147, 215, 1) url('/imgs/sessions/copy_clipboard_icon.png') no-repeat bottom left;
 }
 
 button.copy-clipboard.zeroclipboard-is-active {
-  background: rgba(0, 0, 0, 1) url('../imgs/copy_clipboard_icon.png') no-repeat bottom left;
+  background: rgba(0, 0, 0, 1) url('/imgs/sessions/copy_clipboard_icon.png') no-repeat bottom left;
 
 }
 
@@ -325,7 +325,7 @@ button.copy-clipboard.zeroclipboard-is-active {
   color: #6F7070;
   font-size: 12px;
   border: 0px;
-  background: transparent url('../imgs/user_email_icon.png') no-repeat 0 0;
+  background: transparent url('/imgs/sessions/user_email_icon.png') no-repeat 0 0;
 }
 
 .pending-list .session {
@@ -351,7 +351,7 @@ button.copy-clipboard.zeroclipboard-is-active {
 
 .pending-list .session .session_created_by {
   color: #ACADAD;
-  background: transparent url('../imgs/user_email_icon_disabled.png') no-repeat 0 0;
+  background: transparent url('/imgs/sessions/user_email_icon_disabled.png') no-repeat 0 0;
 }
 
 .actions {
@@ -374,7 +374,7 @@ button.copy-clipboard.zeroclipboard-is-active {
 }
 
 a.view {
-  background: url('../../client/imgs/view_icon.png') no-repeat top left;
+  background: url('/imgs/sessions/view_icon.png') no-repeat top left;
   display: inline-block;
   height: 15px;
   margin: 2.4em 1.2em;
@@ -388,7 +388,7 @@ a.view:hover {
 }
 
 a.delete {
-  background: url('../../client/imgs/delete_icon.png') no-repeat top left;
+  background: url('/imgs/sessions/delete_icon.png') no-repeat top left;
   display: inline-block;
   height: 24px;
   margin: 2.1em 1.2em;

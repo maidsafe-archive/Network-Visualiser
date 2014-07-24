@@ -1,18 +1,18 @@
 .hexagon {
-  background: url('../../client/imgs/icons/hexagon.png') no-repeat;
+  background: url('/imgs/viewer/icons/hexagon.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .circle {
-  background: url('../../client/imgs/icons/circle.png') no-repeat;
+  background: url('/imgs/viewer/icons/circle.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 
 .square {
-  background: url('../../client/imgs/icons/square.png') no-repeat;
+  background: url('/imgs/viewer/icons/square.png') no-repeat;
   height: 50px;
   width: 50px;
 }
@@ -26,138 +26,138 @@
 }
 
 .square-red {
-  background: url('../../client/imgs/icons/square-red.png') no-repeat;
+  background: url('/imgs/viewer/icons/square-red.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .square-green {
-  background: url('../../client/imgs/icons/square-green.png') no-repeat;
+  background: url('/imgs/viewer/icons/square-green.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .rhombus {
-  background: url('../../client/imgs/icons/rhombus.png') no-repeat;
+  background: url('/imgs/viewer/icons/rhombus.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .rhombus-red {
-  background: url('../../client/imgs/icons/rhombus-red.png') no-repeat;
+  background: url('/imgs/viewer/icons/rhombus-red.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .rhombus-green {
-  background: url('../../client/imgs/icons/rhombus-green.png') no-repeat;
+  background: url('/imgs/viewer/icons/rhombus-green.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 
 .account-transferred {
-  background: url('../../client/imgs/icons/account-transferred.png') no-repeat;
+  background: url('/imgs/viewer/icons/account-transferred.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .blocked-delete-request {
-  background: url('../../client/imgs/icons/blocked-delete-request.png') no-repeat;
+  background: url('/imgs/viewer/icons/blocked-delete-request.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .deleting-data {
-  background: url('../../client/imgs/icons/deleting-data.png') no-repeat;
+  background: url('/imgs/viewer/icons/deleting-data.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .dropping-pmid-node {
-  background: url('../../client/imgs/icons/dropping-pmid-node.png') no-repeat;
+  background: url('/imgs/viewer/icons/dropping-pmid-node.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .joining-pmid-node {
-  background: url('../../client/imgs/icons/joining-pmid-node.png') no-repeat;
+  background: url('/imgs/viewer/icons/joining-pmid-node.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .marking-node-down {
-  background: url('../../client/imgs/icons/marking-node-down.png') no-repeat;
+  background: url('/imgs/viewer/icons/marking-node-down.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .marking-node-up {
-  background: url('../../client/imgs/icons/marking-node-up.png') no-repeat;
+  background: url('/imgs/viewer/icons/marking-node-up.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .move-data {
-  background: url('../../client/imgs/icons/move-data.png') no-repeat;
+  background: url('/imgs/viewer/icons/move-data.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .remove-account {
-  background: url('../../client/imgs/icons/remove-account.png') no-repeat;
+  background: url('/imgs/viewer/icons/remove-account.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .storing-data {
-  background: url('../../client/imgs/icons/storing-data.png') no-repeat;
+  background: url('/imgs/viewer/icons/storing-data.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 
 .transfer-account {
-  background: url('../../client/imgs/icons/transfer-account.png') no-repeat;
+  background: url('/imgs/viewer/icons/transfer-account.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .update-data-version {
-  background: url('../../client/imgs/icons/update-data-version.png') no-repeat;
+  background: url('/imgs/viewer/icons/update-data-version.png') no-repeat;
   height: 50px;
   width: 50px;
 }
 
 .play-btn {
-  background: #87b7ec url(../imgs/icon-play.png) no-repeat 0 -2px;
+  background: #87b7ec url('/imgs/timeline/icon-play.png') no-repeat 0 -2px;
   height: 40px;
   text-indent: -9999px;
   width: 70px;
 }
 
-.play-btn:hover {background: #29578A url(../imgs/icon-play.png) no-repeat 0 -2px;}
+.play-btn:hover {background: #29578A url('/imgs/timeline/icon-play.png') no-repeat 0 -2px;}
 
 .pause-btn {
-  background: #87b7ec url(../imgs/icon-pause.png) no-repeat -4px -2px;
+  background: #87b7ec url('/imgs/timeline/icon-pause.png') no-repeat -4px -2px;
   height: 40px;
   text-indent: -9999px;
   width: 70px;
 }
 
-.pause-btn:hover {background: #29578A url(../imgs/icon-pause.png) no-repeat -4px -2px;}
+.pause-btn:hover {background: #29578A url('/imgs/timeline/icon-pause.png') no-repeat -4px -2px;}
 
 .resume-btn {
-  background: #87b7ec url(../imgs/icon-resume.png) no-repeat 0 -2px;
+  background: #87b7ec url('/imgs/timeline/icon-resume.png') no-repeat 0 -2px;
   height: 40px;
   text-indent: -9999px;
   width: 70px;
 }
 
-.resume-btn:hover {background: #29578A url(../imgs/icon-resume.png) no-repeat 0 -2px;}
+.resume-btn:hover {background: #29578A url('/imgs/timeline/icon-resume.png') no-repeat 0 -2px;}
 
 .host-name-btn {
-  background: url('../imgs/icons/host-name.png') no-repeat 0 0;
+  background: url('/imgs/viewer/host-name.png') no-repeat 0 0;
   width: 20px;
   height: 20px;
   display: block;
@@ -165,7 +165,7 @@
   background-size: 20px 20px;
   margin: 0px 5px;
 }
-.host-name-btn:active {background: url('../imgs/icons/host-name-down.png') no-repeat 0 0;
+.host-name-btn:active {background: url('/imgs/viewer/host-name-down.png') no-repeat 0 0;
   background-size: 20px 20px;
 }
 

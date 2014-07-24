@@ -1,5 +1,17 @@
-var ApplicationCtrl = [
+var app = angular.module('MaidSafe',[]);
+
+app.run([
+  '$rootScope', '$location', function($rootScope, $location) {
+    $rootScope.socketEndPoint = "http://" + $location.host() + ":" + socketPort;
+  }
+]);
+
+app.service('dataManager', DataManagerService);
+app.service('socketService', SocketService);
+
+app.controller('applicationCtrl', [
   '$scope', '$rootScope', '$location', 'dataManager', 'socketService', function($scope, $rootScope, $location, dataManager, socketService) {
+
     $rootScope.sessionName = $location.search().sn;
 
     $scope.iconsTrayClosed = true;
@@ -60,4 +72,4 @@ var ApplicationCtrl = [
       dataManager.getActiveVaults();
     }, 10);
   }
-];
+]);
