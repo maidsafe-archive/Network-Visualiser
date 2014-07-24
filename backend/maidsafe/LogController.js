@@ -16,9 +16,6 @@ var getActiveVaults = function(req, res) {
 var history = function(req, res) {
   logService.vaultHistory(req, res);
 };
-var exportLogs = function(req, res) {
-  logService.exportLogs(req, res);
-};
 var getTimelineDates = function(req, res) {
   logService.getTimelineDates(req, res);
 };
@@ -33,7 +30,6 @@ exports.register = function(server) {
   server.get('/backend/selectLogs', selectLogs);
 
   // server.get('/searchLogs', searchLogs); // Needs implementation in LogService
-  server.get('/backend/export', exportLogs);
   server.get('/backend/timelineDates', getTimelineDates);
 
   server.post('/testlog', testLog);

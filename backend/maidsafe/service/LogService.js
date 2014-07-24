@@ -3,8 +3,6 @@ var Handler = require('./Handler.js');
 var utils = require('./../utils.js');
 var url = require('url');
 var config = require('./../../../Config.js');
-var fs = require('fs');
-var archiver = require('archiver');
 
 var saveLog = function(req, res) {
   var log = req.body;
@@ -142,33 +140,6 @@ var getTimelineDates = function(req, res) {
     res.send(500, err);
   });
 };
-var exportLogs = function(req, res) {
-  var criteria = url.parse(req.url, true).query;
-  if (!criteria || !criteria.hasOwnProperty('sn')) {
-    res.send(500, 'Missing Session Name');
-    return;
-  }
-
-  bridge.exportLogs(criteria.sn).then(function(path) {
-    var zipPath = path.replace(".csv", ".zip");
-    var output = fs.createWriteStream(zipPath);
-    var archive = archiver('zip');
-
-    output.on('close', function() {
-      fs.unlinkSync(path);
-      res.download(zipPath, criteria.sn + ' - Logs.zip', function() {
-        fs.unlinkSync(zipPath);
-      });
-    });
-
-    archive.on('error', function(err) {
-      res.send(err);
-    });
-
-    archive.pipe(output);
-    archive.append(fs.createReadStream(path), { name: criteria.sn + ' - Logs.csv' }).finalize();
-  });
-};
 var testLog = function(req, res) {
   var log = req.body;
 
@@ -197,6 +168,5 @@ exports.searchLogs = searchLogs;
 exports.vaultHistory = history;
 exports.getActiveVaults = activeVaultsWithRecentLogs;
 exports.getTimelineDates = getTimelineDates;
-exports.exportLogs = exportLogs;
 
 exports.testLog = testLog;

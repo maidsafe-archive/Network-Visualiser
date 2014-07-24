@@ -3,13 +3,9 @@ var Handler = require('./Handler.js');
 var utils = require('./../utils.js');
 var url = require('url');
 var fs = require('fs');
+var archiver = require('archiver');
 
 exports.createSession = function(req, res) {
-  if (!req._userInfo || !req._userInfo.isAuthenticated) {
-    res.send(500, 'Invalid Authentication');
-    return;
-  }
-
   var criteria = JSON.parse(JSON.stringify(req.body));
   if (!criteria || !criteria.hasOwnProperty('session_name')) {
     res.send(500, 'Invalid parameters');
@@ -20,11 +16,6 @@ exports.createSession = function(req, res) {
 };
 
 exports.importSession = function(req, res) {
-  if (!req._userInfo || !req._userInfo.isAuthenticated) {
-    res.send(500, 'Invalid Authentication');
-    return;
-  }
-
   fs.readFile(req.files.file.path, function(err, data) {
     var fileName = "Import_" + new Date().getTime() + '.csv';
     fs.writeFile(fileName, data, function(err) {
@@ -36,10 +27,10 @@ exports.importSession = function(req, res) {
       bridge.importLogs(req.body.sn, req._userInfo.mailAddress, fileName).then(function() {
         var handler = new Handler.SaveLogHandler();
         res.send('Added to Import Queue');
-        fs.unlinkSync(path);
+        fs.unlink(path);
         handler.refreshSessionsCallback();
       }, function() {
-        fs.unlinkSync(path);
+        fs.unlink(path);
         res.send(500, 'Invalid File');
       });
     });
@@ -56,12 +47,45 @@ exports.getCurrentSessions = function(req, res) {
   });
 };
 
-exports.deleteSession = function(req, res) {
-  if (!req._userInfo || !req._userInfo.isAuthenticated) {
-    res.send(500, 'Invalid Authentication');
+exports.requestExport = function(req, res) {
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || !criteria.hasOwnProperty('sn')) {
+    res.send(500, 'Missing Session Name');
     return;
   }
 
+  bridge.exportLogs(criteria.sn).then(function(path) {
+    var zipPath = path.replace(".csv", ".zip");
+    var output = fs.createWriteStream(zipPath);
+    var archive = archiver('zip');
+
+    output.on('close', function() {
+      fs.unlink(path);
+      res.send(200, zipPath);
+    });
+
+    archive.on('error', function(err) {
+      res.send(500, err);
+    });
+
+    archive.pipe(output);
+    archive.append(fs.createReadStream(path), { name: criteria.sn + ' - Logs.csv' }).finalize();
+  });
+};
+
+exports.downloadExport = function(req, res) {
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || !criteria.hasOwnProperty('sn') || !criteria.hasOwnProperty('fname')) {
+    res.send(500, 'Missing File Name');
+    return;
+  }
+
+  res.download(criteria.fname, criteria.sn + ' - Logs.zip', function() {
+    fs.unlink(criteria.fname);
+  });
+};
+
+exports.deleteSession = function(req, res) {
   var criteria = url.parse(req.url, true).query;
   if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
     res.send(500, 'Invalid Request');
@@ -83,11 +107,6 @@ exports.deleteSession = function(req, res) {
 };
 
 exports.deletePendingSession = function(req, res) {
-  if (!req._userInfo || !req._userInfo.isAuthenticated) {
-    res.send(500, 'Invalid Authentication');
-    return;
-  }
-
   var criteria = url.parse(req.url, true).query;
   if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
     res.send(500, 'Invalid Request');
