@@ -376,23 +376,54 @@ button.copy-clipboard.zeroclipboard-is-active {
 a.view {
   background: url('/imgs/sessions/view_icon.png') no-repeat top left;
   display: inline-block;
-  height: 15px;
-  margin: 2.4em 1.2em;
-  width: 26px;
+  height: 21px;
+  margin: 2.3em 1.2em;
+  width: 37px;
   position: absolute;
-  right: 50px;
+  right: 100px;
+  background-size: 37px 42px;
 }
 
 a.view:hover {
   background-position: bottom left;
 }
 
-a.delete {
-  background: url('/imgs/sessions/delete_icon.png') no-repeat top left;
+a.export {
+  background: url('/imgs/sessions/export_icon.png') no-repeat top left;
+  display: inline-block;
+  height: 25px;
+  margin: 2.1em 1.2em;
+  width: 27px;
+  position: absolute;
+  right: 46px;
+  background-size: 27px 50px;
+  cursor: pointer;
+}
+
+a.export:hover {
+  background-position: bottom left;
+}
+
+a.export-download {
+  background: url('/imgs/sessions/export_download_icon.png') no-repeat top left;
   display: inline-block;
   height: 24px;
   margin: 2.1em 1.2em;
+  width: 26px;
+  cursor: pointer;
+}
+
+a.export-download:hover {
+  background-position: bottom left;
+}
+
+a.delete {
+  background: url('/imgs/sessions/delete_icon.png') no-repeat top left;
+  display: inline-block;
+  height: 25px;
+  margin: 2.1em 1.2em;
   width: 18px;
+  background-size: 18px 50px;
 }
 
 a.delete:hover {
@@ -401,6 +432,10 @@ a.delete:hover {
 
 .pending-list .confirm-delete {left: -74px;}
 
+.pending-list .export,
+.pending-list .export-download { display: none;}
+
+.pending-list .list-loader { display: none;}
 
 .confirm-delete {
   border: 1px solid #dcdcdc;
@@ -516,4 +551,40 @@ footer button {
     box-shadow: 0 -2em #87B7EC;
     height: 5em;
   }
+}
+
+.list-loader,
+.list-loader:before,
+.list-loader:after {
+  background: #87B7EC;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+  float: left;
+  display: block;
+  right: 27px;
+  top: 10px;
+}
+.list-loader:before,
+.list-loader:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.list-loader:before {
+  left: -1.5em;
+}
+.list-loader {
+  text-indent: -9999em;
+  margin: 5em auto;
+  position: relative;
+  font-size: 4px;
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.list-loader:after {
+  left: 1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
 }

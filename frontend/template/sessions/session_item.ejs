@@ -12,6 +12,10 @@
         <div class="actions">
           <a href="" class="view" ng-click="openViewer(session.session_name)"></a>
 <% if (userInfo.isAuthenticated) { %>
+          <!--<a href="" ng-click="export()" class="export"></a>-->
+          <div class="list-loader">loading</div>
+          <!--<a href="" class="export-download"></a>-->
+
           <a href=""
              class="delete"
              ng-click="onDeleteSessionClicked(session.session_name, $event)"
