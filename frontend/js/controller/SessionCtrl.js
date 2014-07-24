@@ -1,4 +1,17 @@
-var SessionCtrl = [
+var app = angular.module('MaidSafe', ['angularFileUpload']);
+
+app.run([
+  '$rootScope', '$location', function($rootScope, $location) {
+    $rootScope.socketEndPoint = "http://" + $location.host() + ":" + socketPort;
+  }
+]);
+
+app.directive('fileDialog', FileDialog);
+app.directive('clipCopy', ClipCopy);
+app.service('dataManager', DataManagerService);
+app.service('socketService', SocketService);
+
+app.controller('sessionCtrl', [
   '$scope', '$http', '$upload', 'socketService', function($scope, $http, $upload, socketService) {
 
     $scope.userInfo = {};
@@ -158,4 +171,4 @@ var SessionCtrl = [
 
     refreshCurrentSessions();
   }
-];
+]);
