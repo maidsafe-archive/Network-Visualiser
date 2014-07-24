@@ -56,7 +56,7 @@ var DBUtil = function(dbConnection) {
     var promise = new mongoose.Promise;
     var outStream = fs.createWriteStream(fileName, { 'flags': 'a' });
     dbConn.db.collection(formattedCollectionName, function(err, col) {
-      var stream = col.find({}, { __id: 0, __v: 0 }).stream();
+      var stream = col.find({}, { __id: 0, __v: 0 }).sort([['ts', 'ascending']]).stream();
       var res = stream.pipe(createParser()).pipe(outStream);
       res.on('finish', function() {
         promise.complete('');
