@@ -42,6 +42,9 @@ app.controller('sessionCtrl', [
 
     $scope.init = function(user) {
       $scope.userInfo = JSON.parse(JSON.stringify(user));
+      if ($scope.userInfo.invalidAuthMessage) {
+        $scope.setStatusAlert($scope.userInfo.invalidAuthMessage);
+      }
     };
 
     socketService.setSignalListner(function(signal) {

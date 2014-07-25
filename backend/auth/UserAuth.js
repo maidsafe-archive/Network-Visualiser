@@ -100,6 +100,11 @@ exports.setupAuthCallbacks = function(server) {
   }
 
   server.get('/auth', setUserInfo, function(req, res) {
+    if (req.isAuthenticated() && !req._userInfo.isAuthenticated) {
+      res.redirect('/');
+      return;
+    }
+
     res.render('sessions', {
       userInfo: req._userInfo,
       socketPort: config.Constants.socketPort

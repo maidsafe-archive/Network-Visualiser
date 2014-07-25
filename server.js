@@ -34,6 +34,10 @@ app.use(express.static(__dirname + '/frontend'));
 
 
 app.get('/', userAuth.appendUserInfo, function(req, res) {
+  if (req.isAuthenticated() && !req._userInfo.isAuthenticated) {
+    req._userInfo.invalidAuthMessage = 'Invalid Authentication';
+  }
+
   res.render('sessions', { userInfo: req._userInfo, socketPort: socketPort });
 });
 
