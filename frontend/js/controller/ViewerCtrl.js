@@ -1,4 +1,4 @@
-var app = angular.module('MaidSafe', []);
+var app = angular.module('MaidSafe', ['ngReact']);
 
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {
@@ -47,7 +47,29 @@ app.controller('viewerCtrl', [
         }
       }, 5000);
     };
+        $scope.watchersCount = 0;
+        $scope.setWatchersCount = function () {
+            (function () {
+                var root = angular.element(document.getElementsByTagName('body'));
+                var watchers = [];
 
+                var f = function (element) {
+                    if (element.data().hasOwnProperty('$scope')) {
+                        angular.forEach(element.data().$scope.$$watchers, function (watcher) {
+                            watchers.push(watcher);
+                        });
+                    }
+
+                    angular.forEach(element.children(), function (childElement) {
+                        f(angular.element(childElement));
+                    });
+                };
+
+                f(root);
+
+                $scope.watchersCount = watchers.length;
+            })();
+        };
     var newVault = function(vault) {
       $scope.vaults.push(vault);
       if (!$scope.$$phase) {

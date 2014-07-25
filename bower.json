@@ -9,6 +9,7 @@
     "angular-rangeslider":"latest",
     "zeroclipboard":"latest",
     "ng-file-upload":"latest",
-    "animate.css":"latest"
+    "animate.css":"latest",
+    "ngReact":"latest"
   }
 }

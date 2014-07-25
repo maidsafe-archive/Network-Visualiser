@@ -85,7 +85,7 @@ exports.downloadExport = function(req, res) {
   });
 };
 
-exports.deleteSession = function(req, res) {
+exports.deleteActiveSession = function(req, res) {
   var criteria = url.parse(req.url, true).query;
   if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
     res.send(500, 'Invalid Request');

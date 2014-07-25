@@ -32,3 +32,6 @@ obj/
 *.sln
 *.suo
 .idea/
+
+# Reactjs
+frontend/js/reactjs/scripts/.module-cache

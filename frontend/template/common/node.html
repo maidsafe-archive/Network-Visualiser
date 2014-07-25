@@ -1,3 +1,20 @@
+
+
+<div class="node" ng-repeat="vault in vaults | orderBy:'vault_id'" ng-controller="vaultCtrl" ng-init="init(vault)">
+    <div ng-react-component="ReactItem"></div>
+</div>
+
+
+<!--<div class="node" ng-repeat="vault in vaults | orderBy:'vault_id'" ng-controller="vaultCtrl" ng-init="init(vault)">
+    <div>
+        <div>Id: {{vaultName}}</div>
+        <div>Health - {{networkHealth}}</div>
+        <div>Full Name - {{fullVaultName.substring(0,30)}}</div>
+        <div>Last Log - {{lastLog()}}</div>
+    </div>
+</div>-->
+
+<!--
 <div class="node" ng-repeat="vault in vaults | orderBy:'vault_id'" ng-controller="vaultCtrl" ng-init="init(vault)"
      ng-class="{false:'dead'}[isActive]">
   <div class="box">
@@ -42,4 +59,4 @@
       <a target="_blank" ng-href="/history#?id={{vaultName}}&sn={{$root.sessionName}}">See All</a>
     </div>
   </div>
-</div>
+</div>-->
