@@ -1,5 +1,5 @@
 var VaultCtrl = [
-  '$scope', '$rootScope', 'dataManager', 'vaultBehaviour', function($scope, $rootScope, dataManager, vaultBehaviour) {
+  '$scope', '$rootScope', '$filter', 'dataManager', 'vaultBehaviour', function($scope, $rootScope, $filter, dataManager, vaultBehaviour) {
     $scope.stateIcon;
     $scope.logsOpen;
     $scope.progressLevel;
@@ -49,6 +49,7 @@ var VaultCtrl = [
       }
     };
     $scope.logRecieved = function(log, initialLoad) {
+      log.formattedTime = $filter('date')(log.ts, 'dd/MM/yyyy HH:mm:ss');
       $scope.addLog(log);
       $scope.personaColour = $scope.PERSONA_COLOUR_TAG + (initialLoad ? 'na' : $scope.vaultBehaviour.personas[log.persona_id]);
       if (log.action_id == 17) {
@@ -89,6 +90,11 @@ var VaultCtrl = [
     $scope.toggleVaultLogs = function(expand) {
       $scope.stateIcon = !$scope.logsOpen ? "arrow-up.png" : "info.png";
       $scope.logsOpen = expand ? expand : !$scope.logsOpen;
+    };
+    $scope.toggleVaultLogsNew = function(item, expand) {
+      $scope.logsOpen = expand ? expand : !$scope.logsOpen;
+      $scope.stateIcon = $scope.logsOpen ? "arrow-up.png" : "info.png";
+      item.setState({ scope: $scope });
     };
     $scope.$on('expandVault', function(e, v) {
       if (v == $scope.logsOpen) {

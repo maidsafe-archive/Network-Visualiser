@@ -11,15 +11,17 @@ app.directive('tooltip', ToolTip);
 app.service('dataManager', DataManagerService);
 app.service('vaultBehaviour', VaultBehaviourService);
 app.service('socketService', SocketService);
-app.controller('vaultCtrl', VaultCtrl);
+app.service('vaultMgr', VaultMgr);
+// app.controller('vaultCtrl', VaultCtrl);
 
 app.controller('viewerCtrl', [
-  '$scope', '$rootScope', '$location', 'dataManager', 'socketService', function($scope, $rootScope, $location, dataManager, socketService) {
+  '$scope', '$rootScope', '$location', 'dataManager', 'socketService', 'vaultMgr', function($scope, $rootScope, $location, dataManager, socketService, vaultMgr) {
 
     $rootScope.sessionName = $location.search().sn;
 
     $scope.iconsTrayClosed = true;
 
+    $scope.vaultMgr = vaultMgr;
     $scope.vaults = [];
     $scope.allVaultsExpanded = false;
 
@@ -72,6 +74,8 @@ app.controller('viewerCtrl', [
         };
     var newVault = function(vault) {
       $scope.vaults.push(vault);
+      $scope.vaultMgr.addVault(vault);
+
       if (!$scope.$$phase) {
         $scope.$apply();
       }

@@ -1,18 +1,57 @@
+<!--vaultMgr.vaultCollection-->
+<div ng-react-component="VaultCollection" data="vaultMgr.vaultCollection"></div>
 
 
-<div class="node" ng-repeat="vault in vaults | orderBy:'vault_id'" ng-controller="vaultCtrl" ng-init="init(vault)">
-    <div ng-react-component="ReactItem"></div>
-</div>
-
-
-<!--<div class="node" ng-repeat="vault in vaults | orderBy:'vault_id'" ng-controller="vaultCtrl" ng-init="init(vault)">
-    <div>
-        <div>Id: {{vaultName}}</div>
-        <div>Health - {{networkHealth}}</div>
-        <div>Full Name - {{fullVaultName.substring(0,30)}}</div>
-        <div>Last Log - {{lastLog()}}</div>
-    </div>
+<!--<div class="node" ng-repeat="vault in vaults">
+    <div ng-react-component="ReactItem" verid="vault"></div>
 </div>-->
+
+<!--<div class="node" ng-repeat="vault in vaults" ng-controller="vaultCtrl" ng-init="init(vault)">
+  <div class="box">
+    <div class="notif">
+      <ul>
+        <li ng-class="iconsTray.account">
+        </li>
+        <li ng-class="iconsTray.chunk">
+        </li>
+        <li class="shape" ng-class="iconsTray.subscriber">
+          <p>{{subscriber}}</p>
+        </li>
+        <li class="shape" ng-class="iconsTray.counter">
+          <p>{{counter}}</p>
+        </li>
+      </ul>
+    </div>
+    <div class="progress"
+         ng-class="{true:'vault_start'}[networkHealth <= 0]">
+      <div ng-style="progressLevel"></div>
+    </div>
+    <div class="info" ng-class="personaColour">
+      <p>{{vaultName.substring(0,6) | uppercase}}</p>
+      <img ng-src="../../imgs/viewer/{{stateIcon}}" ng-click="toggleVaultLogs()">
+      <a class="host-name-btn" title="{{hostName}}" ng-hide="hostName == ''" clip-copy clip-text="{{hostName == '' ? 'Unknown' : hostName}}"></a>
+    </div>
+  </div>
+  <div class="log_slider" ng-class="{false:'close', true:personaColour+'_alpha'}[logsOpen]">
+    <ul>
+      <li ng-repeat="log in logs" >
+        <div class="log_date">
+          {{log.ts}}
+        </div>
+        <div class="log_msg">
+          {{ vaultBehaviour.formatMessage(log) }}
+        </div>
+      </li>
+    </ul>
+    <div class="see_history">
+      <a target="_blank" ng-href="/history#?id={{vaultName}}&sn={{$root.sessionName}}">See All</a>
+    </div>
+  </div>
+</div>-->
+
+<!---->
+
+
 
 <!--
 <div class="node" ng-repeat="vault in vaults | orderBy:'vault_id'" ng-controller="vaultCtrl" ng-init="init(vault)"
