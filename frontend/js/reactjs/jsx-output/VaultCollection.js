@@ -60,7 +60,7 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
     }
 
     return (
-      React.DOM.div({className: "node"}, 
+      React.DOM.div({className: 'node ' + (!item.isActive ? 'dead' : '')}, 
         React.DOM.div({className: "box"}, 
           React.DOM.div({className: "notif"}, 
             React.DOM.ul(null, 

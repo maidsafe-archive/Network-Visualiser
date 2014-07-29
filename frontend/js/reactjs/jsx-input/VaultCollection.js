@@ -60,7 +60,7 @@ window.VaultNode = React.createClass({
     }
 
     return (
-      <div className="node">
+      <div className={'node ' + (!item.isActive ? 'dead' : '' )}>
         <div className="box">
           <div className="notif">
             <ul>
