@@ -18,7 +18,7 @@ var VaultCtrl = [
     $scope.updateFromQueue = function() {
       var logs = dataManager.getLogsFromQueue($scope.vaultName);
       for (var index in logs) {
-        $scope.logRecieved(logs[index], true);
+        $scope.logReceived(logs[index], true);
       }
     }; //initialize the controller
     $scope.init = function(vault) {
@@ -29,7 +29,7 @@ var VaultCtrl = [
       $scope.logs = [];
       $scope.personaColour = $scope.PERSONA_COLOUR_TAG + $scope.vaultBehaviour.personas[0];
       $scope.updateIcons(0);
-      dataManager.setLogListner($scope.vaultName, $scope.logRecieved);
+      dataManager.setLogListner($scope.vaultName, $scope.logReceived);
       $scope.updateFromQueue();
     };
     $scope.updateIcons = function(actionId) {
@@ -48,7 +48,7 @@ var VaultCtrl = [
         $scope.updateProgress($scope.networkHealth);
       }
     };
-    $scope.logRecieved = function(log, initialLoad) {
+    $scope.logReceived = function(log, initialLoad) {
       log.formattedTime = $filter('date')(log.ts, 'dd/MM/yyyy HH:mm:ss');
       $scope.addLog(log);
       $scope.personaColour = $scope.PERSONA_COLOUR_TAG + (initialLoad ? 'na' : $scope.vaultBehaviour.personas[log.persona_id]);

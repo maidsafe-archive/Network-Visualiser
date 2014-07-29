@@ -13,7 +13,7 @@
     <script src="components/underscore/underscore-min.js"></script>
     <script src="components/react/react.js"></script>
     <script src="components/ngReact/ngReact.min.js"></script>
-    <script src="js/reactjs/scripts/reactor.js"></script>
+    <script src="js/reactjs/jsx-output/VaultCollection.js"></script>
 
     <script type="text/javascript" src="components/zeroclipboard/dist/ZeroClipboard.min.js"></script>
 
@@ -22,8 +22,8 @@
     <script type="text/javascript" src="js/service/DataManagerService.js"></script>
     <script type="text/javascript" src="js/service/VaultBehaviourService.js"></script>
     <script type="text/javascript" src="js/service/SocketService.js"></script>
+    <script type="text/javascript" src="js/service/VaultManager.js"></script>
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
-    <script type="text/javascript" src="js/service/VaultMgr.js"></script>
     <script type="text/javascript" src="js/controller/ViewerCtrl.js"></script>
 
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" />
@@ -41,14 +41,14 @@
       <ng-include src="'template/viewer/header.html'"></ng-include>
     </header>
     <section>
-      <div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]">
+      <div class="icons open" ng-if="!iconsTrayClosed">
         <ng-include src="'template/common/icons_tray.html'"></ng-include>
       </div>
       <div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
         <ng-include src="'template/common/node.html'"></ng-include>
       </div>
     </section>
-    <div class="loading" ng-style="{ false:{display:'none'}}[showLoader]">
+    <div class="loading" ng-if="showLoader">
       <div class="loader_icon" >
         <img src="imgs/loader.gif">
       </div>

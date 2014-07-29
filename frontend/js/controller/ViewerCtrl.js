@@ -11,17 +11,17 @@ app.directive('tooltip', ToolTip);
 app.service('dataManager', DataManagerService);
 app.service('vaultBehaviour', VaultBehaviourService);
 app.service('socketService', SocketService);
-app.service('vaultMgr', VaultMgr);
+app.service('vaultManager', VaultManager);
 // app.controller('vaultCtrl', VaultCtrl);
 
 app.controller('viewerCtrl', [
-  '$scope', '$rootScope', '$location', 'dataManager', 'socketService', 'vaultMgr', function($scope, $rootScope, $location, dataManager, socketService, vaultMgr) {
+  '$scope', '$rootScope', '$location', 'dataManager', 'socketService', 'vaultManager', function($scope, $rootScope, $location, dataManager, socketService, vaultManager) {
 
     $rootScope.sessionName = $location.search().sn;
 
     $scope.iconsTrayClosed = true;
 
-    $scope.vaultMgr = vaultMgr;
+    $scope.vaultManager = vaultManager;
     $scope.vaults = [];
     $scope.allVaultsExpanded = false;
 
@@ -49,39 +49,39 @@ app.controller('viewerCtrl', [
         }
       }, 5000);
     };
-        $scope.watchersCount = 0;
-        $scope.setWatchersCount = function () {
-            (function () {
-                var root = angular.element(document.getElementsByTagName('body'));
-                var watchers = [];
+    $scope.watchersCount = 0;
+    $scope.setWatchersCount = function() {
+      (function() {
+        var root = angular.element(document.getElementsByTagName('body'));
+        var watchers = [];
 
-                var f = function (element) {
-                    if (element.data().hasOwnProperty('$scope')) {
-                        angular.forEach(element.data().$scope.$$watchers, function (watcher) {
-                            watchers.push(watcher);
-                        });
-                    }
+        var f = function(element) {
+          if (element.data().hasOwnProperty('$scope')) {
+            angular.forEach(element.data().$scope.$$watchers, function(watcher) {
+              watchers.push(watcher);
+            });
+          }
 
-                    angular.forEach(element.children(), function (childElement) {
-                        f(angular.element(childElement));
-                    });
-                };
-
-                f(root);
-
-                $scope.watchersCount = watchers.length;
-            })();
+          angular.forEach(element.children(), function(childElement) {
+            f(angular.element(childElement));
+          });
         };
+
+        f(root);
+
+        $scope.watchersCount = watchers.length;
+      })();
+    };
     var newVault = function(vault) {
       $scope.vaults.push(vault);
-      $scope.vaultMgr.addVault(vault);
+      $scope.vaultManager.addVault(vault);
 
       if (!$scope.$$phase) {
         $scope.$apply();
       }
     };
     var onVaultsLoaded = function(time) {
-      $scope.showLoader = false;
+      // $scope.showLoader = false;
       if (!$scope.vaults || $scope.vaults.length == 0) {
         $scope.setStatusAlert('No active vaults');
       }

@@ -1,4 +1,4 @@
-var VaultMgr = [
+var VaultManager = [
   '$rootScope', '$filter', 'dataManager', 'vaultBehaviour', function($rootScope, $filter, dataManager, vaultBehaviour) {
 
     var PERSONA_COLOUR_TAG = "persona_";
@@ -50,7 +50,7 @@ var VaultMgr = [
       this.networkHealth = 0;
       this.subscriber = null;
       this.counter = null;
-      this.intervalId = '';
+      this.intervalId = null;
       this.reactItem = null;
 
       this.refreshItem = function() {
@@ -76,7 +76,7 @@ var VaultMgr = [
         this.logs = [];
         this.personaColour = PERSONA_COLOUR_TAG + vaultBehaviour.personas[0];
         this.updateIcons(0);
-        dataManager.setLogListner(this.vaultName, this.logRecieved);
+        dataManager.setLogListner(this.vaultName, this.logReceived.bind(this));
         this.updateFromQueue();
       };
 
@@ -88,7 +88,7 @@ var VaultMgr = [
         this.iconsTray = vaultBehaviour.icons[actionId];
       };
 
-      this.logRecieved = function(log, initialLoad) {
+      this.logReceived = function(log, initialLoad) {
         log.formattedTime = $filter('date')(log.ts, 'dd/MM/yyyy HH:mm:ss');
         this.addLog(log);
         this.personaColour = PERSONA_COLOUR_TAG + (initialLoad ? 'na' : vaultBehaviour.personas[log.persona_id]);
@@ -127,7 +127,7 @@ var VaultMgr = [
         }*/
 
         this.resetInActivityMonitor();
-      }.bind(this);
+      };
 
       this.addLog = function(log) {
         if (this.logs.length >= vaultBehaviour.MAX_LOGS) {
@@ -166,7 +166,7 @@ var VaultMgr = [
       this.updateFromQueue = function() {
         var logs = dataManager.getLogsFromQueue(this.vaultName);
         for (var index in logs) {
-          this.logRecieved(logs[index], true);
+          this.logReceived(logs[index], true);
         }
       };
     };

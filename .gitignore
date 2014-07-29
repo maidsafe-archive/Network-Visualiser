@@ -34,4 +34,4 @@ obj/
 .idea/
 
 # Reactjs
-frontend/js/reactjs/scripts/.module-cache
+frontend/js/reactjs/jsx-output/.module-cache

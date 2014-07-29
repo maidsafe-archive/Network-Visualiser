@@ -18,7 +18,7 @@ window.LogList = React.createClass({
           {log.formattedTime}
         </div>
         <div className={'log_msg'}>
-          {scope.vaultMgr.vaultBehaviour.formatMessage(log)}
+          {scope.vaultManager.vaultBehaviour.formatMessage(log)}
         </div>
       </li>
     );
@@ -86,7 +86,7 @@ window.VaultNode = React.createClass({
 window.VaultCollection = React.createClass({
     render: function() {
         var scope = this.props.scope.$parent;
-        var vaultCollection = scope.vaultMgr.vaultCollection;
+        var vaultCollection = scope.vaultManager.vaultCollection;
 
         var rows = _.map(vaultCollection, function(vaultInfo) {
             return (
@@ -97,5 +97,12 @@ window.VaultCollection = React.createClass({
         return (
           <div>{rows}</div>
         );
+    },
+    componentDidUpdate: function () {
+      var scope = this.props.scope.$parent;
+      if (scope.showLoader) {
+        console.log('called');
+        scope.showLoader = false;
+      }
     }
 });
