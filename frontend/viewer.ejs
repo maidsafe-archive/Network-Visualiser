@@ -22,7 +22,7 @@
     <script type="text/javascript" src="js/service/DataManagerService.js"></script>
     <script type="text/javascript" src="js/service/VaultBehaviourService.js"></script>
     <script type="text/javascript" src="js/service/SocketService.js"></script>
-    <script type="text/javascript" src="js/service/VaultManager.js"></script>
+    <script type="text/javascript" src="js/service/VaultManagerService.js"></script>
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
     <script type="text/javascript" src="js/controller/ViewerCtrl.js"></script>
 
@@ -45,7 +45,7 @@
         <ng-include src="'template/common/icons_tray.html'"></ng-include>
       </div>
       <div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
-        <ng-include src="'template/common/node.html'"></ng-include>
+        <div ng-react-component="VaultCollection" data="vaultManager.vaultCollection"></div>
       </div>
     </section>
     <div class="loading" ng-if="showLoader">

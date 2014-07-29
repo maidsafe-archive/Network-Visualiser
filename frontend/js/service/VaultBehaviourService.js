@@ -59,6 +59,12 @@ var VaultBehaviourService = [
       17: { account: 'hexagon', chunk: 'circle', subscriber: 'square', counter: 'rhombus' },
       18: { account: 'hexagon', chunk: 'circle', subscriber: 'square', counter: 'rhombus' }
     };
+    service.iconShapes = {
+      HEXAGON: 0,
+      CIRCLE: 1,
+      SQUARE: 2,
+      DIAMOND: 3
+    };
     var tootips = {
       0: [4, 5, 9, 10, 11, 12, 16],
       1: [3, 8, 13, 14, 15],
