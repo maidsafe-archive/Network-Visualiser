@@ -59,6 +59,9 @@ app.controller('timelineCtrl', [
     $scope.updatePlayingTime = function() {
       $scope.playback.currentState += $scope.playback.incrementalSteps;
       $scope.currentPlayTime += 1000;
+      if ($scope.currentPlayTime >= $scope.maxTime) {
+        $scope.pauseHistoryPlayback();
+      }
       if (!$scope.$$phase) {
         $scope.$apply();
       }

@@ -99,20 +99,12 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
             host_name: vaults[index].host_name,
             logs: []
           };
-          if (vaults[index].vault_id == "0006") {
-            console.log("here");
-          }
           bridge.vaultHistory(sessionName, vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
             counter++;
-            if (vaults[index].vault_id == "0006") {
-              console.log("here");
-            }
-            if (logs.length > 0 && logs[0].action_id != 18) {
+            if (logs.length > 0) {
               results[logs[0].vault_id].logs = logs;
             }
             if (counter >= vaults.length) {
-              console.log(counter);
-              console.log(vaults.length);
               res.send(results);
             }
           }, function(err) {
