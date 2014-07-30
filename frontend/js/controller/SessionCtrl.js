@@ -103,7 +103,10 @@ app.controller('sessionCtrl', [
           break;
         }
       }
-      $http.get(endPoint + '?sn=' + sessionName).success(refreshCurrentSessions).error(function(errorMessage) {
+      $http.get(endPoint + '?sn=' + sessionName).success(function() {
+        delete $scope.isConfirmDeleteDialogOpen[sessionName];
+        refreshCurrentSessions();
+      }).error(function(errorMessage) {
         $scope.setStatusAlert(errorMessage);
         $scope.isConfirmDeleteDialogOpen[sessionName] = false;
       });

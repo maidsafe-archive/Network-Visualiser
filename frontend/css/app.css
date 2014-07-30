@@ -292,7 +292,7 @@ section div.wrapper {
   margin-left: 2em;
   overflow: auto;
   padding: .343em;
-  position: absolute;
+  position: relative;
   top: 0px;
 }
 
@@ -300,17 +300,15 @@ section div.wrapper.tray_open { top: 180px; }
 
 
 section div.wrapper div.node {
-  float: left;
   height: 180px;
   margin: 15px;
-  width: 15%;
-  width: 220px
+  width: 220px;
+  clear: both;
 }
 
 section div.wrapper div.node div.box {
   border: 2px solid #776E6E;
   height: 100px;
-  /*width: 100%;*/
   width: 220px;
 }
 
@@ -323,8 +321,6 @@ section div.wrapper div.node div.box div.notif ul { margin: 2px; }
 
 section div.wrapper div.node div.box div.notif ul li {
   float: left;
-  /*height: 25px;
-	width: 25px;*/
   margin-left: 0.2em;
 }
 
