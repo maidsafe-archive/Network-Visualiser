@@ -18,10 +18,10 @@
              <span>{{playerStatus}}</span>
            </div> -->
       <div class="player_buttons">
-        <button ng-click="playHistory()" ng-show="playerState == PLAYER_STATE.STOPED" class="play-btn">Play</button>
+        <button ng-click="playHistory()" ng-show="playerState == PLAYER_STATE.STOPPED" class="play-btn">Play</button>
         <button ng-click="pauseHistoryPlayback()" ng-show="playerState == PLAYER_STATE.PLAYING" class="pause-btn">Pause</button>
         <button ng-click="resumeHistoryPlayback()" ng-show="playerState == PLAYER_STATE.PAUSED" class="resume-btn">Resume</button>
-        <!-- <button ng-click="stopHistoryPlayback()" ng-show="playerState != PLAYER_STATE.STOPED">Stop</button>	  -->
+        <!-- <button ng-click="stopHistoryPlayback()" ng-show="playerState != PLAYER_STATE.STOPPED">Stop</button>	  -->
       </div>
     </div>
   </div>

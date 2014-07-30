@@ -12,7 +12,7 @@ var PlaybackService = [
     var bufferMonitor = 0;
     var firstBuffer = true;
     var buffer_pool = {};
-    var status = { playing: 0, stoped: 1, pause: 2, resume: 3 };
+    var status = { playing: 0, stopped: 1, pause: 2, resume: 3 };
     var playerStatus = "";
     var statusChangeListner;
     var dateFormater = function(date) {
@@ -139,7 +139,7 @@ var PlaybackService = [
     };
     this.stop = function() {
       clearAll();
-      setPlayerStatus(status.stoped);
+      setPlayerStatus(status.stopped);
     };
     this.onStatusChange = function(callback) {
       statusChangeListner = callback;

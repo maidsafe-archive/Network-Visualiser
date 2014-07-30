@@ -6,8 +6,6 @@ app.run([
   }
 ]);
 
-app.directive('clipCopy', ClipCopy);
-app.directive('tooltip', ToolTip);
 app.service('dataManager', DataManagerService);
 app.service('vaultBehaviour', VaultBehaviourService);
 app.service('socketService', SocketService);

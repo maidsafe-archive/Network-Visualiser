@@ -7,5 +7,5 @@ exports.Constants = {
   vault_logs_count: 3,
   minLengthForDecode: 6,
   persona_na: 10,
-  action_network_health: '17',
+  action_network_health: '17'
 }

@@ -14,14 +14,18 @@
     <script type="text/javascript" src="components/angular-rangeslider/angular.rangeSlider.js"></script>
     <link rel="stylesheet" type="text/css" href="components/angular-rangeslider/angular.rangeSlider.css">
 
-    <script type="text/javascript" src="js/directive/clipcopy.js"></script>
-    <script type="text/javascript" src="js/directive/tooltip.js"></script>
+    <script src="components/underscore/underscore-min.js"></script>
+    <script src="components/react/react.min.js"></script>
+    <script src="components/ngReact/ngReact.min.js"></script>
+    <script src="js/reactjs/addons/react-infinite-scroll.min.js"></script>
+    <script src="js/reactjs/jsx-output/VaultCollection.js"></script>
+
     <script type="text/javascript" src="js/service/DataManagerService.js"></script>
     <script type="text/javascript" src="js/service/VaultBehaviourService.js"></script>
     <script type="text/javascript" src="js/service/SocketService.js"></script>
     <script type="text/javascript" src="js/service/PlaybackService.js"></script>
+    <script type="text/javascript" src="js/service/VaultManagerService.js"></script>
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
-    <script type="text/javascript" src="js/controller/VaultCtrl.js"></script>
     <script type="text/javascript" src="js/controller/TimelineCtrl.js"></script>
 
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" />
@@ -39,14 +43,14 @@
       <ng-include src="'template/timeline/header.html'"></ng-include>
     </header>
     <section>
-      <div class="icons" ng-class="{true:'close', false:'open' }[iconsTrayClosed]" >
+      <div class="icons open" ng-if="!iconsTrayClosed">
         <ng-include src="'template/common/icons_tray.html'"></ng-include>
       </div>
       <div class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
-        <ng-include src="'template/common/node.html'"></ng-include>
+        <div ng-react-component="VaultCollection" data="vaultManager.vaultCollection"></div>
       </div>
     </section>
-    <div class="loading" ng-style="{ false:{display:'none'}}[showLoader]">
+    <div class="loading" ng-if="showLoader">
       <div class="loader_icon" >
         <img src="imgs/loader.gif">
       </div>

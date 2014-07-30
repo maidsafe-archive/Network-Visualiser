@@ -1,4 +1,4 @@
-var app = angular.module('MaidSafe', ['ui-rangeSlider']);
+var app = angular.module('MaidSafe', ['ui-rangeSlider', 'ngReact']);
 
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {
@@ -6,36 +6,32 @@ app.run([
   }
 ]);
 
-app.directive('clipCopy', ClipCopy);
-app.directive('tooltip', ToolTip);
 app.service('dataManager', DataManagerService);
 app.service('vaultBehaviour', VaultBehaviourService);
 app.service('socketService', SocketService);
 app.service('playbackService', PlaybackService);
-app.controller('vaultCtrl', VaultCtrl);
+app.service('vaultManager', VaultManagerService);
 
 app.controller('timelineCtrl', [
-  '$scope', '$rootScope', '$location', '$http', 'dataManager', 'playbackService', 'socketService', function($scope, $rootScope, $location, $http, dataManager, playbackService, socketService) {
+  '$scope', '$rootScope', '$location', '$http', '$timeout', 'dataManager', 'playbackService', 'socketService', 'vaultManager',
+  function($scope, $rootScope, $location, $http, $timeout, dataManager, playbackService, socketService, vaultManager) {
+
     $rootScope.sessionName = $location.search().sn;
-
     $scope.iconsTrayClosed = true;
-
-    $scope.vaults = [];
+    $scope.vaultManager = vaultManager;
     $scope.allVaultsExpanded = false;
-
     $scope.showLoader = true;
-    $scope.alert;
+    $scope.alert = null;
     $scope.playerStatus = "";
-    $scope.PLAYER_STATE = { PLAYING: "playing", STOPED: "stoped", PAUSED: 'pause' };
-    $scope.playerState = $scope.PLAYER_STATE.STOPED;
-    $scope.firstLogtime;
+    $scope.PLAYER_STATE = { PLAYING: "playing", STOPPED: "stopped", PAUSED: 'pause' };
+    $scope.playerState = $scope.PLAYER_STATE.STOPPED;
+    $scope.firstLogtime = null;
     $scope.playback = { currentState: 0, max_steps: 1000, incrementalSteps: 0 };
     $scope.currentPlayTime = null;
-    // $scope.maxTime = $location.search().ts ? new Date($location.search().ts) : new Date();
     $scope.maxTime = new Date();
     $scope.playingTime = new Date();
     socketService.stop();
-    $scope.autoSeekItervalId;
+    $scope.autoSeekIntervalPromise = null;
     $scope.changedOnPause = false;
     $scope.$watch('playback.currentState', function(newValue) {
       if ($scope.firstLogtime && String(newValue).indexOf(".") == -1) {
@@ -48,11 +44,11 @@ app.controller('timelineCtrl', [
         if (!$scope.$$phase) {
           $scope.$apply();
         }
-        if ($scope.autoSeekItervalId) {
-          clearTimeout($scope.autoSeekItervalId);
-          $scope.autoSeekItervalId = null;
+        if ($scope.autoSeekIntervalPromise) {
+          $timeout.cancel($scope.autoSeekIntervalPromise);
+          $scope.autoSeekIntervalPromise = null;
         }
-        $scope.autoSeekItervalId = setTimeout(function() {
+        $scope.autoSeekIntervalPromise = $timeout(function() {
           if (!$rootScope.playerPaused) {
             $scope.stopHistoryPlayback();
             $scope.playHistory();
@@ -69,16 +65,16 @@ app.controller('timelineCtrl', [
     };
     $scope.setStatusAlert = function(msg) {
       $scope.alert = msg;
-      setTimeout(function() {
+      $timeout(function() {
         $scope.alert = null;
-      }, 2000);
+      }, 5000);
     };
     $scope.toggleIconsTray = function() {
       $scope.iconsTrayClosed = !$scope.iconsTrayClosed;
     };
     $scope.toggleExpandAllLogs = function() {
       $scope.allVaultsExpanded = !$scope.allVaultsExpanded;
-      $rootScope.$broadcast('expandVault', $scope.allVaultsExpanded);
+      vaultManager.expandAllVaultLogs($scope.allVaultsExpanded);
     };
     $scope.getPlayTime = function(playFrom) {
       var time = $scope.maxTime;
@@ -90,7 +86,7 @@ app.controller('timelineCtrl', [
       $rootScope.playerPaused = false;
       var _time = new Date($scope.currentPlayTime).toISOString();
       $scope.playerState = $scope.PLAYER_STATE.PLAYING;
-      $scope.vaults = []; //clear the present state
+      $scope.vaultManager.vaultCollection = []; //clear the present state
       dataManager.clearState();
       dataManager.getActiveVaults(_time);
       $scope.playerStatus = "Buffering...";
@@ -113,30 +109,16 @@ app.controller('timelineCtrl', [
 
     };
     $scope.stopHistoryPlayback = function() {
-      $scope.playerState = $scope.PLAYER_STATE.STOPED;
+      $scope.playerState = $scope.PLAYER_STATE.STOPPED;
       playbackService.stop();
-    }; // $scope.stopPlayer = function(){
-    // 	$scope.playerState = $scope.PLAYER_STATE.STOPED
-    // 	playbackService.pause()
-    // 	dataManager.clearState()
-    // }
-
-
-    var newVault = function(vault) {
-      $scope.vaults.push(vault);
-      if (!$scope.$$phase) {
-        $scope.$apply();
-      }
     };
+
     var onVaultsLoaded = function(time) {
       $scope.showLoader = false;
-      if (!$scope.vaults || $scope.vaults.length == 0) {
+      if ($scope.vaultManager.vaultCollection.length == 0) {
         $scope.playerStatus = 'No active vaults';
-        setTimeout(function() {
+        $timeout(function() {
           $scope.playerStatus = '';
-          if (!$scope.$$phase) {
-            $scope.$apply();
-          }
         }, 3000);
       }
       if (time) {
@@ -155,7 +137,7 @@ app.controller('timelineCtrl', [
           break;
       }
     };
-    dataManager.onNewVault(newVault);
+    dataManager.onNewVault($scope.vaultManager.addVault);
     dataManager.onVaultsLoaded(onVaultsLoaded);
     playbackService.onStatusChange(updatePlayerStatus);
     $http.get('/backend/timelineDates?sn=' + $rootScope.sessionName).then(function(res) {
@@ -165,8 +147,7 @@ app.controller('timelineCtrl', [
       $scope.playback.incrementalSteps = 1000 / ((new Date($scope.maxTime).getTime() - $scope.firstLogtime) / $scope.playback.max_steps);
       $scope.currentPlayTime = $scope.firstLogtime;
     }, function(err) {
-      // TODO display to user.
-      console.log(err);
+      $scope.setStatusAlert(err);
     });
     $scope.showLoader = false;
   }

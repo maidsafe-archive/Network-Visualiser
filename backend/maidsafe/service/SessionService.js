@@ -4,6 +4,7 @@ var utils = require('./../utils.js');
 var url = require('url');
 var fs = require('fs');
 var archiver = require('archiver');
+var path = require('path');
 
 exports.createSession = function(req, res) {
   var criteria = JSON.parse(JSON.stringify(req.body));
@@ -61,7 +62,7 @@ exports.requestExport = function(req, res) {
 
     output.on('close', function() {
       fs.unlink(path);
-      res.send(200, zipPath);
+      res.send(200, zipPath.replace(".zip", ""));
     });
 
     archive.on('error', function(err) {
@@ -76,12 +77,24 @@ exports.requestExport = function(req, res) {
 exports.downloadExport = function(req, res) {
   var criteria = url.parse(req.url, true).query;
   if (!criteria || !criteria.hasOwnProperty('sn') || !criteria.hasOwnProperty('fname')) {
-    res.send(500, 'Missing File Name');
+    res.send(500, 'Missing details');
     return;
   }
 
-  res.download(criteria.fname, criteria.sn + ' - Logs.zip', function() {
-    fs.unlink(criteria.fname);
+  var rootFolder = path.resolve(__dirname, '../../..');
+  var downloadFile = path.resolve(criteria.fname + '.zip');
+  if (downloadFile.indexOf(rootFolder) != 0) {
+    res.send(500, 'Invalid Request');
+    return;
+  }
+
+  res.download(downloadFile, criteria.sn + ' - Logs.zip', function(err) {
+    if (err) {
+      res.send(500, 'Invalid Request');
+      return;
+    }
+
+    fs.unlink(downloadFile);
   });
 };
 
