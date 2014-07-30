@@ -110,18 +110,19 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
   componentDidMount: function () {
     var item = this.props.item;
     item.setReactVaultItem(this);
-    var clipCopyButton = this.refs.hostCopyButton;
-    if (clipCopyButton) {
-      var domNode = clipCopyButton.getDOMNode();
-      var client = new ZeroClipboard(domNode);
-      client.on('ready', function() {
-        client.on('copy', function(event) {
-          var clipboard = event.clipboardData;
-          var copyText = domNode.title || "Unknown host-name";
-          clipboard.setData('text/plain', copyText);
-        });
-      });
+    if (!this.refs || !this.refs.hasOwnProperty('hostCopyButton')) {
+      return;
     }
+
+    var domNode = this.refs['hostCopyButton'].getDOMNode();
+    var client = new ZeroClipboard(domNode);
+    client.on('ready', function() {
+      client.on('copy', function(event) {
+        var clipboard = event.clipboardData;
+        var copyText = domNode.title || "Unknown host-name";
+        clipboard.setData('text/plain', copyText);
+      });
+    });
   }
 });
 
@@ -134,20 +135,16 @@ window.VaultCollection = React.createClass({displayName: 'VaultCollection',
       forceHandCursor: true
     });
     return {
-      renderedItems: 0
+      renderedItemsCount: 0
     };
   },
   render: function() {
     var scope = this.props.scope;
-    var renderedItems = this.state.renderedItems;
-    var InfiniteScroll = React.addons.InfiniteScroll;  // Do not remove.
-    var vaultCollection = scope.vaultManager.vaultCollection.sort(function(leftItem, rightItem) {
-      return leftItem.vaultName.localeCompare(rightItem.vaultName);
-    });
+    var vaultCollection = scope.vaultManager.vaultCollection;
+    var totalVaultsCount = vaultCollection.length;
+    var renderedItemsCount = Math.min(this.state.renderedItemsCount, totalVaultsCount);
 
-    var moreVaultsAvailable = renderedItems < vaultCollection.length;
-    vaultCollection = vaultCollection.slice(0, renderedItems);
-
+    vaultCollection = vaultCollection.slice(0, renderedItemsCount);
     var rows = _.map(vaultCollection, function(vaultInfo) {
       return (
         VaultNode({item: vaultInfo, scope: scope, key: vaultInfo.vaultName})
@@ -155,21 +152,18 @@ window.VaultCollection = React.createClass({displayName: 'VaultCollection',
     });
 
     return (
-      InfiniteScroll({pageStart: 0, 
-                      loadMore: this.loadFunc, 
-                      hasMore: moreVaultsAvailable, 
-                      loader: React.DOM.div(null, "Loading ...")}, 
+      React.addons.InfiniteScroll({pageStart: 0, 
+                                   loadMore: this.loadMoreVaults, 
+                                   hasMore: renderedItemsCount < totalVaultsCount, 
+                                   loader: React.DOM.div(null, "Loading ...")}, 
         React.DOM.div(null, rows)
       )
     );
   },
-  loadFunc: function(page) {
-    //setTimeout(function () {
-      var newRenderedCount = this.state.renderedItems + 50;
-      this.setState({
-        renderedItems: newRenderedCount
-      });
-    //}.bind(this), 5000);
+  loadMoreVaults: function() {
+    this.setState({
+      renderedItemsCount: this.state.renderedItemsCount + 50
+    });
   },
   componentDidMount: function () {
     var scope = this.props.scope;
