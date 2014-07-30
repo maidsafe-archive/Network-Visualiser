@@ -28,9 +28,10 @@ header {
   background-color: #5593d7;
   height: 90px;
   min-width: 1150px;
-  position: absolute;
   top: 0px;
   width: 100%;
+  position: fixed;
+  z-index:100;
 }
 
 header p.title {
@@ -219,6 +220,7 @@ section {
   position: absolute;
   top: 90px; /* Corresponds to the header height plus 20px */
   width: 100%;
+  overflow-y: visible;
 }
 
 section div.legends {
@@ -288,12 +290,13 @@ section div.icons ul li span {
 }
 
 section div.wrapper {
-  bottom: 0px;
+
   margin-left: 2em;
   overflow: auto;
   padding: .343em;
-  position: relative;
-  top: 0px;
+  /* position:absolute; - infinite scroll doesn't work with this */
+
+  position: absolute;
 }
 
 section div.wrapper.tray_open { top: 180px; }
@@ -303,7 +306,7 @@ section div.wrapper div.node {
   height: 180px;
   margin: 15px;
   width: 220px;
-  clear: both;
+  display: inline-block;
 }
 
 section div.wrapper div.node div.box {
