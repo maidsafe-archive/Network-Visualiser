@@ -162,15 +162,12 @@ var VaultManagerService = [
         dataManager.setLogListner(vault.vaultName, logReceived);
         updateFromQueue();
       };
-      vault.lastLog = function() {
-        return vault.logs.length > 0 ? vaultBehaviour.formatMessage(vault.logs[vault.logs.length - 1]) : "";
-      };
-      vault.isToolTipEnabled = function(iconShape) {
-        if (vault.flagClearedIcons || !vault.logs || vault.logs.length <= 0) {
-          return false;
-        } else {
-          return vaultBehaviour.canShowToolTip(iconShape, vault.logs[vault.logs.length - 1].action_id);
+      vault.alertMessage = function() {
+        if (vault.flagClearedIcons || !vault.logs || vault.logs.length < 1) {
+          return null;
         }
+
+        return vaultBehaviour.alertMessage(vault.logs[vault.logs.length - 1]);
       };
     };
   }

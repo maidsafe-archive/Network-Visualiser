@@ -63,8 +63,7 @@ var VaultBehaviourService = [
       HEXAGON: 0,
       CIRCLE: 1,
       SQUARE: 2,
-      DIAMOND: 3
-    };
+      DIAMOND: 3 };
     var tootips = {
       0: [4, 5, 9, 10, 11, 12, 16],
       1: [3, 8, 13, 14, 15],
@@ -80,11 +79,13 @@ var VaultBehaviourService = [
       }
       return txt;
     };
-    var formatWithOneValue = function(log) {
-      return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + trim(log.value1);
+    var formatWithOneValue = function(log, includePersona) {
+      var result = includePersona ? service.personas[log.persona_id] + ' - ' : '';
+      return result + service.actions[log.action_id] + ' ' + trim(log.value1);
     };
-    var formatWithTwoValues = function(log) {
-      return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ' + trim(log.value1) + " : " + trim(log.value2);
+    var formatWithTwoValues = function(log, includePersona) {
+      var result = includePersona ? service.personas[log.persona_id] + ' - ' : '';
+      return result + service.actions[log.action_id] + ' ' + trim(log.value1) + " : " + trim(log.value2);
     };
     var formats = {
       1: formatWithOneValue,
@@ -106,11 +107,15 @@ var VaultBehaviourService = [
       17: formatWithOneValue,
       18: formatWithOneValue
     };
-    service.formatMessage = function(log) {
-      return (formats[log.action_id] || generalFormat)(log);
+    service.formatMessage = function(log, includePersona) {
+      return (formats[log.action_id] || generalFormat)(log, includePersona);
     };
-    service.canShowToolTip = function(shape, actionId) {
-      return tootips[shape].indexOf(parseInt(actionId)) > -1;
+    service.alertMessage = function(log) {
+      if (log.action_id == 0 || log.action_id == 17 || log.action_id == 18) {
+        return null;
+      }
+
+      return service.formatMessage(log, false);
     };
   }
 ]

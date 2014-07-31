@@ -18,7 +18,7 @@ window.LogList = React.createClass({
           {log.formattedTime}
         </div>
         <div className={'log_msg'}>
-          {scope.vaultManager.vaultBehaviour.formatMessage(log)}
+          {scope.vaultManager.vaultBehaviour.formatMessage(log, true)}
         </div>
       </li>
     );
@@ -29,7 +29,6 @@ window.VaultNode = React.createClass({
   render: function() {
     var item = this.props.item;
     var scope = this.props.scope;
-    var iconShapes = scope.vaultManager.vaultBehaviour.iconShapes;
     var iconPath = "../../imgs/viewer/" + item.stateIcon;
     var hostNameButton;
     if (item.hostName != '') {
@@ -37,17 +36,6 @@ window.VaultNode = React.createClass({
     }
     var toggleVaultLogsHandler = onToggleVaultLogsClicked(item, scope);
     var progressWidth = { width: Math.min(Math.max(0, item.networkHealth), 100) + '%'};
-
-    var accountTitle = null, chunkTitle = null, subscriberTitle = null, counterTitle = null;
-    if (item.isToolTipEnabled(iconShapes.HEXAGON)) {
-      accountTitle = item.lastLog();
-    } else if (item.isToolTipEnabled(iconShapes.CIRCLE)) {
-      chunkTitle = item.lastLog();
-    } else if (item.isToolTipEnabled(iconShapes.SQUARE)) {
-      subscriberTitle = item.lastLog();
-    } else if (item.isToolTipEnabled(iconShapes.DIAMOND)) {
-      counterTitle = item.lastLog();
-    }
 
     var networkHealthTitle = null;
     if (item.logs[item.logs.length - 1].action_id != 18) {
@@ -81,15 +69,18 @@ window.VaultNode = React.createClass({
 
     return (
       <div className={'node ' + (!item.isActive ? 'dead' : '' )}>
+        <div className="message-bar">
+          <input type="text" value={item.alertMessage()} readOnly />
+        </div>
         <div className="box">
           <div className="notif">
             <ul>
-              <li className={item.iconsTray.account} title={accountTitle}></li>
-              <li className={item.iconsTray.chunk} title={chunkTitle}></li>
-              <li className={'shape ' + item.iconsTray.subscriber} title={subscriberTitle}>
+              <li className={item.iconsTray.account}></li>
+              <li className={item.iconsTray.chunk}></li>
+              <li className={'shape ' + item.iconsTray.subscriber}>
                 <p>{item.subscriber}</p>
               </li>
-              <li className={'shape ' + item.iconsTray.counter} title={counterTitle}>
+              <li className={'shape ' + item.iconsTray.counter}>
                 <p>{item.counter}</p>
               </li>
             </ul>

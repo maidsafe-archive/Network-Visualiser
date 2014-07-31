@@ -307,7 +307,7 @@ section div#wrapper div.node {
 
 
 section div#wrapper div.message-bar {
-  height:22px;
+  height:24px;
   width:220px;
   background: #f4f4f4;
   border-left: 2px solid #dddddd;
@@ -316,10 +316,26 @@ section div#wrapper div.message-bar {
 }
 
 section div#wrapper div.message-bar p {
-  margin: 5px 4px;
   padding: 0;
   font-size:9px;
   text-transform: uppercase;
+}
+
+section div#wrapper div.message-bar input[type=text] {
+    background: transparent;
+    word-wrap: normal;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -icab-text-overflow: ellipsis;
+    -khtml-text-overflow: ellipsis;
+    -moz-text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+    overflow: hidden;
+    border: 0px;
+    width: 220px;
+    outline:0px;
+    padding: 3px 4px;
 }
 
 section div#wrapper div.node div.box {

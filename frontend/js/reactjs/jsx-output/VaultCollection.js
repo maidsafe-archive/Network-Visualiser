@@ -18,7 +18,7 @@ window.LogList = React.createClass({displayName: 'LogList',
           log.formattedTime
         ), 
         React.DOM.div({className: 'log_msg'}, 
-          scope.vaultManager.vaultBehaviour.formatMessage(log)
+          scope.vaultManager.vaultBehaviour.formatMessage(log, true)
         )
       )
     );
@@ -29,7 +29,6 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
   render: function() {
     var item = this.props.item;
     var scope = this.props.scope;
-    var iconShapes = scope.vaultManager.vaultBehaviour.iconShapes;
     var iconPath = "../../imgs/viewer/" + item.stateIcon;
     var hostNameButton;
     if (item.hostName != '') {
@@ -37,17 +36,6 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
     }
     var toggleVaultLogsHandler = onToggleVaultLogsClicked(item, scope);
     var progressWidth = { width: Math.min(Math.max(0, item.networkHealth), 100) + '%'};
-
-    var accountTitle = null, chunkTitle = null, subscriberTitle = null, counterTitle = null;
-    if (item.isToolTipEnabled(iconShapes.HEXAGON)) {
-      accountTitle = item.lastLog();
-    } else if (item.isToolTipEnabled(iconShapes.CIRCLE)) {
-      chunkTitle = item.lastLog();
-    } else if (item.isToolTipEnabled(iconShapes.SQUARE)) {
-      subscriberTitle = item.lastLog();
-    } else if (item.isToolTipEnabled(iconShapes.DIAMOND)) {
-      counterTitle = item.lastLog();
-    }
 
     var networkHealthTitle = null;
     if (item.logs[item.logs.length - 1].action_id != 18) {
@@ -81,15 +69,18 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
 
     return (
       React.DOM.div({className: 'node ' + (!item.isActive ? 'dead' : '')}, 
+        React.DOM.div({className: "message-bar"}, 
+          React.DOM.input({type: "text", value: item.alertMessage(), readOnly: true})
+        ), 
         React.DOM.div({className: "box"}, 
           React.DOM.div({className: "notif"}, 
             React.DOM.ul(null, 
-              React.DOM.li({className: item.iconsTray.account, title: accountTitle}), 
-              React.DOM.li({className: item.iconsTray.chunk, title: chunkTitle}), 
-              React.DOM.li({className: 'shape ' + item.iconsTray.subscriber, title: subscriberTitle}, 
+              React.DOM.li({className: item.iconsTray.account}), 
+              React.DOM.li({className: item.iconsTray.chunk}), 
+              React.DOM.li({className: 'shape ' + item.iconsTray.subscriber}, 
                 React.DOM.p(null, item.subscriber)
               ), 
-              React.DOM.li({className: 'shape ' + item.iconsTray.counter, title: counterTitle}, 
+              React.DOM.li({className: 'shape ' + item.iconsTray.counter}, 
                 React.DOM.p(null, item.counter)
               )
             )
