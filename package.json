@@ -1,6 +1,6 @@
 {
   "name":"Network-Visualiser",
-  "version":"0.0.2",
+  "version":"0.1.0",
   "description":"Network Visualiser to monitor vaults",
   "author":"MaidSafe",
   "dependencies":{
