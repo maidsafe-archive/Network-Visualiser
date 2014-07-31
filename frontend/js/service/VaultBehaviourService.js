@@ -5,27 +5,27 @@ var VaultBehaviourService = [
     service.MAX_LOGS = 3; //Max logs retained for showing on info click
 
     service.personas = {
-      0: 'MaidNode',
-      1: 'MpidNode',
-      2: 'DataGetter',
-      3: 'MaidManager',
-      4: 'DataManager',
-      5: 'PmidManager',
-      6: 'PmidNode',
-      7: 'MpidManager',
-      8: 'VersionHandler',
-      9: 'Cachehandler',
+      0: 'MAID',
+      1: 'MPID',
+      2: 'Data-Getter',
+      3: 'MAID-Manager',
+      4: 'Data-Manager',
+      5: 'PMID-Manager',
+      6: 'PMID',
+      7: 'MPID-Manager',
+      8: 'Version-Handler',
+      9: 'Cache-Handler',
       10: 'NA'
     };
     service.actions = {
       0: 'Vault Started',
-      1: 'Increases count to',
-      2: 'Decreases count to',
+      1: 'Increase count to',
+      2: 'Decrease count to',
       3: 'Blocked Delete Request',
       4: 'Account Transfer',
       5: 'Got Account Transferred',
-      6: 'Increase Subscribers',
-      7: 'Decrease Subscribers',
+      6: 'Increase Subscribers to',
+      7: 'Decrease Subscribers to',
       8: 'Move Chunk',
       9: 'Marking Node up',
       10: 'Marking Node Down',
@@ -63,12 +63,7 @@ var VaultBehaviourService = [
       HEXAGON: 0,
       CIRCLE: 1,
       SQUARE: 2,
-      DIAMOND: 3 };
-    var tootips = {
-      0: [4, 5, 9, 10, 11, 12, 16],
-      1: [3, 8, 13, 14, 15],
-      2: [6, 7],
-      3: [1, 2,]
+      DIAMOND: 3
     };
     var generalFormat = function(log) {
       return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ';

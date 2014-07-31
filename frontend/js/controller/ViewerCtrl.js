@@ -29,6 +29,7 @@ app.controller('viewerCtrl', [
     };
     var onVaultsLoaded = function(time) {
       if ($scope.vaultManager.vaultCollection.length == 0) {
+        $scope.showLoader = false;
         $scope.setStatusAlert('No active vaults');
       }
     };

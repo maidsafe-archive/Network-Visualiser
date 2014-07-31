@@ -61,8 +61,8 @@ var VaultManagerService = [
       vault.hostName = '';
       vault.logs = [];
       vault.iconsTray = {};
+      vault.alertMessage = null;
       vault.isActive = false;
-      vault.flagClearedIcons = false;
       vault.networkHealth = 0;
       vault.subscriber = null;
       vault.counter = null;
@@ -81,6 +81,7 @@ var VaultManagerService = [
           vault.counter = null;
           if (!initialLoad) {
             updateIcons(log.action_id);
+            vault.alertMessage = vaultBehaviour.alertMessage(log);
           }
         }
 
@@ -118,19 +119,20 @@ var VaultManagerService = [
         }
       };
       var resetInActivityMonitor = function() {
-        vault.flagClearedIcons = false;
         if (timeoutPromise) {
           $timeout.cancel(timeoutPromise);
         }
 
         timeoutPromise = $timeout(function() {
           if (!$rootScope.playerPaused) {
-            vault.flagClearedIcons = true;
             updateIcons(0);
+            vault.alertMessage = null;
             vault.personaColour = PERSONA_COLOUR_TAG + 'na';
             vault.subscriber = null;
             vault.counter = null;
             refreshVaultDisplay();
+          } else {
+            resetInActivityMonitor();
           }
         }, 5000);
       };
@@ -162,13 +164,6 @@ var VaultManagerService = [
         dataManager.setLogListner(vault.vaultName, logReceived);
         updateFromQueue();
       };
-      vault.alertMessage = function() {
-        if (vault.flagClearedIcons || !vault.logs || vault.logs.length < 1) {
-          return null;
-        }
-
-        return vaultBehaviour.alertMessage(vault.logs[vault.logs.length - 1]);
-      };
     };
   }
-]
+];

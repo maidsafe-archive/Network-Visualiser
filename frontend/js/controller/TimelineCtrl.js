@@ -61,6 +61,7 @@ app.controller('timelineCtrl', [
       $scope.currentPlayTime += 1000;
       if ($scope.currentPlayTime >= $scope.maxTime) {
         $scope.pauseHistoryPlayback();
+        $scope.setStatusAlert('Playback Completed');
       }
       if (!$scope.$$phase) {
         $scope.$apply();
@@ -144,13 +145,13 @@ app.controller('timelineCtrl', [
     dataManager.onVaultsLoaded(onVaultsLoaded);
     playbackService.onStatusChange(updatePlayerStatus);
     $http.get('/backend/timelineDates?sn=' + $rootScope.sessionName).then(function(res) {
-      $scope.firstLogtime = new Date(res.data.beginDate).getTime() - 3000;
+      $scope.firstLogtime = new Date(res.data.beginDate).getTime() - 1000;
       var maxDate = res.data.endDate ? new Date(res.data.endDate) : new Date();
       $scope.maxTime = maxDate.getTime() + 10000;
       $scope.playback.incrementalSteps = 1000 / ((new Date($scope.maxTime).getTime() - $scope.firstLogtime) / $scope.playback.max_steps);
       $scope.currentPlayTime = $scope.firstLogtime;
-    }, function(err) {
-      $scope.setStatusAlert(err);
+    }, function() {
+      $scope.setStatusAlert('Unable to Initialise Timeline');
     });
     $scope.showLoader = false;
   }

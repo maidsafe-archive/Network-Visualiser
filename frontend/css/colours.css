@@ -1,45 +1,45 @@
 .persona_na { background-color: rgb(141, 192, 248) }
 
-.persona_maidnode { background-color: rgb(248, 205, 161); }
+.persona_maid { background-color: rgb(248, 205, 161); }
 
-.persona_mpidnode { background-color: rgb(136, 154, 139) }
+.persona_mpid { background-color: rgb(136, 154, 139) }
 
-.persona_datagetter { background-color: rgb(199, 205, 138); }
+.persona_data-getter { background-color: rgb(199, 205, 138); }
 
-.persona_maidmanager { background-color: rgb(248, 174, 212) }
+.persona_maid-manager { background-color: rgb(248, 174, 212) }
 
-.persona_datamanager { background-color: rgb(193, 255, 246); }
+.persona_data-manager { background-color: rgb(193, 255, 246); }
 
-.persona_pmidmanager { background-color: rgb(249, 164, 137) }
+.persona_pmid-manager { background-color: rgb(249, 164, 137) }
 
-.persona_pmidnode { background-color: rgb(184, 173, 242) }
+.persona_pmid { background-color: rgb(184, 173, 242) }
 
-.persona_mpidmanager { background-color: rgb(125, 204, 157) }
+.persona_mpid-manager { background-color: rgb(125, 204, 157) }
 
-.persona_versionhandler { background-color: rgb(170, 234, 244) }
+.persona_version-handler { background-color: rgb(170, 234, 244) }
 
 
 .persona_na_alpha { background-color: rgba(141, 192, 248, .5) }
 
-.persona_maidnode_alpha { background-color: rgba(248, 205, 161, .5); }
+.persona_maid_alpha { background-color: rgba(248, 205, 161, .5); }
 
-.persona_mpidnode_alpha { background-color: rgba(136, 154, 139, .5) }
+.persona_mpid_alpha { background-color: rgba(136, 154, 139, .5) }
 
-.persona_datagetter_alpha { background-color: rgba(199, 205, 138, .5); }
+.persona_data-getter_alpha { background-color: rgba(199, 205, 138, .5); }
 
-.persona_maidmanager_alpha { background-color: rgba(248, 174, 212, .5) }
+.persona_maid-manager_alpha { background-color: rgba(248, 174, 212, .5) }
 
-.persona_datamanager_alpha { background-color: rgba(193, 255, 246, .5); }
+.persona_data-manager_alpha { background-color: rgba(193, 255, 246, .5); }
 
-.persona_pmidmanager_alpha { background-color: rgba(249, 164, 137, .5) }
+.persona_pmid-manager_alpha { background-color: rgba(249, 164, 137, .5) }
 
-.persona_pmidnode_alpha { background-color: rgba(184, 173, 242, .5) }
+.persona_pmid_alpha { background-color: rgba(184, 173, 242, .5) }
 
-.persona_mpidmanager_alpha { background-color: rgba(125, 204, 157, .5) }
+.persona_mpid-manager_alpha { background-color: rgba(125, 204, 157, .5) }
 
-.persona_versionhandler_alpha { background-color: rgba(170, 234, 244, .5) }
+.persona_version-handler_alpha { background-color: rgba(170, 234, 244, .5) }
 
-.persona_cachehandler { background-color: #F8CDA1 }
+.persona_cache-handler { background-color: #F8CDA1 }
 
 .ngrs-range-slider .ngrs-join {
   background-color: #00ca77 !important;

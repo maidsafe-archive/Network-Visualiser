@@ -454,9 +454,7 @@ button.copy-clipboard.zeroclipboard-is-hover {
 
 button.copy-clipboard.zeroclipboard-is-active {
   background: rgba(0, 0, 0, 1) url('/imgs/sessions/copy_clipboard_icon.png') no-repeat bottom left;
-
 }
-
 
 footer {
   background-color: #5593d7;

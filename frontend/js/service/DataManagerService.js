@@ -15,14 +15,14 @@ var DataManagerService = [
     this.onVaultsLoaded = function(callback) {
       vaultsLoadedObserver = callback;
     };
-    addLogToPool = function(log) {
+    addLogToPool = function(log, initialLoad) {
       if (!vaultsInDisplay.hasOwnProperty(log.vault_id)) {
         vaultsInDisplay[log.vault_id] = { pushLog: null, queue: [] };
         newVaultObserver({ vault_id: log.vault_id });
       }
-      //Temporary Queue to hold logs until the vault has not registered for recieving logs
+      //Temporary Queue to hold logs until the vault has not registered for receiving logs
       if (vaultsInDisplay[log.vault_id].pushLog) {
-        vaultsInDisplay[log.vault_id].pushLog(log);
+        vaultsInDisplay[log.vault_id].pushLog(log, initialLoad);
       } else {
         vaultsInDisplay[log.vault_id].queue.push(log);
       }
@@ -36,7 +36,7 @@ var DataManagerService = [
             for (var index in logs) {
               logs[index].vault_id_full = vaults[key].vault_id_full;
               logs[index].host_name = vaults[key].host_name;
-              addLogToPool(logs[index]);
+              addLogToPool(logs[index], time == null);
             }
           }
         }

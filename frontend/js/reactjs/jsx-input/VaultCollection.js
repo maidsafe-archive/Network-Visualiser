@@ -70,7 +70,7 @@ window.VaultNode = React.createClass({
     return (
       <div className={'node ' + (!item.isActive ? 'dead' : '' )}>
         <div className="message-bar">
-          <input type="text" value={item.alertMessage()} readOnly />
+          <input type="text" value={item.alertMessage} readOnly />
         </div>
         <div className="box">
           <div className="notif">
