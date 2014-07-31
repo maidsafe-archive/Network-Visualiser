@@ -253,28 +253,6 @@ button.select-file {
   border: none;
 }
 
-button.copy-clipboard {
-  border-radius: 0px 5px 5px 0px;
-  -moz-border-radius: 0px 5px 5px 0px;
-  -webkit-border-radius: 0px 5px 5px 0px;
-  /*border: 1px solid #A9A9AA;*/
-  background: rgba(85, 147, 215, 0.35) url('/imgs/sessions/copy_clipboard_icon.png') no-repeat top left;
-  display: block;
-  width: 35px !important;
-  height: 35px;
-  float: left;
-  outline: 0;
-}
-
-button.copy-clipboard.zeroclipboard-is-hover {
-  background: rgba(85, 147, 215, 1) url('/imgs/sessions/copy_clipboard_icon.png') no-repeat bottom left;
-}
-
-button.copy-clipboard.zeroclipboard-is-active {
-  background: rgba(0, 0, 0, 1) url('/imgs/sessions/copy_clipboard_icon.png') no-repeat bottom left;
-
-}
-
 .session_info {
   float: left;
   width: 75%;
@@ -453,6 +431,7 @@ a.delete:hover {
   top: -19px;
   left: -112px;
   clear: both;
+  min-height: 54px;
 }
 
 .confirm-delete p {
@@ -592,6 +571,43 @@ footer button {
   animation-delay: -0.16s;
 }
 .export-loader:after {
+  left: 1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+
+.delete-progress-loader,
+.delete-progress-loader:before,
+.delete-progress-loader:after {
+  background: #87B7EC;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+  float: left;
+  display: block;
+  left: 73px;
+  top: 20px;
+}
+.delete-progress-loader:before,
+.delete-progress-loader:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.delete-progress-loader:before {
+  left: -1.5em;
+}
+.delete-progress-loader {
+  text-indent: -9999em;
+  margin: 0em auto;
+  position: relative;
+  font-size: 4px;
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.delete-progress-loader:after {
   left: 1.5em;
   -webkit-animation-delay: -0.32s;
   animation-delay: -0.32s;

@@ -40,10 +40,10 @@
       <ng-include src="'template/viewer/header.html'"></ng-include>
     </header>
     <section>
-      <div class="icons open" ng-if="!iconsTrayClosed">
+      <div class="icons" ng-if="!iconsTrayClosed">
         <ng-include src="'template/common/icons_tray.html'"></ng-include>
       </div>
-      <div id="wrapper" class="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
+      <div id="wrapper" ng-class="{false:'tray_open'}[iconsTrayClosed]">
         <div ng-react-component="VaultCollection" data="vaultManager.vaultCollection"></div>
       </div>
     </section>
