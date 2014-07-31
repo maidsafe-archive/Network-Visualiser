@@ -155,7 +155,8 @@ window.VaultCollection = React.createClass({displayName: 'VaultCollection',
       React.addons.InfiniteScroll({pageStart: 0, 
                                    loadMore: this.loadMoreVaults, 
                                    hasMore: renderedItemsCount < totalVaultsCount, 
-                                   loader: React.DOM.div(null, "Loading ...")}, 
+                                   loader: React.DOM.div(null, "Loading ..."), 
+                                   scrollElement: document.getElementById('wrapper')}, 
         React.DOM.div(null, rows)
       )
     );
