@@ -298,12 +298,28 @@ section div#wrapper {
 
 section div#wrapper.tray_open { top: 270px; }
 
-
 section div#wrapper div.node {
-  height: 180px;
+  height: 210px;
   margin: 15px;
   width: 220px;
   display: inline-block;
+}
+
+
+section div#wrapper div.message-bar {
+  height:22px;
+  width:220px;
+  background: #f4f4f4;
+  border-left: 2px solid #dddddd;
+  border-top: 2px solid #dddddd;
+  border-right: 2px solid #dddddd;
+}
+
+section div#wrapper div.message-bar p {
+  margin: 5px 4px;
+  padding: 0;
+  font-size:9px;
+  text-transform: uppercase;
 }
 
 section div#wrapper div.node div.box {
@@ -358,11 +374,12 @@ section div#wrapper div.node div.log_slider {
   border-bottom: 2px solid #776E6E;
   border-left: 2px solid #776E6E;
   border-right: 2px solid #776E6E;
-  height: 88px;
+  height: 89px;
   overflow: auto;
   position: relative;
-  top: -2px;
+  top: 0px;
   width: 100%;
+  float: left;
 }
 
 section div#wrapper div.node div.log_slider ul li {

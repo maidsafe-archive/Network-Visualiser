@@ -2,25 +2,17 @@
   padding: 6px 15px;
 }
 
+#sessions section {
+  position: absolute;
+  top: 90px;
+}
+
 .session {
   border-bottom: 1px solid #dcdcdc;
   height: 111px;
   width: 100%;
 }
 
-/*
-.session,
-.session_info,
-.session_name,
-.session_id,
-.session_created_by {
-  cursor: pointer;
-} */
-
-/*
-.session:hover {
-  background: rgba(85, 147, 215, 0.14);;
-}*/
 #sessions .wrapper {
   margin: 0 2em 7em 2em;
   padding-top: 3em;
