@@ -19,18 +19,19 @@
           </div>
           <a href=""
              class="delete"
-             ng-click="onDeleteSessionClicked(session.session_name, $event)"
-             ng-show="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by"></a>
-          <div class="confirm-delete" ng-show="isConfirmDeleteDialogOpen[session.session_name]" ng-click="$event.stopPropagation();">
-          <!--<p>Are you sure?</p>
-            <a href="" class="yes-btn" ng-click="deleteSession(session.session_name, $event)">Yes</a>
-            <a href="" class="no-btn" ng-click="onDeleteSessionClicked(session.session_name, $event)">No</a>-->
-            <div class="delete-progress">
+             ng-click="session.isDeleteDialogOpen = !session.isDeleteDialogOpen || false"
+             ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by"></a>
+          <div class="confirm-delete" ng-if="session.isDeleteDialogOpen">
+            <div ng-if="!session.isDeleteInProgress">
+              <p>Are you sure?</p>
+              <a href="" class="yes-btn" ng-click="deleteSession(session)">Yes</a>
+              <a href="" class="no-btn" ng-click="session.isDeleteDialogOpen = false">No</a>
+            </div>
+            <div class="delete-progress" ng-if="session.isDeleteInProgress">
               <p>Deleting Session</p>
               <div class="delete-progress-loader"></div>
             </div>
           </div>
-
 <% } %>
         </div>
       </li>

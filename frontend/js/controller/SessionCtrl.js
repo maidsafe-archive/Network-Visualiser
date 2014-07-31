@@ -17,7 +17,6 @@ app.controller('sessionCtrl', [
     $scope.userInfo = {};
     $scope.activeSessions = [];
     $scope.pendingSessions = [];
-    $scope.isConfirmDeleteDialogOpen = {};
     $scope.exportStatus = {};
     $scope.alert = null;
     $scope.sessionNamePattern = /^[a-zA-Z0-9- ]{1,}$/;
@@ -63,7 +62,7 @@ app.controller('sessionCtrl', [
       }, 5000);
     };
 
-    function refreshCurrentSessions() {
+    var refreshCurrentSessions = function() {
       $http.get('/backend/currentSessions').then(function(result) {
         $scope.activeSessions = result.data.filter(function(item) {
           return item.is_active;
@@ -71,19 +70,12 @@ app.controller('sessionCtrl', [
         $scope.pendingSessions = result.data.filter(function(item) {
           return !item.is_active;
         });
-      }, function(err) {
+      }, function() {
         $scope.activeSessions = {};
         $scope.pendingSessions = {};
         $scope.setStatusAlert('No Current Sessions');
       });
     };
-
-    function cancelEventPropagation(event) {
-      if (event) {
-        event.stopPropagation();
-        event.preventDefault();
-      }
-    }
 
     $scope.onSignInClicked = function() {
       window.location.href = "/auth/google";
@@ -94,28 +86,15 @@ app.controller('sessionCtrl', [
     $scope.openViewer = function(sessionName) {
       window.location.href = "/viewer#?sn=" + sessionName;
     };
-    $scope.deleteSession = function(sessionName, event) {
-      cancelEventPropagation(event);
-      var endPoint = '/backend/deleteActiveSession';
-      for (var i in $scope.pendingSessions) {
-        if ($scope.pendingSessions[i].session_name == sessionName) {
-          endPoint = '/backend/deletePendingSession';
-          break;
-        }
-      }
-      $http.get(endPoint + '?sn=' + sessionName).success(function() {
-        delete $scope.isConfirmDeleteDialogOpen[sessionName];
-        refreshCurrentSessions();
-      }).error(function(errorMessage) {
+    $scope.deleteSession = function(session) {
+      session.isDeleteInProgress = true;
+      var endPoint = session.is_active ? '/backend/deleteActiveSession' : '/backend/deletePendingSession';
+      $http.get(endPoint + '?sn=' + session.session_name).success(refreshCurrentSessions).error(function(errorMessage) {
         $scope.setStatusAlert(errorMessage);
-        $scope.isConfirmDeleteDialogOpen[sessionName] = false;
+        session.isDeleteDialogOpen = false;
+        session.isDeleteInProgress = false;
       });
     };
-    $scope.onDeleteSessionClicked = function(sessionName, event) {
-      $scope.isConfirmDeleteDialogOpen[sessionName] = !$scope.isConfirmDeleteDialogOpen[sessionName];
-      cancelEventPropagation(event);
-    };
-
     $scope.onCreateSessionTabClicked = function() {
       $scope.importTab.isOpen = false;
       $scope.createTab.isOpen = !$scope.createTab.isOpen;
