@@ -9,7 +9,7 @@ var VaultManagerService = [
     service.vaultCollection = [];
 
     var refreshVaultCollection = function() {
-      if (reactVaultCollectionItem) {
+      if (reactVaultCollectionItem && reactVaultCollectionItem.isMounted()) {
         reactVaultCollectionItem.setState({});
       }
     };
@@ -141,7 +141,7 @@ var VaultManagerService = [
         }
       };
       var refreshVaultDisplay = function() {
-        if (reactVaultItem) {
+        if (reactVaultItem && reactVaultItem.isMounted()) {
           reactVaultItem.setState({});
         }
       };
