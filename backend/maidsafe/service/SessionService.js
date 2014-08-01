@@ -55,13 +55,13 @@ exports.requestExport = function(req, res) {
     return;
   }
 
-  bridge.exportLogs(criteria.sn).then(function(path) {
-    var zipPath = path.replace(".csv", ".zip");
-    var output = fs.createWriteStream(zipPath);
+  bridge.exportLogs(criteria.sn).then(function(csvPath) {
+    var zipPath = csvPath.replace(".csv", ".zip");
+    var output = fs.createWriteStream(path.resolve(__dirname, '../../..' , zipPath));
     var archive = archiver('zip');
 
     output.on('close', function() {
-      fs.unlink(path);
+      fs.unlink(csvPath);
       res.send(200, zipPath.replace(".zip", ""));
     });
 
@@ -70,7 +70,7 @@ exports.requestExport = function(req, res) {
     });
 
     archive.pipe(output);
-    archive.append(fs.createReadStream(path), { name: criteria.sn + ' - Logs.csv' }).finalize();
+    archive.append(fs.createReadStream(csvPath), { name: criteria.sn + ' - Logs.csv' }).finalize();
   });
 };
 
@@ -82,7 +82,7 @@ exports.downloadExport = function(req, res) {
   }
 
   var rootFolder = path.resolve(__dirname, '../../..');
-  var downloadFile = path.resolve(criteria.fname + '.zip');
+  var downloadFile = path.resolve(rootFolder, criteria.fname + '.zip');
   if (downloadFile.indexOf(rootFolder) != 0) {
     res.send(500, 'Invalid Request');
     return;
