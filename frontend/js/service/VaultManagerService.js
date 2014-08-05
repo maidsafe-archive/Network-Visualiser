@@ -118,7 +118,7 @@ var VaultManagerService = [
         }
       };
       var resetInActivityMonitor = function() {
-        /*if (timeoutPromise) {
+        if (timeoutPromise) {
           $timeout.cancel(timeoutPromise);
         }
 
@@ -133,7 +133,7 @@ var VaultManagerService = [
           } else {
             resetInActivityMonitor();
           }
-        }, 5000);*/
+        }, 5000);
       };
       var updateFromQueue = function() {
         var logs = dataManager.getLogsFromQueue(vault.vaultName);

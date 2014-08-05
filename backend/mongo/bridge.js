@@ -7,16 +7,19 @@ var dbUtils = require('./DBUtils.js');
 var config = require('./../../Config.js');
 var utils = require('./../maidsafe/utils.js');
 
-mongoose.connect(config.Constants.mongo_con);
-db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function callback() {
-  console.log('Mongodb connected successfully');
-  vaultLog = logManager.getManager(db);
-  vaultInfo = vaultInfo.VaultMetaData(db);
-  sessionInfo = sessionInfo.SessionMetaData(db);
-  dbUtils = dbUtils.getDBUtil(db);
-});
+exports.setupMongooseConnection = function(callback) {
+  mongoose.connect(config.Constants.mongo_con);
+  db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error:'));
+  db.once('open', function() {
+    console.log('Mongodb connected successfully');
+    callback();
+    vaultLog = logManager.getManager(db);
+    vaultInfo = vaultInfo.VaultMetaData(db);
+    sessionInfo = sessionInfo.SessionMetaData(db);
+    dbUtils = dbUtils.getDBUtil(db);
+  });
+};
 
 exports.addLog = function(log, promise, refreshSessionsCallback) {
   sessionInfo.isValidSessionId(log).then(function(isValid) {
