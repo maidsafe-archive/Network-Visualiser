@@ -22,6 +22,7 @@ app.controller('viewerCtrl', [
     $scope.showLoader = true;
     $scope.alert = null;
     $scope.currentTime = '';
+    $scope.zoomClass = 'large';
 
     var clockTimer = function() {
       $scope.currentTime = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss');
@@ -52,6 +53,15 @@ app.controller('viewerCtrl', [
     $scope.toggleExpandAllLogs = function() {
       $scope.allVaultsExpanded = !$scope.allVaultsExpanded;
       vaultManager.expandAllVaultLogs($scope.allVaultsExpanded);
+    };
+
+    $scope.changeZoomLevel = function(newZoomLevel) {
+      if ($scope.zoomClass == newZoomLevel) {
+        return;
+      }
+
+      $scope.zoomClass = newZoomLevel;
+      $scope.vaultManager.refreshVaultCollection();
     };
 
     dataManager.onNewVault($scope.vaultManager.addVault);

@@ -8,12 +8,6 @@ var VaultManagerService = [
     service.vaultBehaviour = vaultBehaviour;
     service.vaultCollection = [];
 
-    var refreshVaultCollection = function() {
-      if (reactVaultCollectionItem && reactVaultCollectionItem.isMounted()) {
-        reactVaultCollectionItem.setState({});
-      }
-    };
-
     function locationOf(element, array, comparer, start, end) {
       if (array.length === 0)
         return -1;
@@ -30,6 +24,11 @@ var VaultManagerService = [
       };
     };
 
+    service.refreshVaultCollection = function() {
+      if (reactVaultCollectionItem && reactVaultCollectionItem.isMounted()) {
+        reactVaultCollectionItem.setState({});
+      }
+    };
     service.addVault = function(vault) {
       var newVault = new VaultInfo();
       newVault.init(vault);
@@ -45,7 +44,7 @@ var VaultManagerService = [
       for (var index in service.vaultCollection) {
         service.vaultCollection[index].toggleVaultLogs(expand);
       }
-      refreshVaultCollection();
+      service.refreshVaultCollection();
     };
 
     var VaultInfo = function() {
@@ -119,7 +118,7 @@ var VaultManagerService = [
         }
       };
       var resetInActivityMonitor = function() {
-        if (timeoutPromise) {
+        /*if (timeoutPromise) {
           $timeout.cancel(timeoutPromise);
         }
 
@@ -134,7 +133,7 @@ var VaultManagerService = [
           } else {
             resetInActivityMonitor();
           }
-        }, 5000);
+        }, 5000);*/
       };
       var updateFromQueue = function() {
         var logs = dataManager.getLogsFromQueue(vault.vaultName);

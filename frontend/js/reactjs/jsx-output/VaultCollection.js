@@ -68,22 +68,20 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
     }
 
     return (
-      React.DOM.div({className: 'node ' + (!item.isActive ? 'dead' : '')}, 
+      React.DOM.div({className: 'node ' + (!item.isActive ? 'dead ' : '' ) + (scope.zoomClass || 'large')}, 
         React.DOM.div({className: "message-bar"}, 
           React.DOM.input({type: "text", value: item.alertMessage, readOnly: true})
         ), 
         React.DOM.div({className: "box"}, 
           React.DOM.div({className: "notif"}, 
-            React.DOM.ul(null, 
-              React.DOM.li({className: item.iconsTray.account}), 
-              React.DOM.li({className: item.iconsTray.chunk}), 
-              React.DOM.li({className: 'shape ' + item.iconsTray.subscriber}, 
-                React.DOM.p(null, item.subscriber)
+              React.DOM.div({className: item.iconsTray.account}), 
+              React.DOM.div({className: item.iconsTray.chunk}), 
+              React.DOM.div({className: 'shape ' + item.iconsTray.subscriber}, 
+                React.DOM.span(null, item.subscriber)
               ), 
-              React.DOM.li({className: 'shape ' + item.iconsTray.counter}, 
-                React.DOM.p(null, item.counter)
+              React.DOM.div({className: 'shape ' + item.iconsTray.counter}, 
+                React.DOM.span(null, item.counter)
               )
-            )
           ), 
           React.DOM.div({className: 'progress ' + (item.networkHealth <= 0 ? 'vault_start' : ''), title: networkHealthTitle}, 
             React.DOM.div({style: progressWidth})
@@ -134,7 +132,7 @@ window.VaultCollection = React.createClass({displayName: 'VaultCollection',
     var vaultCollection = scope.vaultManager.vaultCollection;
     var totalVaultsCount = vaultCollection.length;
     var renderedItemsCount = Math.min(this.state.renderedItemsCount, totalVaultsCount);
-
+    console.log(renderedItemsCount);
     vaultCollection = vaultCollection.slice(0, renderedItemsCount);
     var rows = _.map(vaultCollection, function(vaultInfo) {
       return (

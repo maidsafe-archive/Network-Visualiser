@@ -201,6 +201,46 @@ button.sign-in a { color: #29578A; }
 button.sign-in:hover a { color: #fff; }
 
 
+ul.zoom-control {margin: 3px 0 0 0;}
+
+
+ul.zoom-control button {
+  font-size: 10px;
+  padding: 2px 4px 2px 4px;
+  width: 40px;
+  margin: 0px;
+}
+
+ul.zoom-control button:hover {
+  background-color: #87b7ec;
+  color: #000000!important;
+}
+
+ul.zoom-control button.selected {
+  background-color: #29578A;
+  color: #ffffff;
+}
+
+
+button.left-btn {
+  border-radius: 5px 0px 0px 5px;
+  -webkit-border-radius: 5px 0px 0px 5px;
+  -moz-border-radius: 5px 0px 0px 5px;
+}
+
+button.center-btn {
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 05px;
+  border-left:1px solid #5593d7;
+  border-right:1px solid #5593d7;
+}
+
+button.right-btn {
+  border-radius: 0px 5px 5px 0px;
+  -webkit-border-radius: 0px 5px 5px 0px;
+  -moz-border-radius: 0px 5px 5px 0px;
+}
 
 .zoom {
   display: inline-block;
@@ -298,30 +338,31 @@ section div#wrapper {
 
 section div#wrapper.tray_open { top: 270px; }
 
-section div#wrapper div.node {
+
+.node {
   height: 210px;
   margin: 15px;
   width: 220px;
   display: inline-block;
 }
 
-
-section div#wrapper div.message-bar {
+.message-bar {
   height:24px;
-  width:220px;
+  width: 100%;
+  /*width:220px;*/
   background: #f4f4f4;
   border-left: 2px solid #dddddd;
   border-top: 2px solid #dddddd;
   border-right: 2px solid #dddddd;
 }
 
-section div#wrapper div.message-bar p {
+.message-bar p {
   padding: 0;
   font-size:9px;
   text-transform: uppercase;
 }
 
-section div#wrapper div.message-bar input[type=text] {
+.message-bar input[type=text] {
     background: transparent;
     word-wrap: normal;
     white-space: nowrap;
@@ -338,40 +379,37 @@ section div#wrapper div.message-bar input[type=text] {
     padding: 3px 4px;
 }
 
-section div#wrapper div.node div.box {
+.node div.box {
   border: 2px solid #776E6E;
-  height: 100px;
-  width: 220px;
-}
-
-section div#wrapper div.node div.box div.notif {
-  height: 54px;
   width: 100%;
 }
 
-section div#wrapper div.node div.box div.notif ul { margin: 2px; }
-
-section div#wrapper div.node div.box div.notif ul li {
-  float: left;
-  margin-left: 0.2em;
+.node div.box div.notif {
+  width: 100%;
 }
 
-section div#wrapper div.node div.box div.progress {
+.node div.box div.notif ul { margin: 2px; }
+
+.node div.box div.notif ul li {
+  float: left;
+}
+
+.node div.box div.progress {
   background-color: #ccc;
   height: 7px;
 }
 
-section div#wrapper div.node div.box div.progress.vault_start { background-color: rgb(153, 36, 36) }
+.node div.box div.progress.vault_start { background-color: rgb(153, 36, 36) }
 
-section div#wrapper div.node div.box div.progress div {
+.node div.box div.progress div {
   background-color: #4E4D4E;
   height: 100%;
   width: 80%;
 }
 
-section div#wrapper div.node div.box div.info { height: 21px; padding: 8px; }
+.node div.box div.info { height: 21px; padding: 8px; }
 
-section div#wrapper div.node div.box div.info p {
+.node div.box div.info p {
   cursor: pointer;
   float: left;
   font-size: 18px;
@@ -380,13 +418,12 @@ section div#wrapper div.node div.box div.info p {
   padding:0em;
 }
 
-section div#wrapper div.node div.box div.info img {
+.node div.box div.info img {
   float: right;
-  margin: 0px 4px;
   width: 20px
 }
 
-section div#wrapper div.node div.log_slider {
+.node div.log_slider {
   border-bottom: 2px solid #776E6E;
   border-left: 2px solid #776E6E;
   border-right: 2px solid #776E6E;
@@ -398,7 +435,7 @@ section div#wrapper div.node div.log_slider {
   float: left;
 }
 
-section div#wrapper div.node div.log_slider ul li {
+.node div.log_slider ul li {
   border-bottom: 1px solid #776E6E;
   font-size: 11px;
   margin-bottom: .2em;

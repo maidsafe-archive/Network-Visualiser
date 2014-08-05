@@ -1,132 +1,174 @@
 .hexagon {
   background: url('../imgs/viewer/hexagon.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
+}
+/*
+.hexagon, .circle, .square, .rhombus { margin: 0px 10px;}
+*/
+
+/*
+.hexagon {
+  position: relative;
+  width: 35px;
+  height: 20.21px;
+  background-color: #ffffff;
+  margin: 10.10px 0;
+  border-left: solid 1px #000000;
+  border-right: solid 1px #000000;
+  transform:rotate(90deg);
+  -ms-transform:rotate(90deg);
+  -webkit-transform:rotate(90deg);
 }
 
+.hexagon:before,
+.hexagon:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 24.75px;
+  height: 24.75px;
+  -webkit-transform: scaleY(0.5774) rotate(-45deg);
+  -ms-transform: scaleY(0.5774) rotate(-45deg);
+  transform: scaleY(0.5774) rotate(-45deg);
+  background-color: inherit;
+  left: 4.1256px;
+}
+
+.hexagon:before {
+  top: -12.3744px;
+  border-top: solid 1.4142px #000000;
+  border-right: solid 1.4142px #000000;
+}
+
+.hexagon:after {
+  bottom: -12.3744px;
+  border-bottom: solid 1.4142px #000000;
+  border-left: solid 1.4142px #000000;
+}
+*/
 .circle {
   background: url('../imgs/viewer/circle.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 
 .square {
   background: url('../imgs/viewer/square.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
-.shape p {
-  font-size: 18px;
+.shape span {
   font-weight: bold;
   margin: 0em;
-  padding: 13px;
   text-align: center;
+  float: left;
 }
 
 .square-red {
   background: url('../imgs/viewer/square-red.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .square-green {
   background: url('../imgs/viewer/square-green.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .rhombus {
   background: url('../imgs/viewer/rhombus.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .rhombus-red {
   background: url('../imgs/viewer/rhombus-red.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .rhombus-green {
   background: url('../imgs/viewer/rhombus-green.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 
 .account-transferred {
   background: url('../imgs/viewer/account-transferred.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .blocked-delete-request {
   background: url('../imgs/viewer/blocked-delete-request.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .deleting-data {
   background: url('../imgs/viewer/deleting-data.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .dropping-pmid-node {
   background: url('../imgs/viewer/dropping-pmid-node.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .joining-pmid-node {
   background: url('../imgs/viewer/joining-pmid-node.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .marking-node-down {
   background: url('../imgs/viewer/marking-node-down.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .marking-node-up {
   background: url('../imgs/viewer/marking-node-up.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .move-data {
   background: url('../imgs/viewer/move-data.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .remove-account {
   background: url('../imgs/viewer/remove-account.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .storing-data {
   background: url('../imgs/viewer/storing-data.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 
 .transfer-account {
   background: url('../imgs/viewer/transfer-account.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .update-data-version {
   background: url('../imgs/viewer/update-data-version.png') no-repeat;
-  height: 50px;
-  width: 50px;
+  float: left;
+  display: inline-block;
 }
 
 .play-btn {

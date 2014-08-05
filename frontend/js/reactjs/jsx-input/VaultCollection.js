@@ -68,22 +68,20 @@ window.VaultNode = React.createClass({
     }
 
     return (
-      <div className={'node ' + (!item.isActive ? 'dead' : '' )}>
+      <div className={'node ' + (!item.isActive ? 'dead ' : '' ) + (scope.zoomClass || 'large')}>
         <div className="message-bar">
           <input type="text" value={item.alertMessage} readOnly />
         </div>
         <div className="box">
           <div className="notif">
-            <ul>
-              <li className={item.iconsTray.account}></li>
-              <li className={item.iconsTray.chunk}></li>
-              <li className={'shape ' + item.iconsTray.subscriber}>
-                <p>{item.subscriber}</p>
-              </li>
-              <li className={'shape ' + item.iconsTray.counter}>
-                <p>{item.counter}</p>
-              </li>
-            </ul>
+              <div className={item.iconsTray.account}></div>
+              <div className={item.iconsTray.chunk}></div>
+              <div className={'shape ' + item.iconsTray.subscriber}>
+                <span>{item.subscriber}</span>
+              </div>
+              <div className={'shape ' + item.iconsTray.counter}>
+                <span>{item.counter}</span>
+              </div>
           </div>
           <div className={'progress ' + (item.networkHealth <= 0 ? 'vault_start' : '')} title={networkHealthTitle}>
             <div style={progressWidth}></div>
@@ -134,7 +132,7 @@ window.VaultCollection = React.createClass({
     var vaultCollection = scope.vaultManager.vaultCollection;
     var totalVaultsCount = vaultCollection.length;
     var renderedItemsCount = Math.min(this.state.renderedItemsCount, totalVaultsCount);
-
+    console.log(renderedItemsCount);
     vaultCollection = vaultCollection.slice(0, renderedItemsCount);
     var rows = _.map(vaultCollection, function(vaultInfo) {
       return (

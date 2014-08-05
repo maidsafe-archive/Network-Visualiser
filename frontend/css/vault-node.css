@@ -1,0 +1,251 @@
+/* Small Size */
+.small.node {
+  width: 66px;
+  height: 63px;
+}
+
+.small.node div.box div.notif {
+  height: 14px;
+}
+
+.small.node div.log_slider {
+  height: 29px;
+  border-bottom: 1px solid #776E6E;
+  border-left: 1px solid #776E6E;
+  border-right: 1px solid #776E6E;
+}
+
+.small .log_date, .small .log_msg {
+  font-size: 3px;
+}
+
+.small .message-bar {
+  height: 7px;
+  border-left: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+}
+
+.small .message-bar input[type=text] {
+  width: 100%;
+  height: 7px;
+  font-size: 3px;
+}
+
+.small .hexagon, .small .circle, .small .square, .small .rhombus, .small .square-red, .small .square-green,
+.small .rhombus, .small .rhombus-red, .small .rhombus-green, .small .account-transferred,
+.small .blocked-delete-request, .small .deleting-data, .small .dropping-pmid-node,
+.small .joining-pmid-node, .small .marking-node-down, .small .marking-node-up,
+.small .move-data, .small .remove-account, .small .storing-data, .small .transfer-account,
+.small .update-data-version {
+  width:15px;
+  height:15px;
+  background-size: 15px 15px;
+  margin: 0px 0.5px;
+}
+
+.small .shape span {
+  font-size: 5px;
+  /* Explicit override for this size */
+  padding: 4px;
+}
+
+.small.node div.box div.progress {
+  height: 2px;
+}
+
+.small.node div.box div.info {
+  height: 6px;
+  padding: 2px;
+}
+
+.small.node div.box {
+  border: 1px solid #776E6E;
+}
+
+.small.node div.box div.info p {
+  font-size: 4px;
+}
+
+.small .host-name-btn {
+  width: 6px;
+  height: 6px;
+  background-size: 6px 6px;
+}
+
+.small.node div.box div.info img {
+  width: 6px;
+  margin: 0px 1px;
+}
+
+.small .see_history a {
+  font-size: 3px;
+}
+
+/* Medium Size */
+
+.medium.node {
+  width: 110px;
+  height: 105px;
+}
+
+.medium.node div.box div.notif {
+  height: 24px;
+}
+
+.medium.node div.log_slider {
+  height: 44px;
+  border-bottom: 1px solid #776E6E;
+  border-left: 1px solid #776E6E;
+  border-right: 1px solid #776E6E;
+}
+
+.medium .log_date, .medium .log_msg {
+  font-size: 5px;
+}
+
+.medium .message-bar {
+  height: 12px;
+  border-left: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+}
+
+.medium .message-bar input[type=text] {
+  width: 100%;
+  height: 12px;
+  font-size: 6px;
+}
+
+.medium .hexagon, .medium .circle, .medium .square, .medium .rhombus, .medium .square-red, .medium .square-green,
+.medium .rhombus, .medium .rhombus-red, .medium .rhombus-green, .medium .account-transferred,
+.medium .blocked-delete-request, .medium .deleting-data, .medium .dropping-pmid-node,
+.medium .joining-pmid-node, .medium .marking-node-down, .medium .marking-node-up,
+.medium .move-data, .medium .remove-account, .medium .storing-data, .medium .transfer-account,
+.medium .update-data-version {
+  width:25px;
+  height:25px;
+  background-size: 25px 25px;
+  margin: 0px 1px;
+}
+
+.medium .shape span {
+  font-size: 10px;
+  padding: 6px;
+}
+
+.medium.node div.box div.progress {
+  height: 3px;
+}
+
+.medium.node div.box div.info {
+  height: 10px;
+  padding: 4px;
+}
+
+.medium.node div.box {
+  border: 1px solid #776E6E;
+}
+
+.medium.node div.box div.info p {
+  font-size: 8px;
+}
+
+.medium .host-name-btn {
+  width: 10px;
+  height: 10px;
+  background-size: 10px 10px;
+}
+
+.medium.node div.box div.info img {
+  width: 10px;
+  margin: 0px 1px;
+}
+
+.medium .see_history a {
+  font-size: 6px;
+}
+
+
+/* Large Size */
+
+.large.node {
+  width: 220px;
+  height: 210px;
+}
+
+.large.node div.box div.notif {
+  height: 52px;
+}
+
+.large.node div.log_slider {
+  height: 98px;
+  border-bottom: 2px solid #776E6E;
+  border-left: 2px solid #776E6E;
+  border-right: 2px solid #776E6E;
+}
+
+.large .log_date, .large .log_msg {
+  font-size: 10px;
+}
+
+.large .message-bar {
+  height: 24px;
+  border-left: 2px solid #dddddd;
+  border-top: 2px solid #dddddd;
+  border-right: 2px solid #dddddd;
+}
+
+.large .message-bar input[type=text] {
+  width: 100%;
+  height: 24px;
+}
+
+.large .hexagon, .large .circle, .large .square, .large .rhombus, .large .square-red, .large .square-green,
+.large .rhombus, .large .rhombus-red, .large .rhombus-green, .large .account-transferred,
+.large .blocked-delete-request, .large .deleting-data, .large .dropping-pmid-node,
+.large .joining-pmid-node, .large .marking-node-down, .large .marking-node-up,
+.large .move-data, .large .remove-account, .large .storing-data, .large .transfer-account,
+.large .update-data-version {
+  width:50px;
+  height:50px;
+  background-size: 50px 50px;
+  margin: 0px 2px;
+}
+
+.large .shape span {
+  font-size: 18px;
+  padding: 14px;
+}
+
+.large.node div.box div.progress {
+  height: 7px;
+}
+
+.large.node div.box div.info {
+  height: 20px;
+  padding: 8px;
+}
+
+.large.node div.box {
+  border: 2px solid #776E6E;
+}
+
+.large.node div.box div.info p {
+  font-size: 16px;
+}
+
+.large .host-name-btn {
+  width: 20px;
+  height: 20px;
+  background-size: 20px 20px;
+}
+
+.large.node div.box div.info img {
+  width: 20px;
+  margin: 0px 4px;
+}
+
+.large .see_history a {
+  font-size: 11px;
+}
