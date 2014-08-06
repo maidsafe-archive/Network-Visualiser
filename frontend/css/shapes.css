@@ -64,7 +64,7 @@
   font-weight: bold;
   margin: 0em;
   text-align: center;
-  float: left;
+  display: inherit;
 }
 
 .square-red {

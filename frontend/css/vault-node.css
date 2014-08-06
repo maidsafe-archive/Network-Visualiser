@@ -45,7 +45,7 @@
 }
 
 .small .shape span {
-  font-size: 5px;
+  font-size: 6px;
   /* Explicit override for this size */
   padding: 4px;
 }
@@ -130,7 +130,7 @@
 }
 
 .medium .shape span {
-  font-size: 10px;
+  font-size: 9px;
   padding: 6px;
 }
 
@@ -215,7 +215,7 @@
 
 .large .shape span {
   font-size: 18px;
-  padding: 14px;
+  padding: 13px 15px;
 }
 
 .large.node div.box div.progress {
