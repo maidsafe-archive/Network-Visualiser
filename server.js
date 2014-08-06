@@ -7,6 +7,7 @@ var bridge = require('./backend/mongo/bridge.js');
 var userAuth = require('./backend/auth/UserAuth.js');
 var logController = require('./backend/maidsafe/LogController.js');
 var sessionController = require('./backend/maidsafe/SessionController.js');
+var testnetStatusManager = require('./backend/maidsafe/TestnetStatusManager.js');
 var ciManager = require('./backend/maidsafe/CIManager.js');
 var config = require('./Config.js');
 var serverPort = config.Constants.serverPort;
@@ -59,9 +60,14 @@ bridge.setupMongooseConnection(function() {
     res.render('search', { socketPort: socketPort });
   });
 
+  app.get('/testnet-status', function(req, res) {
+    res.render('testnet-status', { socketPort: socketPort });
+  });
+
   userAuth.setupAuthCallbacks(app);
   sessionController.register(app);
   logController.register(app);
+  testnetStatusManager.register(app);
   ciManager.startChecker();
   app.listen(serverPort);
 });

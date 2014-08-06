@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var logManager = require('./LogManager.js');
 var vaultInfo = require('./VaultInfo.js');
 var sessionInfo = require('./SessionInfo.js');
+var testnetStatus = require('./TestnetStatus.js');
 var dbUtils = require('./DBUtils.js');
 var config = require('./../../Config.js');
 var utils = require('./../maidsafe/utils.js');
@@ -17,6 +18,7 @@ exports.setupMongooseConnection = function(callback) {
     vaultLog = logManager.getManager(db);
     vaultInfo = vaultInfo.VaultMetaData(db);
     sessionInfo = sessionInfo.SessionMetaData(db);
+    testnetStatus = testnetStatus.TestnetStatusInfo(db);
     dbUtils = dbUtils.getDBUtil(db);
   });
 };
@@ -154,4 +156,10 @@ exports.clearSession = function(sessionName) {
     promise.error(err);
   });
   return promise;
+};
+exports.updateTestnetStatus = function(data) {
+  return testnetStatus.updateTestnetStatus(data);
+};
+exports.getTestnetStatus = function() {
+  return testnetStatus.getTestnetStatus();
 };

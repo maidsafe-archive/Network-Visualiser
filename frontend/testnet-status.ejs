@@ -12,28 +12,23 @@
     <script type="text/javascript" src="js/service/DataManagerService.js"></script>
     <script type="text/javascript" src="js/service/SocketService.js"></script>
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
-    <script type="text/javascript" src="js/controller/StatusCtrl.js"></script>
+    <script type="text/javascript" src="js/controller/TestnetStatusCtrl.js"></script>
 
     <title>Network Visualiser - Testnet Status</title>
 
     <link rel="shortcut icon" href="imgs/favicon.ico" />
     <link rel="icon" type="image/ico" href="imgs/favicon.ico" />
   </head>
-  <body ng-app="MaidSafe" ng-controller="statusCtrl" id="status" ng-app="myapp">
-    <header class="success">
+  <body ng-app="MaidSafe" ng-controller="testnetStatusCtrl" id="status" ng-app="myapp">
+    <header ng-class="{true:'success', false:'fail'}[testnetStatus.is_ready]">
       <% include template/status/header.html %>
     </header>
     <section>
       <div class="wrapper">
-          <!--<h3>Last Updated <br>{{currentTime | date : 'HH:mm:ss dd/MM/yyyy'}}</h3>-->
-          <h3>Last Updated <br>11:33:13 15/07/2014</h3>
-          <div class="system-row">
-            <span class="system-ip"><p>80.255.219.75:8080</p></span>
-            <span class="system-status up"></span>
-          </div>
-          <div class="system-row">
-            <span class="system-ip"><p>80.255.219.75:8080</p></span>
-            <span class="system-status down"></span>
+          <h3>Last Updated <br>{{testnetStatus.last_updated | date : 'HH:mm:ss dd/MM/yyyy'}}</h3>
+          <div class="system-row" ng-repeat="connection in testnetStatus.connections">
+            <span class="system-ip"><p>{{connection.contact}}</p></span>
+            <span class="system-status" ng-class="{false:'down', true:'up'}[connection.canConnect]"></span>
           </div>
         </div>
     </section>

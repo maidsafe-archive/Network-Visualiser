@@ -6,6 +6,7 @@ var SocketService = [
     var socket = io.connect($rootScope.socketEndPoint);
 
     var signalObserver;
+    var testnetStatusObserver;
 
     socket.on('log', function(data) {
       if ($rootScope.realTime && data.session_name == $rootScope.sessionName) {
@@ -21,6 +22,12 @@ var SocketService = [
       }
     });
 
+    socket.on('testnet_status_update', function(data) {
+      if (testnetStatusObserver) {
+        testnetStatusObserver(data);
+      }
+    });
+
     this.start = function() {
       $rootScope.realTime = true;
     };
@@ -29,6 +36,9 @@ var SocketService = [
     };
     this.setSignalListner = function(callback) {
       signalObserver = callback;
+    };
+    this.setTestnetStatusListner = function(callback) {
+      testnetStatusObserver = callback;
     };
   }
 ]

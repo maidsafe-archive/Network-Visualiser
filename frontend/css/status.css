@@ -10,23 +10,30 @@ header.fail {
   background-color: #F9BBBB;
 }
 
+header.success .status-header {
+  width:390px;
+}
+
+header.fail .status-header {
+  width:340px;
+}
+
 .status-header {
   margin: 5px auto;
-  width: 470px;
 }
 
 header.success .status-header {
   background-color: #B4EFB4;
 }
 
-.status-header .success-icon {
+header.success .statusIcon {
   background: url('/imgs/status/success-tick.png') no-repeat 0 0;
   width: 39px;
   height: 32px;
   display: inline-block;
 }
 
-.status-header .fail-icon {
+header.fail .statusIcon {
   background: url('/imgs/status/fail-cross.png') no-repeat 0 0;
   width: 29px;
   height: 29px;
@@ -45,7 +52,7 @@ header h2 {
 }
 
 .wrapper {
-  padding-top: 3em;
+  padding-top: 1em;
   position: relative;
   width: 100%;
   float: left;
@@ -64,15 +71,14 @@ header h2 {
   width: 410px;
   margin: 0 auto;
   border-bottom: 1px solid #999999;
-  text-align: center;
 }
 .system-ip {
   display: inline-block;
 }
 .system-ip p {
   font-size: 28px;
-  text-align: center;
   margin: 20px 0;
+  padding-left: 28px;
 }
 
 .system-status {
@@ -84,6 +90,8 @@ header h2 {
   display: inline-block;
   width: 23px;
   height: 23px;
+  float: right;
+  margin: 28px;
 }
 
 .system-status.down {
@@ -91,4 +99,6 @@ header h2 {
   display: inline-block;
   width: 23px;
   height: 23px;
+  float: right;
+  margin: 28px;
 }
