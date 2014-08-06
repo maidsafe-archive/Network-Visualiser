@@ -1,5 +1,5 @@
 <div class="top-header">
-  <h1><a href="/">Network Visualiser - Sessions View{{userInfo.isAuthenticated ? ' (' + userInfo.mailAddress + ')' : ''}}</a></h1>
+  <h1><a href="/" class="home"></a>Network Visualiser - Sessions View{{userInfo.isAuthenticated ? ' (' + userInfo.mailAddress + ')' : ''}}</h1>
 </div>
 <ul class="buttons-left">
 <% if (userInfo.isAuthenticated) { %>
@@ -14,6 +14,11 @@
     <button class="sign-in" ng-click="onSignInClicked()">Sign In</button>
   </li>
 <% } %>
+</ul>
+<ul class="buttons-right">
+  <li>
+    <button ng-click="" class="create-session">Testnet Status</button>
+  </li>
 </ul>
 <% if (userInfo.isAuthenticated) { %>
 <div class="toggle_create_session" ng-show="createTab.isOpen">

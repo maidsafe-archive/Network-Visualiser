@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="components/normalize.css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+    <link rel="stylesheet" type="text/css" href="css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="css/status.css">
+
+    <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="components/socket.io-client/dist/socket.io.min.js"></script>
+
+    <script type="text/javascript" src="js/service/DataManagerService.js"></script>
+    <script type="text/javascript" src="js/service/SocketService.js"></script>
+    <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
+    <script type="text/javascript" src="js/controller/StatusCtrl.js"></script>
+
+    <title>Network Visualiser - Testnet Status</title>
+
+    <link rel="shortcut icon" href="imgs/favicon.ico" />
+    <link rel="icon" type="image/ico" href="imgs/favicon.ico" />
+  </head>
+  <body ng-app="MaidSafe" ng-controller="statusCtrl" id="status" ng-app="myapp">
+    <header class="success">
+      <% include template/status/header.html %>
+    </header>
+    <section>
+      <div class="wrapper">
+          <!--<h3>Last Updated <br>{{currentTime | date : 'HH:mm:ss dd/MM/yyyy'}}</h3>-->
+          <h3>Last Updated <br>11:33:13 15/07/2014</h3>
+          <div class="system-row">
+            <span class="system-ip"><p>80.255.219.75:8080</p></span>
+            <span class="system-status up"></span>
+          </div>
+          <div class="system-row">
+            <span class="system-ip"><p>80.255.219.75:8080</p></span>
+            <span class="system-status down"></span>
+          </div>
+        </div>
+    </section>
+  </body>
+</html>

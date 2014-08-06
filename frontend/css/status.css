@@ -1,0 +1,94 @@
+header {
+  position:fixed;
+}
+
+header.success {
+  background-color: #B4EFB4;
+}
+
+header.fail {
+  background-color: #F9BBBB;
+}
+
+.status-header {
+  margin: 5px auto;
+  width: 470px;
+}
+
+header.success .status-header {
+  background-color: #B4EFB4;
+}
+
+.status-header .success-icon {
+  background: url('/imgs/status/success-tick.png') no-repeat 0 0;
+  width: 39px;
+  height: 32px;
+  display: inline-block;
+}
+
+.status-header .fail-icon {
+  background: url('/imgs/status/fail-cross.png') no-repeat 0 0;
+  width: 29px;
+  height: 29px;
+  display: inline-block;
+}
+
+header h2 {
+  color: #000000;
+  font-size: 22px;
+  text-align: left;
+  text-transform: none;
+  float: none;
+  display: inline-block;
+  vertical-align: super;
+  padding-left: 14px;
+}
+
+.wrapper {
+  padding-top: 3em;
+  position: relative;
+  width: 100%;
+  float: left;
+  top: 100px;
+
+}
+
+.wrapper h3 {
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #B3B3B3;
+  text-align: center;
+}
+
+.system-row {
+  width: 410px;
+  margin: 0 auto;
+  border-bottom: 1px solid #999999;
+  text-align: center;
+}
+.system-ip {
+  display: inline-block;
+}
+.system-ip p {
+  font-size: 28px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.system-status {
+  margin: 0 0 0 30px;
+}
+
+.system-status.up {
+  background: url('/imgs/status/status-up.png');
+  display: inline-block;
+  width: 23px;
+  height: 23px;
+}
+
+.system-status.down {
+  background: url('/imgs/status/status-down.png');
+  display: inline-block;
+  width: 23px;
+  height: 23px;
+}
