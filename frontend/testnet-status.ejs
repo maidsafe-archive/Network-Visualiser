@@ -27,8 +27,8 @@
       <div class="wrapper">
           <h3>Last Updated <br>{{testnetStatus.last_updated | date : 'HH:mm:ss dd/MM/yyyy'}}</h3>
           <div class="system-row" ng-repeat="connection in testnetStatus.connections">
-            <span class="system-ip"><p>{{connection.contact}}</p></span>
             <span class="system-status" ng-class="{false:'down', true:'up'}[connection.canConnect]"></span>
+            <span class="system-ip"><p>{{connection.contact}}</p></span>
           </div>
         </div>
     </section>

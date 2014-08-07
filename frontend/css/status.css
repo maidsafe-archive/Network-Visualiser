@@ -78,7 +78,7 @@ header h2 {
 .system-ip p {
   font-size: 28px;
   margin: 20px 0;
-  padding-left: 28px;
+  padding-left: 0px;
 }
 
 .system-status {
@@ -90,8 +90,8 @@ header h2 {
   display: inline-block;
   width: 23px;
   height: 23px;
-  float: right;
-  margin: 28px;
+  float: left;
+  margin: 28px 40px;
 }
 
 .system-status.down {
@@ -99,6 +99,6 @@ header h2 {
   display: inline-block;
   width: 23px;
   height: 23px;
-  float: right;
-  margin: 28px;
+  float: left;
+  margin: 28px 40px;
 }
