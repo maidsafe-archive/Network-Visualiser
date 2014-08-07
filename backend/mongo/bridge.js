@@ -157,8 +157,8 @@ exports.clearSession = function(sessionName) {
   });
   return promise;
 };
-exports.updateTestnetStatus = function(data) {
-  return testnetStatus.updateTestnetStatus(data);
+exports.updateTestnetStatus = function(data, callback) {
+  return testnetStatus.updateTestnetStatus(data, callback);
 };
 exports.getTestnetStatus = function() {
   return testnetStatus.getTestnetStatus();

@@ -50,7 +50,7 @@ var checkStatus = function() {
           break;
         }
       }
-      bridge.updateTestnetStatus(newStatus).then(function() {
+      bridge.updateTestnetStatus(newStatus, statusChangedCallback).then(function() {
         socket.broadcastTestnetStatusUpdate(newStatus);
         setTimeout(checkStatus, timeoutDuration);
       }, function() {
@@ -58,6 +58,10 @@ var checkStatus = function() {
       });
     });
   });
+};
+
+var statusChangedCallback = function(isReady) {
+  console.log(isReady);
 };
 
 exports.startChecker = checkStatus;
