@@ -30,6 +30,7 @@ header.success .statusIcon {
   background: url('/imgs/status/success-tick.png') no-repeat 0 0;
   width: 39px;
   height: 32px;
+  margin-left: 25px;
   display: inline-block;
 }
 

@@ -51,8 +51,8 @@ window.VaultNode = React.createClass({
       });
       var logs = _.map(sortedLogs, function (log) {
         return (
-          <LogList log={log} scope={scope} key={log.ts} />
-          );
+          <LogList log={log} scope={scope} key={log.uniqueCount} />
+        );
       });
 
       logsItem = (
@@ -132,7 +132,6 @@ window.VaultCollection = React.createClass({
     var vaultCollection = scope.vaultManager.vaultCollection;
     var totalVaultsCount = vaultCollection.length;
     var renderedItemsCount = Math.min(this.state.renderedItemsCount, totalVaultsCount);
-    console.log(renderedItemsCount);
     vaultCollection = vaultCollection.slice(0, renderedItemsCount);
     var rows = _.map(vaultCollection, function(vaultInfo) {
       return (

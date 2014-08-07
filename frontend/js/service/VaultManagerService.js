@@ -50,6 +50,7 @@ var VaultManagerService = [
     var VaultInfo = function() {
       var timeoutPromise = null;
       var reactVaultItem = null;
+      var logCount = 0;
       var vault = this;
 
       vault.personaColour = PERSONA_COLOUR_TAG + vaultBehaviour.personas[0];
@@ -70,6 +71,7 @@ var VaultManagerService = [
         vault.iconsTray = vaultBehaviour.icons[actionId];
       };
       var logReceived = function(log, initialLoad) {
+        log.uniqueCount = ++logCount;
         log.formattedTime = $filter('date')(log.ts, 'dd/MM/yyyy HH:mm:ss');
         addLog(log);
         vault.personaColour = PERSONA_COLOUR_TAG + (initialLoad ? 'na' : vaultBehaviour.personas[log.persona_id]);
