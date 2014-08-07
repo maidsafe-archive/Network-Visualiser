@@ -5,7 +5,7 @@ var url = require('url');
 var fs = require('fs');
 var archiver = require('archiver');
 var path = require('path');
-var config = require('./../../Config.js');
+var config = require('./../../../Config.js');
 
 exports.createSession = function(req, res) {
   var criteria = JSON.parse(JSON.stringify(req.body));

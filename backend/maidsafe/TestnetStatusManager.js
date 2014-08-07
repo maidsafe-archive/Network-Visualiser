@@ -1,5 +1,6 @@
 var bridge = require('./../mongo/bridge.js');
 var socket = require('./../socket/Socket.js');
+var config = require('./../../Config.js');
 var fs = require('fs');
 var path = require('path');
 
