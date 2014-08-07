@@ -1,6 +1,8 @@
 exports.Constants = {
   mongo_con: 'mongodb://localhost:27017/maidsafe_logs',
-  authPath: '../../../../../auth/master/gauth.json',
+  projectRootDir: __dirname,
+  authPath: '../../../auth/master/gauth.json',
+  sanityCheckerDir: '../../../testnet_status_monitor',
   paging: { max: 200 },
   serverPort: 8080,
   socketPort: 8081,

@@ -68,6 +68,7 @@ bridge.setupMongooseConnection(function() {
   sessionController.register(app);
   logController.register(app);
   testnetStatusManager.register(app);
+  testnetStatusManager.startChecker();
   ciManager.startChecker();
   app.listen(serverPort);
 });

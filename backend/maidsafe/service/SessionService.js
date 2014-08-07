@@ -5,6 +5,7 @@ var url = require('url');
 var fs = require('fs');
 var archiver = require('archiver');
 var path = require('path');
+var config = require('./../../Config.js');
 
 exports.createSession = function(req, res) {
   var criteria = JSON.parse(JSON.stringify(req.body));
@@ -57,7 +58,7 @@ exports.requestExport = function(req, res) {
 
   bridge.exportLogs(criteria.sn).then(function(csvPath) {
     var zipPath = csvPath.replace(".csv", ".zip");
-    var output = fs.createWriteStream(path.resolve(__dirname, '../../..' , zipPath));
+    var output = fs.createWriteStream(path.resolve(config.Constants.projectRootDir , zipPath));
     var archive = archiver('zip');
 
     output.on('close', function() {
@@ -81,7 +82,7 @@ exports.downloadExport = function(req, res) {
     return;
   }
 
-  var rootFolder = path.resolve(__dirname, '../../..');
+  var rootFolder = config.Constants.projectRootDir;
   var downloadFile = path.resolve(rootFolder, criteria.fname + '.zip');
   if (downloadFile.indexOf(rootFolder) != 0) {
     res.send(500, 'Invalid Request');

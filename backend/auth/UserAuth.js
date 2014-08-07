@@ -11,7 +11,7 @@ var needsAuth = true;
 exports.initAuth = function(server, callback) {
   var fileContent;
   try {
-    fileContent = fs.readFileSync(path.resolve(__dirname, config.Constants.authPath), 'utf8');
+    fileContent = fs.readFileSync(path.resolve(config.Constants.projectRootDir, config.Constants.authPath), 'utf8');
   } catch (e) {
     console.log('UserAuth Disabled');
     needsAuth = false;

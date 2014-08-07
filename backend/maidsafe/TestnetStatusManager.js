@@ -3,6 +3,11 @@ var socket = require('./../socket/Socket.js');
 var fs = require('fs');
 var path = require('path');
 
+var appName = /^win/.test(process.platform) ? 'network_sanity_checker.exe' : 'network_sanity_checker';
+var resolvedSanityCheckerDir = path.resolve(config.Constants.projectRootDir, config.Constants.sanityCheckerDir);
+
+var sanityCheckerPath = path.resolve(resolvedSanityCheckerDir, appName);
+var checkerResultsPath = path.resolve(resolvedSanityCheckerDir, 'results.json');
 var timeoutDuration = 600000; // 10 minutes
 
 var getTestnetStatus = function(req, res) {
@@ -15,15 +20,14 @@ var getTestnetStatus = function(req, res) {
 
 var checkStatus = function() {
   var exec = require('child_process').execFile;
-  exec('network_sanity_checker.exe', function(error){
+  exec(sanityCheckerPath, function(error){
     if (error) {
-      console.error(error);
       setTimeout(checkStatus, timeoutDuration);
+      return;
     }
 
-    fs.readFile('results.json', 'utf8', function(err, data) {
+    fs.readFile(checkerResultsPath, 'utf8', function(err, data) {
       if (err) {
-        console.error(err);
         setTimeout(checkStatus, timeoutDuration);
         return;
       }
@@ -48,16 +52,15 @@ var checkStatus = function() {
       bridge.updateTestnetStatus(newStatus).then(function() {
         socket.broadcastTestnetStatusUpdate(newStatus);
         setTimeout(checkStatus, timeoutDuration);
-      }, function(err) {
-        console.error(err);
+      }, function() {
         setTimeout(checkStatus, timeoutDuration);
       });
     });
   });
 };
 
+exports.startChecker = checkStatus;
+
 exports.register = function(server) {
   server.get('/backend/testnetStatus', getTestnetStatus);
-
-  checkStatus();
 };
