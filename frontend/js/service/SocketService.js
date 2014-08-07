@@ -1,18 +1,21 @@
 var SocketService = [
-  '$rootScope', 'dataManager', function($rootScope, dataManager) {
+  '$rootScope', '$timeout', function($rootScope, $timeout) {
     $rootScope.realTime = true;
     $rootScope.sessionName = '';
 
     var socket = io.connect($rootScope.socketEndPoint);
 
+    var logObserver;
     var signalObserver;
     var testnetStatusObserver;
 
     socket.on('log', function(data) {
       if ($rootScope.realTime && data.session_name == $rootScope.sessionName) {
-        setTimeout(function() {
-          dataManager.pushLog(data);
-        }, 1); //threaded so ui is non-blocking
+        if (logObserver) {
+          $timeout(function () {
+            logObserver(data);
+          }, 1);
+        }
       }
     });
 
@@ -34,10 +37,13 @@ var SocketService = [
     this.stop = function() {
       $rootScope.realTime = false;
     };
-    this.setSignalListner = function(callback) {
+    this.setLogListener = function(callback) {
+      logObserver = callback;
+    };
+    this.setSignalListener = function(callback) {
       signalObserver = callback;
     };
-    this.setTestnetStatusListner = function(callback) {
+    this.setTestnetStatusListener = function(callback) {
       testnetStatusObserver = callback;
     };
   }

@@ -8,7 +8,6 @@ app.run([
 
 app.directive('fileDialog', FileDialog);
 app.directive('clipCopy', ClipCopy);
-app.service('dataManager', DataManagerService);
 app.service('socketService', SocketService);
 
 app.controller('sessionCtrl', [
@@ -46,7 +45,7 @@ app.controller('sessionCtrl', [
       }
     };
 
-    socketService.setSignalListner(function(signal) {
+    socketService.setSignalListener(function(signal) {
       if (signal == 'REFRESH_SESSIONS') {
         refreshCurrentSessions();
         return;

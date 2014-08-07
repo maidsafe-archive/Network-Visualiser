@@ -160,7 +160,7 @@ var VaultManagerService = [
       vault.init = function(vaultData) {
         updateIcons(0);
         vault.vaultName = vaultData.vault_id;
-        dataManager.setLogListner(vault.vaultName, logReceived);
+        dataManager.setLogListener(vault.vaultName, logReceived);
         updateFromQueue();
       };
     };

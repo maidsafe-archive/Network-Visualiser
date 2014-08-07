@@ -6,9 +6,9 @@ app.run([
   }
 ]);
 
-app.service('dataManager', DataManagerService);
 app.service('vaultBehaviour', VaultBehaviourService);
 app.service('socketService', SocketService);
+app.service('dataManager', DataManagerService);
 app.service('playbackService', PlaybackService);
 app.service('vaultManager', VaultManagerService);
 
@@ -33,6 +33,8 @@ app.controller('timelineCtrl', [
     socketService.stop();
     $scope.autoSeekIntervalPromise = null;
     $scope.changedOnPause = false;
+    $scope.zoomClass = 'large';
+
     $scope.$watch('playback.currentState', function(newValue) {
       if ($scope.firstLogtime && String(newValue).indexOf(".") == -1) {
         if ($rootScope.playerPaused) {
@@ -115,6 +117,14 @@ app.controller('timelineCtrl', [
     $scope.stopHistoryPlayback = function() {
       $scope.playerState = $scope.PLAYER_STATE.STOPPED;
       playbackService.stop();
+    };
+    $scope.changeZoomLevel = function(newZoomLevel) {
+      if ($scope.zoomClass == newZoomLevel) {
+        return;
+      }
+
+      $scope.zoomClass = newZoomLevel;
+      $scope.vaultManager.refreshVaultCollection();
     };
 
     var onVaultsLoaded = function(time) {

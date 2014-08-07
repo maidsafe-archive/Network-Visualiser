@@ -6,7 +6,6 @@ app.run([
   }
 ]);
 
-app.service('dataManager', DataManagerService);
 app.service('socketService', SocketService);
 
 app.controller('testnetStatusCtrl', [
@@ -14,7 +13,7 @@ app.controller('testnetStatusCtrl', [
 
     $scope.testnetStatus = {};
 
-    socketService.setTestnetStatusListner(function(data) {
+    socketService.setTestnetStatusListener(function(data) {
       $scope.testnetStatus = data;
       if (!$scope.$$phase) {
         $scope.$apply();
@@ -25,7 +24,8 @@ app.controller('testnetStatusCtrl', [
       $scope.testnetStatus = res.data;
     }, function() {
       $scope.testnetStatus = {
-        is_ready: false
+        is_ready: false,
+        last_updated: new Date().toISOString()
       };
     });
   }

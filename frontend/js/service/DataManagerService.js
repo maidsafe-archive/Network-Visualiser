@@ -1,8 +1,7 @@
 var DataManagerService = [
-  '$http', '$rootScope', function($http, $rootScope) {
+  '$http', '$rootScope', 'socketService', function($http, $rootScope, socketService) {
 
-    var vaultLogPool, vaults;
-    var addLogToPool;
+    var vaults;
     var newVaultObserver;
     var vaultsInDisplay = {};
     var vaultsLoadedObserver;
@@ -15,7 +14,7 @@ var DataManagerService = [
     this.onVaultsLoaded = function(callback) {
       vaultsLoadedObserver = callback;
     };
-    addLogToPool = function(log, initialLoad) {
+    var addLogToPool = function(log, initialLoad) {
       if (!vaultsInDisplay.hasOwnProperty(log.vault_id)) {
         vaultsInDisplay[log.vault_id] = { pushLog: null, queue: [] };
         newVaultObserver({ vault_id: log.vault_id });
@@ -55,10 +54,13 @@ var DataManagerService = [
     var setLogListner = function(vaultId, callback) {
       vaultsInDisplay[vaultId].pushLog = callback;
     };
+
+    socketService.setLogListener(addLogToPool);
+
     this.getActiveVaults = activeVaults;
     this.pushLog = addLogToPool;
     this.getLogsFromQueue = getLogsFromQueue;
-    this.setLogListner = setLogListner;
+    this.setLogListener = setLogListner;
     this.clearState = clear;
   }
 ]

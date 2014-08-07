@@ -6,9 +6,9 @@ app.run([
   }
 ]);
 
-app.service('dataManager', DataManagerService);
 app.service('vaultBehaviour', VaultBehaviourService);
 app.service('socketService', SocketService);
+app.service('dataManager', DataManagerService);
 app.service('vaultManager', VaultManagerService);
 
 app.controller('viewerCtrl', [
