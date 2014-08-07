@@ -16,7 +16,7 @@ var socketPort = config.Constants.socketPort;
 var app = express();
 
 bridge.setupMongooseConnection(function() {
-  app.set('needsAuth', userAuth.initAuth(app));
+  app.set('needsAuth', userAuth.initAuth(testnetStatusManager.mailerInit));
   app.set('views', __dirname + '/frontend');
   app.set('view engine', 'ejs');
   app.use(express.cookieParser());

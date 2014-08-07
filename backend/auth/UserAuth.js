@@ -8,7 +8,7 @@ var utils = require('./../maidsafe/utils.js');
 var gAuth;
 var needsAuth = true;
 
-exports.initAuth = function(server, callback) {
+exports.initAuth = function(mailerCallback) {
   var fileContent;
   try {
     fileContent = fs.readFileSync(path.resolve(config.Constants.projectRootDir, config.Constants.authPath), 'utf8');
@@ -43,6 +43,8 @@ exports.initAuth = function(server, callback) {
   passport.deserializeUser(function(obj, done) {
     done(null, obj);
   });
+
+  mailerCallback(gAuth.MAIL_ID, gAuth.MAIL_PASS);
 
   return needsAuth;
 };
