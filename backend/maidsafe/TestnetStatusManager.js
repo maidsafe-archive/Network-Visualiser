@@ -1,9 +1,11 @@
+var nodemailer = require('nodemailer');
+var mongoose = require('mongoose');
+var fs = require('fs');
+var path = require('path');
+
 var bridge = require('./../mongo/bridge.js');
 var socket = require('./../socket/Socket.js');
 var config = require('./../../Config.js');
-var fs = require('fs');
-var path = require('path');
-var nodemailer = require('nodemailer');
 
 var appName = /^win/.test(process.platform) ? 'network_sanity_checker.exe' : 'network_sanity_checker';
 var resolvedSanityCheckerDir = path.resolve(config.Constants.projectRootDir, config.Constants.sanityCheckerDir);
@@ -79,23 +81,18 @@ var validateStatusChange = function(newStatus) {
     var newConnections = newStatus.connections;
     oldConnections.sort(sortConnections);
     newConnections.sort(sortConnections);
-    var errorCount = 0;
 
     if (oldConnections.length != newConnections.length) {
-      sendMailNotification(newStatus);
       promise.complete('');
       return promise;
     }
 
     for (var index = 0; index < oldConnections.length; ++index) {
-      if (oldConnections[index].contact != newConnections[index].contact ||
-          oldConnections[index].canConnect != newConnections[index].canConnect) {
-        errorCount++;
+      if (oldConnections[index].canConnect != newConnections[index].canConnect &&
+          oldConnections[index].contact == newConnections[index].contact) {
+        sendMailNotification(newStatus);
+        break;
       }
-    }
-
-    if (errorCount != 0) {
-      sendMailNotification(newStatus, errorCount);
     }
 
     promise.complete('');
@@ -103,13 +100,20 @@ var validateStatusChange = function(newStatus) {
 
   return promise;
 };
-var sendMailNotification = function(newStatus, errorCount) {
-  mailOptions.subject = '✔ All bootstrap nodes operational';
+var sendMailNotification = function(newStatus) {
+  var errorCount = 0;
   for(var index in newStatus.connections) {
     if (!newStatus.connections[index].canConnect) {
-      mailOptions.subject = '✘ Failure : ' + (errorCount ? errorCount + ' bootstrap nodes down' : 'Nodes mismatch');
-      break;
+      errorCount++;
     }
+  }
+
+  if (errorCount == 0) {
+    mailOptions.subject = '✔ All bootstrap nodes operational';
+  } else if (errorCount == 1) {
+    mailOptions.subject = '✘ Failure : 1 bootstrap node down';
+  } else {
+    mailOptions.subject = '✘ Failure : ' + errorCount + ' bootstrap nodes down';
   }
 
   transporter.sendMail(mailOptions, function(err){
