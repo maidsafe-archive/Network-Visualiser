@@ -22,6 +22,7 @@ var mailOptions = {
 
 var getTestnetStatus = function(req, res) {
   bridge.getTestnetStatus().then(function(data) {
+    data.connections.sort(sortConnections);
     res.send(data);
   }, function(err) {
     res.send(500, err);
@@ -60,14 +61,17 @@ var checkStatus = function() {
         }
       }
 
-      validateStatusChange(newStatus);
-      updateStatus(newStatus);
+      validateStatusChange(newStatus).then(function() {
+        updateStatus(newStatus);
+      });
     });
   });
 };
 var validateStatusChange = function(newStatus) {
+  var promise = new mongoose.Promise;
   if (!transporter) {
-    return;
+    promise.complete('');
+    return promise;
   }
 
   bridge.getTestnetStatus().then(function(oldStatus) {
@@ -79,10 +83,11 @@ var validateStatusChange = function(newStatus) {
 
     if (oldConnections.length != newConnections.length) {
       sendMailNotification(newStatus);
-      return;
+      promise.complete('');
+      return promise;
     }
 
-    for (var index in oldConnections) {
+    for (var index = 0; index < oldConnections.length; ++index) {
       if (oldConnections[index].contact != newConnections[index].contact ||
           oldConnections[index].canConnect != newConnections[index].canConnect) {
         errorCount++;
@@ -92,7 +97,11 @@ var validateStatusChange = function(newStatus) {
     if (errorCount != 0) {
       sendMailNotification(newStatus, errorCount);
     }
+
+    promise.complete('');
   });
+
+  return promise;
 };
 var sendMailNotification = function(newStatus, errorCount) {
   mailOptions.subject = '✔ All bootstrap nodes operational';
@@ -110,7 +119,12 @@ var sendMailNotification = function(newStatus, errorCount) {
   });
 };
 var sortConnections = function(leftItem, rightItem) {
-  return leftItem.contact.localeCompare(rightItem.contact);
+  var leftItemFormatted = leftItem.contact.split('.').map(padString).join('.');
+  var rightItemFormatted = rightItem.contact.split('.').map(padString).join('.');
+  return leftItemFormatted.localeCompare(rightItemFormatted);
+};
+var padString = function(inputString) {
+  return inputString.length >= 3 ? inputString : new Array(3 - inputString.length + 1).join('0') + inputString;
 };
 var updateStatus = function(newStatus) {
   bridge.updateTestnetStatus(newStatus).then(function() {
