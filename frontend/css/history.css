@@ -1,3 +1,12 @@
+#history header {
+  position: fixed;
+}
+
+#history section {
+  position: relative;
+  top: 119px;
+}
+
 .history .info {
   min-height: 50px;
   padding: .2em;
@@ -44,6 +53,20 @@ button.close-icon:hover { background: transparent; }
   outline: 0;
   width: 95%;
   z-index: 0;
+  -webkit-box-shadow:
+  inset 0 0 8px  rgba(0,0,0,0.1),
+  0 0 16px rgba(0,0,0,0.1);
+  -moz-box-shadow:
+  inset 0 0 8px  rgba(0,0,0,0.1),
+  0 0 16px rgba(0,0,0,0.1);
+  box-shadow:
+  inset 0 0 8px  rgba(0,0,0,0.1),
+  0 0 16px rgba(0,0,0,0.1);
+}
+
+.input:focus {
+  border: none;
+  outline: none;
 }
 
 .close-icon {
@@ -77,19 +100,9 @@ button.close-icon:hover { background: transparent; }
 
 .search-box:not(:valid) ~ .close-icon { display: none; }
 
-
 table {
-  margin-top: 90px;
-  max-width: 100%;
+  width: 100%;
 }
-
-table thead {
-  background-color: #a7c8ec;
-  border: 1px solid #a7c8ec;
-  font-weight: bold;
-  text-align: center;
-}
-
 
 table tr td {
   border: 1px solid #a7c8ec;
@@ -99,14 +112,104 @@ table tr td {
 
 table tr td div { word-break: break-word; }
 
-.timestamp-head {width: 230px;}
+.table-head {
+  background-color: #a7c8ec;
+  border: 1px solid #a7c8ec;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  top: 90px;
+  font-size: 14px;
+  padding:4px 0;
+  min-width: 1150px;
+}
 
-.persona-head {width: 170px;}
+.table-head div {display: inline-block}
 
-.vault-id-head {width: 170px;}
+.timestamp-head {width: 10.5%; }
 
-.action-head {width: 150px;}
+.persona-head {width: 10%; }
 
-.value1-head {width: 34%;}
+.action-head {width: 10%; }
 
-.value2-head {width: 34%;}
+.value1-head {width: 33%;}
+
+.value2-head {width: 33%; }
+
+
+.loader {
+  background-color: #5593d7;
+  font-size: 18px;
+  color: #fff;
+  padding: 10px 25px 10px 55px;
+  width: 100px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  margin: 30px auto;
+  position: relative;
+  bottom: 15px;
+}
+
+/********** Loader Animation **********/
+.loader-animation,
+.loader-animation:before,
+.loader-animation:after {
+  background: #ffffff;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+  float: left;
+  display: block;
+  left: -20px;
+  top: 0px;
+  margin-right: 20px;
+  display: inline-block;
+}
+.loader-animation:before,
+.loader-animation:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.loader-animation:before {
+  left: -1.5em;
+}
+.loader-animation {
+  text-indent: -9999em;
+  margin: 2em auto;
+  position: relative;
+  font-size: 3px;
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.loader-animation:after {
+  left: 1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0 #ffffff;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em #ffffff;
+    height: 5em;
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0 #FFF;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em #ffffff;
+    height: 5em;
+  }
+}

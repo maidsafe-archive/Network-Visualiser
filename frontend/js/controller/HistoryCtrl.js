@@ -36,7 +36,7 @@ app.controller('historyCtrl', [
     $http({ url: ("/backend/history?&max=-1&vault_id=" + $scope.vaultId + '&sn=' + $scope.sessionName), method: "GET" }).success(function(data) {
       var retrievedLogs = data;
       for (var i = 0; i < retrievedLogs.length; ++i) {
-        retrievedLogs[i].ts = $filter('date')(new Date(retrievedLogs[i].ts), 'dd/MM/yyyy HH:mm:ss');
+        retrievedLogs[i].ts = $filter('date')(new Date(retrievedLogs[i].ts), 'MMM dd yy HH:mm.ss.sss');
         retrievedLogs[i].logIndex = i;
       }
       $scope.logs = retrievedLogs;

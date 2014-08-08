@@ -22,7 +22,7 @@
 
     <title>Network Visualiser - History View</title>
   </head>
-  <body ng-app="MaidSafe" ng-controller="historyCtrl">
+  <body ng-app="MaidSafe" ng-controller="historyCtrl" id="history">
     <header>
       <div class="top-header">
         <h1><a href="/">Network Visualiser - History View - {{vaultId}}</a></h1>
@@ -41,9 +41,14 @@
       </div>
     </header>
     <section>
-      <div id="logs-collection">
-        <div ng-react-component="HistoryCollection" data="logs"></div>
+      <div class="table-head">
+        <div class="timestamp-head">Timestamp</div>
+        <div class="persona-head">Persona</div>
+        <div class="action-head">Action</div>
+        <div class="value1-head">Value 1</div>
+        <div class="value2-head">Value 2</div>
       </div>
+      <div ng-react-component="HistoryCollection" data="logs"></div>
     </section>
   </body>
 </html>

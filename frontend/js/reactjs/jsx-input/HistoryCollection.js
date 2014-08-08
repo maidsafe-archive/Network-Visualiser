@@ -16,12 +16,12 @@ window.LogRow = React.createClass({
         <td style={{ width: '10%'}}>
             {scope.vaultBehaviour.actions[item.action_id]}
         </td>
-        <td style={{ width: '35%'}}>
+        <td style={{ width: '35%', 'word-break': 'break-all'}}>
           <div>
               {item.value1}
           </div>
         </td>
-        <td style={{ width: '35%'}}>
+        <td style={{ width: '35%', 'word-break': 'break-all'}}>
           <div>
               {item.value2}
           </div>
@@ -54,21 +54,17 @@ window.HistoryCollection = React.createClass({
     });
 
     return (
-      <React.addons.InfiniteScroll pageStart={0}
-                                   loadMore={this.loadMoreLogs}
-                                   hasMore={renderedItemsCount < totalLogsCount}
-                                   loader={<div>Loading ...</div>}>
-        <table>
-          <thead>
-            <td className="timestamp-head">Timestamp</td>
-            <td className="persona-head">Persona</td>
-            <td className="action-head">Action</td>
-            <td className="value1-head">Value 1</td>
-            <td className="value2-head">Value 2</td>
-          </thead>
-          {rows}
-        </table>
-      </React.addons.InfiniteScroll>
+      <div>
+        <React.addons.InfiniteScroll pageStart={0}
+                                     loadMore={this.loadMoreLogs}
+                                     hasMore={renderedItemsCount < totalLogsCount}
+                                     loader={<div className="loader"><div className="loader-animation"></div>Loading ...</div>}>
+          <table>
+            {rows}
+          </table>
+        </React.addons.InfiniteScroll>
+        { totalLogsCount == renderedItemsCount ? <div style={{ 'height':'25px'}}></div> : null}
+      </div>
     );
   },
   componentDidMount: function () {

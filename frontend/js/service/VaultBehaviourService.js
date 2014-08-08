@@ -35,7 +35,7 @@ var VaultBehaviourService = [
       14: 'Deleting Chunk',
       15: 'Update Version',
       16: 'Remove Account',
-      17: 'Network Health changed',
+      17: 'Network Health Changed',
       18: 'Vault Stopping'
     };
     service.icons = {

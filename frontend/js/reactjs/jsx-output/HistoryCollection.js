@@ -16,12 +16,12 @@ window.LogRow = React.createClass({displayName: 'LogRow',
         React.DOM.td({style: { width: '10%'}}, 
             scope.vaultBehaviour.actions[item.action_id]
         ), 
-        React.DOM.td({style: { width: '35%'}}, 
+        React.DOM.td({style: { width: '35%', 'word-break': 'break-all'}}, 
           React.DOM.div(null, 
               item.value1
           )
         ), 
-        React.DOM.td({style: { width: '35%'}}, 
+        React.DOM.td({style: { width: '35%', 'word-break': 'break-all'}}, 
           React.DOM.div(null, 
               item.value2
           )
@@ -54,20 +54,16 @@ window.HistoryCollection = React.createClass({displayName: 'HistoryCollection',
     });
 
     return (
-      React.addons.InfiniteScroll({pageStart: 0, 
-                                   loadMore: this.loadMoreLogs, 
-                                   hasMore: renderedItemsCount < totalLogsCount, 
-                                   loader: React.DOM.div(null, "Loading ...")}, 
-        React.DOM.table(null, 
-          React.DOM.thead(null, 
-            React.DOM.td({className: "timestamp-head"}, "Timestamp"), 
-            React.DOM.td({className: "persona-head"}, "Persona"), 
-            React.DOM.td({className: "action-head"}, "Action"), 
-            React.DOM.td({className: "value1-head"}, "Value 1"), 
-            React.DOM.td({className: "value2-head"}, "Value 2")
-          ), 
-          rows
-        )
+      React.DOM.div(null, 
+        React.addons.InfiniteScroll({pageStart: 0, 
+                                     loadMore: this.loadMoreLogs, 
+                                     hasMore: renderedItemsCount < totalLogsCount, 
+                                     loader: React.DOM.div({className: "loader"}, React.DOM.div({className: "loader-animation"}), "Loading ...")}, 
+          React.DOM.table(null, 
+            rows
+          )
+        ), 
+         totalLogsCount == renderedItemsCount ? React.DOM.div({style: { 'height':'25px'}}) : null
       )
     );
   },
