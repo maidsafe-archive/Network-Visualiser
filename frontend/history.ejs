@@ -8,6 +8,12 @@
     <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="components/angular/angular.min.js"></script>
 
+    <script src="components/underscore/underscore-min.js"></script>
+    <script src="components/react/react.js"></script>
+    <script src="components/ngReact/ngReact.min.js"></script>
+    <script src="js/reactjs/addons/react-infinite-scroll.min.js"></script>
+    <script src="js/reactjs/jsx-output/HistoryCollection.js"></script>
+
     <script type="text/javascript" src="js/service/VaultBehaviourService.js"></script>
     <script type="text/javascript" src="js/controller/HistoryCtrl.js"></script>
 
@@ -27,44 +33,17 @@
       <div class="info">
         <div class="search-wrapper">
           <form id="search-filter">
-            <input type="text" style="font-weight: none; text-align: center;" name="focus" class="search-box" required ng-model="search" placeholder="Type text to filter"/>
+            <input type="text" style="font-weight: none; text-align: center;" name="focus" class="search-box" required ng-model="searchText" placeholder="Type text to filter" />
 
-            <button id="clear" class="close-icon reset" type="reset" ng-click="search = ''"></button>
+            <button id="clear" class="close-icon reset" type="reset" ng-click="searchText = ''"></button>
           </form>
         </div>
       </div>
     </header>
     <section>
-      <table>
-        <thead>
-          <td class="timestamp-head">Timestamp</td>
-          <td class="persona-head">Persona</td>
-          <td class="action-head">Action</td>
-          <td class="value1-head">Value 1</td>
-          <td class="value2-head">Value 2</td>
-        </thead>
-        <tr ng-repeat="log in logs | filter:search">
-          <td style="width: 12.5%">
-            {{log.ts = (log.ts | date:'MMM dd yy HH:mm.ss.sss')}}
-          </td>
-          <td style="width: 10%">
-            {{log.p = vaultBehaviour.personas[log.persona_id]}}
-          </td>
-          <td style="width: 10%">
-            {{log.a = vaultBehaviour.actions[log.action_id]}}
-          </td>
-          <td style="width: 35%;">
-            <div>
-              {{log.value1}}
-            </div>
-          </td>
-          <td style="width: 35%">
-            <div>
-              {{log.value2}}
-            </div>
-          </td>
-        </tr>
-      </table>
+      <div id="logs-collection">
+        <div ng-react-component="HistoryCollection" data="logs"></div>
+      </div>
     </section>
   </body>
 </html>

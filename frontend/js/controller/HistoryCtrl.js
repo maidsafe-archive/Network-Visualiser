@@ -1,15 +1,45 @@
-var app = angular.module('MaidSafe', []);
+var app = angular.module('MaidSafe', ['ngReact']);
 app.service('vaultBehaviour', VaultBehaviourService);
 
 app.controller('historyCtrl', [
-  '$scope', '$location', '$http', 'vaultBehaviour', function($scope, $location, $http, vaultBehaviour) {
+  '$scope', '$location', '$http', '$filter', '$timeout' , 'vaultBehaviour', function($scope, $location, $http, $filter, $timeout, vaultBehaviour) {
     $scope.sessionName = $location.search().sn;
     $scope.vaultId = $location.search().id;
     $scope.logs = [];
     $scope.vaultBehaviour = vaultBehaviour;
     $scope.asOfDate = new Date();
+    $scope.searchText = '';
+    var reactLogsCollectionItem;
+    var timeoutPromise;
+
+    var refreshLogsCollection = function() {
+      if (reactLogsCollectionItem && reactLogsCollectionItem.isMounted()) {
+        reactLogsCollectionItem.setState({ renderedItemsCount: 0 });
+      }
+    };
+
+    $scope.setReactLogsCollectionItem = function(reactItem) {
+      reactLogsCollectionItem = reactItem;
+    };
+
+    $scope.$watch('searchText', function() {
+      if (timeoutPromise) {
+        $timeout.cancel(timeoutPromise);
+      }
+
+      timeoutPromise = $timeout(function() {
+        timeoutPromise = null;
+        refreshLogsCollection();
+      }, 500);
+    });
+
     $http({ url: ("/backend/history?&max=-1&vault_id=" + $scope.vaultId + '&sn=' + $scope.sessionName), method: "GET" }).success(function(data) {
-      $scope.logs = data;
+      var retrievedLogs = data;
+      for (var i = 0; i < retrievedLogs.length; ++i) {
+        retrievedLogs[i].ts = $filter('date')(new Date(retrievedLogs[i].ts), 'dd/MM/yyyy HH:mm:ss');
+        retrievedLogs[i].logIndex = i;
+      }
+      $scope.logs = retrievedLogs;
     });
   }
 ]);
