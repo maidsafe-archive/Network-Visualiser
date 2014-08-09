@@ -96,6 +96,8 @@ var validateStatusChange = function(newStatus) {
     }
 
     promise.complete('');
+  }, function() {
+    promise.complete('');
   });
 
   return promise;
