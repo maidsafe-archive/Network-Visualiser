@@ -13,7 +13,7 @@ var serverPort = config.Constants.serverPort;
 
 var sanityCheckerPath = path.resolve(resolvedSanityCheckerDir, appName);
 var checkerResultsPath = path.resolve(resolvedSanityCheckerDir, 'results.json');
-var timeoutDuration = 300000; // 5 minutes
+var timeoutDuration = 600000; // 10 minutes
 
 var transporter;
 var mailOptions = {
@@ -71,7 +71,7 @@ var checkStatus = function() {
 };
 var validateStatusChange = function(newStatus) {
   var promise = new mongoose.Promise;
-  if (!transporter) {
+  if (!transporter || serverPort == 9080) {
     promise.complete('');
     return promise;
   }
