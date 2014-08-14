@@ -207,6 +207,7 @@ var DBUtil = function(dbConnection) {
         promise.complete('Added to Server Queue.');
       }
     }).on("error", function() {
+      stream.destroy();
       promise.error('Invalid File');
     });
   };

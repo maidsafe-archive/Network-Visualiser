@@ -4,10 +4,10 @@
 <ul class="buttons-left">
 <% if (userInfo.isAuthenticated) { %>
   <li>
-    <button ng-click="onCreateSessionTabClicked()" class="create-session" ng-class="{true:'active'}[createTab.isOpen]">Create Session</button>
+    <button ng-click="onCreateSessionTabClicked();$event.stopPropagation();" class="create-session" ng-class="{true:'active'}[createTab.isOpen]">Create Session</button>
   </li>
   <li>
-    <button ng-click="onImportSessionTabClicked()" class="import-logs" ng-class="{true:'active'}[importTab.isOpen]">Import</button>
+    <button ng-click="onImportSessionTabClicked();$event.stopPropagation();" class="import-logs" ng-class="{true:'active'}[importTab.isOpen]">Import</button>
   </li>
 <% } else { %>
   <li>
@@ -21,7 +21,7 @@
   </li>
 </ul>
 <% if (userInfo.isAuthenticated) { %>
-<div class="toggle_create_session" ng-show="createTab.isOpen">
+<div class="toggle_create_session" ng-show="createTab.isOpen" ng-click="$event.stopPropagation();">
   <div class="wrapper">
     <div class="session-input-wrapper" ng-show="createTab.inputRequired">
       <form name="createSessionForm">
@@ -41,7 +41,7 @@
     </div>
   </div>
 </div>
-<div class="toggle_import_logs" ng-show="importTab.isOpen">
+<div class="toggle_import_logs" ng-show="importTab.isOpen" ng-click="$event.stopPropagation();">
   <div class="wrapper">
     <form name="importSessionForm">
       <file-dialog button-content="Select File"

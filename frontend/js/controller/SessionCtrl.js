@@ -11,7 +11,7 @@ app.directive('clipCopy', ClipCopy);
 app.service('socketService', SocketService);
 
 app.controller('sessionCtrl', [
-  '$scope', '$http', '$upload', 'socketService', function($scope, $http, $upload, socketService) {
+  '$scope', '$window', '$http', '$upload', 'socketService', function($scope, $window, $http, $upload, socketService) {
 
     $scope.userInfo = {};
     $scope.activeSessions = [];
@@ -102,6 +102,30 @@ app.controller('sessionCtrl', [
         $scope.createTab.sessionName = '';
         $scope.createTab.errorMessage = '';
         $scope.createSessionForm.$setPristine();
+      } else {
+        updateWindowClickEvent();
+      }
+    };
+
+    var updateWindowClickEvent = function () {
+      $window.onclick = null;
+      if ($scope.createTab.isOpen) {
+        $window.onclick = function () {
+          $window.onclick = null;
+          $scope.onCreateSessionTabClicked();
+          $scope.$apply();
+        };
+      } else if ($scope.importTab.isOpen) {
+        $window.onclick = function (event) {
+          if (event.target.nodeName === 'INPUT' &&
+              event.target.type === 'file') {
+            return;
+          }
+
+          $window.onclick = null;
+          $scope.onImportSessionTabClicked();
+          $scope.$apply();
+        };
       }
     };
 
@@ -134,6 +158,8 @@ app.controller('sessionCtrl', [
         $scope.importTab.file = null;
         $scope.importTab.errorMessage = '';
         $scope.importSessionForm.$setPristine();
+      } else {
+        updateWindowClickEvent();
       }
     };
 

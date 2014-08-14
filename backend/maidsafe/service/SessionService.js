@@ -19,20 +19,20 @@ exports.createSession = function(req, res) {
 
 exports.importSession = function(req, res) {
   fs.readFile(req.files.file.path, function(err, data) {
-    var fileName = "Import_" + new Date().getTime() + '.csv';
-    fs.writeFile(fileName, data, function(err) {
+    var filePath = path.resolve(config.Constants.projectRootDir, "Import_" + new Date().getTime() + '.csv');
+    fs.writeFile(filePath, data, function(err) {
       if (err) {
         res.send(500, 'Invalid File');
         return;
       }
 
-      bridge.importLogs(req.body.sn, req._userInfo.mailAddress, fileName).then(function() {
+      bridge.importLogs(req.body.sn, req._userInfo.mailAddress, filePath).then(function() {
         var handler = new Handler.SaveLogHandler();
         res.send('Added to Import Queue');
-        fs.unlink(path);
+        fs.unlink(filePath);
         handler.refreshSessionsCallback();
       }, function() {
-        fs.unlink(path);
+        fs.unlink(filePath);
         res.send(500, 'Invalid File');
       });
     });
