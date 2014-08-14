@@ -129,10 +129,12 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
 
     $(domNode).bind('mousewheel', function(element, delta){
       var thisObject = $(this);
+
       if (delta > 0 && thisObject.scrollTop() === 0) {
         element.preventDefault();
       } else {
-        if (delta < 0 && (thisObject.scrollTop() == thisObject.get(0).scrollHeight - thisObject.innerHeight())) {
+        var adjustedHeight = thisObject.scrollTop() - thisObject.get(0).scrollHeight + thisObject.innerHeight();
+        if (delta < 0 && (adjustedHeight >= -1 && adjustedHeight <= 1)) {
           element.preventDefault();
         }
       }

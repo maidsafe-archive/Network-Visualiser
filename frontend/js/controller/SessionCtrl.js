@@ -76,6 +76,28 @@ app.controller('sessionCtrl', [
       });
     };
 
+    var updateWindowClickEvent = function () {
+      $window.onclick = null;
+      if ($scope.createTab.isOpen) {
+        $window.onclick = function () {
+          $window.onclick = null;
+          $scope.onCreateSessionTabClicked();
+          $scope.$apply();
+        };
+      } else if ($scope.importTab.isOpen) {
+        $window.onclick = function (event) {
+          if (event.target.nodeName === 'INPUT' &&
+            event.target.type === 'file') {
+            return;
+          }
+
+          $window.onclick = null;
+          $scope.onImportSessionTabClicked();
+          $scope.$apply();
+        };
+      }
+    };
+
     $scope.onSignInClicked = function() {
       window.location.href = "/auth/google";
     };
@@ -97,35 +119,12 @@ app.controller('sessionCtrl', [
     $scope.onCreateSessionTabClicked = function() {
       $scope.importTab.isOpen = false;
       $scope.createTab.isOpen = !$scope.createTab.isOpen;
+      updateWindowClickEvent();
       if (!$scope.createTab.isOpen) {
         $scope.createTab.inputRequired = true;
         $scope.createTab.sessionName = '';
         $scope.createTab.errorMessage = '';
         $scope.createSessionForm.$setPristine();
-      } else {
-        updateWindowClickEvent();
-      }
-    };
-
-    var updateWindowClickEvent = function () {
-      $window.onclick = null;
-      if ($scope.createTab.isOpen) {
-        $window.onclick = function () {
-          $window.onclick = null;
-          $scope.onCreateSessionTabClicked();
-          $scope.$apply();
-        };
-      } else if ($scope.importTab.isOpen) {
-        $window.onclick = function (event) {
-          if (event.target.nodeName === 'INPUT' &&
-              event.target.type === 'file') {
-            return;
-          }
-
-          $window.onclick = null;
-          $scope.onImportSessionTabClicked();
-          $scope.$apply();
-        };
       }
     };
 
@@ -153,13 +152,12 @@ app.controller('sessionCtrl', [
     $scope.onImportSessionTabClicked = function() {
       $scope.createTab.isOpen = false;
       $scope.importTab.isOpen = !$scope.importTab.isOpen;
+      updateWindowClickEvent();
       if (!$scope.importTab.isOpen) {
         $scope.importTab.sessionName = '';
         $scope.importTab.file = null;
         $scope.importTab.errorMessage = '';
         $scope.importSessionForm.$setPristine();
-      } else {
-        updateWindowClickEvent();
       }
     };
 
