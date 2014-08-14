@@ -56,7 +56,7 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
       });
 
       logsItem = (
-        React.DOM.div({className: 'log_slider ' + item.personaColour + '_alpha'}, 
+        React.DOM.div({className: 'log_slider ' + item.personaColour + '_alpha', ref: "logsPreviewList"}, 
           React.DOM.ul(null, 
             logs
           ), 
@@ -99,6 +99,7 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
   componentDidMount: function () {
     var item = this.props.item;
     item.setReactVaultItem(this);
+
     if (!this.refs || !this.refs.hasOwnProperty('hostCopyButton')) {
       return;
     }
@@ -106,12 +107,47 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
     var domNode = this.refs['hostCopyButton'].getDOMNode();
     var client = new ZeroClipboard(domNode);
     client.on('ready', function() {
+      item.zeroClipboardObject = client;
       client.on('copy', function(event) {
         var clipboard = event.clipboardData;
         var copyText = domNode.title || "Unknown host-name";
         clipboard.setData('text/plain', copyText);
       });
     });
+  },
+  componentDidUpdate: function() {
+    if (!this.refs || !this.refs.hasOwnProperty('logsPreviewList')) {
+      return
+    }
+
+    var domNode = this.refs['logsPreviewList'].getDOMNode();
+    $(domNode).unbind("mousewheel");
+
+    if (!this.props.item.logsOpen) {
+      return;
+    }
+
+    $(domNode).bind('mousewheel', function(element, delta){
+      var thisObject = $(this);
+      if (delta > 0 && thisObject.scrollTop() === 0) {
+        element.preventDefault();
+      } else {
+        if (delta < 0 && (thisObject.scrollTop() == thisObject.get(0).scrollHeight - thisObject.innerHeight())) {
+          element.preventDefault();
+        }
+      }
+    });
+  },
+  componentWillUnmount: function() {
+    if (this.refs && this.refs.hasOwnProperty('logsPreviewList')) {
+      var domNode = this.refs['logsPreviewList'].getDOMNode();
+      $(domNode).unbind("mousewheel");
+    }
+
+    var clipboardItem = this.props.item.zeroClipboardObject;
+    if (clipboardItem) {
+      clipboardItem.destroy();
+    }
   }
 });
 

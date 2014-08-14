@@ -66,6 +66,7 @@ var VaultManagerService = [
       vault.networkHealth = 0;
       vault.subscriber = null;
       vault.counter = null;
+      vault.zeroClipboardObject = null;
 
       var updateIcons = function(actionId) {
         vault.iconsTray = vaultBehaviour.icons[actionId];
