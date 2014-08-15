@@ -117,7 +117,10 @@ app.controller('sessionCtrl', [
       });
     };
     $scope.onCreateSessionTabClicked = function() {
-      $scope.importTab.isOpen = false;
+      if ($scope.importTab.isOpen) {
+        $scope.onImportSessionTabClicked();
+      }
+
       $scope.createTab.isOpen = !$scope.createTab.isOpen;
       updateWindowClickEvent();
       if (!$scope.createTab.isOpen) {
@@ -150,7 +153,10 @@ app.controller('sessionCtrl', [
     };
 
     $scope.onImportSessionTabClicked = function() {
-      $scope.createTab.isOpen = false;
+      if ($scope.createTab.isOpen) {
+        $scope.onCreateSessionTabClicked();
+      }
+
       $scope.importTab.isOpen = !$scope.importTab.isOpen;
       updateWindowClickEvent();
       if (!$scope.importTab.isOpen) {
