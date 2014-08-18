@@ -1,5 +1,7 @@
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var BearerStrategy = require('passport-http-bearer').Strategy;
+var https = require('https');
 var fs = require('fs');
 var path = require('path');
 
@@ -26,12 +28,41 @@ exports.initAuth = function(mailerCallback) {
       callbackURL: gAuth.CALLBACK
     },
     function(accessToken, refreshToken, profile, done) {
-      // asynchronous verification, for effect...
       process.nextTick(function() {
+        return done(null, { email: profile._json.email });
+      });
+    }
+  ));
 
-        // The user's Google profile is returned to
-        // represent the logged-in user.
-        return done(null, profile);
+  passport.use(new BearerStrategy({ },
+    function(token, done) {
+      process.nextTick(function () {
+        var options = {
+          host: 'www.googleapis.com',
+          path: '/oauth2/v1/userinfo',
+          headers: { Authorization: 'Bearer ' + token}
+        };
+
+        var confirmReq = https.get(options, function(result) {
+          if (result.statusCode !== 200) {
+            return done("Invalid Token");
+          }
+
+          var responseParts = [];
+          result.setEncoding('utf8');
+          result.on("data", function(chunk) {
+            responseParts.push(chunk);
+          });
+          result.on("end", function(){
+            responseParts.join('');
+            responseParts = JSON.parse(responseParts);
+            return done(null, { email: responseParts.email });
+          });
+        });
+
+        confirmReq.on('error', function() {
+          return done("Invalid Token");
+        });
       });
     }
   ));
@@ -72,7 +103,7 @@ var setUserInfo = function(req, res, next) {
       mailAddress: 'debug.mail@maidsafe.net'
     };
   } else if (req.isAuthenticated()) {
-    var mailId = req.user._json.email;
+    var mailId = req.user.email;
     if (mailId.indexOf(gAuth.MAIDSAFE_USER) > 0) {
       userInfo = {
         isAuthenticated: true,
@@ -116,6 +147,10 @@ exports.setupAuthCallbacks = function(server) {
   server.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }), function(req, res) {
     // The request will be redirected to Google for authentication, so this
     // function will not be called.
+  });
+
+  server.get('/auth/bearer', passport.authenticate('bearer'), function(req, res) {
+    res.send('Success');
   });
 
   server.get('/googlecallback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {

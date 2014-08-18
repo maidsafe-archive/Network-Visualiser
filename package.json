@@ -20,6 +20,7 @@
     "ejs":"latest",
     "passport":"latest",
     "passport-google-oauth":"latest",
+    "passport-http-bearer":"latest",
     "archiver":"latest",
     "nodemailer":"latest"
   }
