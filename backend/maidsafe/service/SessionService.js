@@ -1,4 +1,5 @@
 var bridge = require('./../../../backend/mongo/bridge.js');
+var mongoose = require('mongoose');
 var Handler = require('./Handler.js');
 var utils = require('./../utils.js');
 var url = require('url');
@@ -6,6 +7,32 @@ var fs = require('fs');
 var archiver = require('archiver');
 var path = require('path');
 var config = require('./../../../Config.js');
+
+var validateSessionOwner = function(req) {
+  var promise = new mongoose.Promise;
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
+    promise.error('Invalid Request');
+    return promise;
+  }
+
+  if (req._userInfo.isMaidSafeUser) {
+    promise.complete(criteria.sn);
+    return promise;
+  }
+
+  bridge.getSessionCreatedByForName(criteria.sn).then(function(createdBy) {
+    if (createdBy == req._userInfo.mailAddress) {
+      promise.complete(criteria.sn);
+    } else {
+      promise.error('Invalid Authentication');
+    }
+  }, function() {
+    promise.error('Session not found');
+  });
+
+  return promise;
+};
 
 exports.createSession = function(req, res) {
   var criteria = JSON.parse(JSON.stringify(req.body));
@@ -100,43 +127,25 @@ exports.downloadExport = function(req, res) {
 };
 
 exports.deleteActiveSession = function(req, res) {
-  var criteria = url.parse(req.url, true).query;
-  if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
-    res.send(500, 'Invalid Request');
-    return;
-  }
-
-  if (req._userInfo.isMaidSafeUser) {
-    bridge.deleteActiveSession(criteria.sn, new Handler.DeleteSessionHandler(res));
-    return;
-  }
-
-  bridge.getSessionCreatedByForName(criteria.sn).then(function(createdBy) {
-    if (createdBy == req._userInfo.mailAddress) {
-      bridge.deleteActiveSession(criteria.sn, new Handler.DeleteSessionHandler(res));
-    } else {
-      res.send(500, 'Invalid Authentication');
-    }
+  validateSessionOwner(req).then(function(sessionName) {
+    bridge.deleteActiveSession(sessionName, new Handler.DeleteSessionHandler(res));
+  }, function(err) {
+    res.send(500, err);
   });
 };
 
 exports.deletePendingSession = function(req, res) {
-  var criteria = url.parse(req.url, true).query;
-  if (!criteria || utils.isEmptyObject(criteria) || !criteria.hasOwnProperty('sn')) {
-    res.send(500, 'Invalid Request');
-    return;
-  }
+  validateSessionOwner(req).then(function(sessionName) {
+    bridge.deletePendingSession(sessionName, new Handler.DeleteSessionHandler(res));
+  }, function(err) {
+    res.send(500, err);
+  });
+};
 
-  if (req._userInfo.isMaidSafeUser) {
-    bridge.deletePendingSession(criteria.sn, new Handler.DeleteSessionHandler(res));
-    return;
-  }
-
-  bridge.getSessionCreatedByForName(criteria.sn).then(function(createdBy) {
-    if (createdBy == req._userInfo.mailAddress) {
-      bridge.deletePendingSession(criteria.sn, new Handler.DeleteSessionHandler(res));
-    } else {
-      res.send(500, 'Invalid Authentication');
-    }
+exports.clearActiveSession = function(req, res) {
+  validateSessionOwner(req).then(function(sessionName) {
+    bridge.clearActiveSession(sessionName, new Handler.ClearActiveSessionHandler(res));
+  }, function(err) {
+    res.send(500, err);
   });
 };

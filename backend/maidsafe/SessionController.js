@@ -30,6 +30,9 @@ var deleteActiveSession = function(req, res) {
 var deletePendingSession = function(req, res) {
   sessionService.deletePendingSession(req, res);
 };
+var clearActiveSession = function(req, res) {
+  sessionService.clearActiveSession(req, res);
+};
 exports.register = function(server) {
   server.post('/backend/createSession', userAuth.appendUserInfo, validateAccess, createSession);
   server.post('/backend/import', userAuth.appendUserInfo, validateAccess, importSession);
@@ -39,4 +42,5 @@ exports.register = function(server) {
   server.get('/backend/downloadExport', userAuth.appendUserInfo, validateAccess, downloadExport);
   server.get('/backend/deleteActiveSession', userAuth.appendUserInfo, validateAccess, deleteActiveSession);
   server.get('/backend/deletePendingSession', userAuth.appendUserInfo, validateAccess, deletePendingSession);
+  server.get('/backend/clearActiveSession', userAuth.appendUserInfo, validateAccess, clearActiveSession);
 };

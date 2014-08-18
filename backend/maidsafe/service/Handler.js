@@ -48,22 +48,24 @@ exports.CreateSessionHandler = function(res) {
   };
   return this.promise;
 };
-exports.ClearPendingSessionsHandler = function(res) {
+exports.ClearActiveSessionHandler = function(res) {
   this.res = res;
-  var onSessionsCleared = function(data) {
-    res.send('');
+  var onSessionCleared = function(data) {
+    emitRefreshSessions();
+    res.send('Session Cleared');
   };
   var onError = function(err) {
     res.send(500, err.message || err);
   };
   this.promise = function(err, data) {
-    err ? onError(err) : onSessionsCleared(data);
+    err ? onError(err) : onSessionCleared(data);
   };
   return this.promise;
 };
 exports.DeleteSessionHandler = function(res) {
   this.res = res;
   var onSessionDeleted = function(data) {
+    emitRefreshSessions();
     res.send('Session Deleted');
   };
   var onError = function(err) {

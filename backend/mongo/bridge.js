@@ -135,8 +135,13 @@ exports.deleteActiveSession = function(sessionName, promise) {
 exports.deletePendingSession = function(sessionName, promise) {
   sessionInfo.deleteSession(sessionName, promise);
 };
-exports.clearSession = function(sessionName) {
+exports.clearActiveSession = function(sessionName, callback) {
   var promise = new mongoose.Promise;
+
+  if (callback) {
+    promise.addBack(callback);
+  }
+
   if (db._readyState != 1) {
     promise.error('Db Not connected');
     return promise;

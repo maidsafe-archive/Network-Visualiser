@@ -61,17 +61,50 @@ app.controller('sessionCtrl', [
       }, 5000);
     };
 
+    var caseInsensitiveCompare = function(a, b) {
+      return a.session_name.toLowerCase().localeCompare(b.session_name.toLowerCase());
+    };
+
+    var mergeAndRemoveSessions = function(a, b) {
+      var result = [];
+      while (b.length > 0) {
+        if (a.length == 0) {
+          result.push(b.shift());
+          continue;
+        }
+
+        var compareResult = caseInsensitiveCompare(a[0], b[0]);
+        if (compareResult < 0) {
+          a.shift();
+        } else if (compareResult > 0){
+          result.push(b.shift());
+        } else {
+          result.push(a.shift());
+          b.shift();
+        }
+      }
+
+      return result;
+    };
+
     var refreshCurrentSessions = function() {
       $http.get('/backend/currentSessions').then(function(result) {
-        $scope.activeSessions = result.data.filter(function(item) {
+        var newActiveSessions = result.data.filter(function(item) {
           return item.is_active;
-        });
-        $scope.pendingSessions = result.data.filter(function(item) {
+        }).sort(caseInsensitiveCompare);
+
+        var newPendingSessions = result.data.filter(function(item) {
           return !item.is_active;
-        });
+        }).sort(caseInsensitiveCompare);
+
+        var currentActiveSessions = $scope.activeSessions;
+        var currentPendingSessions = $scope.pendingSessions;
+
+        $scope.activeSessions = mergeAndRemoveSessions(currentActiveSessions, newActiveSessions);
+        $scope.pendingSessions = mergeAndRemoveSessions(currentPendingSessions, newPendingSessions);
       }, function() {
-        $scope.activeSessions = {};
-        $scope.pendingSessions = {};
+        $scope.activeSessions = [];
+        $scope.pendingSessions = [];
         $scope.setStatusAlert('No Current Sessions');
       });
     };
@@ -110,7 +143,15 @@ app.controller('sessionCtrl', [
     $scope.deleteSession = function(session) {
       session.isDeleteInProgress = true;
       var endPoint = session.is_active ? '/backend/deleteActiveSession' : '/backend/deletePendingSession';
-      $http.get(endPoint + '?sn=' + session.session_name).success(refreshCurrentSessions).error(function(errorMessage) {
+      $http.get(endPoint + '?sn=' + session.session_name).error(function(errorMessage) {
+        $scope.setStatusAlert(errorMessage);
+        session.isDeleteDialogOpen = false;
+        session.isDeleteInProgress = false;
+      });
+    };
+    $scope.clearSession = function(session) {
+      session.isDeleteInProgress = true;
+      $http.get('/backend/clearActiveSession?sn=' + session.session_name).error(function(errorMessage) {
         $scope.setStatusAlert(errorMessage);
         session.isDeleteDialogOpen = false;
         session.isDeleteInProgress = false;

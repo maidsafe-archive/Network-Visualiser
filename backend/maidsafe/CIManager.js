@@ -12,7 +12,7 @@ var checkSession = function() {
     return;
   }
 
-  bridge.clearSession(ciNightlySessionName).then(function() {
+  bridge.clearActiveSession(ciNightlySessionName).then(function() {
     lastReset = currentDate;
     Handler.refreshSessions();
     setTimeout(checkSession, timeoutDuration);
