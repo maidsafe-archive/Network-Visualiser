@@ -107,6 +107,7 @@
   width: 450px;
 }
 
+
 .toggle_import_logs {
   height: 200px;
   left: 14.6em;
@@ -247,7 +248,7 @@ button.select-file {
 
 .session_info {
   float: left;
-  width: 75%;
+  width: 40%;
 }
 
 .session_name {
@@ -309,7 +310,6 @@ button.select-file {
 
 .pending-list .session,
 .pending-list .session .session_info,
-.pending-list .session .session_name,
 .pending-list .session .session_id,
 .pending-list .session .session_created_by {
   cursor: default;
@@ -326,7 +326,7 @@ button.select-file {
 
 .actions {
   float: right;
-  padding: 0 0em;
+  padding: 0;
   position: relative;
   top: 12px;
 }
@@ -345,12 +345,11 @@ button.select-file {
 
 a.view {
   background: url('/imgs/sessions/view_icon.png') no-repeat top left;
-  display: inline-block;
+  position: relative;
   height: 21px;
   margin: 2.3em 1.2em;
   width: 37px;
-  position: absolute;
-  right: 100px;
+  float: right;
   background-size: 37px 42px;
 }
 
@@ -358,20 +357,72 @@ a.view:hover {
   background-position: bottom left;
 }
 
+a.expand-toggle {
+  background: url('/imgs/sessions/expand_icon.png') no-repeat center left;
+  width: 32px;
+  height: 7px;
+  margin: 25px 0 0 0px;
+  position: relative;
+  float: right;
+  padding: 10px 0;
+}
+
+.actions ul li {
+  display: inline-block;
+  margin:0 10px;
+
+}
+.actions ul.show-hide {
+  height: 80px;
+  position: relative;
+  float: right;
+  width: 180px;
+  overflow: hidden;
+  height: 52px;
+}
+
+ul.show-hide {
+  -webkit-transition: all ease 0.2s;
+  -moz-transition: all ease 0.2s;
+  transition: all ease 0.2s;
+  
+}
+
+ul.show-hide.ng-hide {
+  width: 0px;
+}
+
+a.arrow {
+  background: url('/imgs/sessions/arrow.png') no-repeat top left;
+  width: 14px;
+  height: 26px;
+  float:left;
+  margin-top: 25px;
+}
+a.arrow:hover {
+  background-position: bottom left;
+}
+
+a.clear {
+  background: url('/imgs/sessions/clear_icon.png') no-repeat top left; 
+  width:28px;
+  height: 25px;
+  display: block;
+}
+a.clear:hover {
+  background-position: bottom left;
+}
+
 .export-section {
-    display: inline;
+  display: block;
 }
 
 a.export {
   background: url('/imgs/sessions/export_icon.png') no-repeat top left;
-  display: inline-block;
   height: 25px;
-  margin: 2.1em 1.2em;
   width: 27px;
-  position: absolute;
-  right: 46px;
   background-size: 27px 50px;
-  cursor: pointer;
+  display: block;
 }
 
 a.export:hover {
@@ -380,13 +431,10 @@ a.export:hover {
 
 a.export-download {
   background: url('/imgs/sessions/export_download_icon.png') no-repeat top left;
-  display: inline-block;
   height: 24px;
-  margin: 2.1em 1.2em;
   width: 26px;
-  position: absolute;
-  right: 47px;
-  cursor: pointer;
+  display: block;
+  margin-left: 2px;
 }
 
 a.export-download:hover {
@@ -395,43 +443,50 @@ a.export-download:hover {
 
 a.delete {
   background: url('/imgs/sessions/delete_icon.png') no-repeat top left;
-  display: inline-block;
   height: 25px;
-  margin: 2.1em 1.2em;
   width: 18px;
   background-size: 18px 50px;
+  display: block;
 }
 
 a.delete:hover {
   background-position: bottom left;
 }
 
-.pending-list .confirm-delete {left: -114px;}
+
+.pending-list a.delete {
+  position: relative;
+  top: 26px;
+  margin-right: 15px;
+}
+
+.pending-list .confirm-dialog {
+  right: -15px;
+  top: -18px;
+}
 
 .pending-list .export,
 .pending-list .export-download { display: none;}
 
 .pending-list .list-loader { display: none;}
 
-.confirm-delete {
+.confirm-dialog {
   border: 1px solid #dcdcdc;
   background: #fff;
-  padding: 28px 12px 29px;
+  padding: 28px 50px;
   width: 150px;
   text-align: center;
   position: absolute;
-  top: -19px;
-  left: -112px;
-  clear: both;
+  top: -18px;
+  right: -15px;
   min-height: 54px;
+  z-index: 5000;
 }
 
-.confirm-delete p {
+.confirm-dialog p {
   margin: 0;
   padding: 0;
 }
-
-
 
 a.yes-btn {
   padding: 5px 0px;
@@ -542,8 +597,9 @@ footer button {
   height: 4em;
   float: left;
   display: block;
-  right: 27px;
-  top: 10px;
+  right: 0px;
+  top: -3px;
+
 }
 .export-loader:before,
 .export-loader:after {
@@ -556,7 +612,8 @@ footer button {
 }
 .export-loader {
   text-indent: -9999em;
-  margin: 5em auto;
+  margin-right: 11px;
+  margin-left: 12px;
   position: relative;
   font-size: 4px;
   -webkit-animation-delay: -0.16s;
@@ -569,9 +626,9 @@ footer button {
 }
 
 
-.delete-progress-loader,
-.delete-progress-loader:before,
-.delete-progress-loader:after {
+.dialog-progress-loader,
+.dialog-progress-loader:before,
+.dialog-progress-loader:after {
   background: #87B7EC;
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
@@ -582,16 +639,16 @@ footer button {
   left: 73px;
   top: 20px;
 }
-.delete-progress-loader:before,
-.delete-progress-loader:after {
+.dialog-progress-loader:before,
+.dialog-progress-loader:after {
   position: absolute;
   top: 0;
   content: '';
 }
-.delete-progress-loader:before {
+.dialog-progress-loader:before {
   left: -1.5em;
 }
-.delete-progress-loader {
+.dialog-progress-loader {
   text-indent: -9999em;
   margin: 0em auto;
   position: relative;
@@ -599,8 +656,10 @@ footer button {
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
 }
-.delete-progress-loader:after {
+.dialog-progress-loader:after {
   left: 1.5em;
   -webkit-animation-delay: -0.32s;
   animation-delay: -0.32s;
 }
+
+

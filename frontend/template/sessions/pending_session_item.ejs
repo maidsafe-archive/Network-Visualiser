@@ -1,0 +1,33 @@
+<div class="session">
+  <div class="session-wrapper">
+    <ul>
+      <li>
+        <div class="session_info">
+          <input ng-value="session.session_name" ng-click="openViewer(session.session_name)" class="session_name" readonly >
+<% if (userInfo.isAuthenticated) { %>
+          <input class="session_created_by" ng-value="session.created_by" readonly>
+          <input ng-value="session.session_id" class="session_id" readonly>
+ <% } %>
+        </div>
+        <div class="actions">
+<% if (userInfo.isAuthenticated) { %>          
+          <a href="" class="delete"
+              ng-click="session.isDeleteDialogOpen = !session.isDeleteDialogOpen || false"
+              ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by"></a>
+          <div class="confirm-dialog" ng-if="session.isDeleteDialogOpen">
+            <div ng-if="!session.isDeleteInProgress">
+              <p>Are you sure?</p>
+              <a href="" class="yes-btn" ng-click="deleteSession(session)">Yes</a>
+              <a href="" class="no-btn" ng-click="session.isDeleteDialogOpen = false">No</a>
+            </div>
+            <div class="dialog-progress" ng-if="session.isDeleteInProgress">
+              <p>Deleting Session</p>
+              <div class="dialog-progress-loader"></div>
+            </div>
+          </div>                   
+<% } %>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
