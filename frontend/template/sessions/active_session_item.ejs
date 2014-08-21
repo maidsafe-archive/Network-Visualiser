@@ -22,21 +22,22 @@
                 <a href="" class="export-download" ng-click="onDownloadExportClicked(session.session_name)" ng-show="exportStatus[session.session_name].status == 'download'"></a>
               </div>
             </li>
-            <li><a href="" class="clear" ng-click="clearSession(session)"></a></li>
+            <!--<li><a href="" class="clear" ng-click="clearSession(session)"></a></li>-->
+            <li><a href="" class="clear" ng-click="session.confirmAction = 'clear'; session.isConfirmDialogOpen = true"></a></li>
             <li>
               <a href="" class="delete"
-              ng-click="session.isDeleteDialogOpen = !session.isDeleteDialogOpen || false"
+              ng-click="session.confirmAction = 'delete'; session.isConfirmDialogOpen = true"
               ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by"></a>              
             </li>
           </ul>
-          <div class="confirm-dialog" ng-if="session.isDeleteDialogOpen">
-            <div ng-if="!session.isDeleteInProgress">
-              <p>Are you sure?</p>
-              <a href="" class="yes-btn" ng-click="deleteSession(session)">Yes</a>
-              <a href="" class="no-btn" ng-click="session.isDeleteDialogOpen = false">No</a>
+          <div class="confirm-dialog" ng-if="session.isConfirmDialogOpen">
+            <div ng-if="!session.isConfirmInProgress">
+              <p>{{(session.confirmAction === 'delete' ? 'Delete : ' : 'Clear : ') + 'Are you sure?'}}</p>
+              <a href="" class="yes-btn" ng-click="session.confirmAction === 'delete' ? deleteSession(session) : clearSession(session)">Yes</a>
+              <a href="" class="no-btn" ng-click="session.isConfirmDialogOpen = false">No</a>
             </div>
-            <div class="dialog-progress" ng-if="session.isDeleteInProgress">
-              <p>Deleting Session</p>
+            <div class="dialog-progress" ng-if="session.isConfirmInProgress">
+              <p>{{(session.confirmAction === 'delete' ? 'Deleting ' : 'Clearing ') + 'Session'}}</p>
               <div class="dialog-progress-loader"></div>
             </div>
           </div>                   

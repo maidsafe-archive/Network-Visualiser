@@ -509,6 +509,7 @@ footer {
   min-width: 1150px;
   position: fixed;
   width: 100%;
+  z-index: 30000;
 }
 
 footer div.status {

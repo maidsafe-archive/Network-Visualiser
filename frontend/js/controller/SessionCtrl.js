@@ -141,20 +141,20 @@ app.controller('sessionCtrl', [
       window.location.href = "/viewer#?sn=" + sessionName;
     };
     $scope.deleteSession = function(session) {
-      session.isDeleteInProgress = true;
+      session.isConfirmInProgress = true;
       var endPoint = session.is_active ? '/backend/deleteActiveSession' : '/backend/deletePendingSession';
       $http.get(endPoint + '?sn=' + session.session_name).error(function(errorMessage) {
         $scope.setStatusAlert(errorMessage);
-        session.isDeleteDialogOpen = false;
-        session.isDeleteInProgress = false;
+        session.isConfirmDialogOpen = false;
+        session.isConfirmInProgress = false;
       });
     };
     $scope.clearSession = function(session) {
-      session.isDeleteInProgress = true;
+      session.isConfirmInProgress = true;
       $http.get('/backend/clearActiveSession?sn=' + session.session_name).error(function(errorMessage) {
         $scope.setStatusAlert(errorMessage);
-        session.isDeleteDialogOpen = false;
-        session.isDeleteInProgress = false;
+        session.isConfirmDialogOpen = false;
+        session.isConfirmInProgress = false;
       });
     };
     $scope.onCreateSessionTabClicked = function() {
