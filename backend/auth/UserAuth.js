@@ -1,5 +1,6 @@
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var GitHubStrategy = require('passport-github').Strategy;
 var fs = require('fs');
 var path = require('path');
 
@@ -21,17 +22,25 @@ exports.initAuth = function(mailerCallback) {
   gAuth = JSON.parse(fileContent);
 
   passport.use(new GoogleStrategy({
-      clientID: gAuth.CLIENT_ID,
-      clientSecret: gAuth.CLIENT_SECRET,
-      callbackURL: gAuth.CALLBACK
+      clientID: gAuth.GOOGLE.CLIENT_ID,
+      clientSecret: gAuth.GOOGLE.CLIENT_SECRET,
+      callbackURL: gAuth.GOOGLE.CALLBACK
     },
     function(accessToken, refreshToken, profile, done) {
-      // asynchronous verification, for effect...
       process.nextTick(function() {
+        return done(null, { email: profile._json.email });
+      });
+    }
+  ));
 
-        // The user's Google profile is returned to
-        // represent the logged-in user.
-        return done(null, profile);
+  passport.use(new GitHubStrategy({
+      clientID: gAuth.GITHUB.CLIENT_ID,
+      clientSecret: gAuth.GITHUB.CLIENT_SECRET,
+      callbackURL: gAuth.GITHUB.CALLBACK
+    },
+    function(accessToken, refreshToken, profile, done) {
+      process.nextTick(function() {
+        return done(null, { email: profile._json.login + '@github' });
       });
     }
   ));
@@ -72,7 +81,7 @@ var setUserInfo = function(req, res, next) {
       mailAddress: 'debug.mail@maidsafe.net'
     };
   } else if (req.isAuthenticated()) {
-    var mailId = req.user._json.email;
+    var mailId = req.user.email;
     if (mailId.indexOf(gAuth.MAIDSAFE_USER) > 0) {
       userInfo = {
         isAuthenticated: true,
@@ -118,7 +127,16 @@ exports.setupAuthCallbacks = function(server) {
     // function will not be called.
   });
 
+  server.get('/auth/github', passport.authenticate('github'), function(req, res) {
+    // The request will be redirected to Github for authentication, so this
+    // function will not be called.
+  });
+
   server.get('/googlecallback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
+    res.redirect('/auth');
+  });
+
+  server.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
     res.redirect('/auth');
   });
 };
