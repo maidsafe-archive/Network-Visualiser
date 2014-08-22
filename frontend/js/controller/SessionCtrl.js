@@ -8,11 +8,12 @@ app.run([
 
 app.directive('fileDialog', FileDialog);
 app.directive('clipCopy', ClipCopy);
+app.directive('batD3', D3);
 app.service('socketService', SocketService);
 
 app.controller('sessionCtrl', [
   '$scope', '$window', '$http', '$upload', 'socketService', function($scope, $window, $http, $upload, socketService) {
-
+    $scope.deps = '';
     $scope.userInfo = {};
     $scope.activeSessions = [];
     $scope.pendingSessions = [];
@@ -161,7 +162,8 @@ app.controller('sessionCtrl', [
       });
     };
     $scope.onCreateSessionTabClicked = function() {
-      if ($scope.importTab.isOpen) {
+      $scope.deps = JSON.parse('[{"name":"Node-A","imports":["Node-B","Node-C","Node-D","Node-G"]},{"name":"Node-E","imports":["Node-F","Node-G","Node-C"]},{"name":"Node-H","imports":["Node-F","Node-G"]},{"name":"Node-I","imports":["Node-F","Node-G","Node-L"]},{"name":"Node-J","imports":["Node-F","Node-G"]},{"name":"Node-K","imports":["Node-F","Node-G"]},{"name":"Node-L","imports":["Node-M","Node-D"]}]');
+      /*if ($scope.importTab.isOpen) {
         $scope.onImportSessionTabClicked();
       }
 
@@ -172,7 +174,7 @@ app.controller('sessionCtrl', [
         $scope.createTab.sessionName = '';
         $scope.createTab.errorMessage = '';
         $scope.createSessionForm.$setPristine();
-      }
+      }*/
     };
 
     $scope.onExportSessionClicked = function(sessionName) {

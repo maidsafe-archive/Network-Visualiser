@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="css/app.css">
     <link rel="stylesheet" type="text/css" href="css/fonts.css">
     <link rel="stylesheet" type="text/css" href="css/sessions.css">
+    <link rel="stylesheet" type="text/css" href="css/d3.css">
 
     <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="components/angular/angular.min.js"></script>
@@ -13,9 +14,11 @@
     <script type="text/javascript" src="components/ng-file-upload/angular-file-upload.js"></script>
     <script type="text/javascript" src="components/ng-file-upload/angular-file-upload-shim.js"></script>
 
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="js/service/SocketService.js"></script>
     <script type="text/javascript" src="js/directive/clipcopy.js"></script>
     <script type="text/javascript" src="js/directive/filedialog.js"></script>
+    <script type="text/javascript" src="js/directive/d3.js"></script>
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
     <script type="text/javascript" src="js/controller/SessionCtrl.js"></script>
 
@@ -29,7 +32,8 @@
       <% include template/sessions/header.ejs %>
     </header>
     <section>
-      <div class="wrapper active-list">
+      <bat-d3 val="deps"></bat-d3>
+<!--      <div class="wrapper active-list">
         <div class="list-header">
           <h2>Active Sessions</h2>
           <div class="session-count-label">{{activeSessions.length ? activeSessions.length : 0}}</div>
@@ -46,7 +50,7 @@
         <div ng-repeat="session in pendingSessions">
           <% include template/sessions/pending_session_item.ejs %>
         </div>
-      </div>
+      </div>-->
     </section>
     <footer>
       <% include template/sessions/footer.ejs %>
