@@ -132,6 +132,14 @@ header ul li a {
   text-decoration: none;
 }
 
+.sign-in-text {
+  display: inline-block;
+  float: left;
+  margin: 6px 14px 0 0;
+  font-size: 14px;
+  color: #fff;
+}
+
 .top-header {
   background: #3476be;
   height: 25px;
@@ -208,6 +216,28 @@ button.sign-in a {padding: 5px 40px 5px 40px; display: block}
 button.sign-in a { color: #29578A; }
 
 button.sign-in:hover a { color: #fff; }
+
+button.sign-in-google {
+  background: url('/imgs/signin_google_icon.png') no-repeat top left;
+}
+
+button.sign-in-github {
+  background: url('/imgs/signin_github_icon.png') no-repeat top left;
+  
+}
+
+button.sign-in-google,
+button.sign-in-github {
+  display: block;
+  width: 34px!important;
+  height: 34px;
+  margin-right: 10px;
+}
+
+button.sign-in-google:hover,
+button.sign-in-github:hover {
+  background-position: bottom left;
+}
 
 
 ul.zoom-control {margin: 3px 0 0 0;}

@@ -10,8 +10,12 @@
     <button ng-click="onImportSessionTabClicked();$event.stopPropagation();" class="import-logs" ng-class="{true:'active'}[importTab.isOpen]">Import</button>
   </li>
 <% } else { %>
+<span class="sign-in-text">Sign in</span>
   <li>
-    <button class="sign-in" ng-click="onSignInClicked()">Sign In</button>
+    <button class="sign-in-google" ng-click="onGoogleSignInClicked()"></button>
+  </li>
+  <li>
+    <button class="sign-in-github" ng-click="onGitHubSignInClicked()"></button>
   </li>
 <% } %>
 </ul>

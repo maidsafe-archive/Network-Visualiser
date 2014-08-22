@@ -130,10 +130,13 @@ app.controller('sessionCtrl', [
         };
       }
     };
-
-    $scope.onSignInClicked = function() {
+    
+    $scope.onGoogleSignInClicked = function() {
       window.location.href = "/auth/google";
     };
+    $scope.onGitHubSignInClicked = function() {
+      window.location.href = "/auth/github";
+    }; 
     $scope.testnetStatus = function() {
       window.open('/testnet-status', '_blank').focus();
     };
