@@ -139,4 +139,9 @@ exports.setupAuthCallbacks = function(server) {
   server.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
     res.redirect('/auth');
   });
+
+  server.get('/auth/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
 };
