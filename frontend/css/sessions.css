@@ -273,6 +273,8 @@ button.select-file {
   cursor: pointer;
 }
 
+.logged-out-margin {margin-top: 22px;}
+
 .session_id {
   padding: 0px;
   height: 20px;
@@ -380,7 +382,6 @@ a.delete:hover { background-position: bottom left;}
   height: 80px;
   position: relative;
   float: right;
-  width: 180px;
   overflow: hidden;
   height: 52px;
 }

@@ -3,7 +3,8 @@
     <ul>
       <li>
         <div class="session_info">
-          <input ng-value="session.session_name" ng-click="openViewer(session.session_name)" class="session_name" readonly >
+          <input ng-value="session.session_name" ng-click="openViewer(session.session_name)" class="session_name"
+          ng-class="{true:'logged-out-margin'}[!userInfo.isAuthenticated]" readonly >
 <% if (userInfo.isAuthenticated) { %>
           <input class="session_created_by" ng-value="session.created_by" readonly>
           <input ng-value="session.session_id" class="session_id" readonly>
@@ -22,12 +23,13 @@
                 <a href="" class="export-download" ng-click="onDownloadExportClicked(session.session_name)" ng-show="exportStatus[session.session_name].status == 'download'"></a>
               </div>
             </li>
-            <!--<li><a href="" class="clear" ng-click="clearSession(session)"></a></li>-->
-            <li><a href="" class="clear" ng-click="session.confirmAction = 'clear'; session.isConfirmDialogOpen = true"></a></li>
-            <li>
+            <li ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by">
+              <a href="" class="clear" 
+              ng-click="session.confirmAction = 'clear'; session.isConfirmDialogOpen = true"></a>
+            </li>
+            <li ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by">
               <a href="" class="delete"
-              ng-click="session.confirmAction = 'delete'; session.isConfirmDialogOpen = true"
-              ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by"></a>              
+              ng-click="session.confirmAction = 'delete'; session.isConfirmDialogOpen = true"></a>              
             </li>
           </ul>
           <div class="confirm-dialog" ng-if="session.isConfirmDialogOpen">
