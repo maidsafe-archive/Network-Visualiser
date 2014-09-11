@@ -1,6 +1,8 @@
 {
   "excludeFiles" : ["coverage", "node_modules", "bower_components"],
   "preset": "google",
-  "validateIndentation": null,
-  "maximumLineLength":150
+  "validateIndentation": 2,
+  "maximumLineLength":150,
+  "requireCommaBeforeLineBreak" : true,
+  "requireCamelCaseOrUpperCaseIdentifiers" : true
 }

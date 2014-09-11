@@ -5,12 +5,12 @@ var getParser = function(coverageResult) {
   var watch = false;
   var keys = ['statement', 'branches', 'functions', 'lines'];
   var counter = 0;
-	return new htmlParser.Parser({
-		onopentag: function(name, attribs) {
+  return new htmlParser.Parser({
+    onopentag: function(name, attribs) {
       if (name === 'h2') {
         watch = true;
       }
-		},
+    },
     ontext: function(text) {
       if (watch && text.indexOf('%') > -1) {
         text = text.trim();
@@ -20,7 +20,7 @@ var getParser = function(coverageResult) {
     },
     onclosetag: function(tagname) {
       if (tagname === 'h2') {
-				watch = false;
+        watch = false;
       }
     }
   });
@@ -28,29 +28,31 @@ var getParser = function(coverageResult) {
 
 var parseCoverageResult = function(coverageResult, rootFolder, callback) {
   var parser = getParser(coverageResult);
-  fs.readFile(rootFolder + '/lcov-report/index.html', {encoding : 'utf-8'}, function(err, data) {
-		if (err) {
-			console.log(err);
-			callback(err);
-		} else {
-			parser.write(data);
-			parser.end();
-			callback();
-		}
-	});
+  var fileReadCallBack = function(err, data) {
+    if (err) {
+      console.log(err);
+      callback(err);
+    } else {
+      parser.write(data);
+      parser.end();
+      callback();
+    }
+  }
+  fs.readFile(rootFolder + '/lcov-report/index.html', {encoding : 'utf-8'}, fileReadCallBack);
 }
 
 var praseTestResult = function(testResult, rootFolder, callback) {
-	fs.readFile(rootFolder + '/results.json', {encoding : 'utf-8'}, function(err, data) {
+  var fileCb = function(err, data) {
     if (err) {
       callback(err);
     }
-    var stats = JSON.parse(data.split('=')[0]).stats
+    var stats = JSON.parse(data.split('=')[0]).stats;
     for (var key in stats) {
       testResult[key] = stats[key];
     }
     callback();
-  });
+  }
+  fs.readFile(rootFolder + '/results.json', {encoding : 'utf-8'}, fileCb);
 }
 
 exports.getCoverageResult = parseCoverageResult

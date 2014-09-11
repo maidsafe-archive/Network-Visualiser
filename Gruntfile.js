@@ -44,7 +44,7 @@ module.exports = function(grunt) {
       test: [CI_CONFIG.publishedFolder]
     },
     mkdir : {
-       test : {
+      test : {
         options: {
           create: [CI_CONFIG.publishedFolder]
         }
