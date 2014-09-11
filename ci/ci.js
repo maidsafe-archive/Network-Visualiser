@@ -60,6 +60,8 @@ var CIWorkflow = function(grunt, callback) {
 var onCoverageCompleted = function(err, stdout, stderr, callback) {//Needs to be refactored
 	if (config.scpBranchPath.hasOwnProperty(gitBranchName)) {
 			CIWorkflow(grunt, callback)
+	} else {
+		callback();
 	}
 }
 var setGitBranch = function(err, stdout, stderr, callback) {

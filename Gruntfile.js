@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
   var CI_CONFIG = {
     publishedFolder : 'coverage',
-    scpBranchPath : {master : 'temp', next : 'temp_next', "maid-209":"temp_next"},
+    scpBranchPath : {master : 'temp', next : 'temp_next', "maid-209" : "temp_next"},
     jsonReportFileName : 'results.json',
     jscsReportFileName : 'jscs.txt'
   }
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     shell : {
       test : {
-        command: ISTANBUL_COMMAND + '-R mocha-unfunk-reporter'
+        command: ISTANBUL_COMMAND + ' -u tdd -R mocha-unfunk-reporter'
       },
       jscs : {
         command:'jscs . -r text > ' + CI_CONFIG.publishedFolder + '/' + CI_CONFIG.jscsReportFileName,
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
         }
       },
       ci : {
-        command : ISTANBUL_COMMAND + '-R json-cov > ' + CI_CONFIG.publishedFolder + '/' + CI_CONFIG.jsonReportFileName,
+        command : ISTANBUL_COMMAND + ' -u tdd -R json-cov > ' + CI_CONFIG.publishedFolder + '/' + CI_CONFIG.jsonReportFileName,
         options : {
           callback : ci.coverageCompleted
         }
