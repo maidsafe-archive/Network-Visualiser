@@ -3,10 +3,11 @@
   "version":"0.2.2",
   "description":"Network Visualiser to monitor vaults",
   "author":"MaidSafe",
-  "dependencies":{
-
+  "scripts":{
+    "test" : "grunt test",
+    "ci" : "grunt ci"
   },
-  "devDependencies":{
+  "dependencies":{
     "express":"3.x",
     "mongoose":"3.8.x",
     "connect-mongo":"0.4.x",
@@ -23,5 +24,18 @@
     "passport-github":"latest",
     "archiver":"latest",
     "nodemailer":"latest"
+  },
+  "devDependencies":{
+    "grunt-cli": "^0.1.13",
+    "grunt": "^0.4.5",
+    "mocha": "^1.21.4",
+    "istanbul": "^0.3.2",
+    "mocha-unfunk-reporter": "^0.4.0",
+    "grunt-shell": "^1.1.1",
+    "htmlparser2": "^3.7.3",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-mkdir": "^0.1.2",
+    "grunt-env": "^0.4.1",
+    "jscs": "^1.6.1"
   }
 }
