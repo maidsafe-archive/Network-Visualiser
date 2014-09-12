@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
   var CI_CONFIG = {
     publishedFolder : 'coverage',
-    scpBranchPath : {master : 'pod/apps/network_visualiser/frontend/test_results', next : 'pod/apps/network_visualiser_next/frontend/test_results'},
+    scpBranchPath : {master : 'pod/apps/network_visualiser', next : 'pod/apps/network_visualiser_next'},
     jsonReportFileName : 'results.json',
     jscsReportFileName : 'jscs.txt'
   };
