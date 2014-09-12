@@ -24,7 +24,7 @@ var getParser = function(coverageResult) {
       }
     }
   });
-}
+};
 
 var parseCoverageResult = function(coverageResult, rootFolder, callback) {
   var parser = getParser(coverageResult);
@@ -37,11 +37,11 @@ var parseCoverageResult = function(coverageResult, rootFolder, callback) {
       parser.end();
       callback();
     }
-  }
+  };
   fs.readFile(rootFolder + '/lcov-report/index.html', {encoding : 'utf-8'}, fileReadCallBack);
-}
+};
 
-var praseTestResult = function(testResult, rootFolder, callback) {
+var parseTestResult = function(testResult, rootFolder, callback) {
   var fileCb = function(err, data) {
     if (err) {
       callback(err);
@@ -51,9 +51,9 @@ var praseTestResult = function(testResult, rootFolder, callback) {
       testResult[key] = stats[key];
     }
     callback();
-  }
+  };
   fs.readFile(rootFolder + '/results.json', {encoding : 'utf-8'}, fileCb);
-}
+};
 
-exports.getCoverageResult = parseCoverageResult
-exports.getTestResult = praseTestResult
+exports.getCoverageResult = parseCoverageResult;
+exports.getTestResult = parseTestResult;

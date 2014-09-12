@@ -1,5 +1,5 @@
 {
-  "excludeFiles" : ["coverage", "node_modules", "bower_components"],
+  "excludeFiles" : ["coverage", "node_modules", "frontend/components", "frontend", "backend", "server.js", "Config.js"],
   "preset": "google",
   "validateIndentation": 2,
   "maximumLineLength":150,
