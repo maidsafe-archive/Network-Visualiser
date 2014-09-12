@@ -17,7 +17,7 @@ var jshintCompleted = function(err, stdout, stderr, callback) {
     linterPassed = false;
   }
   callback();
-}; 
+};
 
 var CIWorkflow = function(grunt, callback) {
   var coverageResult = {};
@@ -29,7 +29,7 @@ var CIWorkflow = function(grunt, callback) {
   var consolidateResults = function() {
     var coverage = function(callback) {
       resultBuilder.getCoverageResult(coverageResult, config.publishedFolder, callback);
-    };    
+    };
     var test = function(callback) {
       resultBuilder.getTestResult(testResult, config.publishedFolder, callback);
     };

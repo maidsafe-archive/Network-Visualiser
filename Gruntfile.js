@@ -59,11 +59,11 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-contrib-clean');  
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-mkdir');
 
   ci.init(grunt, CI_CONFIG);
-  
+
   grunt.registerTask('test', ['clean:test', 'mkdir:test', 'shell:jscs', 'shell:jshint', 'shell:test']);
   grunt.registerTask('ci', ['shell:gitBranch', 'clean:test', 'mkdir:test', 'shell:jscs', 'shell:jshint', 'shell:ci', 'shell:test']);
 };
