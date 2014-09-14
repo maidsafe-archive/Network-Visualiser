@@ -46,7 +46,7 @@ var CIWorkflow = function(grunt, callback) {
     var test = function(callback) {
       badgeBuilder.saveTestSatusBadge(testResult, linterPassed, config.publishedFolder, callback);
     };
-    async.each([coverage, test], asnycIterator, scp);
+    async.each([coverage, test], asyncIterator, scp);
   };
 
   var scp = function() {
