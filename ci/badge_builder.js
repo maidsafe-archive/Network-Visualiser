@@ -2,7 +2,7 @@ var fs = require('fs');
 var util = require('util');
 var http = require('http');
 var TEST_STATUS_BADGE_LABEL = 'Tests Status';
-var COVERAGE_STATUS_BADGE_LABEL = 'Tests Status';
+var COVERAGE_STATUS_BADGE_LABEL = 'Coverage';
 
 var ImageDownloadHelper = function(filePath, callback) {
   var self = this;
