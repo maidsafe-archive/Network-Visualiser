@@ -9,7 +9,7 @@ var config = require('./../../Config.js');
 var utils = require('./../maidsafe/utils.js');
 
 exports.setupMongooseConnection = function(callback, path) {
-  mongoose.connect(path || config.Constants.mongo_con);
+  mongoose.connect(path || config.Constants.mongoCon);
   db = mongoose.connection;
   db.on('error', function(){
     callback(false);

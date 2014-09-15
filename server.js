@@ -15,8 +15,9 @@ var socketPort = config.Constants.socketPort;
 
 var app = express();
 
-if(process.env.PORT == config.Constants.nextBranchPort){
-  config.updateConstantsForNextBranch()
+if(process.env.PORT == config.Constants.nextBranchConfig.serverPort){
+  serverPort = process.env.PORT;
+  config.updateConstantsForNextBranch();
 }
 
 bridge.setupMongooseConnection(function() {

@@ -1,5 +1,5 @@
 var constants = {
-  mongo_con: 'mongodb://localhost:27017/maidsafe_logs',
+  mongoCon: 'mongodb://localhost:27017/maidsafe_logs',
   projectRootDir: __dirname,
   authPath: '../../../auth/master/gauth.json',
   sanityCheckerDir: '../../../testnet_status_monitor/master',
@@ -10,12 +10,19 @@ var constants = {
   minLengthForDecode: 6,
   persona_na: 10,
   action_network_health: '17',
-  nextBranchPort : 9080
+  nextBranchConfig : {
+    serverPort : 9080,
+    socketPort : 9081,
+    authPath: '../../../auth/next/gauth.json',
+    sanityCheckerDir: '../../../testnet_status_monitor/next',
+  }
 }
 
 exports.updateConstantsForNextBranch = function(){
-  constants.mongo_con += "_next";
-  constants.serverPort =  constants.nextBranchPort;
+  constants.mongoCon += "_next";
+  for(var key in constants.nextBranchConfig){
+    constants[key] = constants.nextBranchConfig[key];
+  }
 }
 
 exports.Constants = constants;

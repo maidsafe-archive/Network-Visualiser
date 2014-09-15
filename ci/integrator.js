@@ -8,7 +8,6 @@ var config = null;
 
 var codeStyleTestCompleted = function(err, stdout, stderr, callback) {
   linterPassed = err ? false : true;
-  console.log('******** JSCS ******* ' + linterPassed);
   callback();
 };
 
@@ -41,10 +40,10 @@ var CIWorkflow = function(grunt, callback) {
       throw err;
     }
     var coverage = function(callback) {
-      badgeBuilder.saveCoverageSatusBadge(coverageResult, config.publishedFolder + '/lcovreport', callback);
+      badgeBuilder.saveCoverageSatusBadge(coverageResult, config.publishedFolder + '/lcov-report', callback);
     };
     var test = function(callback) {
-      badgeBuilder.saveTestSatusBadge(testResult, linterPassed, config.publishedFolder  + '/lcovreport', callback);
+      badgeBuilder.saveTestSatusBadge(testResult, linterPassed, config.publishedFolder  + '/lcov-report', callback);
     };
     async.each([coverage, test], asyncIterator, scp);
   };

@@ -12,7 +12,6 @@ var ImageDownloadHelper = function(filePath, callback) {
       if (err) {
         throw err;
       }
-      console.log('Generated ' + filePath);
       if (callback) {
         callback();
       }
@@ -26,6 +25,7 @@ var ImageDownloadHelper = function(filePath, callback) {
 
     res.on('end', function() {
       fs.writeFile(filePath, imagedata, 'binary', fileWriter);
+      console.log('Generated ' + filePath);
     });
   };
   return self;
@@ -50,7 +50,7 @@ var getBadgeColor = function(percentage) {
 var getPayload = function(text, status, color) {
   return {
     host: 'img.shields.io',
-    path : util.format('/badge/%s-%s-%s.svg', text, status, color)
+    path : util.format('/badge/%s-%s-%s.svg', encodeURIComponent(text), status, color)
   };
 };
 
@@ -69,8 +69,8 @@ var CoverageBadgeFactory = function(coverageResult, rootFolder, callback) {
     factory.imageDownload.callback = cb;
   };
 
-  factory.status = (total / 4).toFixed(2) + '%';
-  factory.color = getBadgeColor(factory.status);
+  status = (total / 4).toFixed(2) + '%';
+  color = getBadgeColor(status);
 
   factory.generate = function() {
     http.request(getPayload(COVERAGE_STATUS_BADGE_LABEL, status, color), imageDownloadHelper.save).end();
@@ -83,7 +83,7 @@ var TestBadgeFactory = function(testResult, jscsPassed, rootFolder, callback) {
   var factory = this;
   testResult.tests += 1;//For adding the JSCS test
   testResult.passes += jscsPassed ? 1 : 0;
-  var status =  testResult.passes + '/' + testResult.tests + '%';
+  var status =  testResult.passes + '/' + testResult.tests;
   var color = getBadgeColor((testResult.passes / testResult.tests) * 100);
   var imageDownloadHelper = new ImageDownloadHelper(rootFolder + '/test_status.svg', callback);
   factory.generate = function() {
