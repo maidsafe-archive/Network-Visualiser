@@ -41,10 +41,10 @@ var CIWorkflow = function(grunt, callback) {
       throw err;
     }
     var coverage = function(callback) {
-      badgeBuilder.saveCoverageSatusBadge(coverageResult, config.publishedFolder, callback);
+      badgeBuilder.saveCoverageSatusBadge(coverageResult, config.publishedFolder + '/lcovreport', callback);
     };
     var test = function(callback) {
-      badgeBuilder.saveTestSatusBadge(testResult, linterPassed, config.publishedFolder, callback);
+      badgeBuilder.saveTestSatusBadge(testResult, linterPassed, config.publishedFolder  + '/lcovreport', callback);
     };
     async.each([coverage, test], asyncIterator, scp);
   };

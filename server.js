@@ -15,6 +15,10 @@ var socketPort = config.Constants.socketPort;
 
 var app = express();
 
+if(process.env.PORT == config.Constants.nextBranchPort){
+  config.updateConstantsForNextBranch()
+}
+
 bridge.setupMongooseConnection(function() {
   app.set('needsAuth', userAuth.initAuth(testnetStatusManager.mailerInit));
   app.set('views', __dirname + '/frontend');
