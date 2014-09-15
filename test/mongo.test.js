@@ -1,6 +1,6 @@
 var assert = require('assert');
 var bridge = require('../backend/mongo/bridge');
-var config = require('../config');
+var config = require('../Config');
 
 suite('MongoDB Test Suite', function() {
 
