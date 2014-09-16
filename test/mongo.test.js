@@ -1,3 +1,5 @@
+/*jshint expr: true*/
+
 var assert = require('assert');
 var bridge = require('../backend/mongo/bridge');
 var should = require('should');

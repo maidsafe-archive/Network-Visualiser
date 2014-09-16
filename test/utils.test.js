@@ -1,3 +1,5 @@
+/*jshint expr: true*/
+
 var assert =  require('assert');
 var should = require('should');
 var utils = require('../backend/maidsafe/utils');
