@@ -9,20 +9,24 @@ var config = require('./../../Config.js');
 var utils = require('./../maidsafe/utils.js');
 
 exports.setupMongooseConnection = function(callback, path) {
-  mongoose.connect(path || config.Constants.mongoCon);
-  db = mongoose.connection;
-  db.on('error', function(){
-    callback(false);
-    console.error.bind(console, 'connection error:');
-  });
-  db.once('open', function() {
+  mongoose.connect(path || config.Constants.mongoCon, function(connectionError) {
+    if (connectionError) {      
+      callback(connectionError);
+      return;
+    }
+
+    db = mongoose.connection;
+    db.on('error', function(){
+      console.error.bind(console, 'connection error:');
+    });
+
     console.log('Mongodb connected successfully');
-    callback(true);
     vaultLog = logManager.getManager(db);
     vaultInfo = vaultInfo.VaultMetaData(db);
     sessionInfo = sessionInfo.SessionMetaData(db);
     testnetStatus = testnetStatus.TestnetStatusInfo(db);
     dbUtils = dbUtils.getDBUtil(db);
+    callback();
   });
 };
 

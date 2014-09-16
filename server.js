@@ -10,15 +10,14 @@ var sessionController = require('./backend/maidsafe/SessionController.js');
 var testnetStatusManager = require('./backend/maidsafe/TestnetStatusManager.js');
 var ciManager = require('./backend/maidsafe/CIManager.js');
 var config = require('./Config.js');
-var serverPort = config.Constants.serverPort;
-var socketPort = config.Constants.socketPort;
 
-var app = express();
-
-if(process.env.PORT == config.Constants.nextBranchConfig.serverPort){
-  serverPort = process.env.PORT;
+if(process.env.PORT == config.Constants.nextBranchConfig.serverPort) {
   config.updateConstantsForNextBranch();
 }
+
+var serverPort = config.Constants.serverPort;
+var socketPort = config.Constants.socketPort;
+var app = express();
 
 bridge.setupMongooseConnection(function() {
   app.set('needsAuth', userAuth.initAuth(testnetStatusManager.mailerInit));

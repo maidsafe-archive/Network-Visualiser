@@ -37,6 +37,7 @@
     "grunt-mkdir": "^0.1.2",
     "grunt-env": "^0.4.1",
     "jscs": "^1.6.1",
-    "jshint": "^2.5.5"
+    "jshint": "^2.5.5",
+    "should": "^4.0.4"
   }
 }

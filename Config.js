@@ -14,7 +14,7 @@ var constants = {
     serverPort : 9080,
     socketPort : 9081,
     authPath: '../../../auth/next/gauth.json',
-    sanityCheckerDir: '../../../testnet_status_monitor/next',
+    sanityCheckerDir: '../../../testnet_status_monitor/next'
   }
 }
 
