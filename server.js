@@ -10,9 +10,13 @@ var sessionController = require('./backend/maidsafe/SessionController.js');
 var testnetStatusManager = require('./backend/maidsafe/TestnetStatusManager.js');
 var ciManager = require('./backend/maidsafe/CIManager.js');
 var config = require('./Config.js');
+
+if(process.env.PORT == config.Constants.nextBranchConfig.serverPort) {
+  config.updateConstantsForNextBranch();
+}
+
 var serverPort = config.Constants.serverPort;
 var socketPort = config.Constants.socketPort;
-
 var app = express();
 
 bridge.setupMongooseConnection(function() {
