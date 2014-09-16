@@ -36,6 +36,7 @@ var CIWorkflow = function(grunt, callback) {
   };
 
   var generateBadges = function(err) {
+    console.log('Badge Generation Begins')
     if (err) {
       throw err;
     }
