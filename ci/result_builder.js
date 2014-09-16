@@ -46,7 +46,7 @@ var parseTestResult = function(testResult, rootFolder, callback) {
     if (err) {
       callback(err);
     }
-    var stats = JSON.parse(data.split('=')[0]).stats;
+    var stats = JSON.parse(data.substring(data.indexOf('{'),data.indexOf('=') )).stats;
     for (var key in stats) {
       testResult[key] = stats[key];
     }
