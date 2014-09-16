@@ -73,7 +73,6 @@ var CoverageBadgeFactory = function(coverageResult, rootFolder, callback) {
   color = getBadgeColor(status);
 
   factory.generate = function() {
-    console.log(getPayload(COVERAGE_STATUS_BADGE_LABEL, status, color))
     http.request(getPayload(COVERAGE_STATUS_BADGE_LABEL, status, color), imageDownloadHelper.save).end();
   };
 
@@ -88,7 +87,6 @@ var TestBadgeFactory = function(testResult, jscsPassed, rootFolder, callback) {
   var color = getBadgeColor((testResult.passes / testResult.tests) * 100);
   var imageDownloadHelper = new ImageDownloadHelper(rootFolder + '/test_status.svg', callback);
   factory.generate = function() {
-    console.log(getPayload(TEST_STATUS_BADGE_LABEL, status, color))
     http.request(getPayload(TEST_STATUS_BADGE_LABEL, status, color), imageDownloadHelper.save).end();
   };
   return factory;
