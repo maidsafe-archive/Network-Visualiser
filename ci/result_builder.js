@@ -27,8 +27,10 @@ var getParser = function(coverageResult) {
 };
 
 var parseCoverageResult = function(coverageResult, rootFolder, callback) {
+  console.log('parsing cov result');
   var parser = getParser(coverageResult);
   var fileReadCallBack = function(err, data) {
+    console.log(data);
     if (err) {
       console.log(err);
       callback(err);
@@ -42,7 +44,9 @@ var parseCoverageResult = function(coverageResult, rootFolder, callback) {
 };
 
 var parseTestResult = function(testResult, rootFolder, callback) {
+  console.log('parsing json result');
   var fileCb = function(err, data) {
+    console.log(data);
     if (err) {
       callback(err);
     }
