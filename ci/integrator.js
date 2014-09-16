@@ -36,7 +36,6 @@ var CIWorkflow = function(grunt, callback) {
   };
 
   var generateBadges = function(err) {
-    console.log('Badge Generation Begins')
     if (err) {
       throw err;
     }
@@ -50,14 +49,14 @@ var CIWorkflow = function(grunt, callback) {
   };
 
   var scp = function() {
-   // grunt.tasks(['shell:scp:' + config.scpBranchPath[gitBranchName]]);
+    grunt.tasks(['shell:scp:' + config.scpBranchPath[gitBranchName]]);
     callback();
   };
   consolidateResults();
 };
 
 var onCoverageCompleted = function(err, stdout, stderr, callback) {//Needs to be refactored
-  if (config.scpBranchPath.hasOwnProperty(gitBranchName) || true) {
+  if (config.scpBranchPath.hasOwnProperty(gitBranchName)) {
     new CIWorkflow(grunt, callback);
   } else {
     callback();
