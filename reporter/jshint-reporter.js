@@ -12,28 +12,28 @@ exports.reporter = function(results) {
         errorGroup[temp.file] = [];
       }
       errorGroup[temp.file].push(temp.error);
-      //console.log('%d,%d - %s in %s ', result.error.line, result.error.character, result.error.reason, result.file);
+      // process.stdout.write('%d,%d - %s in %s ', result.error.line, result.error.character, result.error.reason, result.file);
     }
   };
 
   var printErrors = function() {
     for (var file in errorGroup) {
-      console.log(blue(file));
+       process.stdout.write(blue(file));
       for (var index in errorGroup[file]) {
-        console.log('\t%d,%d - %s', errorGroup[file][index].line, errorGroup[file][index].character, errorGroup[file][index].reason);
+         process.stdout.write('\n\t' + errorGroup[file][index].line + ', ' +  errorGroup[file][index].character + ' - ' + errorGroup[file][index].reason);
       }
     }
   };
 
   if (results && results.length > 0) {
-    console.log('\n');
+     process.stdout.write('\n');
     groupErrors();
     printErrors();
   }
-  console.log('\n');
+   process.stdout.write('\n');
   if (results && results.length > 0) {
-    console.log(clc.red(results.length + ' error(s) found.'));
+     process.stdout.write(clc.red(results.length + ' error(s) found.' + '\n'));
   } else {
-    console.log(clc.green('jshint test passed without errors'));
+     process.stdout.write(clc.green('jshint test passed without errors' + '\n'));
   }
 };

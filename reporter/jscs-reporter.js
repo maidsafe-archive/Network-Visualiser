@@ -7,21 +7,22 @@ module.exports = function(errorsCollection) {
 
   var report = errorsCollection.map(function(errors) {
     if (!errors.isEmpty()) {
-      console.log('\n' + fileName(errors.getFilename()));
+       process.stdout.write('\n' + fileName(errors.getFilename()));
       var error;
       errorCount += errors.getErrorCount();
       var errorList = errors.getErrorList();
       for (var i in errorList) {
         error = errorList[i];
-        console.log('\t' + error.line + ', ' + error.column + ' - '  + error.message);
+         process.stdout.write('\n\t' + error.line + ', ' + error.column + ' - '  + error.message);
       }
     }
     return '';
   });
 
   if (errorCount) {
-    console.log('\n' + clc.red(errorCount + ' error(s) found.'));
+     process.stdout.write('\n' + clc.red(errorCount + ' error(s) found.'  + '\n'));
   } else {
-    console.log('\n' + clc.green('No code style errors found.'));
-  }
-};
+     process.stdout.write(clc.green('No code style errors found.'  + '\n'));
+  } 
+
+}
