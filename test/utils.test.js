@@ -1,7 +1,6 @@
 /*jshint expr: true*/
 
-var assert =  require('assert');
-var should = require('should');
+var should = require('should'); // jshint ignore:line
 var utils = require('../backend/maidsafe/utils');
 
 describe('Utils Test Suite', function() {
