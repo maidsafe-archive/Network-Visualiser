@@ -19,11 +19,11 @@ var jshintCompleted = function(err, stdout, stderr, callback) {
 };
 
 var testCompleted = function(err, stdout, stderr, callback) {
-  // if (!err && !linterPassed) {
-  //   throw 'Code style error(s) found.';
-  // } else {
+  if (!err && !linterPassed) {
+    throw 'Code style error(s) found.';
+  } else {
     callback();
-  // }
+  }
 };
 
 var CIWorkflow = function(grunt, callback) {
