@@ -14,16 +14,19 @@ module.exports = function(grunt) {
   grunt.initConfig({
     shell : {
       test : {
-        command: ISTANBUL_COMMAND + ' -R mocha-unfunk-reporter'
+        command: ISTANBUL_COMMAND + ' -R mocha-unfunk-reporter',
+        options : {
+          callback : ci.testCompleted
+        }
       },
       jscs : {
-        command:'jscs . ',
+        command:'jscs . --reporter reporter/jscs-reporter.js',
         options : {
           callback : ci.codeStyleChecker
         }
       },
       jshint : {
-        command : 'jshint ci test Gruntfile.js',
+        command : 'jshint . --reporter reporter/jshint-reporter.js',
         options : {
           callback : ci.jshintCompleted
         }

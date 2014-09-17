@@ -11,7 +11,7 @@ var testnetStatusManager = require('./backend/maidsafe/TestnetStatusManager.js')
 var ciManager = require('./backend/maidsafe/CIManager.js');
 var config = require('./Config.js');
 
-if(process.env.PORT == config.Constants.nextBranchConfig.serverPort) {
+if(process.env.PORT === config.Constants.nextBranchConfig.serverPort) {
   config.updateConstantsForNextBranch();
 }
 
@@ -30,7 +30,7 @@ bridge.setupMongooseConnection(function() {
   app.use(methodOverride());
   app.use(express.session({
     store: new MongoStore({
-      url: config.Constants.mongo_con + '/nodeSessions'
+      url: config.Constants.mongoCon + '/nodeSessions'
     }),
     cookie: { maxAge: 3600000 },
     secret: 'maidsafelogs'

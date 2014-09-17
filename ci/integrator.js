@@ -18,6 +18,14 @@ var jshintCompleted = function(err, stdout, stderr, callback) {
   callback();
 };
 
+var testCompleted = function(err, stdout, stderr, callback) {
+  if (!err && !linterPassed) {
+    throw 'Code style error(s) found.';
+  } else {
+    callback();
+  }
+};
+
 var CIWorkflow = function(grunt, callback) {
   var coverageResult = {};
   var testResult = {};
@@ -84,3 +92,4 @@ exports.coverageCompleted = onCoverageCompleted;
 exports.gitBranchDetected = setGitBranch;
 exports.codeStyleChecker = codeStyleTestCompleted;
 exports.jshintCompleted = jshintCompleted;
+exports.testCompleted = testCompleted;
