@@ -36,4 +36,4 @@ exports.reporter = function(results) {
   } else {
     console.log(clc.green('jshint test passed without errors'));
   }
-}
+};
