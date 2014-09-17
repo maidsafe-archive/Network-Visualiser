@@ -3,7 +3,7 @@ var clc = require('cli-color');
 module.exports = function(errorsCollection) {
   var errorCount = 0;
 
-  var fileName = clc.xterm(44);
+  var fileName = clc.xterm(24);
 
   var report = errorsCollection.map(function(errors) {
     if (!errors.isEmpty()) {
