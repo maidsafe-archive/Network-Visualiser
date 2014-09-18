@@ -19,10 +19,28 @@ var jshintCompleted = function(err, stdout, stderr, callback) {
 };
 
 var testCompleted = function(err, stdout, stderr, callback) {
-  if (err || !linterPassed) {
-    process.exit(1)
+  var onComplte = function() {
+    if (err || !linterPassed) {
+      process.exit(1);
+    } else {
+      callback();
+    }
+  };
+
+  if (/^win/.test(process.platform)) {
+    var coverageResult = {};
+    resultBuilder.getCoverageResult(coverageResult, config.publishedFolder, function() {
+      console.log('=====================COVERAGE RESULT================================');
+      for (var key in coverageResult) {
+        if (coverageResult[key]) {
+          console.log('%s : %d%', key, coverageResult[key]);
+        }
+      }
+      console.log('====================================================================');
+      onComplte();
+    });
   } else {
-    callback();
+    onComplte();
   }
 };
 
