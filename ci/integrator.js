@@ -32,8 +32,12 @@ var testCompleted = function(err, stdout, stderr, callback) {
     resultBuilder.getCoverageResult(coverageResult, config.publishedFolder, function() {
       console.log('=====================COVERAGE RESULT================================');
       for (var key in coverageResult) {
-        if (coverageResult[key]) {
-          console.log('%s : %d%', key, coverageResult[key]);
+        if (coverageResult[key] != null) {
+          if (key.length < 8) {
+            console.log('%s\t\t: %d%', key, coverageResult[key]);
+          } else {
+            console.log('%s\t: %d%', key, coverageResult[key]);
+          }
         }
       }
       console.log('====================================================================');

@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var getParser = function(coverageResult) {
   var watch = false;
-  var keys = ['statement', 'branches', 'functions', 'lines'];
+  var keys = ['Statements', 'Branches', 'Functions', 'Lines'];
   var counter = 0;
   return new htmlParser.Parser({
     onopentag: function(name) {
@@ -14,7 +14,7 @@ var getParser = function(coverageResult) {
     ontext: function(text) {
       if (watch && text.indexOf('%') > -1) {
         text = text.trim();
-        coverageResult[keys[counter]] = parseInt(text.substring(0, text.length - 1));
+        coverageResult[keys[counter]] = parseFloat(text.substring(0, text.length - 1));
         counter++;
       }
     },
