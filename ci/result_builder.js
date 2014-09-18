@@ -32,11 +32,11 @@ var parseCoverageResult = function(coverageResult, rootFolder, callback) {
     if (err) {
       console.log(err);
       callback(err);
-    } else {
-      parser.write(data);
-      parser.end();
-      callback();
+      return;
     }
+    parser.write(data);
+    parser.end();
+    callback();
   };
   fs.readFile(rootFolder + '/lcov-report/index.html', {encoding: 'utf-8'}, fileReadCallBack);
 };

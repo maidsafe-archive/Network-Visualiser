@@ -14,16 +14,12 @@ module.exports = function(errorsCollection) {
       for (var i in errorList) {
         if (errorList[i]) {
           error = errorList[i];
-          console.log('\t' + error.line + ', ' + error.column + ' - '  + error.message);
+          console.log('    ' + error.line + ', ' + error.column + ' - '  + error.message);
         }
       }
     }
-    return '';
   });
 
-  if (errorCount) {
-    console.log('\n' + clc.red(errorCount + ' error(s) found.'));
-  } else {
-    console.log('\n' + clc.green('No code style errors found.'));
-  }
+  var msg = errorCount ? clc.red(errorCount + ' error(s) found.') : clc.green('No code style errors found.');
+  console.log('\n' + msg);
 };

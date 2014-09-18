@@ -19,33 +19,35 @@ var jshintCompleted = function(err, stdout, stderr, callback) {
 };
 
 var testCompleted = function(err, stdout, stderr, callback) {
-  var onComplte = function() {
+  var coverageResult = {};
+
+  var onComplete = function() {
     if (err || !linterPassed) {
       process.exit(1);
-    } else {
-      callback();
+      return;
     }
+    callback();
   };
 
-  if (/^win/.test(process.platform)) {
-    var coverageResult = {};
-    resultBuilder.getCoverageResult(coverageResult, config.publishedFolder, function() {
-      console.log('=====================COVERAGE RESULT================================');
-      for (var key in coverageResult) {
-        if (coverageResult[key] != null) {
-          if (key.length < 8) {
-            console.log('%s\t\t: %d%', key, coverageResult[key]);
-          } else {
-            console.log('%s\t: %d%', key, coverageResult[key]);
-          }
+  if (!/^win/.test(process.platform)) {
+    onComplete();
+    return;
+  }
+
+  resultBuilder.getCoverageResult(coverageResult, config.publishedFolder, function() {
+    console.log('=====================COVERAGE RESULT================================');
+    for (var key in coverageResult) {
+      if (coverageResult[key] != null) {
+        if (key.length < 8) {
+          console.log('%s\t\t: %d%', key, coverageResult[key]);
+        } else {
+          console.log('%s\t: %d%', key, coverageResult[key]);
         }
       }
-      console.log('====================================================================');
-      onComplte();
-    });
-  } else {
-    onComplte();
-  }
+    }
+    console.log('====================================================================');
+    onComplete();
+  });
 };
 
 var CIWorkflow = function(grunt, callback) {
@@ -86,11 +88,11 @@ var CIWorkflow = function(grunt, callback) {
 };
 
 var onCoverageCompleted = function(err, stdout, stderr, callback) {
-  if (config.scpBranchPath.hasOwnProperty(gitBranchName)) {
-    new CIWorkflow(grunt, callback);
-  } else {
+  if (!config.scpBranchPath.hasOwnProperty(gitBranchName)) {
     callback();
+    return;
   }
+  new CIWorkflow(grunt, callback);
 };
 
 var setGitBranch = function(err, stdout, stderr, callback) {
@@ -102,12 +104,11 @@ var setGitBranch = function(err, stdout, stderr, callback) {
 };
 
 exports.init = function(gruntProcess, ciConfig) {
-  if (gruntProcess && ciConfig) {
-    grunt = gruntProcess;
-    config = ciConfig;
-  } else {
+  if (!gruntProcess || !ciConfig) {
     throw 'Required parameters are missing';
   }
+  grunt = gruntProcess;
+  config = ciConfig;
 };
 
 exports.coverageCompleted = onCoverageCompleted;

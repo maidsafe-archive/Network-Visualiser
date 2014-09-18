@@ -4,6 +4,7 @@ exports.reporter = function(results) {
   var temp;
   var errorGroup = {};
   var blue = clc.xterm(24);
+  var SUCCESS_MSG = 'jshint test passed without errors';
 
   var groupErrors = function() {
     for (var i in results) {
@@ -24,7 +25,7 @@ exports.reporter = function(results) {
       for (var index in errorGroup) {
         if (errorGroup[index]) {
           error = errorGroup[index];
-          console.log('\t%d,%d - %s', error.line, error.character, error.reason);
+          console.log('    %d,%d - %s', error.line, error.character, error.reason);
         }
       }
     };
@@ -43,9 +44,5 @@ exports.reporter = function(results) {
     printErrors();
   }
   console.log('\n');
-  if (results && results.length > 0) {
-    console.log(clc.red(results.length + ' error(s) found.'));
-  } else {
-    console.log(clc.green('jshint test passed without errors'));
-  }
+  console.log((results && results.length > 0) ? clc.red(results.length + ' error(s) found.') : clc.green(SUCCESS_MSG));
 };
