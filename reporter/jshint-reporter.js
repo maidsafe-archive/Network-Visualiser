@@ -7,20 +7,32 @@ exports.reporter = function(results) {
 
   var groupErrors = function() {
     for (var i in results) {
-      temp = results[i];
-      if (!errorGroup.hasOwnProperty(temp.file)) {
-        errorGroup[temp.file] = [];
+      if (results[i]) {
+        temp = results[i];
+        if (!errorGroup.hasOwnProperty(temp.file)) {
+          errorGroup[temp.file] = [];
+        }
+        errorGroup[temp.file].push(temp.error);
       }
-      errorGroup[temp.file].push(temp.error);
-      //console.log('%d,%d - %s in %s ', result.error.line, result.error.character, result.error.reason, result.file);
     }
   };
 
   var printErrors = function() {
+    var error;
+
+    var printErrorsInFile = function(errorGroup) {
+      for (var index in errorGroup) {
+        if (errorGroup[index]) {
+          error = errorGroup[index];
+          console.log('\t%d,%d - %s', error.line, error.character, error.reason);
+        }
+      }
+    };
+
     for (var file in errorGroup) {
-      console.log(blue(file));
-      for (var index in errorGroup[file]) {
-        console.log('\t%d,%d - %s', errorGroup[file][index].line, errorGroup[file][index].character, errorGroup[file][index].reason);
+      if (file && errorGroup[file]) {
+        console.log(blue(file));
+        printErrorsInFile(errorGroup[file]);
       }
     }
   };

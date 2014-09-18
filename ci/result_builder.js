@@ -6,7 +6,7 @@ var getParser = function(coverageResult) {
   var keys = ['statement', 'branches', 'functions', 'lines'];
   var counter = 0;
   return new htmlParser.Parser({
-    onopentag: function(name, attribs) {
+    onopentag: function(name) {
       if (name === 'h2') {
         watch = true;
       }
@@ -38,7 +38,7 @@ var parseCoverageResult = function(coverageResult, rootFolder, callback) {
       callback();
     }
   };
-  fs.readFile(rootFolder + '/lcov-report/index.html', {encoding : 'utf-8'}, fileReadCallBack);
+  fs.readFile(rootFolder + '/lcov-report/index.html', {encoding: 'utf-8'}, fileReadCallBack);
 };
 
 var parseTestResult = function(testResult, rootFolder, callback) {
@@ -48,11 +48,13 @@ var parseTestResult = function(testResult, rootFolder, callback) {
     }
     var stats = JSON.parse(data.substring(data.indexOf('{'), data.indexOf('='))).stats;
     for (var key in stats) {
-      testResult[key] = stats[key];
+      if (stats[key]) {
+        testResult[key] = stats[key];
+      }
     }
     callback();
   };
-  fs.readFile(rootFolder + '/results.json', {encoding : 'utf-8'}, fileCb);
+  fs.readFile(rootFolder + '/results.json', {encoding: 'utf-8'}, fileCb);
 };
 
 exports.getCoverageResult = parseCoverageResult;

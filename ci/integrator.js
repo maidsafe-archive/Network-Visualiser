@@ -19,8 +19,8 @@ var jshintCompleted = function(err, stdout, stderr, callback) {
 };
 
 var testCompleted = function(err, stdout, stderr, callback) {
-  if (!err && !linterPassed) {
-    throw 'Code style error(s) found.';
+  if (err || !linterPassed) {
+    process.exit(1)
   } else {
     callback();
   }
@@ -63,7 +63,7 @@ var CIWorkflow = function(grunt, callback) {
   consolidateResults();
 };
 
-var onCoverageCompleted = function(err, stdout, stderr, callback) {//Needs to be refactored
+var onCoverageCompleted = function(err, stdout, stderr, callback) {
   if (config.scpBranchPath.hasOwnProperty(gitBranchName)) {
     new CIWorkflow(grunt, callback);
   } else {
@@ -79,9 +79,9 @@ var setGitBranch = function(err, stdout, stderr, callback) {
   callback();
 };
 
-exports.init = function(_grunt, ciConfig) {
-  if (_grunt && ciConfig) {
-    grunt = _grunt;
+exports.init = function(gruntProcess, ciConfig) {
+  if (gruntProcess && ciConfig) {
+    grunt = gruntProcess;
     config = ciConfig;
   } else {
     throw 'Required parameters are missing';
