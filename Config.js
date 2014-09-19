@@ -16,13 +16,13 @@ var constants = {
     authPath: '../../../auth/next/gauth.json',
     sanityCheckerDir: '../../../testnet_status_monitor/next'
   }
-}
+};
 
-exports.updateConstantsForNextBranch = function(){
-  constants.mongoCon += "_next";
-  for(var key in constants.nextBranchConfig){
+exports.updateConstantsForNextBranch = function() {
+  constants.mongoCon += '_next';
+  for(var key in constants.nextBranchConfig) {
     constants[key] = constants.nextBranchConfig[key];
   }
-}
+};
 
 exports.Constants = constants;

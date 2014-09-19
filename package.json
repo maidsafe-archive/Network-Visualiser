@@ -36,8 +36,9 @@
     "grunt-contrib-clean": "^0.6.0",
     "grunt-mkdir": "^0.1.2",
     "grunt-env": "^0.4.1",
-    "jscs": "^1.6.1",
+    "jscs": "jscs-dev/node-jscs",
     "jshint": "^2.5.5",
-    "should": "^4.0.4"
+    "should": "^4.0.4",
+    "cli-color": "^0.3.2"
   }
 }

@@ -18,6 +18,38 @@ var jshintCompleted = function(err, stdout, stderr, callback) {
   callback();
 };
 
+var testCompleted = function(err, stdout, stderr, callback) {
+  var coverageResult = {};
+
+  var onComplete = function() {
+    if (err || !linterPassed) {
+      process.exit(1);
+      return;
+    }
+    callback();
+  };
+
+  if (!/^win/.test(process.platform)) {
+    onComplete();
+    return;
+  }
+
+  resultBuilder.getCoverageResult(coverageResult, config.publishedFolder, function() {
+    console.log('=====================COVERAGE RESULT================================');
+    for (var key in coverageResult) {
+      if (coverageResult[key] != null) {
+        if (key.length < 8) {
+          console.log('%s\t\t: %d%', key, coverageResult[key]);
+        } else {
+          console.log('%s\t: %d%', key, coverageResult[key]);
+        }
+      }
+    }
+    console.log('====================================================================');
+    onComplete();
+  });
+};
+
 var CIWorkflow = function(grunt, callback) {
   var coverageResult = {};
   var testResult = {};
@@ -55,12 +87,12 @@ var CIWorkflow = function(grunt, callback) {
   consolidateResults();
 };
 
-var onCoverageCompleted = function(err, stdout, stderr, callback) {//Needs to be refactored
-  if (config.scpBranchPath.hasOwnProperty(gitBranchName)) {
-    new CIWorkflow(grunt, callback);
-  } else {
+var onCoverageCompleted = function(err, stdout, stderr, callback) {
+  if (!config.scpBranchPath.hasOwnProperty(gitBranchName)) {
     callback();
+    return;
   }
+  new CIWorkflow(grunt, callback);
 };
 
 var setGitBranch = function(err, stdout, stderr, callback) {
@@ -71,16 +103,16 @@ var setGitBranch = function(err, stdout, stderr, callback) {
   callback();
 };
 
-exports.init = function(_grunt, ciConfig) {
-  if (_grunt && ciConfig) {
-    grunt = _grunt;
-    config = ciConfig;
-  } else {
+exports.init = function(gruntProcess, ciConfig) {
+  if (!gruntProcess || !ciConfig) {
     throw 'Required parameters are missing';
   }
+  grunt = gruntProcess;
+  config = ciConfig;
 };
 
 exports.coverageCompleted = onCoverageCompleted;
 exports.gitBranchDetected = setGitBranch;
 exports.codeStyleChecker = codeStyleTestCompleted;
 exports.jshintCompleted = jshintCompleted;
+exports.testCompleted = testCompleted;

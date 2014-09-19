@@ -3,10 +3,10 @@ var fs = require('fs');
 
 var getParser = function(coverageResult) {
   var watch = false;
-  var keys = ['statement', 'branches', 'functions', 'lines'];
+  var keys = ['Statements', 'Branches', 'Functions', 'Lines'];
   var counter = 0;
   return new htmlParser.Parser({
-    onopentag: function(name, attribs) {
+    onopentag: function(name) {
       if (name === 'h2') {
         watch = true;
       }
@@ -14,7 +14,7 @@ var getParser = function(coverageResult) {
     ontext: function(text) {
       if (watch && text.indexOf('%') > -1) {
         text = text.trim();
-        coverageResult[keys[counter]] = parseInt(text.substring(0, text.length - 1));
+        coverageResult[keys[counter]] = parseFloat(text.substring(0, text.length - 1));
         counter++;
       }
     },
@@ -32,13 +32,13 @@ var parseCoverageResult = function(coverageResult, rootFolder, callback) {
     if (err) {
       console.log(err);
       callback(err);
-    } else {
-      parser.write(data);
-      parser.end();
-      callback();
+      return;
     }
+    parser.write(data);
+    parser.end();
+    callback();
   };
-  fs.readFile(rootFolder + '/lcov-report/index.html', {encoding : 'utf-8'}, fileReadCallBack);
+  fs.readFile(rootFolder + '/lcov-report/index.html', {encoding: 'utf-8'}, fileReadCallBack);
 };
 
 var parseTestResult = function(testResult, rootFolder, callback) {
@@ -46,13 +46,15 @@ var parseTestResult = function(testResult, rootFolder, callback) {
     if (err) {
       callback(err);
     }
-    var stats = JSON.parse(data.substring(data.indexOf('{'),data.indexOf('=') )).stats;
+    var stats = JSON.parse(data.substring(data.indexOf('{'), data.indexOf('='))).stats;
     for (var key in stats) {
-      testResult[key] = stats[key];
+      if (stats[key]) {
+        testResult[key] = stats[key];
+      }
     }
     callback();
   };
-  fs.readFile(rootFolder + '/results.json', {encoding : 'utf-8'}, fileCb);
+  fs.readFile(rootFolder + '/results.json', {encoding: 'utf-8'}, fileCb);
 };
 
 exports.getCoverageResult = parseCoverageResult;

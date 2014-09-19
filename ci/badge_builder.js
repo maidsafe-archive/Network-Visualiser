@@ -50,7 +50,7 @@ var getBadgeColor = function(percentage) {
 var getPayload = function(text, status, color) {
   return {
     host: 'img.shields.io',
-    path : util.format('/badge/%s-%s-%s.svg', encodeURIComponent(text), status, color)
+    path: util.format('/badge/%s-%s-%s.svg', encodeURIComponent(text), status, color)
   };
 };
 
@@ -62,7 +62,9 @@ var CoverageBadgeFactory = function(coverageResult, rootFolder, callback) {
 
   var total = 0;
   for (var key in coverageResult) {
-    total += coverageResult[key];
+    if (coverageResult[key]) {
+      total += coverageResult[key];
+    }
   }
 
   this.onComplete = function(cb) {
@@ -81,7 +83,8 @@ var CoverageBadgeFactory = function(coverageResult, rootFolder, callback) {
 
 var TestBadgeFactory = function(testResult, jscsPassed, rootFolder, callback) {
   var factory = this;
-  testResult.tests += 1;//For adding the JSCS test
+  testResult.tests += 1;
+  // For adding the JSCS test
   testResult.passes += jscsPassed ? 1 : 0;
   var status =  testResult.passes + '/' + testResult.tests;
   var color = getBadgeColor((testResult.passes / testResult.tests) * 100);
