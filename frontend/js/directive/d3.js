@@ -12,7 +12,7 @@ var D3 = [ function () {
 
       // Constants
       // ---------
-      var w = 500,
+      var w = 1000,
           h = 500,
           rx = w / 2,
           ry = h / 2,
@@ -32,6 +32,7 @@ var D3 = [ function () {
       var packages = {
         // Lazily construct the package hierarchy from class names.
         root: function(classes) {
+          debugger
           var map = {};
 
           // add "classes" with no dependencies
@@ -60,6 +61,7 @@ var D3 = [ function () {
             if (!node) {
               node = map[name] = data || {name: name, children: []};
               if (name.length) {
+                // console.log(name)
                 node.parent = find(name.substring(0, i = name.lastIndexOf(".")));
                 node.parent.children.push(node);
                 node.key = name.substring(i + 1);
@@ -69,9 +71,11 @@ var D3 = [ function () {
           }
 
           classes.forEach(function(d) {
+            console.log(d)
             find(d.name, d);
           });
 
+          console.log(map)
           return map[""];
         },
 
@@ -105,8 +109,8 @@ var D3 = [ function () {
       }
 
       var cluster = d3.layout.cluster().
-        size([360, ry - 120]).
-        sort(function(a, b) { return d3.ascending(a.key, b.key); });
+        size([360, ry/2])
+        .sort(function(a, b) { return d3.ascending(a.key, b.key); });
 
       var bundle = d3.layout.bundle();
 
@@ -130,7 +134,6 @@ var D3 = [ function () {
       // --------------------------------------
       scope.$watch('val', function (newVal, oldVal) {
         var classes;
-
         if (!newVal || newVal.length === 0) {
           svg.selectAll('*').remove();
           return;
@@ -151,7 +154,7 @@ var D3 = [ function () {
 
         classes = newVal.slice(0);
         classes.sort(function (a, b) {
-          return .5 - (a.name < b.name);
+          return  a.name < b.name;
         });
 
         svg.selectAll('*').remove();
@@ -189,7 +192,7 @@ var D3 = [ function () {
         nodes.append("svg:circle")
             .attr("cx", 3)
             .attr("cy", 3)
-            .attr("r", 3)
+            .attr("r", 3)            
             .attr("transform", "translate(1,-3)");
       });
 

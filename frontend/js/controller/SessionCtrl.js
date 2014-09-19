@@ -3,6 +3,7 @@ var app = angular.module('MaidSafe', ['angularFileUpload']);
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {
     $rootScope.socketEndPoint = "http://" + $location.host() + ":" + socketPort;
+    //$rootScope.val = JSON.parse('[{"name":"Node-A","imports":["Node-B","Node-C","Node-D","Node-G"]},{"name":"Node-E","imports":["Node-F","Node-G","Node-C"]},{"name":"Node-H","imports":["Node-F","Node-G"]},{"name":"Node-I","imports":["Node-F","Node-G","Node-L"]},{"name":"Node-J","imports":["Node-F","Node-G"]},{"name":"Node-K","imports":["Node-F","Node-G"]},{"name":"Node-L","imports":["Node-M","Node-D"]}]')
   }
 ]);
 
