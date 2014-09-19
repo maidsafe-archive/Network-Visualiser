@@ -19,13 +19,13 @@ module.exports = function(grunt) {
         }
       },
       jscs: {
-        command: 'jscs . --reporter reporter/jscs-reporter.js',
+        command: 'jscs . --reporter ci/reporters/jscs-reporter.js',
         options: {
           callback: ci.codeStyleChecker
         }
       },
       jshint: {
-        command: 'jshint . --reporter reporter/jshint-reporter.js',
+        command: 'jshint . --reporter ci/reporters/jshint-reporter.js',
         options: {
           callback: ci.jshintCompleted
         }
