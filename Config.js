@@ -18,11 +18,11 @@ var constants = {
   }
 };
 
-exports.updateConstantsForNextBranch = function() {
+if(process.env.PORT === constants.nextBranchConfig.serverPort) {
   constants.mongoCon += '_next';
   for(var key in constants.nextBranchConfig) {
     constants[key] = constants.nextBranchConfig[key];
   }
-};
+}
 
 exports.Constants = constants;
