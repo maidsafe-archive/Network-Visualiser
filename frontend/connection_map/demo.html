@@ -7,26 +7,29 @@
 	<style>
 		svg {
 			border: 1px solid #ccc;
+		}		
+		.link {
+			stroke:#98C2E5;
 		}
 		.link.grey {
-			stroke:#666666;
-		}
+			stroke:#CCCCCC;
+		}		
 		.link.target {
-			stroke:#666666;
+			stroke:#CCCCCC;
 			stroke-width: 1px;
 		}
 		.link.source {
-			stroke:#666666;
+			stroke:#CCCCCC;
 			stroke-width: 1;			
 		}
 		
 		.link.source.grey {
-			stroke:#666666;
+			stroke:#CCCCCC;
 			stroke-width: 1;
 			stroke-opacity:.5;
 		}
 		.link.source.missing-expected{
-			stroke:rgb(183, 46, 5);		
+			stroke:#ED1C24;		
 			stroke-dasharray : 5,3;
 			stroke-width:1.5;
 			stroke-opacity:1;	
@@ -37,12 +40,12 @@
 			stroke-opacity:1;
 		}		
 		.link.source.out{
-			stroke:red;
+			stroke:#ED1C24;
 			stroke-width:1.5;
 			stroke-opacity:1;
 		}
 		.link.source.not-expected {
-			stroke:orange;
+			stroke:#F7931E;
 			stroke-dasharray: 5,3;
 			stroke-width:1.5;
 			stroke-opacity:1;
@@ -54,30 +57,30 @@
 			stroke-opacity:1;
 		}
 		.link.source.group{
-			stroke:#5593D7;
+			stroke:#98C2E5;
 			stroke-width:1.5;
 			stroke-opacity:1;
 		}
 		.link.target.overlaped-target { 
 			fill: none;
-			stroke: #1f77b4;
+			stroke: #5593D7;
 			stroke-opacity: .1;
 			pointer-events: none;
 		}
 		.node text {
-			fill: #808080;
+			fill: #999999;
 		}
 		.node text.red {
-			fill:#FF7BAC;
+			fill:#ED1C24;
 		}
 		.node text.green {
-			fill:#0DB535
+			fill:#0DB535;
 		}
 		.node text.blue {
 			fill:#5593D7;
 		}
 		.node text.orange {
-			fill:orange
+			fill:#F7931E;
 		}
 		.node text.selected {
 			fill:black;
@@ -107,7 +110,7 @@
 						HEIGHT = 500,
 						RADIUS_X = WIDTH / 2,
 						RADIUS_Y = HEIGHT / 2,
-						CIRCLE_TEXT_GAP = 15,
+						CIRCLE_TEXT_GAP = 18,
 						CIRCLE_LINE_GAP = 3,
 						CIRCLE_FULL_LIMIT = 5,
 						CIRCLE_SIZE = 3;						
@@ -123,6 +126,15 @@
 					}				
 					svg.attr("transform", "translate(" + [transX, transY] + ")scale(" + d3.event.scale + ")");
 				}
+				var dragEvent = d3.behavior.drag()
+					.on('dragstart', function(){
+						lastDragPosition = d3.event;
+					}).on('drag', function() {
+						lastDragPosition = d3.event;
+					})
+					.on("dragend", function(){
+						lastDragPosition = null;	
+					});
 
 				var cluster = d3.layout.cluster().
 					size([360, RADIUS_Y/2])
@@ -134,17 +146,7 @@
 					interpolate("bundle").
 					tension(.85).					
 					radius(function(d) { return d.y; }).
-					angle(function(d) { return d.x / 180 * Math.PI; });
-				
-				var dragEvent = d3.behavior.drag()
-				.on('dragstart', function(){
-					lastDragPosition = d3.event;
-				}).on('drag', function() {
-					lastDragPosition = d3.event;
-				})
-				.on("dragend", function(){
-					lastDragPosition = null;	
-				});
+					angle(function(d) { return d.x / 180 * Math.PI; });						
 
 				var svg = div.append("svg:svg").
 								attr("preserveAspectRatio", "xMinYMin meet").
@@ -157,46 +159,46 @@
 				var transformedData = new ConnectionMapTransformer(connectionMap);
 				window.events = new ConnectionEvents(svg);
 
-					connectionMap.sort(function (a, b) {
-						return  a.name < b.name;
-					});
-					svg.selectAll('*').remove();
-				
-					svg.append("svg:path")
-						.attr("class", "arc")
-						.attr("d", d3.svg.arc().outerRadius(RADIUS_Y - (RADIUS_Y/.33)).innerRadius(0).startAngle(0).endAngle(2 * Math.PI))
-	          .on("mousedown", events.mousedown);
+				connectionMap.sort(function (a, b) {
+					return  a.name < b.name;
+				});
+				svg.selectAll('*').remove();
 
-					var nodes = cluster.nodes(transformedData.nodes);
-					var splines = bundle(transformedData.links)
-					var path = svg.selectAll("path.link")
-							.data(transformedData.links)
-						.enter().append("svg:path")
-							.attr("class", function(d) { return "link source-" + d.source.name + " target-" + d.target.name; })							
-							.attr("d", function(d, i) { return line(splines[i]); });
+				svg.append("svg:path")
+					.attr("class", "arc")
+					.attr("d", d3.svg.arc().outerRadius(RADIUS_Y - (RADIUS_Y/.33)).innerRadius(0).startAngle(0).endAngle(2 * Math.PI))
+					.on("mousedown", events.mousedown);
 
-					var nodes = svg.selectAll("g.node")
-							.data(nodes.filter(function(n) { return !n.children; }))
-						.enter().append("svg:g")
-							.attr("class", "node")
-							.attr("id", function(d) { return "node-" + d.name; })
-							.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
-					
-					nodes.append("svg:text")
-							.attr("dx", function(d) { return d.x < 180 ? CIRCLE_TEXT_GAP : -CIRCLE_TEXT_GAP })
-							.attr("dy", ".31em")
-							.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-							.attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })						
-							.text(function(d) { return d.name; })
-							.on("mouseover", events.mouseover)
-            	.on("mouseout", events.mouseout )
-							.on("click", events.mouseClick);
-					nodes.append("svg:circle")
-							.attr("cx", CIRCLE_SIZE)
-							.attr("cy", CIRCLE_SIZE)
-							.attr("r", CIRCLE_SIZE)	
-							.attr("transform", 'translate(' + CIRCLE_LINE_GAP +  ',-' + CIRCLE_LINE_GAP + ')')
-							.classed('full', function(d){return d.group && d.group.length == CIRCLE_FULL_LIMIT});					
+				var nodes = cluster.nodes(transformedData.nodes);
+				var splines = bundle(transformedData.links)
+				var path = svg.selectAll("path.link")
+						.data(transformedData.links)
+					.enter().append("svg:path")
+						.attr("class", function(d) { return "link source-" + d.source.name + " target-" + d.target.name; })							
+						.attr("d", function(d, i) { return line(splines[i]); });
+
+				var nodes = svg.selectAll("g.node")
+						.data(nodes.filter(function(n) { return !n.children; }))
+					.enter().append("svg:g")
+						.attr("class", "node")
+						.attr("id", function(d) { return "node-" + d.name; })
+						.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
+
+				nodes.append("svg:text")
+						.attr("dx", function(d) { return d.x < 180 ? CIRCLE_TEXT_GAP : -CIRCLE_TEXT_GAP })
+						.attr("dy", ".31em")
+						.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+						.attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })						
+						.text(function(d) { return d.name; })
+						.on("mouseover", events.mouseover)
+						.on("mouseout", events.mouseout )
+						.on("click", events.mouseClick);
+				nodes.append("svg:circle")
+						.attr("cx", CIRCLE_SIZE)
+						.attr("cy", CIRCLE_SIZE)
+						.attr("r", CIRCLE_SIZE)	
+						.attr("transform", 'translate(' + CIRCLE_LINE_GAP +  ',-' + CIRCLE_LINE_GAP + ')')
+						.classed('full', function(d){return d.group && d.group.length == CIRCLE_FULL_LIMIT});					
 
 		};
 		</script>
