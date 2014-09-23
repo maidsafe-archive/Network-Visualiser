@@ -5,38 +5,58 @@
 		<script type="application/javascript" src="js/events.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/d3.css"></link>	
 	<style>
+		svg {
+			border: 1px solid #ccc;
+		}
 		.link.grey {
-			stroke:#ccc;
+			stroke:#666666;
 		}
 		.link.target {
-			stroke:#ccc;
+			stroke:#666666;
 			stroke-width: 1px;
 		}
 		.link.source {
-			stroke:#ccc;
-			stroke-width: 1.2;
-			stroke-opacity:1
+			stroke:#666666;
+			stroke-width: 1;			
+		}
+		
+		.link.source.grey {
+			stroke:#666666;
+			stroke-width: 1;
+			stroke-opacity:.5;
 		}
 		.link.source.missing-expected{
 			stroke:rgb(183, 46, 5);		
 			stroke-dasharray : 5,3;
+			stroke-width:1.5;
+			stroke-opacity:1;	
 		}
 		.link.source.in{
-			stroke:green;
+			stroke:#0DB535;
+			stroke-width:1.5;
+			stroke-opacity:1;
 		}		
 		.link.source.out{
 			stroke:red;
+			stroke-width:1.5;
+			stroke-opacity:1;
 		}
 		.link.source.not-expected {
 			stroke:orange;
-			stroke-dasharray: 5,3
+			stroke-dasharray: 5,3;
+			stroke-width:1.5;
+			stroke-opacity:1;
 		}
 		.link.source.close-group {
-			stroke:blue;
+			stroke:#5593D7;
 			stroke-dasharray : 5,3;
+			stroke-width:1.5;
+			stroke-opacity:1;
 		}
 		.link.source.group{
-			stroke:blue;
+			stroke:#5593D7;
+			stroke-width:1.5;
+			stroke-opacity:1;
 		}
 		.link.target.overlaped-target { 
 			fill: none;
@@ -45,24 +65,31 @@
 			pointer-events: none;
 		}
 		.node text {
-			fill: grey;
+			fill: #808080;
 		}
-		.node.target text.red {
-			fill:red
+		.node text.red {
+			fill:#FF7BAC;
 		}
-		.node.target text.green {
-			fill:green
+		.node text.green {
+			fill:#0DB535
 		}
-		.node.target text.blue {
-			fill:blue
+		.node text.blue {
+			fill:#5593D7;
+		}
+		.node text.orange {
+			fill:orange
+		}
+		.node text.selected {
+			fill:black;
+			font-weight: bold;
 		}
 		.node circle {
 			fill:white;
-			stroke:darkgrey;
+			stroke:#808080;
 			stroke-width:1.2;
 		}
 		.node circle.full {
-			fill:darkgrey;
+			fill:#808080;
 		}
 	</style>
 	</head>
@@ -83,9 +110,7 @@
 						CIRCLE_TEXT_GAP = 15,
 						CIRCLE_LINE_GAP = 3,
 						CIRCLE_FULL_LIMIT = 5,
-						CIRCLE_SIZE = 3,
-						rotate=0,
-						m0;
+						CIRCLE_SIZE = 3;						
 				
 
 				// Helpers
