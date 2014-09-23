@@ -22,6 +22,26 @@
 			stroke:#CCCCCC;
 			stroke-width: 1;			
 		}
+						
+		.link.not-exp{
+			stroke:#F7931E;
+			stroke-dasharray: 7,4;
+			stroke-width:1.5;
+			stroke-opacity:1;
+		}
+		
+		.link.missing{
+			stroke:#ED1C24;
+			stroke-dasharray: 7,4;
+			stroke-width:1.5;
+			stroke-opacity:1;
+		}
+		
+		.link.missing.grey , .link.not-exp.grey {
+			stroke:#CCCCCC;
+			stroke-dasharray: none;
+			stroke-opacity:.5;
+		}
 		
 		.link.source.grey {
 			stroke:#CCCCCC;
@@ -30,7 +50,7 @@
 		}
 		.link.source.missing-expected{
 			stroke:#ED1C24;		
-			stroke-dasharray : 5,3;
+			stroke-dasharray : 7,4;
 			stroke-width:1.5;
 			stroke-opacity:1;	
 		}
@@ -46,13 +66,13 @@
 		}
 		.link.source.not-expected {
 			stroke:#F7931E;
-			stroke-dasharray: 5,3;
+			stroke-dasharray: 7,4;
 			stroke-width:1.5;
 			stroke-opacity:1;
 		}
 		.link.source.close-group {
 			stroke:#5593D7;
-			stroke-dasharray : 5,3;
+			stroke-dasharray : 7,4;
 			stroke-width:1.5;
 			stroke-opacity:1;
 		}
@@ -194,15 +214,17 @@
 						.attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })						
 						.text(function(d) { return d.name; })
 						.on("mouseover", events.mouseover)
-						.on("mouseout", events.mouseout )
+						.on("mouseout", events.mouseout)
 						.on("click", events.mouseClick);
 				nodes.append("svg:circle")
 						.attr("cx", CIRCLE_SIZE)
 						.attr("cy", CIRCLE_SIZE)
-						.attr("r", CIRCLE_SIZE)	
+						.attr("r", CIRCLE_SIZE)
 						.attr("transform", 'translate(' + CIRCLE_LINE_GAP +  ',-' + CIRCLE_LINE_GAP + ')')
-						.classed('full', function(d){return d.group && d.group.length == CIRCLE_FULL_LIMIT});					
-
+						.classed('full', function(d){return d.group && d.group.length == CIRCLE_FULL_LIMIT});
+				
+				events.updateLinksOnLoad(nodes);
+							
 		};
 		</script>
 		<button onclick="events.setMode(2)">CHURN</button>
