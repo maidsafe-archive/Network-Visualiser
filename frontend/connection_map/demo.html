@@ -79,6 +79,9 @@
 		.node text.blue {
 			fill:#5593D7;
 		}
+		.node text.light-blue {
+			fill:#98C2E5;
+		}
 		.node text.orange {
 			fill:#F7931E;
 		}
@@ -127,7 +130,7 @@
 					svg.attr("transform", "translate(" + [transX, transY] + ")scale(" + d3.event.scale + ")");
 				}
 				var dragEvent = d3.behavior.drag()
-					.on('dragstart', function(){
+					.on('dragstart', function(){						
 						lastDragPosition = d3.event;
 					}).on('drag', function() {
 						lastDragPosition = d3.event;

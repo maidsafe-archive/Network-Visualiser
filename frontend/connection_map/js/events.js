@@ -29,7 +29,7 @@ function ConnectionEvents(svg) {
 						labelClass = 'red';
 					} else {
 						className = GROUP_CLASS;
-						labelClass = 'blue';
+						labelClass = 'light-blue';
 					}
 					svg.select('g#node-' + d + ' text').classed(labelClass, true);
 					svg.selectAll("path.link.source-" + node.name + ".target-" + d).classed(className, true);
@@ -65,7 +65,7 @@ function ConnectionEvents(svg) {
 			return;
 		}
 		var linkClasses = [OVERLAPPING_TARGET_CLASS, GROUP_CLASS, GREY_LINK_CLASS, VAULT_ENTERED_CLASS, VAULT_LEFT_CLASS, MISSING_EXPECTED, 		NOT_EXPECTED_CLASS, CLOSE_GROUP_CLASS];
-		var textClasses = ['blue', 'green', 'red', 'orange'];
+		var textClasses = ['blue', 'green', 'red', 'orange', 'light-blue'];
 		linkClasses.forEach(function(className) {
 			svg.selectAll('path.link.' + className).classed(className, false);
 		});
