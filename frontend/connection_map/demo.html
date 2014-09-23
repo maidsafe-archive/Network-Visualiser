@@ -115,9 +115,13 @@
 
 				// Helpers
 				// -------
-
+				var lastDragPosition, transX = RADIUS_X, transY = RADIUS_Y; 
 				function zoom() {
-					svg.attr("transform", "translate(" + RADIUS_X + "," + RADIUS_Y + ")scale(" + d3.event.scale + ")");
+					if(lastDragPosition) {
+							transX += (-1 * ( lastDragPosition.sourceEvent.offsetX - d3.event.sourceEvent.offsetX ));
+							transY += (-1 * ( lastDragPosition.sourceEvent.offsetY - d3.event.sourceEvent.offsetY ));
+					}				
+					svg.attr("transform", "translate(" + [transX, transY] + ")scale(" + d3.event.scale + ")");
 				}
 
 				var cluster = d3.layout.cluster().
@@ -131,14 +135,23 @@
 					tension(.85).					
 					radius(function(d) { return d.y; }).
 					angle(function(d) { return d.x / 180 * Math.PI; });
-
+				
+				var dragEvent = d3.behavior.drag()
+				.on('dragstart', function(){
+					lastDragPosition = d3.event;
+				}).on('drag', function() {
+					lastDragPosition = d3.event;
+				})
+				.on("dragend", function(){
+					lastDragPosition = null;	
+				});
 
 				var svg = div.append("svg:svg").
 								attr("preserveAspectRatio", "xMinYMin meet").
 								attr("viewBox", [0, 0, WIDTH, HEIGHT].join(' ')).
 								attr("height", HEIGHT).
 							append("svg:g").
-								call(d3.behavior.zoom().scaleExtent([-5, 20]).on("zoom", zoom)).
+								call(d3.behavior.zoom().scaleExtent([-5, 20]).on("zoom", zoom)).call(dragEvent).
 								attr("transform", "translate(" + RADIUS_X + "," + RADIUS_Y + ")");
 					
 				var transformedData = new ConnectionMapTransformer(connectionMap);
