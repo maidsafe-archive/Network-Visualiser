@@ -1,4 +1,5 @@
 /*jshint expr: true*/
+/*jshint maxstatements: false*/
 
 var should = require('should'); // jshint ignore:line
 var config = require('../Config');
