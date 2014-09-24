@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var testnetStatus = require('../../backend/mongo/TestnetStatus');
 var db;
 
-describe('Testnet Status', function() {
+describe('TestnetStatus', function() {
   var statusModel = {'last_updated': '', isReady: false};
 
   var prepareDB = function(callback) {
