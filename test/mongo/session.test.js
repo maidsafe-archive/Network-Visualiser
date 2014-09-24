@@ -1,8 +1,8 @@
 /*jshint expr: true*/
 
 var should = require('should'); // jshint ignore:line
-var bridge = require('../../backend/mongo/bridge');
-var config = require('../../Config');
+var config = require('../Config');
+var mongoose = require('mongoose');
 var sessionInfo = require('../../backend/mongo/SessionInfo');
 
 describe('Sessions', function() {
@@ -10,9 +10,25 @@ describe('Sessions', function() {
   var SESSION_NAME = 'TEST_SESSION';
   var USER = 'test_user';
   var userInfoModel = {mailAddress: USER, isAuthenticated: true, isMaidSafeUser: true};
+  var db;
+
+  var prepareDB = function(callback) {
+    mongoose.connect(config.Constants.mongoCon, function(connectionError) {
+      if (connectionError) {
+        callback(connectionError);
+        return;
+      }
+      db = mongoose.connection;
+      db.on('error', function() {
+        console.error.bind(console, 'connection error:');
+      });
+      sessionInfo = sessionInfo.SessionMetaData(db);
+      callback();
+    });
+  };
 
   before(function(done) {
-    bridge.setupMongooseConnection(done, (config.Constants.mongoCon + config.Constants.testDBEndPoint));
+    prepareDB(done);
   });
 
   it('Should create a new session', function(done) {
@@ -151,5 +167,10 @@ describe('Sessions', function() {
       should(err).not.be.ok;
       done();
     });
+  });
+
+  after(function(done) {
+    db.db.dropDatabase();
+    done();
   });
 });

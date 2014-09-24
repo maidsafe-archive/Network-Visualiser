@@ -13,7 +13,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     shell: {
       test: {
-        command: ISTANBUL_COMMAND + '--recursive -R mocha-unfunk-reporter ',
+        command: ISTANBUL_COMMAND + ' -R mocha-unfunk-reporter --recursive',
         options: {
           callback: ci.testCompleted
         }
@@ -37,8 +37,8 @@ module.exports = function(grunt) {
         }
       },
       ci: {
-        command: ISTANBUL_COMMAND + '--recursive -R json-cov > ' + CI_CONFIG.publishedFolder +
-        '/' + CI_CONFIG.jsonReportFileName,
+        command: ISTANBUL_COMMAND + ' --recursive -R json-cov > ' +
+        CI_CONFIG.publishedFolder + '/' + CI_CONFIG.jsonReportFileName,
         options: {
           callback: ci.coverageCompleted
         }
