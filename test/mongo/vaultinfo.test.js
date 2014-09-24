@@ -6,8 +6,6 @@ var sessionHelper = require('../../ci/test/SessionHelper');
 var vaultInfo = require('../../backend/mongo/VaultInfo');
 
 describe('VaultInfo', function() {
-  var statusModel = {'last_updated': '', isReady: false};
-
   var prepareDB = function(callback) {
     dbHelper.openConnection(function(err) {
       if (err) {
@@ -18,8 +16,8 @@ describe('VaultInfo', function() {
       sessionHelper = sessionHelper(dbHelper.getDB());
       sessionHelper.createTestSession(function(err) {
         err ? callback(err) : callback();
-      });      
-    });      
+      });
+    });
   };
 
   before(prepareDB);
@@ -30,7 +28,7 @@ describe('VaultInfo', function() {
   });
 
   it('Active vaults count should be 0 at start', function(done) {
-    vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data){
+    vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data) {
       should(err).not.be.ok;
       should(data.length).be.exactly(0);
       done();
@@ -38,7 +36,8 @@ describe('VaultInfo', function() {
   });
 
   it('Should be able to add Vault status', function(done) {
-    var data = {'vault_id':'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(), 'action_id': 0, 'value1': 'aaaabbbbccccdddd'};
+    var data = {'vault_id': 'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(),
+    'action_id': 0, 'value1': 'aaaabbbbccccdddd'};
     vaultInfo.updateVaultStatus(data).then(function(data) {
       should(data).be.exactly('');
       done();
@@ -59,15 +58,15 @@ describe('VaultInfo', function() {
   });
 
   it('Should be able to get active vaults', function(done) {
-    vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data){
+    vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data) {
       should(err).not.be.ok;
       should(data.length).be.above(0);
       done();
     });
   });
 
-  it('Should be able to check is vault is active', function(done) {   
-    vaultInfo.isVaultActive({'session_id': sessionHelper.getSessionId(), 'vault_id': 'aaaa-bbbb'}).then(function(data) {   
+  it('Should be able to check is vault is active', function(done) {
+    vaultInfo.isVaultActive({'session_id': sessionHelper.getSessionId(), 'vault_id': 'aaaa-bbbb'}).then(function(data) {
       should(data).be.ok;
       done();
     }, function(err) {
@@ -76,8 +75,8 @@ describe('VaultInfo', function() {
     });
   });
 
-  it('Should be able to check is vault is not active', function(done) {   
-    vaultInfo.isVaultActive({'session_id': sessionHelper.getSessionId(), 'vault_id': 'aaa-bbbb'}).then(function(data) {      
+  it('Should be able to check is vault is not active', function(done) {
+    vaultInfo.isVaultActive({'session_id': sessionHelper.getSessionId(), 'vault_id': 'aaa-bbbb'}).then(function(data) {
       should(data).not.be.ok;
       done();
     }, function(err) {
@@ -88,7 +87,8 @@ describe('VaultInfo', function() {
   });
 
   it('Should be able to update Vault status', function(done) {
-    var data = {'vault_id':'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(), 'action_id': 18, 'value1': 'aaaabbbbccccdddd'};
+    var data = {'vault_id': 'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(),
+    'action_id': 18, 'value1': 'aaaabbbbccccdddd'};
     vaultInfo.updateVaultStatus(data).then(function(data) {
       should(data).be.exactly('');
       done();
@@ -107,7 +107,6 @@ describe('VaultInfo', function() {
   //   });
   // });
 
-
   it('Should be able to delete Vaults for the session', function(done) {
     vaultInfo.deleteVaultInfoForSession(sessionHelper.getSessionId()).then(function(data) {
       should(data).be.ok;
@@ -117,5 +116,4 @@ describe('VaultInfo', function() {
       done();
     });
   });
-
 });

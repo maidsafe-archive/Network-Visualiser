@@ -8,7 +8,7 @@ var dropDatabase = function() {
 
 var closeConnection = function() {
   mongoose.disconnect();
-}
+};
 
 var openConnection = function(callback) {
   mongoose.connect(config.Constants.mongoCon, function(connectionError) {

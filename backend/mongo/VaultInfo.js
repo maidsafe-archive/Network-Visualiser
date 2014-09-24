@@ -1,18 +1,18 @@
 var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
+var SCHEMA, VaultInfo, MODEL_NAME;
+SCHEMA = {
+  vault_id: String,
+  vault_id_full: String,
+  host_name: String,
+  session_id: String,
+  is_running: Boolean
+};
+MODEL_NAME = 'vaultInfo';
+VaultInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
+
 
 var VaultMetaData = function(dbConnection) {
-
-  var SCHEMA, VaultInfo, MODEL_NAME;
-  SCHEMA = {
-    vault_id: String,
-    vault_id_full: String,
-    host_name: String,
-    session_id: String,
-    is_running: Boolean
-  };
-  MODEL_NAME = 'vaultInfo';
-  VaultInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
 
   var canUpdateStatus = function(actionId) {
     return (actionId == 18 || actionId == 0);

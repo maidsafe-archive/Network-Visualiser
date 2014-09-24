@@ -9,7 +9,7 @@ module.exports =  function(db) {
   var createTestSession = function(callBack) {
     sessionInfo.createSession(SESSION_NAME, USER, function(err, data) {
       if (err) {
-        callBack(err)
+        callBack(err);
         return;
       }
       sessionId = data;
@@ -23,17 +23,21 @@ module.exports =  function(db) {
 
   var getCurrentSessionName = function() {
     return SESSION_NAME;
-  }
+  };
 
   var getCurrentSessionUser = function() {
     return USER;
-  }
+  };
 
   var deleteSession = function(callBack) {
-    sessionInfo.deleteSession(SESSION_NAME, function(err) {      
-      err ? callBack(err) : callBack();
+    sessionInfo.deleteSession(SESSION_NAME, function(err) {
+      if (err) {
+        callBack(err);
+        return;
+      }
+      callBack();
     });
-  }
+  };
 
   this.createTestSession = createTestSession;
   this.getSessionId = getCurrentSessionId;
@@ -42,4 +46,4 @@ module.exports =  function(db) {
   this.deleteSession = deleteSession;
 
   return this;
-}
+};
