@@ -1,9 +1,7 @@
 var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
-
-var SessionMetaData = function(dbConnection) {
-  var SCHEMA, SessionInfo, MODEL_NAME;
-  SCHEMA = {
+var SCHEMA, SessionInfo, MODEL_NAME;
+SCHEMA = {
     session_id: String,
     session_name: String,
     created_by: String,
@@ -11,8 +9,12 @@ var SessionMetaData = function(dbConnection) {
     beginDate: String,
     endDate: String
   };
-  MODEL_NAME = 'sessionInfo';
-  SessionInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
+MODEL_NAME = 'sessionInfo';
+SessionInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
+  
+var SessionMetaData = function(dbConnection) {
+  
+  
   utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'session_id');
 
   this.createSession = function(sessionName, createdBy, callback) {
