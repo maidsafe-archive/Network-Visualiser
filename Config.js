@@ -15,8 +15,7 @@ var constants = {
     socketPort : 9081,
     authPath: '../../../auth/next/gauth.json',
     sanityCheckerDir: '../../../testnet_status_monitor/next'
-  },
-  testDBEndPoint: '_test'
+  }
 };
 
 if(process.env.PORT === constants.nextBranchConfig.serverPort.toString()) {
