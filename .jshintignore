@@ -1,0 +1,6 @@
+frontend
+backend
+node_modules
+coverage
+server.js
+Config.js

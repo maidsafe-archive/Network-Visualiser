@@ -10,9 +10,9 @@ var sessionController = require('./backend/maidsafe/SessionController.js');
 var testnetStatusManager = require('./backend/maidsafe/TestnetStatusManager.js');
 var ciManager = require('./backend/maidsafe/CIManager.js');
 var config = require('./Config.js');
+
 var serverPort = config.Constants.serverPort;
 var socketPort = config.Constants.socketPort;
-
 var app = express();
 
 bridge.setupMongooseConnection(function() {
@@ -26,7 +26,7 @@ bridge.setupMongooseConnection(function() {
   app.use(methodOverride());
   app.use(express.session({
     store: new MongoStore({
-      url: config.Constants.mongo_con + '/nodeSessions'
+      url: config.Constants.mongoCon + '/nodeSessions'
     }),
     cookie: { maxAge: 3600000 },
     secret: 'maidsafelogs'
