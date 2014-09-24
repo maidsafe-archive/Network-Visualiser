@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
+/**
+* Moving the SCHEMA creation above VaultMetaData to avoid multiple compilation of the same Model thrown by Mongoose
+**/
 var SCHEMA, VaultInfo, MODEL_NAME;
 SCHEMA = {
   vault_id: String,
@@ -10,7 +13,6 @@ SCHEMA = {
 };
 MODEL_NAME = 'vaultInfo';
 VaultInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
-
 
 var VaultMetaData = function(dbConnection) {
 

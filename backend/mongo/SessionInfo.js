@@ -17,10 +17,16 @@ var SessionMetaData = function(dbConnection) {
   
   utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'session_id');
 
-  this.createSession = function(sessionName, createdBy, callback) {
-    var promise = new mongoose.Promise;
+  this.createSession = function(sessionName, createdBy, callback) {    
+    var promise = new mongoose.Promise;    
     if (callback) {
       promise.addBack(callback);
+    }
+    if (!createdBy) {
+      setTimeout(function() {
+        promise.error('Created by parameter is missing');
+      }, 10);
+      return promise;
     }
     SessionInfo.find({}, { session_id: 1, session_name: 1 }, function(err, res) {
       if (err) {
