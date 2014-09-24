@@ -171,6 +171,7 @@ describe('Sessions', function() {
 
   after(function(done) {
     db.db.dropDatabase();
+    mongoose.disconnect();
     done();
   });
 });

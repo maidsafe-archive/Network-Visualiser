@@ -1,14 +1,31 @@
 /*jshint expr: true*/
 
 var should = require('should'); // jshint ignore:line
-var bridge = require('../../backend/mongo/bridge');
-var config = require('../../Config');
+var config = require('../Config');
+var mongoose = require('mongoose');
 var testnetStatus = require('../../backend/mongo/TestnetStatus');
+var db;
 
 describe('Testnet Status', function() {
   var statusModel = {'last_updated': '', isReady: false};
+
+  var prepareDB = function(callback) {
+    mongoose.connect(config.Constants.mongoCon, function(connectionError) {
+      if (connectionError) {
+        callback(connectionError);
+        return;
+      }
+      db = mongoose.connection;
+      db.on('error', function() {
+        console.error.bind(console, 'connection error:');
+      });
+      testnetStatus = testnetStatus.TestnetStatusInfo(db);
+      callback();
+    });
+  };
+
   before(function(done) {
-    bridge.setupMongooseConnection(done, (config.Constants.mongoCon + config.Constants.testDBEndPoint));
+    prepareDB(done);
   });
 
   it('Should be able to add testnet status', function(done) {
@@ -41,5 +58,11 @@ describe('Testnet Status', function() {
       should(err).not.be.ok;
       done();
     });
+  });
+
+  after(function(done) {
+    db.db.dropDatabase();
+    mongoose.disconnect();
+    done();
   });
 });
