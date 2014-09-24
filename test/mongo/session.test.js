@@ -5,7 +5,7 @@ var config = require('../Config');
 var mongoose = require('mongoose');
 var sessionInfo = require('../../backend/mongo/SessionInfo');
 
-describe('Sessions', function() {
+describe('SessionInfo', function() {
   var sessionId;
   var SESSION_NAME = 'TEST_SESSION';
   var USER = 'test_user';
