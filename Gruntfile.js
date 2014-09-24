@@ -37,7 +37,8 @@ module.exports = function(grunt) {
         }
       },
       ci: {
-        command: ISTANBUL_COMMAND + ' --recursive -R json-cov > ' + CI_CONFIG.publishedFolder + '/' + CI_CONFIG.jsonReportFileName,
+        command: ISTANBUL_COMMAND + ' --recursive -R json-cov > ' +
+        CI_CONFIG.publishedFolder + '/' + CI_CONFIG.jsonReportFileName,
         options: {
           callback: ci.coverageCompleted
         }
