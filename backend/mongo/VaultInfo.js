@@ -31,7 +31,7 @@ var VaultMetaData = function(dbConnection) {
     var promise = new mongoose.Promise;
     if (canUpdateStatus(data.action_id)) {
       data = transformData(data);
-      VaultInfo.update({ vault_id: data.vault_id, session_id: data.session_id }, data, { upsert: true }, function(err, doc) {        
+      VaultInfo.update({ vault_id: data.vault_id, session_id: data.session_id }, data, { upsert: true }, function(err, doc) {
         if (err || doc == 0) {
           promise.error(err ? err : 'Vault is not active');
         } else {
