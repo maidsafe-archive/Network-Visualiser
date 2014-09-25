@@ -20,6 +20,36 @@ describe('VaultInfo', function() {
     });
   };
 
+  var addVaultStatus = function(callback) {
+    var data = {'vault_id': 'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(),
+    'action_id': 0, 'value1': 'aaaabbbbccccdddd'};
+    vaultInfo.updateVaultStatus(data).then(function(data) {      
+      callback(null, data);
+    }, function(err) {
+      callback(err);
+    });
+  };
+
+  var deleteVaultInfoForSession = function(callback) {
+     vaultInfo.deleteVaultInfoForSession(sessionHelper.getSessionId()).then(function(data) {     
+      callback(null, data);
+    }, function(err) {       
+      callback(err);
+    });
+  }
+
+  var updateVaultStoped = function(callback) {
+    var data = {'vault_id': 'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(),
+    'action_id': 18, 'value1': 'aaaabbbbccccdddd'};
+    vaultInfo.updateVaultStatus(data).then(function(data) {
+      should(data).be.exactly('');
+      callback(null, data)
+    }, function(err) {
+      should(err).not.be.ok;
+      callback(err);
+    });
+  }
+
   before(prepareDB);
 
   after(function(done) {
@@ -27,93 +57,120 @@ describe('VaultInfo', function() {
     done();
   });
 
-  it('Active vaults count should be 0 at start', function(done) {
-    vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data) {
-      should(err).not.be.ok;
-      should(data.length).be.exactly(0);
-      done();
-    });
-  });
-
   it('Should be able to add Vault status', function(done) {
-    var data = {'vault_id': 'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(),
-    'action_id': 0, 'value1': 'aaaabbbbccccdddd'};
-    vaultInfo.updateVaultStatus(data).then(function(data) {
-      should(data).be.exactly('');
-      done();
-    }, function(err) {
+    addVaultStatus(function(err, data){      
       should(err).not.be.ok;
-      done();
+      deleteVaultInfoForSession(function(err, data) {
+        done();
+      });
     });
   });
 
   it('Should be able to get all vault names in the session', function(done) {
-    vaultInfo.getAllVaultNames(sessionHelper.getSessionId()).then(function(data) {
-      should(data.length).be.above(0);
-      done();
-    }, function(err) {
+    var deleteInfo = function() {
+      deleteVaultInfoForSession(function() {
+        done();
+      });
+    };
+    addVaultStatus(function(err, data){
       should(err).not.be.ok;
-      done();
+      vaultInfo.getAllVaultNames(sessionHelper.getSessionId()).then(function(data) {
+        should(data).be.ok;
+        deleteInfo();
+      }, function(err) {
+        should(err).not.be.ok;
+        deleteInfo();
+      });
     });
   });
 
   it('Should be able to get active vaults', function(done) {
-    vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data) {
+    var deleteInfo = function() {
+      deleteVaultInfoForSession(function() {
+        done();
+      });
+    };
+    addVaultStatus(function(err, data){
       should(err).not.be.ok;
-      should(data.length).be.above(0);
-      done();
-    });
+      vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data) {
+        should(err).not.be.ok;
+        should(data.length).be.above(0);
+        deleteInfo();
+      });
+    });    
   });
 
   it('Should be able to check is vault is active', function(done) {
-    vaultInfo.isVaultActive({'session_id': sessionHelper.getSessionId(), 'vault_id': 'aaaa-bbbb'}).then(function(data) {
-      should(data).be.ok;
-      done();
-    }, function(err) {
+    var deleteInfo = function() {
+      deleteVaultInfoForSession(function() {
+        done();
+      });
+    };
+    addVaultStatus(function(err, data){
       should(err).not.be.ok;
-      done();
-    });
+      vaultInfo.isVaultActive({'session_id': sessionHelper.getSessionId(), 'vault_id': 'aaaa-bbbb'}).then(function(data) {
+        should(data).be.ok;
+        done();
+      }, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
+    });    
   });
 
   it('Should be able to check is vault is not active', function(done) {
-    vaultInfo.isVaultActive({'session_id': sessionHelper.getSessionId(), 'vault_id': 'aaa-bbbb'}).then(function(data) {
-      should(data).not.be.ok;
-      done();
-    }, function(err) {
-      console.log(err);
+    var deleteInfo = function() {
+      deleteVaultInfoForSession(function() {
+        done();
+      });
+    };
+    addVaultStatus(function(err, data){
       should(err).not.be.ok;
-      done();
-    });
-  });
-
-  it('Should be able to update Vault status', function(done) {
-    var data = {'vault_id': 'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(),
-    'action_id': 18, 'value1': 'aaaabbbbccccdddd'};
-    vaultInfo.updateVaultStatus(data).then(function(data) {
-      should(data).be.exactly('');
-      done();
-    }, function(err) {
-      should(err).not.be.ok;
-      done();
+      vaultInfo.isVaultActive({'session_id': sessionHelper.getSessionId(), 'vault_id': 'aaa-bbbb'}).then(function(data) {
+        should(data).not.be.ok;
+        done();
+      }, function(err) {
+        should(err).not.be.ok;
+        done();
+      });
     });
   });
 
   // Active vaults are not returning the expected value
-  // it('Active vaults should be 0', function(done) {
-  //   vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data){
-  //     should(err).not.be.ok;
-  //     should(data.length).be.equal(0);
-  //     done();
-  //   });
-  // });
+  it('Active vaults should be 0', function(done) {
+     var deleteInfo = function() {
+      deleteVaultInfoForSession(function() {
+        done();
+      });
+    };
+    addVaultStatus(function(err, data){
+      should(err).not.be.ok;
+      updateVaultStoped(function(err, data){
+        vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data){
+          should(err).not.be.ok;
+          should(data.length).be.equal(0);
+          done();
+        });
+      });
+    });    
+  });
 
   it('Should be able to delete Vaults for the session', function(done) {
-    vaultInfo.deleteVaultInfoForSession(sessionHelper.getSessionId()).then(function(data) {
-      should(data).be.ok;
-      done();
-    }, function(err) {
+    var deleteInfo = function() {
+      deleteVaultInfoForSession(function() {
+        done();
+      });
+    };
+    addVaultStatus(function(err, data){
       should(err).not.be.ok;
-      done();
-    });
+      deleteVaultInfoForSession(function(err, data) {
+        should(err).not.be.ok;
+        vaultInfo.getActiveVaults(sessionHelper.getSessionId(), function(err, data) {
+          should(err).not.be.ok;
+          should(data.length).be.exactly(0);
+          deleteInfo();
+        });
+      });
+    });    
   });
 });
