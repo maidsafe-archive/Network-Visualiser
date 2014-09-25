@@ -133,7 +133,7 @@ var SessionMetaData = function(dbConnection) {
 
     var queryCriteria = { session_name: sessionName, is_active: true };
     var updateCriteria = { $set: { is_active: false }, $unset: { beginDate: 1, endDate: 1 } };
-    SessionInfo.findOneAndUpdate(queryCriteria, updateCriteria, function(err, session) {
+    SessionInfo.findOneAndUpdate(queryCriteria, updateCriteria, function(err, session) {      
       err || !session ? promise.error(err || 'Invalid Session') : promise.complete(session.session_id);
     });
     return promise;
