@@ -1,9 +1,7 @@
 var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
-
-var SessionMetaData = function(dbConnection) {
-  var SCHEMA, SessionInfo, MODEL_NAME;
-  SCHEMA = {
+var SCHEMA, SessionInfo, MODEL_NAME;
+SCHEMA = {
     session_id: String,
     session_name: String,
     created_by: String,
@@ -11,14 +9,24 @@ var SessionMetaData = function(dbConnection) {
     beginDate: String,
     endDate: String
   };
-  MODEL_NAME = 'sessionInfo';
-  SessionInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
+MODEL_NAME = 'sessionInfo';
+SessionInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
+  
+var SessionMetaData = function(dbConnection) {
+  
+  
   utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'session_id');
 
-  this.createSession = function(sessionName, createdBy, callback) {
-    var promise = new mongoose.Promise;
+  this.createSession = function(sessionName, createdBy, callback) {    
+    var promise = new mongoose.Promise;    
     if (callback) {
       promise.addBack(callback);
+    }
+    if (!createdBy) {
+      setTimeout(function() {
+        promise.error('Created by parameter is missing');
+      }, 10);
+      return promise;
     }
     SessionInfo.find({}, { session_id: 1, session_name: 1 }, function(err, res) {
       if (err) {
@@ -125,7 +133,7 @@ var SessionMetaData = function(dbConnection) {
 
     var queryCriteria = { session_name: sessionName, is_active: true };
     var updateCriteria = { $set: { is_active: false }, $unset: { beginDate: 1, endDate: 1 } };
-    SessionInfo.findOneAndUpdate(queryCriteria, updateCriteria, function(err, session) {
+    SessionInfo.findOneAndUpdate(queryCriteria, updateCriteria, function(err, session) {      
       err || !session ? promise.error(err || 'Invalid Session') : promise.complete(session.session_id);
     });
     return promise;
