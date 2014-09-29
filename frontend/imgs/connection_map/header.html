@@ -1,0 +1,23 @@
+<div class="top-header">
+    <h1><a href="/">Network Visualiser -Connection Map</a></h1>
+    <p class="time_label">
+        {{currentTime | date : 'HH:mm:ss dd/MM/yyyy'}}
+    </p>
+</div>
+<!--
+<ul class="buttons-left">
+    <li>
+        <button ng-click="timeline()">Timeline</button>
+    </li>
+    <li>
+      <button ng-click="search()">Search</button>
+    </li>
+</ul>-->
+<ul class="buttons-right">
+    <!--<li>
+        <button ng-click="toggleExpandAllLogs()">{{allVaultsExpanded?'Hide All':'Expand All'}}</button>
+    </li>-->
+    <li>
+        <button ng-click="toggleIconsTray()">{{iconsTrayClosed?'Show Keys':'Hide Keys'}}</button>
+    </li>
+</ul>
