@@ -1,7 +1,7 @@
 /*
- * TODO :: set width and height dynamically based on parent node, present logic wont hold good
+ * TODO :: Set width and height dynamically based on parent node, present logic wont hold good
  */
-function ConnectionMap(connectionMap, elementId) {
+function ConnectionMapBuilder(connectionMap, elementId) {
   var div = d3.select('#' + elementId);
   // Constants
   // ---------
@@ -10,7 +10,7 @@ function ConnectionMap(connectionMap, elementId) {
   var WIDTH = window.innerWidth - (window.innerWidth / PADDING_WIDTH );
   var HEIGHT = window.innerHeight - 155 , // 90 (header) + 50 (footer) + 15 (padding)
     RADIUS_X = WIDTH / 2,
-    RADIUS_Y = HEIGHT / 2.5,
+    RADIUS_Y = HEIGHT / 2,
     CIRCLE_TEXT_GAP = 18,
     CIRCLE_LINE_GAP = 3,
     CIRCLE_FULL_LIMIT = 5,
@@ -25,7 +25,7 @@ function ConnectionMap(connectionMap, elementId) {
       transY += (-1 * ( lastDragPosition.sourceEvent.offsetY - d3.event.sourceEvent.offsetY ));
     }
     svg.attr("transform", "translate(" + [transX, transY] + ")scale(" + d3.event.scale + ")");
-  }
+  };
 
   var dragEvent = d3.behavior.drag()
     .on('dragstart', function () {
@@ -61,6 +61,7 @@ function ConnectionMap(connectionMap, elementId) {
       .sort(function (a, b) {
         return d3.ascending(a.name, b.name);
       });
+    console.log('ininin')
     var transformedData = new ConnectionMapTransformer(connectionMap);
     window.events = new ConnectionEvents(svg);
     connectionMap.sort(function (a, b) {
@@ -122,4 +123,5 @@ function ConnectionMap(connectionMap, elementId) {
     events.updateLinksOnLoad(nodes);
   };
   this.drawConnections = drawConnectionLinks;
+  return this;
 };
