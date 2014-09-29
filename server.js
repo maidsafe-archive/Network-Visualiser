@@ -64,6 +64,10 @@ bridge.setupMongooseConnection(function() {
     res.render('testnet-status', { socketPort: socketPort });
   });
 
+  app.get('/connection', function(req, res) {
+        res.render('connection', { socketPort: socketPort });
+  });
+
   userAuth.setupAuthCallbacks(app);
   sessionController.register(app);
   logController.register(app);

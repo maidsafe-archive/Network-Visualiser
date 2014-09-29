@@ -1,0 +1,20 @@
+<div class="top-header">
+    <h1><a href="/" class="home"></a>Network Visualiser - Realtime View</h1>
+    <p class="time_label">
+        {{currentTime | date : 'HH:mm:ss dd/MM/yyyy'}}
+    </p>
+    <!--<ng-include src="'template/common/zoom_control.html'"></ng-include>-->
+</div>
+<!--<ul class="buttons-left">
+    <li>
+        <button ng-click="timeline()">Timeline</button>
+    </li>
+    <li>
+      <button ng-click="search()">Search</button>
+    </li>
+</ul>-->
+<ul class="buttons-right">
+    <li>
+        <button ng-click="toggleIconsTray()">{{iconsTrayClosed?'Show Keys':'Hide Keys'}}</button>
+    </li>
+</ul>
