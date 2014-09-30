@@ -150,6 +150,9 @@ function ConnectionEvents(svg) {
         });
       }
     });
+    if (clickEvent.state) {
+      d3.selectAll('.link').classed('grey', true);
+    }
   };
   this.mouseover = function(d) {
     if (!clickEvent.state) {
