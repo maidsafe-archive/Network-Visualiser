@@ -12,10 +12,10 @@ function ConnectionEvents(svg) {
   var LINK_MODE = {CONNECTIVITY: 1, CHURN: 2};
   var mode = LINK_MODE.CONNECTIVITY;
   var clickEvent = { state: false, node: null};
-  var updateExpectedAndMissingLinks = function (node) {
+  var updateExpectedAndMissingLinks = function(node) {
     if (node.group && node.expected) {
       var actual = node.group.slice(0, CLOSE_GROUP_LIMIT);
-      node.expected.forEach(function (expected) {
+      node.expected.forEach(function(expected) {
         if (actual.indexOf(expected) === -1) {
           svg.select('g#node-' + expected + ' text').classed('blue', false).classed('red', true);
           svg.selectAll("path.link.source-" + node.name + ".target-" + expected).
@@ -23,7 +23,7 @@ function ConnectionEvents(svg) {
             classed(MISSING_EXPECTED, true);
         }
       });
-      actual.forEach(function (vaultName) {
+      actual.forEach(function(vaultName) {
         if (node.expected.indexOf(vaultName) === -1) {
           svg.select('g#node-' + vaultName + ' text').classed('blue', false).classed('orange', true);
           svg.selectAll("path.link.source-" + node.name + ".target-" + vaultName)
@@ -35,20 +35,20 @@ function ConnectionEvents(svg) {
       });
     }
   }
-  var updateConnectionLinks = function (svg, node) {
+  var updateConnectionLinks = function(svg, node) {
     revertConnections(svg);
     svg.select('svg g#node-' + node.name + ' text').classed(TEXT_NODE_SELECTED_CLASS, true);
     svg.selectAll('.link').classed(GREY_LINK_CLASS, true);
     if (node.group) {
       if (mode === LINK_MODE.CONNECTIVITY) {
-        node.group.slice(0, CLOSE_GROUP_LIMIT).forEach(function (vaultName) {
+        node.group.slice(0, CLOSE_GROUP_LIMIT).forEach(function(vaultName) {
           svg.select('g#node-' + vaultName + ' text').classed('blue', true);
           svg.selectAll("path.link.source-" + node.name + ".target-" + vaultName).classed(CLOSE_GROUP_CLASS, true)
         });
       }
       if (mode == LINK_MODE.CHURN) {
         var className, labelClass;
-        node.group.forEach(function (d) {
+        node.group.forEach(function(d) {
           if (d === node.lastIn) {
             className = VAULT_ENTERED_CLASS;
             labelClass = 'green';
@@ -69,16 +69,16 @@ function ConnectionEvents(svg) {
       updateExpectedAndMissingLinks(node);
     }
   };
-  var revertConnections = function (node) {
+  var revertConnections = function(node) {
     if (clickEvent.state) {
       return;
     }
     var linkClasses = [OVERLAPPING_TARGET_CLASS, GROUP_CLASS, GREY_LINK_CLASS, VAULT_ENTERED_CLASS, VAULT_LEFT_CLASS, MISSING_EXPECTED, NOT_EXPECTED_CLASS, CLOSE_GROUP_CLASS];
     var textClasses = ['blue', 'green', 'red', 'orange', 'light-blue'];
-    linkClasses.forEach(function (className) {
+    linkClasses.forEach(function(className) {
       svg.selectAll('path.link.' + className).classed(className, false);
     });
-    textClasses.forEach(function (className) {
+    textClasses.forEach(function(className) {
       svg.selectAll('g.node text').classed(className, false);
     });
     svg.selectAll("path.link.source-" + node.name)
@@ -89,7 +89,7 @@ function ConnectionEvents(svg) {
       .each(updateNodes("source", false));
     svg.select('g text.selected').classed(TEXT_NODE_SELECTED_CLASS, false);
   };
-  var showConnections = function (d) {
+  var showConnections = function(d) {
     svg.selectAll("path.link.target-" + d.name)
       .classed("target", true)
       .each(updateNodes("source", true));
@@ -100,21 +100,21 @@ function ConnectionEvents(svg) {
   };
 
   function updateNodes(name, value) {
-    return function (d) {
+    return function(d) {
       if (value) {
         this.parentNode.appendChild(this);
       }
       svg.select("#node-" + d[name].name).classed(name, value);
     };
   };
-  this.mousedown = function () {
+  this.mousedown = function() {
     if (!clickEvent.state) {
       return;
     }
     clickEvent.state = false;
     revertConnections(clickEvent.node);
   };
-  var restoreMouseClick = function () {
+  var restoreMouseClick = function() {
     if (clickEvent.state) {
       clickEvent.state = false;
       revertConnections(clickEvent.node);
@@ -122,7 +122,7 @@ function ConnectionEvents(svg) {
       showConnections(clickEvent.node);
     }
   };
-  this.mouseClick = function (d) {
+  this.mouseClick = function(d) {
     if (clickEvent.state) {
       clickEvent.state = false;
       revertConnections(clickEvent.node);
@@ -131,17 +131,17 @@ function ConnectionEvents(svg) {
     clickEvent.node = d;
     showConnections(d);
   };
-  this.updateLinksOnLoad = function (nodes) {
-    nodes.each(function (node) {
+  this.updateLinksOnLoad = function(nodes) {
+    nodes.each(function(node) {
       if (node.group && node.expected) {
         var actual = node.group.slice(0, CLOSE_GROUP_LIMIT);
-        node.expected.forEach(function (expected) {
+        node.expected.forEach(function(expected) {
           if (actual.indexOf(expected) === -1) {
             svg.selectAll("path.link.source-" + node.name + ".target-" + expected).
               classed('missing', true);
           }
         });
-        actual.forEach(function (vaultName) {
+        actual.forEach(function(vaultName) {
           if (node.expected.indexOf(vaultName) === -1) {
             svg.selectAll("path.link.source-" + node.name + ".target-" + vaultName)
               .classed('missing', false)
@@ -151,12 +151,12 @@ function ConnectionEvents(svg) {
       }
     });
   };
-  this.mouseover = function (d) {
+  this.mouseover = function(d) {
     if (!clickEvent.state) {
       showConnections(d);
     }
   };
-  this.setMode = function (_mode) {
+  this.setMode = function(_mode) {
     mode = _mode;
     if (!clickEvent.node) {
       return;
@@ -169,7 +169,7 @@ function ConnectionEvents(svg) {
     }
   };
   this.mouseout = revertConnections;
-  this.updateSVG = function (svgRegion) {
+  this.updateSVG = function(svgRegion) {
     svg = svgRegion;
     setTimeout(restoreMouseClick, 1);
   };
