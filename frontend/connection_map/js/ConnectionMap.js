@@ -27,7 +27,9 @@ function ConnectionMapBuilder(connectionMap, elementId) {
       transX += (-1 * ( lastDragPosition.sourceEvent.offsetX - d3.event.sourceEvent.offsetX ));
       transY += (-1 * ( lastDragPosition.sourceEvent.offsetY - d3.event.sourceEvent.offsetY ));
     }
-    lastScale = d3.event.scale;
+    if (!lastDragPosition) {
+      lastScale = d3.event.scale;
+    }
     svg.attr("transform", "translate(" + [transX, transY] + ")scale(" + lastScale + ")");
   };
   var dragEvent = d3.behavior.drag()

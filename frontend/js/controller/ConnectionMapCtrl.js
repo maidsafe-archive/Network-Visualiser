@@ -38,7 +38,6 @@ app.controller('connectionMapCtrl', ['$scope', '$location', function ($scope, $l
         });
       $scope.counter++;
       reactComp.setState({});
-      console.log(($scope.counter * 2) + 6);
     }, 2000)
   };
 }]);

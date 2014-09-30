@@ -56,7 +56,6 @@ function ConnectionMapTransformer(connectionMap) {
     connectionMap.forEach(function(d) {
       find(d.name, d);
     });
-    console.log(map);
     return map[''];
   };
   var generateLinks = function(nodes) {
