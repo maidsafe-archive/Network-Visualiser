@@ -6,27 +6,30 @@ function ConnectionMapBuilder(connectionMap, elementId) {
   // Constants
   // ---------
   var svg;
-  var PADDING_WIDTH = 20;
-  var WIDTH = window.innerWidth - (window.innerWidth / PADDING_WIDTH );
-  var HEIGHT = window.innerHeight - 155 , // 90 (header) + 50 (footer) + 15 (padding)
-    RADIUS_X = WIDTH / 2,
-    RADIUS_Y = HEIGHT / 2,
-    CIRCLE_TEXT_GAP = 18,
-    CIRCLE_LINE_GAP = 3,
-    CIRCLE_FULL_LIMIT = 5,
-    CIRCLE_SIZE = 3;
+  var events;
+  var WIDTH = window.innerWidth - (window.innerWidth / 20 );//20 is picked random
+  var HEIGHT = window.innerHeight - 155; // 90 (header) + 50 (footer) + 15 (padding)
+  var RADIUS_X = WIDTH / 2;
+  var RADIUS_Y = HEIGHT / 2;
+  var CIRCLE_TEXT_GAP = 18;
+  var CIRCLE_LINE_GAP = 3;
+  var CIRCLE_FULL_LIMIT = 5;
+  var CIRCLE_SIZE = 3;
   // Helpers
   // -------
-  var lastDragPosition, transX = RADIUS_X, transY = RADIUS_Y;
+  var lastDragPosition;
+  var transX = RADIUS_X;
+  var transY = RADIUS_Y;
+  var lastScale;
 
   function zoom() {
     if (lastDragPosition) {
       transX += (-1 * ( lastDragPosition.sourceEvent.offsetX - d3.event.sourceEvent.offsetX ));
       transY += (-1 * ( lastDragPosition.sourceEvent.offsetY - d3.event.sourceEvent.offsetY ));
     }
-    svg.attr("transform", "translate(" + [transX, transY] + ")scale(" + d3.event.scale + ")");
+    lastScale = d3.event.scale;
+    svg.attr("transform", "translate(" + [transX, transY] + ")scale(" + lastScale + ")");
   };
-
   var dragEvent = d3.behavior.drag()
     .on('dragstart', function () {
       lastDragPosition = d3.event;
@@ -46,24 +49,31 @@ function ConnectionMapBuilder(connectionMap, elementId) {
     angle(function (d) {
       return d.x / 180 * Math.PI;
     });
+  svg = div.append("svg:svg").
+    attr("preserveAspectRatio", "xMinYMin meet").
+    attr("viewBox", [0, 0, WIDTH, HEIGHT].join(' ')).
+    attr("height", HEIGHT);
   var drawConnectionLinks = function (connections) {
-    d3.select('svg').remove('*');
-    connectionMap = connections || connectionMap;
-    svg = div.append("svg:svg").
-      attr("preserveAspectRatio", "xMinYMin meet").
-      attr("viewBox", [0, 0, WIDTH, HEIGHT].join(' ')).
-      attr("height", HEIGHT).
-      append("svg:g").
+    d3.select('svg g').remove('*');
+    svg = d3.select('svg').append("svg:g").
       call(d3.behavior.zoom().scaleExtent([-5, 20]).on("zoom", zoom)).call(dragEvent).
-      attr("transform", "translate(" + RADIUS_X + "," + RADIUS_Y + ")");
+      attr("transform", function () {
+        if (lastScale) {
+          return "translate(" + transX + "," + transY + ")scale(" + lastScale + ")";
+        }
+        return "translate(" + transX + "," + transY + ")";
+      });
+    connectionMap = connections || connectionMap;
     var cluster = d3.layout.cluster().
       size([360, RADIUS_Y / 2])
       .sort(function (a, b) {
         return d3.ascending(a.name, b.name);
       });
-    console.log('ininin')
     var transformedData = new ConnectionMapTransformer(connectionMap);
-    window.events = new ConnectionEvents(svg);
+    if (!events) {
+      events = new ConnectionEvents();
+    }
+    events.updateSVG(svg);
     connectionMap.sort(function (a, b) {
       return  a.name < b.name;
     });
@@ -97,7 +107,7 @@ function ConnectionMapBuilder(connectionMap, elementId) {
       });
     nodes.append("svg:text")
       .attr("dx", function (d) {
-        return d.x < 180 ? CIRCLE_TEXT_GAP : -CIRCLE_TEXT_GAP
+        return d.x < 180 ? CIRCLE_TEXT_GAP : -CIRCLE_TEXT_GAP;
       })
       .attr("dy", ".31em")
       .attr("text-anchor", function (d) {

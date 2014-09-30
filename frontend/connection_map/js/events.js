@@ -114,6 +114,14 @@ function ConnectionEvents(svg) {
     clickEvent.state = false;
     revertConnections(clickEvent.node);
   };
+  var restoreMouseClick = function () {
+    if (clickEvent.state) {
+      clickEvent.state = false;
+      revertConnections(clickEvent.node);
+      clickEvent.state = true;
+      showConnections(clickEvent.node);
+    }
+  };
   this.mouseClick = function (d) {
     if (clickEvent.state) {
       clickEvent.state = false;
@@ -161,5 +169,9 @@ function ConnectionEvents(svg) {
     }
   };
   this.mouseout = revertConnections;
+  this.updateSVG = function (svgRegion) {
+    svg = svgRegion;
+    setTimeout(restoreMouseClick, 1);
+  };
   return this;
 };
