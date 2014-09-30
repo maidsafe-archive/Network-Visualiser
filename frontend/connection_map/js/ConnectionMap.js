@@ -118,7 +118,7 @@ function ConnectionMapBuilder(connectionMap, elementId) {
       .attr("r", CIRCLE_SIZE)
       .attr("transform", 'translate(' + CIRCLE_LINE_GAP + ',-' + CIRCLE_LINE_GAP + ')')
       .classed('full', function (d) {
-        return d.group && d.group.length == CIRCLE_FULL_LIMIT
+        return d.group && d.group.length == CIRCLE_FULL_LIMIT;
       });
     events.updateLinksOnLoad(nodes);
   };

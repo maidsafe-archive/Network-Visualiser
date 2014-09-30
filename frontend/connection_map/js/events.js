@@ -107,12 +107,6 @@ function ConnectionEvents(svg) {
       svg.select("#node-" + d[name].name).classed(name, value);
     };
   };
-  function cross(a, b) {
-    return a[0] * b[1] - a[1] * b[0];
-  };
-  function dot(a, b) {
-    return a[0] * b[0] + a[1] * b[1];
-  };
   this.mousedown = function () {
     if (!clickEvent.state) {
       return;

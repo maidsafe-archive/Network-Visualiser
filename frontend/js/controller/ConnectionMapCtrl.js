@@ -9,53 +9,39 @@ app.controller('connectionMapCtrl', ['$scope', '$location', function ($scope, $l
     $scope.iconsTrayClosed = true;
     $scope.currentTime = new Date();
     $scope.vaultsCount = 10;
+    $scope.counter = 0;
 
+    $scope.connections = [];
 
-    $scope.connections = [
-      {
-        "name": "Vault-A",
-        "group": [
-          "Vault-B",
-          "Vault-C",
-          "Vault-K",
-          "Vault-Y",
-          "Vault-ZZ"
-        ],
-        "expected": [
-          "Vault-B",
-          "Vault-C",
-          "Vault-G",
-          "Vault-Y"
-        ],
-        "lastIn": "Vault-ZZ",
-        "lastOut": "Vault-Y"
-      },
-      {
-        "name": "Vault-K",
-        "group": [
-          "Vault-B",
-          "Vault-A",
-          "Vault-G"
-        ],
-        "expected" : [
-          "Vault-B",
-          "Vault-C",
-          "Vault-O"
-        ],
-        "lastIn": "Vault-A",
-        "lastOut": "Vault-C"
-      }
-    ];
   $scope.toggleIconsTray = function () {
         $scope.iconsTrayClosed = !$scope.iconsTrayClosed;
     };
   var reactComp;
   $scope.registerReactComponent = function(reactComponent) {
     reactComp = reactComponent;
-    setTimeout(function(){
-      $scope.connections = $scope.connections.slice(1);
+    setInterval(function(){
+      $scope.connections.push(
+        {
+          "name": ("Vault-A" + $scope.counter),
+          "group": [
+            ("Vault-B" + $scope.counter),
+            "Vault-C",
+            "Vault-K",
+            "Vault-Y",
+            "Vault-ZZ"
+          ],
+          "expected": [
+            "Vault-B",
+            "Vault-C",
+            "Vault-G",
+            "Vault-Y"
+          ],
+          "lastIn": "Vault-ZZ",
+          "lastOut": "Vault-Y"
+        });
+      $scope.counter++;
       reactComp.setState({});
-    }, 6000)
+    }, 10000)
   };
 
 
