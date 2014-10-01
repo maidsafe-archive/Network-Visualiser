@@ -109,18 +109,22 @@ var checkStatus = function() {
         return;
       }
       var newStatus = {};
-      /* jshint sub:true*/
-      newStatus['last_updated'] = new Date().toISOString();
-      /* jshint sub:false*/
+      newStatus.last_updated = new Date().toISOString();
+      // jshint camelcase:false
+      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       newStatus.connections = parsedData.bootstrapConnectivityCheck;
-      /* jshint sub:true*/
-      newStatus['is_ready'] = false;
-      /* jshint sub:false*/
+      // jshint camelcase:true
+      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+      newStatus.is_ready = false;
+      // jshint camelcase:false
+      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       for (var index in newStatus.connections) {
         if (newStatus.connections[index].canConnect) {
-          /* jshint sub:true*/
-          newStatus['is_ready'] = true;
-          /* jshint sub:false*/
+          // jshint camelcase:false
+          // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+          newStatus.is_ready = true;
+          // jshint camelcase:true
+          // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           break;
         }
       }

@@ -1,13 +1,15 @@
 var config = require('./../../Config.js');
-/*jshint sub:true*/
 exports.isValid = function(log) {
-  var isValid = log['vault_id'] && log['action_id'] && log['persona_id'];
+  // jshint camelcase:false
+  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+  var isValid = log.vault_id && log.action_id && log.persona_id;
+  // jshint camelcase:true
+  // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   if (!log.hasOwnProperty('session_id')) {
     isValid = false;
   }
   return isValid;
 };
-/*jshint sub:false*/
 exports.formatDate = function(log) {
   try {
     if (log.ts) {
@@ -40,9 +42,12 @@ exports.decodeData = function(str) {
   str = new Buffer(str, 'base64').toString('utf8');
   return new Buffer(str).toString('hex');
 };
-/*jshint sub:true*/
 exports.isPageRequestValid = function(criteria) {
-  if (criteria['vault_id']) {
+  // jshint camelcase:false
+  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+  if (criteria.vault_id) {
+    // jshint camelcase:true
+    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     if (criteria.page) {
       try {
         criteria.page = parseInt(criteria.page);
@@ -65,7 +70,6 @@ exports.isPageRequestValid = function(criteria) {
   }
   return false;
 };
-/*jshint sub:false*/
 exports.transformQuery = function(query) {
   for (var key in query) {
     if (key === 'ts') {
