@@ -1,5 +1,5 @@
 {
-  "excludeFiles" : ["coverage", "node_modules", "frontend/components", "frontend", "backend"],
+  "excludeFiles" : ["coverage", "node_modules", "frontend/components", "frontend"],
   "preset": "google",
   "validateIndentation": 2,
   "requireCommaBeforeLineBreak": true,

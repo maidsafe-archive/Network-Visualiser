@@ -32,10 +32,12 @@ bridge.setupMongooseConnection(function() {
   app.use(app.router);
   app.use(express.static(__dirname + '/frontend'));
   app.get('/', userAuth.appendUserInfo, function(req, res) {
+    /* jscs:disable disallowDanglingUnderscores */
     if (req.isAuthenticated() && !req._userInfo.isAuthenticated) {
       req._userInfo.invalidAuthMessage = 'Invalid Authentication';
     }
     res.render('sessions', {userInfo: req._userInfo, socketPort: socketPort});
+    /* jscs:enable disallowDanglingUnderscores */
   });
   app.get('/viewer', function(req, res) {
     res.render('viewer', {socketPort: socketPort});
