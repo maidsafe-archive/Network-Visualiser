@@ -1,13 +1,13 @@
 var sessionService = require('./service/SessionService.js');
-var utils = require('./utils.js');
 var userAuth = require('./../auth/UserAuth.js');
-
 var validateAccess = function(req, res, next) {
+  /* jscs:disable disallowDanglingUnderscores */
   if (!req._userInfo || !req._userInfo.isAuthenticated) {
     res.send(500, 'Invalid Authentication');
   } else {
     next();
   }
+  /* jscs:enable disallowDanglingUnderscores */
 };
 var createSession = function(req, res) {
   sessionService.createSession(req, res);
@@ -36,7 +36,6 @@ var clearActiveSession = function(req, res) {
 exports.register = function(server) {
   server.post('/backend/createSession', userAuth.appendUserInfo, validateAccess, createSession);
   server.post('/backend/import', userAuth.appendUserInfo, validateAccess, importSession);
-
   server.get('/backend/currentSessions', userAuth.appendUserInfo, getCurrentSessions);
   server.get('/backend/requestExport', userAuth.appendUserInfo, validateAccess, requestExport);
   server.get('/backend/downloadExport', userAuth.appendUserInfo, validateAccess, downloadExport);
