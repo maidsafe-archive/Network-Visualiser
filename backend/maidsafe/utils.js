@@ -3,6 +3,7 @@ exports.isValid = function(log) {
   // jshint camelcase:false
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
   var isValid = log.vault_id && log.action_id && log.persona_id;
+  log.action_id = parseInt(log.action_id);
   // jshint camelcase:true
   // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   if (!log.hasOwnProperty('session_id')) {
