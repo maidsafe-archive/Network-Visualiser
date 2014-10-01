@@ -10,9 +10,11 @@ var saveLog = function(req, res) {
     return;
   }
   if (!log.hasOwnProperty('persona_id')) {
-    // jshint sub:true
-    log['persona_id'] = config.Constants.naPersonaId;
-    // jshint sub:false
+    // jshint camelcase:false
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+    log.persona_id = config.Constants.naPersonaId;
+    // jshint camelcase:true
+    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   }
   if (!utils.isValid(log)) {
     res.send(500, 'Invalid Parameters');
@@ -49,10 +51,12 @@ var history = function(req, res) {
   }
   var timeCriteria = criteria.ts ? {'ts': {'$lt': criteria.ts}} : {};
   if (utils.isPageRequestValid(criteria)) {
-    // jshint sub:true
-    bridge.vaultHistory(criteria.sn, criteria['vault_id'], timeCriteria,
+    // jshint camelcase:false
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+    bridge.vaultHistory(criteria.sn, criteria.vault_id, timeCriteria,
       parseInt(criteria.page), parseInt(criteria.max), new Handler.SelectLogsHandler(res));
-    // jshint sub:false
+    // jshint camelcase:true
+    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   } else {
     res.send(500, 'Invalid Request');
   }

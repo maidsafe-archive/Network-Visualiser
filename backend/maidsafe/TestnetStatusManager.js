@@ -109,15 +109,11 @@ var checkStatus = function() {
         return;
       }
       var newStatus = {};
+      // jshint camelcase:false
+      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       newStatus.last_updated = new Date().toISOString();
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       newStatus.connections = parsedData.bootstrapConnectivityCheck;
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       newStatus.is_ready = false;
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       for (var index in newStatus.connections) {
         if (newStatus.connections[index].canConnect) {
           // jshint camelcase:false
