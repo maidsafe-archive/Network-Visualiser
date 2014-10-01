@@ -12,7 +12,8 @@ var config = require('./Config.js');
 var serverPort = config.Constants.serverPort;
 var socketPort = config.Constants.socketPort;
 var app = express();
-bridge.setupMongooseConnection(function() {
+
+var configureMvcEngine = function() {
   app.set('needsAuth', userAuth.initAuth(testnetStatusManager.mailerInit));
   app.set('views', __dirname + '/frontend');
   app.set('view engine', 'ejs');
@@ -30,6 +31,18 @@ bridge.setupMongooseConnection(function() {
   }));
   userAuth.configureAuth(app);
   app.use(app.router);
+};
+var registerControllers = function() {
+  userAuth.setupAuthCallbacks(app);
+  sessionController.register(app);
+  logController.register(app);
+  testnetStatusManager.register(app);
+  testnetStatusManager.startChecker();
+  ciManager.startChecker();
+};
+bridge.setupMongooseConnection(function() {
+  configureMvcEngine();
+  registerControllers();
   app.use(express.static(__dirname + '/frontend'));
   app.get('/', userAuth.appendUserInfo, function(req, res) {
     /* jscs:disable disallowDanglingUnderscores */
@@ -54,11 +67,5 @@ bridge.setupMongooseConnection(function() {
   app.get('/testnet-status', function(req, res) {
     res.render('testnet-status', {socketPort: socketPort});
   });
-  userAuth.setupAuthCallbacks(app);
-  sessionController.register(app);
-  logController.register(app);
-  testnetStatusManager.register(app);
-  testnetStatusManager.startChecker();
-  ciManager.startChecker();
   app.listen(serverPort);
 });
