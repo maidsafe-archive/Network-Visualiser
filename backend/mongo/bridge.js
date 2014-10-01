@@ -19,7 +19,7 @@ exports.setupMongooseConnection = function(callback, path) {
     });
     console.log('Mongodb connected successfully');
     vaultLog = logManager.getManager(db);
-    vaultInfo = vaultInfo.VaultMetaData(db);
+    vaultInfo = vaultInfo.VaultMetaData();
     sessionInfo = sessionInfo.SessionMetaData(db);
     testnetStatus = testnetStatus.TestnetStatusInfo(db);
     dbUtils = dbUtils.getDBUtil(db);
