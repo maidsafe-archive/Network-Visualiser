@@ -13,7 +13,7 @@ describe('VaultInfo', function() {
         callback(err);
         return;
       }
-      vaultInfo = vaultInfo.VaultMetaData(dbHelper.getDB());
+      vaultInfo = vaultInfo.VaultMetaData();
       sessionHelper = sessionHelper(dbHelper.getDB());
       sessionHelper.createTestSession(function(err) {
         err ? callback(err) : callback();

@@ -287,6 +287,7 @@ describe('SessionInfo', function() {
       should(err).not.be.ok;
       var log = {'action_id': 0, 'session_id': sessionId, ts: new Date().toUTCString()};
       sessionInfo.updateSessionInfo(log, function(err) {
+        should(err).not.be.ok;
         sessionInfo.clearActiveSession(SESSION_NAME, function(err, data) {
           should(err).not.be.ok;
           clearSession();

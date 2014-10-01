@@ -12,7 +12,6 @@ var SCHEMA = {
   endDate: String
   // jshint camelcase:true
   // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-
 };
 var MODEL_NAME = 'sessionInfo';
 SessionInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
@@ -170,6 +169,7 @@ var SessionMetaData = function(dbConnection) {
     SessionInfo.findOneAndUpdate(queryCriteria, updateCriteria, function(err, session) {
       if (err || !session) {
         promise.error(err || 'Invalid Session');
+        return;
       }
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
