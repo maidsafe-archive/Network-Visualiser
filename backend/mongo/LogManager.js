@@ -47,7 +47,7 @@ var LogManager = function(dbConnConnection) {
           }
           var networkHealthFound = false;
           for (var i in data) {
-            if (data[i].action_id == config.Constants.action_network_health) {
+            if (data[i].action_id == config.Constants.networkHealthActionId) {
               networkHealthFound = true;
               break;
             }
@@ -58,7 +58,7 @@ var LogManager = function(dbConnConnection) {
             promise.complete(data);
             return;
           }
-          criteria['action_id'] = config.Constants.action_network_health;
+          criteria['action_id'] = config.Constants.networkHealthActionId;
           var healthCursor = coll.find(criteria, HIDE_FIELDS).sort([['ts', 'descending']]).limit(1);
           healthCursor.toArray(function(healthErr, healthData) {
             if (healthErr) {

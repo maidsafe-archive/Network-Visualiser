@@ -12,7 +12,7 @@ var saveLog = function(req, res) {
   }
 
   if (!log.hasOwnProperty('persona_id')) {
-    log.persona_id = config.Constants.persona_na;
+    log.persona_id = config.Constants.naPersonaId;
   }
 
   if (!utils.isValid(log)) {
@@ -73,7 +73,7 @@ var getCurrentActiveVaults = function(req, res, sessionName) {
         host_name: vaults[index].host_name,
         logs: []
       };
-      bridge.vaultHistory(sessionName, vaults[index].vault_id, {}, 0, config.Constants.vault_logs_count).then(function(logs) {
+      bridge.vaultHistory(sessionName, vaults[index].vault_id, {}, 0, config.Constants.vaultLogsCount).then(function(logs) {
         counter++;
         if (logs.length > 0) {
           results[logs[0].vault_id].logs = logs;
@@ -99,7 +99,7 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
             host_name: vaults[index].host_name,
             logs: []
           };
-          bridge.vaultHistory(sessionName, vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vault_logs_count).then(function(logs) {
+          bridge.vaultHistory(sessionName, vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0, config.Constants.vaultLogsCount).then(function(logs) {
             counter++;
             if (logs.length > 0) {
               results[logs[0].vault_id].logs = logs;

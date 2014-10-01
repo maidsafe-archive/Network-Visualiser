@@ -1,5 +1,5 @@
 {
-  "excludeFiles" : ["coverage", "node_modules", "frontend/components", "frontend", "backend", "server.js", "Config.js"],
+  "excludeFiles" : ["coverage", "node_modules", "frontend/components", "frontend", "backend"],
   "preset": "google",
   "validateIndentation": 2,
   "requireCommaBeforeLineBreak": true,
