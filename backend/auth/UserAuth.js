@@ -1,10 +1,11 @@
+/* jscs:disable disallowDanglingUnderscores */
+
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var GitHubStrategy = require('passport-github').Strategy;
 var fs = require('fs');
 var path = require('path');
 var config = require('./../../Config.js');
-var utils = require('./../maidsafe/utils.js');
 var gAuth;
 var needsAuth = true;
 var googleOauthScope = {scope: ['https://www.googleapis.com/auth/userinfo.email']};
@@ -72,13 +73,13 @@ var setUserInfo = function(req, res, next) {
         isMaidSafeUser: true,
         mailAddress: mailId
       };
-    } else {
-      for (var index in gAuth.WHITELIST_USERS) {
-        if (mailId == gAuth.WHITELIST_USERS[index]) {
-          userInfo.isAuthenticated = true;
-          userInfo.mailAddress = mailId;
-          break;
-        }
+      return;
+    }
+    for (var index in gAuth.WHITELIST_USERS) {
+      if (mailId === gAuth.WHITELIST_USERS[index]) {
+        userInfo.isAuthenticated = true;
+        userInfo.mailAddress = mailId;
+        break;
       }
     }
   }
@@ -100,6 +101,7 @@ exports.setupAuthCallbacks = function(server) {
       socketPort: config.Constants.socketPort
     });
   });
+  /* jshint unused:false*/
   server.get('/auth/google', passport.authenticate('google', googleOauthScope), function(req, res) {
     // The request will be redirected to Google for authentication, so this
     // function will not be called.
