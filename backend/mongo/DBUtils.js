@@ -4,10 +4,10 @@ var csv = require('fast-csv');
 var utils = require('./../maidsafe/utils.js');
 var async = require('async');
 var Transform = require('stream').Transform;
-
 var DBUtil = function(dbConnection) {
   var dbConn = dbConnection;
-  var actionMap, personaMap;
+  var actionMap;
+  var personaMap;
   var ACTION_TO_STRING = {
     0: 'Vault Started',
     1: 'Increase count to',
@@ -42,21 +42,30 @@ var DBUtil = function(dbConnection) {
     9: 'Cache-Handler',
     10: 'NA'
   };
-
-  function createParser() {
-    var parser = new Transform({ objectMode: true });
+  var createParser = function() {
+    var parser = new Transform({objectMode: true});
+    /* jscs:disable disallowDanglingUnderscores */
     parser._transform = function(doc, encoding, done) {
-      this.push(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' + PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
+      /* jscs:enable disallowDanglingUnderscores */
+      // jshint camelcase:false
+      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+      this.push(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' +
+        PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
+      // jshint camelcase:true
+      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       done();
     };
     return parser;
-  }
-
+  };
   var appendCollectionToFile = function(formattedCollectionName, fileName) {
-    var promise = new mongoose.Promise;
-    var outStream = fs.createWriteStream(fileName, { 'flags': 'a' });
+    var promise = new mongoose.Promise();
+    var outStream = fs.createWriteStream(fileName, {'flags': 'a'});
     dbConn.db.collection(formattedCollectionName, function(err, col) {
-      var stream = col.find({}, { __id: 0, __v: 0 }).sort([['ts', 'ascending']]).stream();
+      /* jscs:disable disallowDanglingUnderscores */
+      var stream = col.find({}, {__id: 0, __v: 0}).sort([
+        /* jscs:enable disallowDanglingUnderscores */
+        ['ts', 'ascending']
+      ]).stream();
       var res = stream.pipe(createParser()).pipe(outStream);
       res.on('finish', function() {
         promise.complete('');
@@ -65,9 +74,9 @@ var DBUtil = function(dbConnection) {
     return promise;
   };
   var setupExportFile = function() {
-    var promise = new mongoose.Promise;
-    var fileName = "Logs_" + new Date().getTime() + ".csv";
-    fs.writeFile(fileName, "Vault_Id,Timestamp,Action,Persona,Value1,Value2\n", function(err) {
+    var promise = new mongoose.Promise();
+    var fileName = 'Logs_' + new Date().getTime() + '.csv';
+    fs.writeFile(fileName, 'Vault_Id,Timestamp,Action,Persona,Value1,Value2\n', function(err) {
       if (err) {
         promise.error(err);
       } else {
@@ -77,7 +86,7 @@ var DBUtil = function(dbConnection) {
     return promise;
   };
   this.exportLogs = function(sessionName, sessionInfo) {
-    var promise = new mongoose.Promise;
+    var promise = new mongoose.Promise();
     sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
       setupExportFile().then(function(fileName) {
         dbConn.db.collectionNames(function(e, colls) {
@@ -89,7 +98,11 @@ var DBUtil = function(dbConnection) {
               callback('Export Failed');
             });
           }, function(err) {
-            err ? promise.error(err) : promise.complete(fileName);
+            if (err) {
+              promise.error(err);
+              return;
+            }
+            promise.complete(fileName);
           });
         });
       });
@@ -101,46 +114,59 @@ var DBUtil = function(dbConnection) {
   var getActionNameMap = function() {
     var map = {};
     for (var key in ACTION_TO_STRING) {
-      map[ACTION_TO_STRING[key]] = key;
+      if (!map[ACTION_TO_STRING[key]]) {
+        map[ACTION_TO_STRING[key]] = key;
+      }
     }
     return map;
   };
   var getPersonaNameMap = function() {
     var map = {};
     for (var key in PERSONA_TO_STRING) {
-      map[PERSONA_TO_STRING[key]] = key;
+      if (!map[PERSONA_TO_STRING[key]]) {
+        map[PERSONA_TO_STRING[key]] = key;
+      }
     }
     return map;
   };
   var getLogFromCSVRow = function(data) {
-    return { vault_id: data[0], ts: data[1], action_id: actionMap[data[2]], persona_id: (personaMap[data[3]] || 10), value1: (data[4] || ''), value2: (data[5] || '') };
+    // jshint camelcase:false
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+    return {vault_id: data[0], ts: data[1], action_id: actionMap[data[2]],
+      persona_id: personaMap[data[3]] || 10,
+      value1: data[4] || '',
+      value2: data[5] || ''
+    };
+    // jshint camelcase:true
+    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   };
   var importValidator = function(data) {
     var log = getLogFromCSVRow(data);
     var errString = '';
     var isValid = true;
     var addErrorMessage = function(msg) {
-      errString += ((errString == '' ? errString : ', ') + msg);
+      errString += ((errString === '' ? errString : ', ') + msg);
       isValid = false;
     };
-    if (!log.vault_id || log.vault_id == '') {
-      addErrorMessage("Vault Id is empty");
+    // jshint camelcase:false
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+    if (!log.vault_id) {
+      // jshint camelcase:true
+      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+      addErrorMessage('Vault Id is empty');
     }
-    if (!log.ts) {
-      addErrorMessage("Timestamp is empty");
-    }
-    if (log.ts) {
-      try {
-        var tempDate = new Date(log.ts);
-        if (tempDate == "Invalid Date") {
-          addErrorMessage("Invalid Timestamp");
-        }
-      } catch (e) {
-        addErrorMessage("Invalid Timestamp");
+    try {
+      var tempDate = new Date(log.ts);
+      if (tempDate === 'Invalid Date') {
+        addErrorMessage('Invalid Timestamp');
       }
+    } catch (e) {
+      addErrorMessage('Invalid Timestamp');
     }
+    // jshint camelcase:false
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     if (!log.action_id) {
-      addErrorMessage("Action Id is empty or invalid - spell check");
+      addErrorMessage('Action Id is empty or invalid - spell check');
     }
     if (log.action_id) {
       try {
@@ -155,41 +181,47 @@ var DBUtil = function(dbConnection) {
       } catch (e) {
         addErrorMessage('Invalid Persona Id');
       }
+      // jshint camelcase:true
+      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     }
-
-    return { valid: isValid, msg: errString };
+    return {valid: isValid, msg: errString};
   };
   var importFactory = function(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise, validationCallback) {
     var stream = fs.createReadStream(filePath);
     var validationErrors = [];
     var lineNumber = 0;
-
     // ReSharper disable once InconsistentNaming - Constructor func
     var SaveLog = function(data) {
       var actionId = actionMap[data[2]];
+      // jshint camelcase:false
+      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       var log = {
         vault_id: data[0],
         ts: data[1],
         session_id: sessionId,
         action_id: actionId,
         persona_id: personaMap[data[3]],
-        value1: (data[4] || ''),
-        value2: (data[5] || '')
+        value1: data[4] || '',
+        value2: data[5] || ''
       };
+      // jshint camelcase:true
+      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       vaultInfo.updateVaultStatus(log).then(function() {
         // we assume imported logs hold valid info. Thus stream the intake in parallel.
         sessionInfo.updateSessionInfo(log).then(function() {
+          // jshint camelcase:false
+          // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
           delete log.session_id;
+          // jshint camelcase:true
+          // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           logManager.save(sessionId, log);
         });
       });
     };
-
-    csv.fromStream(stream).on("record", function(data) {
-      if (lineNumber++ == 0) {
+    csv.fromStream(stream).on('record', function(data) {
+      if (lineNumber++ === 0) {
         return;
       }
-
       if (validationCallback) {
         var errorInfo = importValidator(data);
         if (!errorInfo.valid) {
@@ -200,19 +232,19 @@ var DBUtil = function(dbConnection) {
         // ReSharper disable once WrongExpressionStatement
         new SaveLog(data);
       }
-    }).on("end", function() {
+    }).on('end', function() {
       if (validationCallback) {
         validationCallback(validationErrors);
       } else {
         promise.complete('Added to Server Queue.');
       }
-    }).on("error", function() {
+    }).on('error', function() {
       stream.destroy();
       promise.error('Invalid File');
     });
   };
   this.importLogs = function(sessionName, createdBy, filePath, vaultInfo, sessionInfo, logManager) {
-    var promise = new mongoose.Promise;
+    var promise = new mongoose.Promise();
     var validationCallback = function(errors) {
       if (errors.length > 0) {
         var err = '';
