@@ -1,5 +1,3 @@
-/* jscs:disable disallowDanglingUnderscores */
-
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var GitHubStrategy = require('passport-github').Strategy;
@@ -25,7 +23,9 @@ exports.initAuth = function(mailerCallback) {
     callbackURL: gAuth.GOOGLE.CALLBACK
   }, function(accessToken, refreshToken, profile, done) {
     process.nextTick(function() {
+      /* jscs:disable disallowDanglingUnderscores */
       return done(null, {email: profile._json.email});
+      /* jscs:enable disallowDanglingUnderscores */
     });
   }));
   passport.use(new GitHubStrategy({
@@ -34,7 +34,9 @@ exports.initAuth = function(mailerCallback) {
     callbackURL: gAuth.GITHUB.CALLBACK
   }, function(accessToken, refreshToken, profile, done) {
     process.nextTick(function() {
+      /* jscs:disable disallowDanglingUnderscores */
       return done(null, {email: profile._json.login + '@github'});
+      /* jscs:enable disallowDanglingUnderscores */
     });
   }));
   passport.serializeUser(function(user, done) {
@@ -83,7 +85,9 @@ var setUserInfo = function(req, res, next) {
       }
     }
   }
+  /* jscs:disable disallowDanglingUnderscores */
   req._userInfo = userInfo;
+  /* jscs:enable disallowDanglingUnderscores */
   return next();
 };
 exports.appendUserInfo = setUserInfo;
@@ -92,12 +96,16 @@ exports.setupAuthCallbacks = function(server) {
     return;
   }
   server.get('/auth', setUserInfo, function(req, res) {
+    /* jscs:disable disallowDanglingUnderscores */
     if (req.isAuthenticated() && !req._userInfo.isAuthenticated) {
       res.redirect('/');
       return;
     }
+    /* jscs:enable disallowDanglingUnderscores */
     res.render('sessions', {
+      /* jscs:disable disallowDanglingUnderscores */
       userInfo: req._userInfo,
+      /* jscs:enable disallowDanglingUnderscores */
       socketPort: config.Constants.socketPort
     });
   });
