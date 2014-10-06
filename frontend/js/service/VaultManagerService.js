@@ -1,29 +1,32 @@
-var VaultManagerService = [
-  '$rootScope', '$filter', '$timeout', 'dataManager', 'vaultBehaviour', function($rootScope, $filter, $timeout, dataManager, vaultBehaviour) {
-
+/* global window:false */
+window.VaultManagerService = [
+  '$rootScope', '$filter', '$timeout', 'dataManager', 'vaultBehaviour',
+  function($rootScope, $filter, $timeout, dataManager, vaultBehaviour) {
     var service = this;
     var reactVaultCollectionItem = null;
-    var PERSONA_COLOUR_TAG = "persona_";
-
+    var PERSONA_COLOUR_TAG = 'persona_';
     service.vaultBehaviour = vaultBehaviour;
     service.vaultCollection = [];
-
-    function locationOf(element, array, comparer, start, end) {
-      if (array.length === 0)
+    var locationOf = function(element, array, comparer, start, end) {
+      if (array.length === 0) {
         return -1;
-
+      }
       start = start || 0;
       end = end || array.length;
       var pivot = (start + end) >> 1;
       var c = comparer(element, array[pivot]);
-      if (end - start <= 1) return c == -1 ? pivot - 1 : pivot;
+      if (end - start <= 1) {
+        return c === -1 ? pivot - 1 : pivot;
+      }
       switch (c) {
-        case -1: return locationOf(element, array, comparer, start, pivot);
-        case 0: return pivot;
-        case 1: return locationOf(element, array, comparer, pivot, end);
-      };
+        case -1:
+          return locationOf(element, array, comparer, start, pivot);
+        case 0:
+          return pivot;
+        case 1:
+          return locationOf(element, array, comparer, pivot, end);
+      }
     };
-
     service.refreshVaultCollection = function() {
       if (reactVaultCollectionItem && reactVaultCollectionItem.isMounted()) {
         reactVaultCollectionItem.setState({});
@@ -42,17 +45,17 @@ var VaultManagerService = [
     };
     service.expandAllVaultLogs = function(expand) {
       for (var index in service.vaultCollection) {
-        service.vaultCollection[index].toggleVaultLogs(expand);
+        if (service.vaultCollection[index]) {
+          service.vaultCollection[index].toggleVaultLogs(expand);
+        }
       }
       service.refreshVaultCollection();
     };
-
     var VaultInfo = function() {
       var timeoutPromise = null;
       var reactVaultItem = null;
       var logCount = 0;
       var vault = this;
-
       vault.personaColour = PERSONA_COLOUR_TAG + vaultBehaviour.personas[0];
       vault.stateIcon = 'info.png';
       vault.logsOpen = false;
@@ -67,7 +70,6 @@ var VaultManagerService = [
       vault.subscriber = null;
       vault.counter = null;
       vault.zeroClipboardObject = null;
-
       var updateIcons = function(actionId) {
         vault.iconsTray = vaultBehaviour.icons[actionId];
       };
@@ -75,8 +77,10 @@ var VaultManagerService = [
         log.uniqueCount = ++logCount;
         log.formattedTime = $filter('date')(log.ts, 'dd/MM/yyyy HH:mm:ss');
         addLog(log);
+        // jshint camelcase:false
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         vault.personaColour = PERSONA_COLOUR_TAG + (initialLoad ? 'na' : vaultBehaviour.personas[log.persona_id]);
-        if (log.action_id == 17) {
+        if (log.action_id === 17) {
           vault.networkHealth = log.value1;
         } else {
           vault.subscriber = null;
@@ -86,23 +90,21 @@ var VaultManagerService = [
             vault.alertMessage = vaultBehaviour.alertMessage(log);
           }
         }
-
         if (!initialLoad) {
-          if (log.action_id == 1 || log.action_id == 2) {
+          if (log.action_id === 1 || log.action_id === 2) {
             vault.counter = log.value1;
-          } else if (log.action_id == 6 || log.action_id == 7) {
+          } else if (log.action_id === 6 || log.action_id === 7) {
             vault.subscriber = log.value1;
           }
         }
-
-        if (!vault.fullVaultName && (log.action_id == 0 || log.hasOwnProperty('vault_id_full'))) {
+        if (!vault.fullVaultName && (log.action_id === 0 || log.hasOwnProperty('vault_id_full'))) {
           vault.fullVaultName = log.vault_id_full || log.value1;
         }
-
-        if (!vault.hostName && (log.action_id == 0 || log.hasOwnProperty('host_name'))) {
+        if (!vault.hostName && (log.action_id === 0 || log.hasOwnProperty('host_name'))) {
           vault.hostName = log.host_name || log.value2 || '';
         }
-
+        // jshint camelcase:true
+        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         stateOfVault(log);
         refreshVaultDisplay();
         resetInActivityMonitor();
@@ -111,11 +113,14 @@ var VaultManagerService = [
         if (vault.logs.length >= vaultBehaviour.MAX_LOGS) {
           vault.logs.shift();
         }
-
         vault.logs.push(log);
       };
       var stateOfVault = function(log) {
-        vault.isActive = (log.action_id != 18);
+        // jshint camelcase:false
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+        vault.isActive = (log.action_id !== 18);
+        // jshint camelcase:true
+        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         if (!vault.isActive) {
           vault.networkHealth = 0;
         }
@@ -124,7 +129,6 @@ var VaultManagerService = [
         if (timeoutPromise) {
           $timeout.cancel(timeoutPromise);
         }
-
         timeoutPromise = $timeout(function() {
           if (!$rootScope.playerPaused) {
             updateIcons(0);
@@ -141,7 +145,9 @@ var VaultManagerService = [
       var updateFromQueue = function() {
         var logs = dataManager.getLogsFromQueue(vault.vaultName);
         for (var index in logs) {
-          logReceived(logs[index], true);
+          if (logs[index]) {
+            logReceived(logs[index], true);
+          }
         }
       };
       var refreshVaultDisplay = function() {
@@ -149,20 +155,23 @@ var VaultManagerService = [
           reactVaultItem.setState({});
         }
       };
-
       vault.setReactVaultItem = function(reactItem) {
         reactVaultItem = reactItem;
       };
       vault.toggleVaultLogs = function(expand, performRefresh) {
         vault.logsOpen = expand ? expand : !vault.logsOpen;
-        vault.stateIcon = vault.logsOpen ? "arrow-up.png" : "info.png";
+        vault.stateIcon = vault.logsOpen ? 'arrow-up.png' : 'info.png';
         if (performRefresh) {
           refreshVaultDisplay();
         }
       };
       vault.init = function(vaultData) {
         updateIcons(0);
+        // jshint camelcase:false
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         vault.vaultName = vaultData.vault_id;
+        // jshint camelcase:true
+        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         dataManager.setLogListener(vault.vaultName, logReceived);
         updateFromQueue();
       };
