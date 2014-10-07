@@ -10,49 +10,14 @@ app.service('socketService', window.SocketService);
 app.service('dataManager', window.DataManagerService);
 app.service('playbackService', window.PlaybackService);
 app.service('vaultManager', window.VaultManagerService);
-app.service('layoutService', ['$rootScope', '$location', '$timeout', 'vaultManager',
-  function($rootScope, $location, $timeout, vaultManager) {
-    var instance = this;
-    instance.bind = function($scope) {
-      $rootScope.sessionName = $location.search().sn;
-      $scope.zoomClass = 'large';
-      $scope.allVaultsExpanded = false;
-      $scope.iconsTrayClosed = true;
-      $scope.showLoader = true;
-      $scope.firstLogtime = null;
-      $scope.alert = null;
-      $scope.playerStatus = '';
-      $scope.showLoader = false;
-      $scope.changedOnPause = false;
-      $scope.PLAYER_STATE = {PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause'};
-      $scope.playerState = $scope.PLAYER_STATE.STOPPED;
-      $scope.changeZoomLevel = function(newZoomLevel) {
-        if ($scope.zoomClass === newZoomLevel) {
-          return;
-        }
-        $scope.zoomClass = newZoomLevel;
-        $scope.vaultManager.refreshVaultCollection();
-      };
-      $scope.setStatusAlert = function(msg) {
-        $scope.alert = msg;
-        $timeout(function() {
-          $scope.alert = null;
-        }, 5000);
-      };
-      $scope.toggleIconsTray = function() {
-        $scope.iconsTrayClosed = !$scope.iconsTrayClosed;
-      };
-      $scope.toggleExpandAllLogs = function() {
-        $scope.allVaultsExpanded = !$scope.allVaultsExpanded;
-        vaultManager.expandAllVaultLogs($scope.allVaultsExpanded);
-      };
-    };
-  }
-]);
+app.service('layoutService', window.TimelineLayoutService);
 app.controller('timelineCtrl', [
   '$scope', '$rootScope', '$http', '$timeout', 'dataManager', 'playbackService', 'socketService',
   'vaultManager', 'layoutService', function($scope, $rootScope, $http, $timeout, dataManager,
                            playbackService, socketService, vaultManager, layoutService) {
+    $scope.changedOnPause = false;
+    $scope.PLAYER_STATE = {PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause'};
+    $scope.playerState = $scope.PLAYER_STATE.STOPPED;
     $scope.vaultManager = vaultManager;
     $scope.playback = {currentState: 0, maxSteps: 1000, incrementalSteps: 0};
     $scope.currentPlayTime = null;
