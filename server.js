@@ -56,7 +56,7 @@ bridge.setupMongooseConnection(function() {
     res.render('viewer', { socketPort: socketPort });
   });
   app.get('/timeline', function(req, res) {
-    res.render('timeline', { ocketPort: socketPort });
+    res.render('timeline', { socketPort: socketPort });
   });
   app.get('/history', function(req, res) {
     res.render('history', { socketPort: socketPort });
