@@ -33,8 +33,8 @@ var LogManager = function(dbConnConnection) {
             results[docs[0].vault_id] = docs;
             // jshint camelcase:true
             // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-            completed();
           }
+          completed();
         });
       };
       sessionVaultNames = utils.filterSessionVaultNames(sessionId, dbConn.name, colls);

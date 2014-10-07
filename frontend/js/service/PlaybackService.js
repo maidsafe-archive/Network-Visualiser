@@ -141,7 +141,7 @@ window.PlaybackService = [
       loadBuffer();
     };
     this.play = function(time) {
-      playEndsAt = new Date().getTime(); // setPlayerStatus("Preparing for playback")
+      playEndsAt = new Date().getTime();
       clearAll();
       nextPushTime = new Date(time).getTime();
       lastBufferedTime = nextPushTime;

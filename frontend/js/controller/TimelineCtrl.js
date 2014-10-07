@@ -10,28 +10,57 @@ app.service('socketService', window.SocketService);
 app.service('dataManager', window.DataManagerService);
 app.service('playbackService', window.PlaybackService);
 app.service('vaultManager', window.VaultManagerService);
+app.service('layoutService', ['$rootScope', '$location', '$timeout', 'vaultManager',
+  function($rootScope, $location, $timeout, vaultManager) {
+    var instance = this;
+    instance.bind = function($scope) {
+      $rootScope.sessionName = $location.search().sn;
+      $scope.zoomClass = 'large';
+      $scope.allVaultsExpanded = false;
+      $scope.iconsTrayClosed = true;
+      $scope.showLoader = true;
+      $scope.firstLogtime = null;
+      $scope.alert = null;
+      $scope.playerStatus = '';
+      $scope.showLoader = false;
+      $scope.changedOnPause = false;
+      $scope.PLAYER_STATE = {PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause'};
+      $scope.playerState = $scope.PLAYER_STATE.STOPPED;
+      $scope.changeZoomLevel = function(newZoomLevel) {
+        if ($scope.zoomClass === newZoomLevel) {
+          return;
+        }
+        $scope.zoomClass = newZoomLevel;
+        $scope.vaultManager.refreshVaultCollection();
+      };
+      $scope.setStatusAlert = function(msg) {
+        $scope.alert = msg;
+        $timeout(function() {
+          $scope.alert = null;
+        }, 5000);
+      };
+      $scope.toggleIconsTray = function() {
+        $scope.iconsTrayClosed = !$scope.iconsTrayClosed;
+      };
+      $scope.toggleExpandAllLogs = function() {
+        $scope.allVaultsExpanded = !$scope.allVaultsExpanded;
+        vaultManager.expandAllVaultLogs($scope.allVaultsExpanded);
+      };
+    };
+  }
+]);
 app.controller('timelineCtrl', [
-  '$scope', '$rootScope', '$location', '$http', '$timeout', 'dataManager', 'playbackService', 'socketService',
-  'vaultManager', function($scope, $rootScope, $location, $http, $timeout, dataManager,
-                           playbackService, socketService, vaultManager) {
-    $rootScope.sessionName = $location.search().sn;
-    $scope.iconsTrayClosed = true;
+  '$scope', '$rootScope', '$http', '$timeout', 'dataManager', 'playbackService', 'socketService',
+  'vaultManager', 'layoutService', function($scope, $rootScope, $http, $timeout, dataManager,
+                           playbackService, socketService, vaultManager, layoutService) {
     $scope.vaultManager = vaultManager;
-    $scope.allVaultsExpanded = false;
-    $scope.showLoader = true;
-    $scope.alert = null;
-    $scope.playerStatus = '';
-    $scope.PLAYER_STATE = {PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause'};
-    $scope.playerState = $scope.PLAYER_STATE.STOPPED;
-    $scope.firstLogtime = null;
     $scope.playback = {currentState: 0, maxSteps: 1000, incrementalSteps: 0};
     $scope.currentPlayTime = null;
     $scope.maxTime = new Date();
     $scope.playingTime = new Date();
     socketService.stop();
     $scope.autoSeekIntervalPromise = null;
-    $scope.changedOnPause = false;
-    $scope.zoomClass = 'large';
+    layoutService.bind($scope);
     $scope.$watch('playback.currentState', function(newValue) {
       console.log(newValue);
       if ($scope.firstLogtime && String(newValue).indexOf('.') === -1) {
@@ -66,19 +95,6 @@ app.controller('timelineCtrl', [
       if (!$scope.$$phase) {
         $scope.$apply();
       }
-    };
-    $scope.setStatusAlert = function(msg) {
-      $scope.alert = msg;
-      $timeout(function() {
-        $scope.alert = null;
-      }, 5000);
-    };
-    $scope.toggleIconsTray = function() {
-      $scope.iconsTrayClosed = !$scope.iconsTrayClosed;
-    };
-    $scope.toggleExpandAllLogs = function() {
-      $scope.allVaultsExpanded = !$scope.allVaultsExpanded;
-      vaultManager.expandAllVaultLogs($scope.allVaultsExpanded);
     };
     $scope.getPlayTime = function(playFrom) {
       var time = $scope.maxTime;
@@ -116,14 +132,8 @@ app.controller('timelineCtrl', [
       $scope.playerState = $scope.PLAYER_STATE.STOPPED;
       playbackService.stop();
     };
-    $scope.changeZoomLevel = function(newZoomLevel) {
-      if ($scope.zoomClass === newZoomLevel) {
-        return;
-      }
-      $scope.zoomClass = newZoomLevel;
-      $scope.vaultManager.refreshVaultCollection();
-    };
-    var onVaultsLoaded = function(time) {
+    dataManager.onNewVault($scope.vaultManager.addVault);
+    dataManager.onVaultsLoaded(function(time) {
       $scope.showLoader = false;
       if ($scope.vaultManager.vaultCollection.length === 0) {
         $scope.playerStatus = 'No active vaults';
@@ -134,8 +144,8 @@ app.controller('timelineCtrl', [
       if (time) {
         playbackService.play(time);
       }
-    };
-    var updatePlayerStatus = function(status) {
+    });
+    playbackService.onStatusChange(function(status) {
       switch (status) {
         case 0: // playing
           $scope.playerStatus = '';
@@ -145,10 +155,7 @@ app.controller('timelineCtrl', [
           $scope.updatePlayingTime();
           break;
       }
-    };
-    dataManager.onNewVault($scope.vaultManager.addVault);
-    dataManager.onVaultsLoaded(onVaultsLoaded);
-    playbackService.onStatusChange(updatePlayerStatus);
+    });
     $http.get('/backend/timelineDates?sn=' + $rootScope.sessionName).then(function(res) {
       $scope.firstLogtime = new Date(res.data.beginDate).getTime() - 1000;
       var maxDate = res.data.endDate ? new Date(res.data.endDate) : new Date();
@@ -159,6 +166,5 @@ app.controller('timelineCtrl', [
     }, function() {
       $scope.setStatusAlert('Unable to Initialise Timeline');
     });
-    $scope.showLoader = false;
   }
 ]);
