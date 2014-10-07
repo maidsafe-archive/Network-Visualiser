@@ -25,7 +25,7 @@ app.controller('viewerCtrl', [
       $scope.currentTime = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss');
       $timeout(clockTimer, 1000);
     };
-    var onVaultsLoaded = function(time) {
+    var onVaultsLoaded = function() {
       if ($scope.vaultManager.vaultCollection.length === 0) {
         $scope.showLoader = false;
         $scope.setStatusAlert('No active vaults');

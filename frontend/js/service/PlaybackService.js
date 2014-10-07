@@ -1,5 +1,4 @@
 /* global window:false */
-
 window.PlaybackService = [
   '$rootScope', '$http', '$filter', 'dataManager', function($rootScope, $http, $filter, dataManager) {
     var timerId = 0;
@@ -38,9 +37,9 @@ window.PlaybackService = [
     var populateTimePool = function(history) {
       var key;
       var log;
-      var addToBufferPool = function(vaultLogs) {
+      var addLog = function(vaultLogs) {
         for (var index in vaultLogs) {
-          if (!vaultLogs[index]) {
+          if (vaultLogs[index]) {
             log = vaultLogs[index];
             key = getDateKey(log.ts);
             if (!bufferPool.hasOwnProperty(key)) {
@@ -50,12 +49,14 @@ window.PlaybackService = [
           }
         }
       };
+
       for (var vault in history) {
-        if (!history[vault]) {
-          addToBufferPool(history[vault]);
+        if (history[vault]) {
+          addLog(history[vault]);
         }
       }
-    }; // sorting by id to arrange in the same sequence order of receiving the logs
+    };
+    // sorting by id to arrange in the same sequence order of receiving the logs
     var sortTimePool = function() {
       for (var key in bufferPool) {
         if (bufferPool[key]) {
@@ -102,14 +103,16 @@ window.PlaybackService = [
       }
       updateNextPushTime();
     };
+    /*jshint unused:false */
+    /*jshint forin:false */
     var isEmpty = function(obj) {
-      // jshint unused:false
       for (var o in obj) {
         return false;
       }
-      // jshint unused:true
       return true;
     };
+    /*jshint forin:true */
+    /*jshint unused:true */
     var loadBuffer = function() {
       var condition;
       if (firstBuffer) {
@@ -124,9 +127,8 @@ window.PlaybackService = [
         if (isEmpty(bufferPool) && !buffering) {
           buffering = true;
           lastBufferedTime += (BUFFER_MINUTES * 60000);
-          $http.get('/backend/selectLogs?offset=' + BUFFER_MINUTES +
-            '&ts=' + new Date(lastBufferedTime).toISOString() + '&sn=' +
-            $rootScope.sessionName).then(prepareData, onNetworkError);
+          $http.get('/backend/selectLogs?offset=' + BUFFER_MINUTES + '&ts=' + new Date(lastBufferedTime).toISOString() +
+            '&sn=' + $rootScope.sessionName).then(prepareData, onNetworkError);
         }
       }
     };
