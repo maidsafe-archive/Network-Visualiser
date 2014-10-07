@@ -23,8 +23,8 @@ var TestnetStatusInfo = function(dbConnection) {
     var promise = new mongoose.Promise();
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    TestnetStatus.update({entry: 1}, {last_updated: data.last_updated, is_ready: data.is_ready,
-    connections: data.connections}, {upsert: true}, function(errSave) {
+    TestnetStatus.update({ entry: 1 }, { last_updated: data.last_updated, is_ready: data.is_ready,
+    connections: data.connections }, { upsert: true }, function(errSave) {
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       if (errSave) {
@@ -37,7 +37,7 @@ var TestnetStatusInfo = function(dbConnection) {
   };
   this.getTestnetStatus = function() {
     var promise = new mongoose.Promise();
-    TestnetStatus.findOne({entry: 1}, function(err, res) {
+    TestnetStatus.findOne({ entry: 1 }, function(err, res) {
       if (err || !res) {
         promise.error(err);
         return;

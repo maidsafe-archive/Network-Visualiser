@@ -11,7 +11,7 @@ window.PlaybackService = [
     var bufferMonitor = 0;
     var firstBuffer = true;
     var bufferPool = {};
-    var status = {playing: 0, stopped: 1, pause: 2, resume: 3};
+    var status = { playing: 0, stopped: 1, pause: 2, resume: 3 };
     var playerStatus = '';
     var statusChangeListner;
     var buffering;

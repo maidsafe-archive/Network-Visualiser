@@ -43,7 +43,7 @@ var DBUtil = function(dbConnection) {
     10: 'NA'
   };
   var createParser = function() {
-    var parser = new Transform({objectMode: true});
+    var parser = new Transform({ objectMode: true });
     /* jscs:disable disallowDanglingUnderscores */
     parser._transform = function(doc, encoding, done) {
       /* jscs:enable disallowDanglingUnderscores */
@@ -59,12 +59,12 @@ var DBUtil = function(dbConnection) {
   };
   var appendCollectionToFile = function(formattedCollectionName, fileName) {
     var promise = new mongoose.Promise();
-    var outStream = fs.createWriteStream(fileName, {'flags': 'a'});
+    var outStream = fs.createWriteStream(fileName, { 'flags': 'a' });
     dbConn.db.collection(formattedCollectionName, function(err, col) {
       /* jscs:disable disallowDanglingUnderscores */
-      var stream = col.find({}, {__id: 0, __v: 0}).sort([
+      var stream = col.find({}, { __id: 0, __v: 0 }).sort([
         /* jscs:enable disallowDanglingUnderscores */
-        ['ts', 'ascending']
+        [ 'ts', 'ascending' ]
       ]).stream();
       var res = stream.pipe(createParser()).pipe(outStream);
       res.on('finish', function() {
@@ -132,7 +132,7 @@ var DBUtil = function(dbConnection) {
   var getLogFromCSVRow = function(data) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    return {vault_id: data[0], ts: data[1], action_id: actionMap[data[2]],
+    return { vault_id: data[0], ts: data[1], action_id: actionMap[data[2]],
       persona_id: personaMap[data[3]] || 10,
       value1: data[4] || '',
       value2: data[5] || ''
@@ -184,7 +184,7 @@ var DBUtil = function(dbConnection) {
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     }
-    return {valid: isValid, msg: errString};
+    return { valid: isValid, msg: errString };
   };
   var importFactory = function(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise, validationCallback) {
     var stream = fs.createReadStream(filePath);

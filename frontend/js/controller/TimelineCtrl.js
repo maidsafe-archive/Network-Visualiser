@@ -1,5 +1,5 @@
 /* global window:false */
-var app = window.angular.module('MaidSafe', ['ui-rangeSlider', 'ngReact']);
+var app = window.angular.module('MaidSafe', [ 'ui-rangeSlider', 'ngReact' ]);
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {
     $rootScope.socketEndPoint = 'http://' + $location.host() + ':' + window.socketPort;
@@ -16,10 +16,10 @@ app.controller('timelineCtrl', [
   'vaultManager', 'layoutService', function($scope, $rootScope, $http, $timeout, dataManager,
                            playbackService, socketService, vaultManager, layoutService) {
     $scope.changedOnPause = false;
-    $scope.PLAYER_STATE = {PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause'};
+    $scope.PLAYER_STATE = { PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause' };
     $scope.playerState = $scope.PLAYER_STATE.STOPPED;
     $scope.vaultManager = vaultManager;
-    $scope.playback = {currentState: 0, maxSteps: 1000, incrementalSteps: 0};
+    $scope.playback = { currentState: 0, maxSteps: 1000, incrementalSteps: 0 };
     $scope.currentPlayTime = null;
     $scope.maxTime = new Date();
     $scope.playingTime = new Date();

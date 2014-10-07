@@ -1,6 +1,6 @@
 /* global window:false */
 
-window.SessionEvents = ['$http', '$upload', 'sessionHelper', function($http, $upload, sessionHelper) {
+window.SessionEvents = [ '$http', '$upload', 'sessionHelper', function($http, $upload, sessionHelper) {
   var instance = this;
   instance.bindEventsForScope = function($scope) {
     $scope.deleteSession = function(session) {
@@ -91,8 +91,8 @@ window.SessionEvents = ['$http', '$upload', 'sessionHelper', function($http, $up
       $http({
         url: '/backend/createSession',
         method: 'POST',
-        data: {'session_name': $scope.createTab.sessionName},
-        headers: {'Content-Type': 'application/json'}
+        data: { 'session_name': $scope.createTab.sessionName },
+        headers: { 'Content-Type': 'application/json' }
       }).success(onSuccess).error(onError);
     };
     $scope.onImportSession = function() {
@@ -112,9 +112,9 @@ window.SessionEvents = ['$http', '$upload', 'sessionHelper', function($http, $up
       $scope.upload = $upload.upload({
         url: '/backend/import',
         method: 'POST',
-        data: {sn: $scope.importTab.sessionName},
+        data: { sn: $scope.importTab.sessionName },
         file: $scope.importTab.file
       }).then(onSuccess, onError);
     };
   };
-}];
+} ];

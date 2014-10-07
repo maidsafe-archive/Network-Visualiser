@@ -1,6 +1,6 @@
 /* global window:false */
 
-window.TimelineLayoutService = ['$rootScope', '$location', '$timeout', 'vaultManager',
+window.TimelineLayoutService = [ '$rootScope', '$location', '$timeout', 'vaultManager',
   function($rootScope, $location, $timeout, vaultManager) {
     var instance = this;
     instance.bind = function($scope) {

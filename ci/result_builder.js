@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var getParser = function(coverageResult) {
   var watch = false;
-  var keys = ['Statements', 'Branches', 'Functions', 'Lines'];
+  var keys = [ 'Statements', 'Branches', 'Functions', 'Lines' ];
   var counter = 0;
   return new htmlParser.Parser({
     onopentag: function(name) {
@@ -38,7 +38,7 @@ var parseCoverageResult = function(coverageResult, rootFolder, callback) {
     parser.end();
     callback();
   };
-  fs.readFile(rootFolder + '/lcov-report/index.html', {encoding: 'utf-8'}, fileReadCallBack);
+  fs.readFile(rootFolder + '/lcov-report/index.html', { encoding: 'utf-8' }, fileReadCallBack);
 };
 
 var parseTestResult = function(testResult, rootFolder, callback) {
@@ -54,7 +54,7 @@ var parseTestResult = function(testResult, rootFolder, callback) {
     }
     callback();
   };
-  fs.readFile(rootFolder + '/results.json', {encoding: 'utf-8'}, fileCb);
+  fs.readFile(rootFolder + '/results.json', { encoding: 'utf-8' }, fileCb);
 };
 
 exports.getCoverageResult = parseCoverageResult;

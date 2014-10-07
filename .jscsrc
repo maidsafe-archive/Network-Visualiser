@@ -9,6 +9,10 @@
   "disallowSpacesInFunction": {
     "beforeOpeningRoundBrace": true
   },
+  "disallowSpacesInsideObjectBrackets": null,
+  "disallowSpacesInsideArrayBrackets": null,
+  "requireSpacesInsideObjectBrackets": "all",
+  "requireSpacesInsideArrayBrackets": "all",
   "requireBlocksOnNewline": true,
   "disallowPaddingNewlinesInBlocks": true,
   "disallowEmptyBlocks": true,

@@ -5,7 +5,7 @@ window.ClipCopy = [
     var clipCopyLink = function(scope, element) {
       window.ZeroClipboard.config({
         swfPath: '../../components/zeroclipboard/dist/ZeroClipboard.swf',
-        trustedDomains: ['*'],
+        trustedDomains: [ '*' ],
         allowScriptAccess: 'always',
         forceHandCursor: true
       });

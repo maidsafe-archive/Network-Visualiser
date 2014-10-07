@@ -1,6 +1,6 @@
 /* global window:false */
 
-var app = window.angular.module('MaidSafe', ['ngReact']);
+var app = window.angular.module('MaidSafe', [ 'ngReact' ]);
 app.service('vaultBehaviour', window.VaultBehaviourService);
 app.controller('historyCtrl', [
   '$scope', '$location', '$http', '$filter', '$timeout' , 'vaultBehaviour',
@@ -15,7 +15,7 @@ app.controller('historyCtrl', [
     var timeoutPromise;
     var refreshLogsCollection = function() {
       if (reactLogsCollectionItem && reactLogsCollectionItem.isMounted()) {
-        reactLogsCollectionItem.setState({renderedItemsCount: 0});
+        reactLogsCollectionItem.setState({ renderedItemsCount: 0 });
       }
     };
     $scope.setReactLogsCollectionItem = function(reactItem) {
@@ -30,7 +30,7 @@ app.controller('historyCtrl', [
         refreshLogsCollection();
       }, 500);
     });
-    $http({url: '/backend/history?&max=-1&vault_id=' + $scope.vaultId + '&sn=' + $scope.sessionName, method: 'GET'})
+    $http({ url: '/backend/history?&max=-1&vault_id=' + $scope.vaultId + '&sn=' + $scope.sessionName, method: 'GET' })
       .success(function(data) {
         var retrievedLogs = data;
         for (var i = 0; i < retrievedLogs.length; ++i) {

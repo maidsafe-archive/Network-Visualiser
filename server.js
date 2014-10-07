@@ -26,7 +26,7 @@ var configureMvcEngine = function() {
     store: new MongoStore({
       url: config.Constants.mongoCon + '/nodeSessions'
     }),
-    cookie: {maxAge: 3600000},
+    cookie: { maxAge: 3600000 },
     secret: 'maidsafelogs'
   }));
   userAuth.configureAuth(app);
@@ -49,23 +49,23 @@ bridge.setupMongooseConnection(function() {
     if (req.isAuthenticated() && !req._userInfo.isAuthenticated) {
       req._userInfo.invalidAuthMessage = 'Invalid Authentication';
     }
-    res.render('sessions', {userInfo: req._userInfo, socketPort: socketPort});
+    res.render('sessions', { userInfo: req._userInfo, socketPort: socketPort });
     /* jscs:enable disallowDanglingUnderscores */
   });
   app.get('/viewer', function(req, res) {
-    res.render('viewer', {socketPort: socketPort});
+    res.render('viewer', { socketPort: socketPort });
   });
   app.get('/timeline', function(req, res) {
-    res.render('timeline', {socketPort: socketPort});
+    res.render('timeline', { ocketPort: socketPort });
   });
   app.get('/history', function(req, res) {
-    res.render('history', {socketPort: socketPort});
+    res.render('history', { socketPort: socketPort });
   });
   app.get('/search', function(req, res) {
-    res.render('search', {socketPort: socketPort});
+    res.render('search', { socketPort: socketPort });
   });
   app.get('/testnet-status', function(req, res) {
-    res.render('testnet-status', {socketPort: socketPort});
+    res.render('testnet-status', { socketPort: socketPort });
   });
   app.listen(serverPort);
 });

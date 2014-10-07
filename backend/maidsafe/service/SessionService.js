@@ -98,7 +98,7 @@ exports.requestExport = function(req, res) {
       res.send(500, err);
     });
     archive.pipe(output);
-    archive.append(fs.createReadStream(csvPath), {name: criteria.sn + ' - Logs.csv'}).finalize();
+    archive.append(fs.createReadStream(csvPath), { name: criteria.sn + ' - Logs.csv' }).finalize();
   });
 };
 exports.downloadExport = function(req, res) {

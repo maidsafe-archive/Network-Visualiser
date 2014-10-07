@@ -30,7 +30,7 @@ var selectLogs = function(req, res) {
     return;
   }
   var offset = new Date(criteria.ts).getTime() + ((criteria.offset || 1) * 60000);
-  bridge.selectLogs(criteria.sn, {'ts': {'$gt': criteria.ts, '$lt': new Date(offset).toISOString()}},
+  bridge.selectLogs(criteria.sn, { 'ts': { '$gt': criteria.ts, '$lt': new Date(offset).toISOString() } },
     new Handler.SelectLogsHandler(res));
 };
 var searchLogs = function(req, res) {
@@ -49,7 +49,7 @@ var history = function(req, res) {
     res.send(500, 'Missing Session Name');
     return;
   }
-  var timeCriteria = criteria.ts ? {'ts': {'$lt': criteria.ts}} : {};
+  var timeCriteria = criteria.ts ? { 'ts': { '$lt': criteria.ts } } : {};
   if (utils.isPageRequestValid(criteria)) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
@@ -134,7 +134,7 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
             host_name: vaults[index].host_name,
             logs: []
           };
-          bridge.vaultHistory(sessionName, vaults[index].vault_id, {ts: {'$lt': criteria.ts}}, 0,
+          bridge.vaultHistory(sessionName, vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0,
             config.Constants.vaultLogsCount).then(onSuccess, onError);
         }
         // jshint camelcase:true

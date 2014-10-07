@@ -74,7 +74,7 @@ exports.isPageRequestValid = function(criteria) {
 exports.transformQuery = function(query) {
   for (var key in query) {
     if (key === 'ts') {
-      query[key] = {'$gt': query[key]}; // works fine only ISO string - query is done based on ISO string
+      query[key] = { '$gt': query[key] }; // works fine only ISO string - query is done based on ISO string
     } else { // For like operation on strings
       query[key] = new RegExp(query[key], 'i');
     }
@@ -87,7 +87,7 @@ exports.ensureUniqueDocInMongo = function(dbConn, collectionName, fieldName) {
       var ob = {};
       ob[fieldName] = 1;
       /* jshint unused:false */
-      coll.ensureIndex(ob, {unique: true, dropDups: true}, function(errorUpdate, writeSuccess) {
+      coll.ensureIndex(ob, { unique: true, dropDups: true }, function(errorUpdate, writeSuccess) {
         if (errorUpdate) {
           console.log(errorUpdate);
         }

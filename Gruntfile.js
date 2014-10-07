@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 
   var CI_CONFIG = {
     publishedFolder: 'coverage',
-    scpBranchPath: {master: 'pod/apps/network_visualiser', next: 'pod/apps/network_visualiser_next'},
+    scpBranchPath: { master: 'pod/apps/network_visualiser', next: 'pod/apps/network_visualiser_next' },
     jsonReportFileName: 'results.json',
     jscsReportFileName: 'jscs.txt'
   };
@@ -51,12 +51,12 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      test: [CI_CONFIG.publishedFolder]
+      test: [ CI_CONFIG.publishedFolder ]
     },
     mkdir: {
       test: {
         options: {
-          create: [CI_CONFIG.publishedFolder]
+          create: [ CI_CONFIG.publishedFolder ]
         }
       }
     }
@@ -68,7 +68,7 @@ module.exports = function(grunt) {
 
   ci.init(grunt, CI_CONFIG);
 
-  grunt.registerTask('test', ['clean:test', 'mkdir:test', 'shell:jscs', 'shell:jshint', 'shell:test']);
-  grunt.registerTask('ci', ['shell:gitBranch', 'clean:test', 'mkdir:test', 'shell:jscs', 'shell:jshint',
-  'shell:ci', 'shell:test']);
+  grunt.registerTask('test', [ 'clean:test', 'mkdir:test', 'shell:jscs', 'shell:jshint', 'shell:test' ]);
+  grunt.registerTask('ci', [ 'shell:gitBranch', 'clean:test', 'mkdir:test', 'shell:jscs', 'shell:jshint',
+  'shell:ci', 'shell:test' ]);
 };

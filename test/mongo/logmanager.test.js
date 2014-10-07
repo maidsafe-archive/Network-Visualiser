@@ -6,7 +6,7 @@ var dbHelper = require('../../ci/test/DBHelper');
 var sessionHelper = require('../../ci/test/SessionHelper');
 var logManager = require('../../backend/mongo/LogManager');
 var vaultLog;
-var log = {'vault_id': 'aaaa-bbbb', 'value1': 'asdsds', 'action_id': 0};
+var log = { 'vault_id': 'aaaa-bbbb', 'value1': 'asdsds', 'action_id': 0 };
 
 describe('LogManager', function() {
   var prepareDB = function(callback) {
@@ -49,7 +49,7 @@ describe('LogManager', function() {
   it('Should be able to delete vault logs', function(done) {
     saveLog(log, function(err, data) {
       should(err).not.be.ok;
-      deleteLogs([log], function(err, data) {
+      deleteLogs([ log ], function(err, data) {
         should(err).not.be.ok;
         should(data).be.exactly('');
         done();
@@ -59,7 +59,7 @@ describe('LogManager', function() {
 
   it('Should not be able to get logs', function(done) {
     var deleteVaultLogs = function() {
-      deleteLogs([log], function(err, data) {
+      deleteLogs([ log ], function(err, data) {
         should(err).not.be.ok;
         should(data).be.exactly('');
         done();
@@ -77,7 +77,7 @@ describe('LogManager', function() {
 
   it('Should be able to get vault history', function(done) {
     var deleteVaultLogs = function() {
-      deleteLogs([log], function(err, data) {
+      deleteLogs([ log ], function(err, data) {
         should(err).not.be.ok;
         should(data).be.exactly('');
         done();

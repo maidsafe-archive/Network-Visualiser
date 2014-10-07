@@ -6,7 +6,7 @@ var LogManager = function(dbConnConnection) {
   var HIDE_FIELDS;
   dbConn = dbConnConnection;
   /* jscs:disable disallowDanglingUnderscores */
-  HIDE_FIELDS = {_id: 0, __v: 0};
+  HIDE_FIELDS = { _id: 0, __v: 0 };
   /* jscs:enable disallowDanglingUnderscores */
   var formatCollectionName = function(sessionId, vaultId) {
     return sessionId + '_' + utils.transformVaultId(vaultId);
@@ -25,7 +25,7 @@ var LogManager = function(dbConnConnection) {
       // TODO error is unhandled - possibly can block the thread
       var groupResults = function(er, col) {
         /* jscs:disable disallowDanglingUnderscores */
-        col.find(criteria, {__v: 0}).toArray(function(err, docs) {
+        col.find(criteria, { __v: 0 }).toArray(function(err, docs) {
           /* jscs:enable disallowDanglingUnderscores */
           if (docs.length > 0) {
             // jshint camelcase:false
@@ -51,7 +51,7 @@ var LogManager = function(dbConnConnection) {
         promise.error(err);
       } else {
         var q = coll.find(criteria, HIDE_FIELDS).sort([
-          ['ts', 'descending']
+          [ 'ts', 'descending' ]
         ]);
         if (max > 0) {
           q.skip(page * max).limit(max);
@@ -84,7 +84,7 @@ var LogManager = function(dbConnConnection) {
           // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
           var healthCursor = coll.find(criteria, HIDE_FIELDS).sort([
-            ['ts', 'descending']
+            [ 'ts', 'descending' ]
           ]).limit(1);
           healthCursor.toArray(function(healthErr, healthData) {
             if (healthErr) {

@@ -1,6 +1,6 @@
 /* global window:false */
 
-window.SessionHelper = ['$window', '$http', function($window, $http) {
+window.SessionHelper = [ '$window', '$http', function($window, $http) {
   var $scope;
   var instance = this;
   instance.onSignalReceived = function(signal) {
@@ -79,4 +79,4 @@ window.SessionHelper = ['$window', '$http', function($window, $http) {
   instance.bindScope = function(scope) {
     $scope = scope;
   };
-}];
+} ];

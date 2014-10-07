@@ -6,7 +6,7 @@ var path = require('path');
 var config = require('./../../Config.js');
 var gAuth;
 var needsAuth = true;
-var googleOauthScope = {scope: ['https://www.googleapis.com/auth/userinfo.email']};
+var googleOauthScope = { scope: [ 'https://www.googleapis.com/auth/userinfo.email' ] };
 exports.initAuth = function(mailerCallback) {
   var fileContent;
   try {
@@ -24,7 +24,7 @@ exports.initAuth = function(mailerCallback) {
   }, function(accessToken, refreshToken, profile, done) {
     process.nextTick(function() {
       /* jscs:disable disallowDanglingUnderscores */
-      return done(null, {email: profile._json.email});
+      return done(null, { email: profile._json.email });
       /* jscs:enable disallowDanglingUnderscores */
     });
   }));
@@ -35,7 +35,7 @@ exports.initAuth = function(mailerCallback) {
   }, function(accessToken, refreshToken, profile, done) {
     process.nextTick(function() {
       /* jscs:disable disallowDanglingUnderscores */
-      return done(null, {email: profile._json.login + '@github'});
+      return done(null, { email: profile._json.login + '@github' });
       /* jscs:enable disallowDanglingUnderscores */
     });
   }));
@@ -118,10 +118,10 @@ exports.setupAuthCallbacks = function(server) {
     // The request will be redirected to Github for authentication, so this
     // function will not be called.
   });
-  server.get('/googlecallback', passport.authenticate('google', {failureRedirect: '/'}), function(req, res) {
+  server.get('/googlecallback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
     res.redirect('/auth');
   });
-  server.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/'}), function(req, res) {
+  server.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
     res.redirect('/auth');
   });
   /* jshint unused:true*/

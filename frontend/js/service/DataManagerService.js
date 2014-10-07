@@ -18,8 +18,8 @@ window.DataManagerService = [
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       if (!vaultsInDisplay.hasOwnProperty(log.vault_id)) {
-        vaultsInDisplay[log.vault_id] = {pushLog: null, queue: []};
-        newVaultObserver({vault_id: log.vault_id});
+        vaultsInDisplay[ log.vault_id ] = { pushLog: null, queue: [] };
+        newVaultObserver({ vault_id: log.vault_id });
       }
       // Temporary Queue to hold logs until the vault has not registered for receiving logs
       if (vaultsInDisplay[log.vault_id].pushLog) {

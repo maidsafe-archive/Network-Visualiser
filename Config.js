@@ -3,7 +3,7 @@ var constants = {
   projectRootDir: __dirname,
   authPath: '../../../auth/master/gauth.json',
   sanityCheckerDir: '../../../testnet_status_monitor/master',
-  paging: {max: 200},
+  paging: { max: 200 },
   serverPort: 8080,
   socketPort: 8081,
   vaultLogsCount: 3,
