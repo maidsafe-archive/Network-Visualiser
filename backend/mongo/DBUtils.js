@@ -114,7 +114,7 @@ var DBUtil = function(dbConnection) {
   var getActionNameMap = function() {
     var map = {};
     for (var key in ACTION_TO_STRING) {
-      if (!map[ACTION_TO_STRING[key]]) {
+      if (!ACTION_TO_STRING[key] && !map[ACTION_TO_STRING[key]]) {
         map[ACTION_TO_STRING[key]] = key;
       }
     }
@@ -123,7 +123,7 @@ var DBUtil = function(dbConnection) {
   var getPersonaNameMap = function() {
     var map = {};
     for (var key in PERSONA_TO_STRING) {
-      if (!map[PERSONA_TO_STRING[key]]) {
+      if (!PERSONA_TO_STRING[key] && !map[PERSONA_TO_STRING[key]]) {
         map[PERSONA_TO_STRING[key]] = key;
       }
     }
