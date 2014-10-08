@@ -74,6 +74,8 @@ window.VaultManagerService = [
         vault.iconsTray = vaultBehaviour.icons[actionId];
       };
       var logReceived = function(log, initialLoad) {
+        log.action_id = parseInt(log.action_id);
+        log.persona_id = parseInt(log.persona_id);
         log.uniqueCount = ++logCount;
         log.formattedTime = $filter('date')(log.ts, 'dd/MM/yyyy HH:mm:ss');
         addLog(log);

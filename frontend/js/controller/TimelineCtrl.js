@@ -27,7 +27,6 @@ app.controller('timelineCtrl', [
     $scope.autoSeekIntervalPromise = null;
     layoutService.bind($scope);
     $scope.$watch('playback.currentState', function(newValue) {
-      console.log(newValue);
       if ($scope.firstLogtime && String(newValue).indexOf('.') === -1) {
         if ($rootScope.playerPaused) {
           $scope.changedOnPause = true;
