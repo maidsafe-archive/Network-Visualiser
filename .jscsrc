@@ -1,5 +1,5 @@
 {
-  "excludeFiles" : ["coverage", "node_modules", "frontend/components", "frontend", "backend", "server.js", "Config.js"],
+  "excludeFiles" : ["coverage", "node_modules", "frontend/components", "frontend/js/plugins", "frontend/js/reactjs"],
   "preset": "google",
   "validateIndentation": 2,
   "requireCommaBeforeLineBreak": true,
@@ -9,6 +9,10 @@
   "disallowSpacesInFunction": {
     "beforeOpeningRoundBrace": true
   },
+  "disallowSpacesInsideObjectBrackets": null,
+  "disallowSpacesInsideArrayBrackets": null,
+  "requireSpacesInsideObjectBrackets": "all",
+  "requireSpacesInsideArrayBrackets": "all",
   "requireBlocksOnNewline": true,
   "disallowPaddingNewlinesInBlocks": true,
   "disallowEmptyBlocks": true,

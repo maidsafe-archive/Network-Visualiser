@@ -6,23 +6,24 @@ var constants = {
   paging: { max: 200 },
   serverPort: 8080,
   socketPort: 8081,
-  vault_logs_count: 3,
+  vaultLogsCount: 3,
   minLengthForDecode: 6,
-  persona_na: 10,
-  action_network_health: '17',
-  nextBranchConfig : {
-    serverPort : 9080,
-    socketPort : 9081,
+  naPersonaId: 10,
+  networkHealthActionId: '17',
+  nextBranchConfig: {
+    serverPort: 9080,
+    socketPort: 9081,
     authPath: '../../../auth/next/gauth.json',
     sanityCheckerDir: '../../../testnet_status_monitor/next'
   }
 };
-
-if(process.env.PORT === constants.nextBranchConfig.serverPort.toString()) {
+if (process.env.PORT === constants.nextBranchConfig.serverPort.toString()) {
   constants.mongoCon += '_next';
-  for(var key in constants.nextBranchConfig) {
-    constants[key] = constants.nextBranchConfig[key];
+  var branchConfig = constants.nextBranchConfig;
+  for (var key in branchConfig) {
+    if (branchConfig[key]) {
+      constants[key] = branchConfig[key];
+    }
   }
 }
-
 exports.Constants = constants;

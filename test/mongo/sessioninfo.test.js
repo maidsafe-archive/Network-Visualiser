@@ -11,7 +11,7 @@ describe('SessionInfo', function() {
   var sessionId;
   var SESSION_NAME = 'TEST_SESSION';
   var USER = 'test_user';
-  var userInfoModel = {mailAddress: USER, isAuthenticated: true, isMaidSafeUser: true};
+  var userInfoModel = { mailAddress: USER, isAuthenticated: true, isMaidSafeUser: true };
   var db;
 
   var prepareDB = function(callback) {
@@ -150,7 +150,7 @@ describe('SessionInfo', function() {
     createSession(function(err, data) {
       sessionInfo.createSession(SESSION_NAME, USER, function(err) {
         should(err).be.ok;
-        sessionInfo.isValidSessionId({'session_id': sessionId}).then(function(data) {
+        sessionInfo.isValidSessionId({ 'session_id': sessionId }).then(function(data) {
           should(data).be.ok;
           clearSession();
         }, function(err) {
@@ -162,7 +162,7 @@ describe('SessionInfo', function() {
   });
 
   it('Session should not be valid', function(done) {
-    sessionInfo.isValidSessionId({'session_id': 'JUNK-SESSION'}).then(function(data) {
+    sessionInfo.isValidSessionId({ 'session_id': 'JUNK-SESSION' }).then(function(data) {
       should(data).not.be.ok;
       done();
     }, function(err) {
@@ -221,12 +221,12 @@ describe('SessionInfo', function() {
     createSession(function(err, data) {
       sessionInfo.createSession(SESSION_NAME, USER, function(err) {
         should(err).be.ok;
-        var log = {'action_id': 0, 'session_id': sessionId, ts: new Date().toUTCString()};
+        var log = { 'action_id': 0, 'session_id': sessionId, ts: new Date().toUTCString() };
         sessionInfo.updateSessionInfo(log, function(err) {
           should(err).not.be.ok;
           var date = new Date();
           date.setSeconds(date.getSeconds() + 1);
-          log = {'action_id': 18, 'session_id': sessionId, ts: date.toUTCString()};
+          log = { 'action_id': 18, 'session_id': sessionId, ts: date.toUTCString() };
           sessionInfo.updateSessionInfo(log).then(function(data) {
             sessionInfo.getTimelineDates(SESSION_NAME, function(err, data) {
               should(err).not.be.ok;
@@ -285,8 +285,9 @@ describe('SessionInfo', function() {
     };
     createSession(function(err, data) {
       should(err).not.be.ok;
-      var log = {'action_id': 0, 'session_id': sessionId, ts: new Date().toUTCString()};
+      var log = { 'action_id': 0, 'session_id': sessionId, ts: new Date().toUTCString() };
       sessionInfo.updateSessionInfo(log, function(err) {
+        should(err).not.be.ok;
         sessionInfo.clearActiveSession(SESSION_NAME, function(err, data) {
           should(err).not.be.ok;
           clearSession();

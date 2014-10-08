@@ -12,7 +12,7 @@
   "undef": true,
   "unused": true,
   "maxdepth": 3,
-  "maxstatements": 20,
+  "maxstatements": 40,
   "maxlen": 120,
   "eqnull": true,
   "maxerr": 30,

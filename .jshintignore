@@ -1,6 +1,5 @@
-frontend
-backend
+frontend/components
+frontend/js/plugins
+frontend/js/reactjs
 node_modules
 coverage
-server.js
-Config.js

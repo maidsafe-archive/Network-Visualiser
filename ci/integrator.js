@@ -64,7 +64,7 @@ var CIWorkflow = function(grunt, callback) {
     var test = function(callback) {
       resultBuilder.getTestResult(testResult, config.publishedFolder, callback);
     };
-    async.each([coverage, test], asyncIterator, generateBadges);
+    async.each([ coverage, test ], asyncIterator, generateBadges);
   };
 
   var generateBadges = function(err) {
@@ -77,11 +77,11 @@ var CIWorkflow = function(grunt, callback) {
     var test = function(callback) {
       badgeBuilder.saveTestSatusBadge(testResult, linterPassed, config.publishedFolder  + '/lcov-report', callback);
     };
-    async.each([coverage, test], asyncIterator, scp);
+    async.each([ coverage, test ], asyncIterator, scp);
   };
 
   var scp = function() {
-    grunt.tasks(['shell:scp:' + config.scpBranchPath[gitBranchName]]);
+    grunt.tasks([ 'shell:scp:' + config.scpBranchPath[ gitBranchName ] ]);
     callback();
   };
   consolidateResults();
