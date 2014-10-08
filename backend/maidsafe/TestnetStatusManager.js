@@ -21,7 +21,7 @@ var mailOptions = {
 var sendMailNotification = function(newStatus) {
   var errorCount = 0;
   for (var index in newStatus.connections) {
-    if (!newStatus.connections[index] && !newStatus.connections[index].canConnect) {
+    if (newStatus.connections[index] && !newStatus.connections[index].canConnect) {
       errorCount++;
     }
   }

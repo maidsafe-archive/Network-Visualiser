@@ -114,7 +114,7 @@ var DBUtil = function(dbConnection) {
   var getActionNameMap = function() {
     var map = {};
     for (var key in ACTION_TO_STRING) {
-      if (!ACTION_TO_STRING[key] && !map[ACTION_TO_STRING[key]]) {
+      if (ACTION_TO_STRING[key] && !map[ACTION_TO_STRING[key]]) {
         map[ACTION_TO_STRING[key]] = key;
       }
     }
@@ -123,7 +123,7 @@ var DBUtil = function(dbConnection) {
   var getPersonaNameMap = function() {
     var map = {};
     for (var key in PERSONA_TO_STRING) {
-      if (!PERSONA_TO_STRING[key] && !map[PERSONA_TO_STRING[key]]) {
+      if (PERSONA_TO_STRING[key] && !map[PERSONA_TO_STRING[key]]) {
         map[PERSONA_TO_STRING[key]] = key;
       }
     }
@@ -142,6 +142,7 @@ var DBUtil = function(dbConnection) {
   };
   var importValidator = function(data) {
     var log = getLogFromCSVRow(data);
+    utils.isValid(log);
     var errString = '';
     var isValid = true;
     var addErrorMessage = function(msg) {
@@ -150,9 +151,9 @@ var DBUtil = function(dbConnection) {
     };
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    if (!log.vault_id) {
+    if (log.vault_id === null) {
       // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       addErrorMessage('Vault Id is empty');
     }
     try {
@@ -165,17 +166,17 @@ var DBUtil = function(dbConnection) {
     }
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    if (!log.action_id) {
+    if (log.action_id === null) {
       addErrorMessage('Action Id is empty or invalid - spell check');
     }
-    if (log.action_id) {
+    if (log.action_id !== null) {
       try {
         parseInt(log.action_id);
       } catch (e) {
         addErrorMessage('Invalid Action Id');
       }
     }
-    if (log.persona_id) {
+    if (log.persona_id !== null) {
       try {
         parseInt(log.action_id);
       } catch (e) {
@@ -204,6 +205,7 @@ var DBUtil = function(dbConnection) {
         value1: data[4] || '',
         value2: data[5] || ''
       };
+      utils.isValid(log);
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       vaultInfo.updateVaultStatus(log).then(function() {
@@ -253,7 +255,7 @@ var DBUtil = function(dbConnection) {
         }
         promise.error(err);
       } else {
-        sessionInfo.createSession(sessionName, createdBy).then(function(sessionId) {
+        sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
           importFactory(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise);
         }, function(createSessionError) {
           promise.error(createSessionError);

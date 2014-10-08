@@ -74,13 +74,13 @@ window.VaultManagerService = [
         vault.iconsTray = vaultBehaviour.icons[actionId];
       };
       var logReceived = function(log, initialLoad) {
+        // jshint camelcase:false
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         log.action_id = parseInt(log.action_id);
         log.persona_id = parseInt(log.persona_id);
         log.uniqueCount = ++logCount;
         log.formattedTime = $filter('date')(log.ts, 'dd/MM/yyyy HH:mm:ss');
         addLog(log);
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         vault.personaColour = PERSONA_COLOUR_TAG + (initialLoad ? 'na' : vaultBehaviour.personas[log.persona_id]);
         if (log.action_id === 17) {
           vault.networkHealth = log.value1;
