@@ -19,8 +19,9 @@ var constants = {
 };
 if (process.env.PORT === constants.nextBranchConfig.serverPort.toString()) {
   constants.mongoCon += '_next';
-  for (var key in constants.nextBranchConfig) {
-    if (!constants.nextBranchConfig[key]) {
+  var branchConfig = constants.nextBranchConfig;
+  for (var key in branchConfig) {
+    if (!branchConfig[key]) {
       constants[key] = constants.nextBranchConfig[key];
     }
   }
