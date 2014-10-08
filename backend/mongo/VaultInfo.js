@@ -82,7 +82,7 @@ var VaultMetaData = function() {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
-    VaultInfo.find({ session_id: sessionId }, { _id: 0, vault_id: 1, vault_id_full: 1, host_name: 1 },
+    VaultInfo.find({ session_id: sessionId, is_running: 1 }, { _id: 0, vault_id: 1, vault_id_full: 1, host_name: 1 },
       function(err, vaults) {
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
