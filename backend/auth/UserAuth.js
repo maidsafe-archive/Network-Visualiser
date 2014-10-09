@@ -69,13 +69,7 @@ var setUserInfo = function(req, res, next) {
     };
   } else if (req.isAuthenticated()) {
     var mailId = req.user.email;
-    if (mailId.indexOf(gAuth.MAIDSAFE_USER) > 0) {
-      userInfo = {
-        isAuthenticated: true,
-        isMaidSafeUser: true,
-        mailAddress: mailId
-      };
-    } else {
+    var checkIfWhiteListUser = function() {
       for (var index in gAuth.WHITELIST_USERS) {
         if (mailId === gAuth.WHITELIST_USERS[index]) {
           userInfo.isAuthenticated = true;
@@ -83,6 +77,15 @@ var setUserInfo = function(req, res, next) {
           break;
         }
       }
+    };
+    if (mailId.indexOf(gAuth.MAIDSAFE_USER) > 0) {
+      userInfo = {
+        isAuthenticated: true,
+        isMaidSafeUser: true,
+        mailAddress: mailId
+      };
+    } else {
+      checkIfWhiteListUser();
     }
   }
   /* jscs:disable disallowDanglingUnderscores */
