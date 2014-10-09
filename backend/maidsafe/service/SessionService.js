@@ -62,9 +62,9 @@ exports.importSession = function(req, res) {
         res.send('Added to Import Queue');
         fs.unlink(filePath);
         handler.refreshSessionsCallback();
-      }, function() {
+      }, function(err) {
         fs.unlink(filePath);
-        res.send(500, 'Invalid File');
+        res.send(500, err.message || 'Invalid File');
       });
     });
   });

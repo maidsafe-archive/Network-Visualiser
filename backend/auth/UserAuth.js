@@ -75,7 +75,6 @@ var setUserInfo = function(req, res, next) {
         isMaidSafeUser: true,
         mailAddress: mailId
       };
-      return;
     } else {
       for (var index in gAuth.WHITELIST_USERS) {
         if (mailId === gAuth.WHITELIST_USERS[index]) {
