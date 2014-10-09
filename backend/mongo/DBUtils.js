@@ -255,7 +255,7 @@ var DBUtil = function(dbConnection) {
         }
         promise.error(err);
       } else {
-        sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+        sessionInfo.createSession(sessionName, createdBy).then(function(sessionId) {
           importFactory(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise);
         }, function(createSessionError) {
           promise.error(createSessionError);

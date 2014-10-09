@@ -76,12 +76,13 @@ var setUserInfo = function(req, res, next) {
         mailAddress: mailId
       };
       return;
-    }
-    for (var index in gAuth.WHITELIST_USERS) {
-      if (mailId === gAuth.WHITELIST_USERS[index]) {
-        userInfo.isAuthenticated = true;
-        userInfo.mailAddress = mailId;
-        break;
+    } else {
+      for (var index in gAuth.WHITELIST_USERS) {
+        if (mailId === gAuth.WHITELIST_USERS[index]) {
+          userInfo.isAuthenticated = true;
+          userInfo.mailAddress = mailId;
+          break;
+        }
       }
     }
   }
