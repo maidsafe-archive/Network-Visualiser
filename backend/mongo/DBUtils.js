@@ -151,7 +151,7 @@ var DBUtil = function(dbConnection) {
     };
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    if (log.vault_id === null) {
+    if (!log.vault_id) {
       // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       addErrorMessage('Vault Id is empty');
@@ -166,17 +166,17 @@ var DBUtil = function(dbConnection) {
     }
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    if (log.action_id === null) {
+    if (log.action_id === null || isNaN(log.action_id)) {
       addErrorMessage('Action Id is empty or invalid - spell check');
     }
-    if (log.action_id !== null) {
+    if (log.action_id !== null || !isNaN(log.action_id)) {
       try {
         parseInt(log.action_id);
       } catch (e) {
         addErrorMessage('Invalid Action Id');
       }
     }
-    if (log.persona_id !== null) {
+    if (log.persona_id !== null || !isNaN(log.persona_id)) {
       try {
         parseInt(log.action_id);
       } catch (e) {
@@ -255,7 +255,7 @@ var DBUtil = function(dbConnection) {
         }
         promise.error(err);
       } else {
-        sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+        sessionInfo.createSession(sessionName, createdBy).then(function(sessionId) {
           importFactory(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise);
         }, function(createSessionError) {
           promise.error(createSessionError);
