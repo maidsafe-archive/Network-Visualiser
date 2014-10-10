@@ -20,12 +20,8 @@ app.controller('testnetStatusCtrl', [
       $scope.testnetStatus = res.data;
     }, function() {
       $scope.testnetStatus = {
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         isReady: false,
         lastUpdated: new Date().toISOString()
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       };
     });
   }
