@@ -64,7 +64,7 @@ exports.importSession = function(req, res) {
         handler.refreshSessionsCallback();
       }, function(err) {
         fs.unlink(filePath);
-        res.send(500, err.message || 'Invalid File');
+        res.send(500, err.message.indexOf('Duplicate') > -1 ? err.message : 'Invalid File');
       });
     });
   });

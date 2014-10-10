@@ -2,8 +2,9 @@ var config = require('./../../Config.js');
 exports.isValid = function(log) {
   // jshint camelcase:false
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-  var isValid = log.vaultId && log.actionId && log.personaId;
+  var isValid = log.vaultId && !isNaN(log.actionId) && !isNaN(log.personaId);
   log.actionId = parseInt(log.actionId);
+  log.personaId = parseInt(log.personaId);
   // jshint camelcase:true
   // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   if (!log.hasOwnProperty('sessionId')) {
