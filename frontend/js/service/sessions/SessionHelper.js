@@ -10,11 +10,7 @@ window.SessionHelper = [ '$window', '$http', function($window, $http) {
     }
   };
   var caseInsensitiveCompare = function(a, b) {
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     return a.sessionName.toLowerCase().localeCompare(b.sessionName.toLowerCase());
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   };
   var mergeAndRemoveSessions = function(a, b) {
     var result = [];
@@ -37,16 +33,12 @@ window.SessionHelper = [ '$window', '$http', function($window, $http) {
   };
   instance.refreshCurrentSessions = function() {
     $http.get('/backend/currentSessions').then(function(result) {
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       var newActiveSessions = result.data.filter(function(item) {
         return item.isActive;
       }).sort(caseInsensitiveCompare);
       var newPendingSessions = result.data.filter(function(item) {
         return !item.isActive;
       }).sort(caseInsensitiveCompare);
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       var currentActiveSessions = $scope.activeSessions;
       var currentPendingSessions = $scope.pendingSessions;
       $scope.activeSessions = mergeAndRemoveSessions(currentActiveSessions, newActiveSessions);

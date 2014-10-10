@@ -10,11 +10,7 @@ var saveLog = function(req, res) {
     return;
   }
   if (!log.hasOwnProperty('personaId')) {
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     log.personaId = config.Constants.naPersonaId;
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   }
   if (!utils.isValid(log)) {
     res.send(500, 'Invalid Parameters');
@@ -51,12 +47,8 @@ var history = function(req, res) {
   }
   var timeCriteria = criteria.ts ? { 'ts': { '$lt': criteria.ts } } : {};
   if (utils.isPageRequestValid(criteria)) {
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     bridge.vaultHistory(criteria.sn, criteria.vaultId, timeCriteria,
       parseInt(criteria.page), parseInt(criteria.max), new Handler.SelectLogsHandler(res));
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   } else {
     res.send(500, 'Invalid Request');
   }
@@ -71,11 +63,7 @@ var getCurrentActiveVaults = function(req, res, sessionName) {
     var onSuccess = function(logs) {
       counter++;
       if (logs.length > 0) {
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        // jshint camelcase:false
         results[logs[0].vaultId].logs = logs;
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-        // jshint camelcase:true
       }
       if (counter >= vaults.length) {
         res.send(results);
@@ -86,8 +74,6 @@ var getCurrentActiveVaults = function(req, res, sessionName) {
       return;
     }
     for (var index in vaults) {
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      // jshint camelcase:false
       if (vaults[index].vaultId) {
         results[vaults[index].vaultId] = {
           vaultIdFull: vaults[index].vaultIdFull,
@@ -97,8 +83,6 @@ var getCurrentActiveVaults = function(req, res, sessionName) {
         bridge.vaultHistory(sessionName, vaults[index].vaultId, {}, 0, config.Constants.vaultLogsCount)
           .then(onSuccess, errorHandler);
       }
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     }
   });
 };
@@ -112,11 +96,7 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
     var onSuccess = function(logs) {
       counter++;
       if (logs.length > 0) {
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         results[logs[0].vaultId].logs = logs;
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       }
       if (counter >= vaults.length) {
         res.send(results);
@@ -126,8 +106,6 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
       res.send(500, 'No active vaults');
     } else {
       for (var index in vaults) {
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         if (vaults[index].vaultId) {
           results[vaults[index].vaultId] = {
             vaultIdFull: vaults[index].vaultIdFull,
@@ -137,8 +115,6 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
           bridge.vaultHistory(sessionName, vaults[index].vaultId, { ts: { '$lt': criteria.ts } }, 0,
             config.Constants.vaultLogsCount).then(onSuccess, onError);
         }
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       }
     }
   });
@@ -178,11 +154,7 @@ var testLog = function(req, res) {
     return;
   }
   var expectedSessionId = '54ca73ce-0c3c-4155-c9e3-c89d74ad5602';
-  // jshint camelcase:false
-  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
   if (log.sessionId !== expectedSessionId) {
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     res.send(500, 'Invalid Session');
   } else {
     res.send(200, 'Saved');

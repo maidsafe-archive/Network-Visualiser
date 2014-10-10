@@ -10,12 +10,8 @@ window.SessionEvents = [ '$http', '$upload', 'sessionHelper', function($http, $u
         session.isConfirmDialogOpen = false;
         session.isConfirmInProgress = false;
       };
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       var endPoint = session.isActive ? '/backend/deleteActiveSession' : '/backend/deletePendingSession';
       $http.get(endPoint + '?sn=' + session.sessionName).error(onError);
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     };
     $scope.clearSession = function(session) {
       session.isConfirmInProgress = true;
@@ -24,11 +20,7 @@ window.SessionEvents = [ '$http', '$upload', 'sessionHelper', function($http, $u
         session.isConfirmDialogOpen = false;
         session.isConfirmInProgress = false;
       };
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       $http.get('/backend/clearActiveSession?sn=' + session.sessionName).error(onError);
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     };
     $scope.onCreateSessionTabClicked = function() {
       if ($scope.importTab.isOpen) {

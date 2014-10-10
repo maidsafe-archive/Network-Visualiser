@@ -47,12 +47,8 @@ var DBUtil = function(dbConnection) {
     /* jscs:disable disallowDanglingUnderscores */
     parser._transform = function(doc, encoding, done) {
       /* jscs:enable disallowDanglingUnderscores */
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       this.push(doc.vaultId + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.actionId] + ',' +
         PERSONA_TO_STRING[doc.personaId] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       done();
     };
     return parser;
@@ -130,15 +126,11 @@ var DBUtil = function(dbConnection) {
     return map;
   };
   var getLogFromCSVRow = function(data) {
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     return { vaultId: data[0], ts: data[1], actionId: actionMap[data[2]],
       personaId: personaMap[data[3]] || 10,
       value1: data[4] || '',
       value2: data[5] || ''
     };
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   };
   var importValidator = function(data) {
     var log = getLogFromCSVRow(data);
@@ -149,11 +141,7 @@ var DBUtil = function(dbConnection) {
       errString += ((errString === '' ? errString : ', ') + msg);
       isValid = false;
     };
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     if (!log.vaultId) {
-      // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       addErrorMessage('Vault Id is empty');
     }
     try {
@@ -164,8 +152,6 @@ var DBUtil = function(dbConnection) {
     } catch (e) {
       addErrorMessage('Invalid Timestamp');
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     if (log.actionId === null || isNaN(log.actionId)) {
       addErrorMessage('Action Id is empty or invalid - spell check');
     }
@@ -182,8 +168,6 @@ var DBUtil = function(dbConnection) {
       } catch (e) {
         addErrorMessage('Invalid Persona Id');
       }
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     }
     return { valid: isValid, msg: errString };
   };
@@ -194,8 +178,6 @@ var DBUtil = function(dbConnection) {
     // ReSharper disable once InconsistentNaming - Constructor func
     var SaveLog = function(data) {
       var actionId = actionMap[data[2]];
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       var log = {
         vaultId: data[0],
         ts: data[1],
@@ -206,16 +188,10 @@ var DBUtil = function(dbConnection) {
         value2: data[5] || ''
       };
       utils.isValid(log);
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       vaultInfo.updateVaultStatus(log).then(function() {
         // we assume imported logs hold valid info. Thus stream the intake in parallel.
         sessionInfo.updateSessionInfo(log).then(function() {
-          // jshint camelcase:false
-          // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
           delete log.sessionId;
-          // jshint camelcase:true
-          // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           logManager.save(sessionId, log);
         });
       });

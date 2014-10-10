@@ -111,14 +111,14 @@ var checkStatus = function() {
       var newStatus = {};
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      newStatus.last_updated = new Date().toISOString();
+      newStatus.lastUpdated = new Date().toISOString();
       newStatus.connections = parsedData.bootstrapConnectivityCheck;
-      newStatus.is_ready = false;
+      newStatus.isReady = false;
       for (var index in newStatus.connections) {
         if (newStatus.connections[index].canConnect) {
           // jshint camelcase:false
           // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-          newStatus.is_ready = true;
+          newStatus.isReady = true;
           // jshint camelcase:true
           // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           break;

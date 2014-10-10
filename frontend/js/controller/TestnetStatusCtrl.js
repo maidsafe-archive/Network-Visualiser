@@ -22,8 +22,8 @@ app.controller('testnetStatusCtrl', [
       $scope.testnetStatus = {
         // jshint camelcase:false
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        is_ready: false,
-        last_updated: new Date().toISOString()
+        isReady: false,
+        lastUpdated: new Date().toISOString()
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       };

@@ -34,31 +34,19 @@ exports.addLog = function(log, promise, refreshSessionsCallback) {
     }
     vaultInfo.updateVaultStatus(log).then(function() {
       vaultInfo.isVaultActive(log).then(function(isActive) {
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         if (!isActive && log.actionId !== 18) {
           promise('Vault is not active');
           return;
         }
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         sessionInfo.updateSessionInfo(log, refreshSessionsCallback).then(function() {
-          // jshint camelcase:false
-          // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
           var sessionId = log.sessionId;
           delete log.sessionId;
-          // jshint camelcase:true
-          // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           vaultLog.save(sessionId, log).then(function(data) {
             sessionInfo.getSessionNameForId(sessionId).then(function(sessionName) {
               if (!data || !sessionName) {
                 promise('Error adding log');
               } else {
-                // jshint camelcase:false
-                // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
                 data.sessionName = sessionName;
-                // jshint camelcase:true
-                // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
                 promise(null, data);
               }
             });

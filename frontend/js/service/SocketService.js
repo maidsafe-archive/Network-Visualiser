@@ -9,11 +9,7 @@ window.SocketService = [
     var signalObserver;
     var testnetStatusObserver;
     socket.on('log', function(data) {
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       if ($rootScope.realTime && data.sessionName === $rootScope.sessionName) {
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         if (logObserver) {
           $timeout(function() {
             logObserver(data);

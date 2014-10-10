@@ -2,16 +2,12 @@ var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
 var SessionInfo;
 var SCHEMA = {
-  // jshint camelcase:false
-  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
   sessionId: String,
   sessionName: String,
   createdBy: String,
   isActive: Boolean,
   beginDate: String,
   endDate: String
-  // jshint camelcase:true
-  // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 };
 var MODEL_NAME = 'sessionInfo';
 SessionInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
@@ -28,11 +24,7 @@ var SessionMetaData = function(dbConnection) {
       }, 10);
       return promise;
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     SessionInfo.find({}, { sessionId: 1, sessionName: 1 }, function(err, res) {
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       if (err) {
         promise.error(err);
         return;
@@ -52,12 +44,8 @@ var SessionMetaData = function(dbConnection) {
       do {
         randomId = utils.generateRandomSessionIdString();
       } while (currentSessions.length > 0 && isDuplicateSessionId(randomId, currentSessions));
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       var newSession = new SessionInfo({ sessionId: randomId, sessionName: nameTrimmed,
         createdBy: createdBy, isActive: false });
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 
       // jshint unused:false
       newSession.save(function(errSave, resSave) {
@@ -76,14 +64,10 @@ var SessionMetaData = function(dbConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
     var fullResultsCriteria = { _id: 0, sessionId: 1, sessionName: 1, createdBy: 1, isActive: 1 };
     var restrictedResultsCriteria = { _id: 0, sessionName: 1, createdBy: 1, isActive: 1 };
     /* jscs:enable disallowDanglingUnderscores */
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     if (userInfo.isMaidSafeUser) {
       SessionInfo.find({}, fullResultsCriteria, function(err, res) {
         if (err) {
@@ -104,8 +88,6 @@ var SessionMetaData = function(dbConnection) {
       });
       return promise;
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     SessionInfo.find({ createdBy: userInfo.mailAddress }, fullResultsCriteria, function(err, res) {
       if (err) {
         promise.error(err);
@@ -125,8 +107,6 @@ var SessionMetaData = function(dbConnection) {
           promise.complete(selectSessions);
         });
     });
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     return promise;
   };
   this.deleteSession = function(sessionName, callback) {
@@ -134,8 +114,6 @@ var SessionMetaData = function(dbConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
     SessionInfo.findOne({ sessionName: sessionName }, { _id: 0, sessionId: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
@@ -151,8 +129,6 @@ var SessionMetaData = function(dbConnection) {
         promise.complete(res.sessionId);
       });
     });
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     return promise;
   };
   this.clearActiveSession = function(sessionName, callback) {
@@ -160,32 +136,20 @@ var SessionMetaData = function(dbConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     var queryCriteria = { sessionName: sessionName, isActive: true };
     var updateCriteria = { $set: { isActive: false }, $unset: { beginDate: 1, endDate: 1 } };
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     SessionInfo.findOneAndUpdate(queryCriteria, updateCriteria, function(err, session) {
       if (err || !session) {
         promise.error(err || 'Invalid Session');
         return;
       }
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       promise.complete(session.sessionId);
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     });
     return promise;
   };
   this.isValidSessionId = function(log) {
     var promise = new mongoose.Promise();
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     SessionInfo.findOne({ sessionId: log.sessionId }, function(err, res) {
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       if (!res) {
         promise.complete(false);
       } else {
@@ -200,21 +164,13 @@ var SessionMetaData = function(dbConnection) {
   };
   this.updateSessionInfo = function(log, refreshSessionsCallback) {
     var promise = new mongoose.Promise();
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     SessionInfo.findOneAndUpdate({ sessionId: log.sessionId }, { $set: { isActive: true } }, { new: false },
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       function(err, currentSession) {
         if (err) {
           promise.error('Unable to Update Session');
           return;
         }
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         if (!currentSession.isActive && refreshSessionsCallback) {
-          // jshint camelcase:true
-          // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           refreshSessionsCallback();
         }
         checkAndUpdateDates(log, currentSession, promise);
@@ -226,13 +182,9 @@ var SessionMetaData = function(dbConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
     SessionInfo.findOne({ sessionName: sessionName }, { _id: 0, beginDate: 1, endDate: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       if (err || !res) {
         promise.error('No times recorded');
         return;
@@ -243,8 +195,6 @@ var SessionMetaData = function(dbConnection) {
   };
   this.getSessionIdForName = function(sessionName) {
     var promise = new mongoose.Promise();
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
     SessionInfo.findOne({ sessionName: sessionName }, { _id: 0, sessionId: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
@@ -254,8 +204,6 @@ var SessionMetaData = function(dbConnection) {
       }
       promise.complete(res.sessionId);
     });
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     return promise;
   };
   this.getSessionNameForId = function(sessionId, callback) {
@@ -263,8 +211,6 @@ var SessionMetaData = function(dbConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
     SessionInfo.findOne({ sessionId: sessionId }, { _id: 0, sessionName: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
@@ -274,14 +220,10 @@ var SessionMetaData = function(dbConnection) {
       }
       promise.complete(res.sessionName);
     });
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     return promise;
   };
   this.getSessionCreatedByForName = function(sessionName) {
     var promise = new mongoose.Promise();
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
     SessionInfo.findOne({ sessionName: sessionName }, { _id: 0, createdBy: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
@@ -291,17 +233,11 @@ var SessionMetaData = function(dbConnection) {
       }
       promise.complete(res.createdBy);
     });
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     return promise;
   };
   var isDuplicateSessionId = function(sessionId, sessions) {
     for (var index in sessions) {
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       if (sessions[index].sessionId === sessionId) {
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         return true;
       }
     }
@@ -309,11 +245,7 @@ var SessionMetaData = function(dbConnection) {
   };
   var isDuplicateSessionName = function(sessionName, sessions) {
     for (var index in sessions) {
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       if (sessions[index].sessionName === sessionName) {
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         return true;
       }
     }
@@ -324,15 +256,11 @@ var SessionMetaData = function(dbConnection) {
     var currentEndDate = currentSession.endDate ? new Date(currentSession.endDate) : null;
     var newDate = new Date(log.ts);
     var newDateTime = newDate.getTime();
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     if ((log.actionId === 0 || log.actionId === 18) &&
       (currentBeginDate === null || currentBeginDate.getTime() > newDateTime)) {
       setDate(currentSession.sessionId, true, newDate, promise);
     } else if (currentBeginDate != null && (currentEndDate === null || currentEndDate.getTime() < newDateTime)) {
       setDate(currentSession.sessionId, false, newDate, promise);
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     } else {
       promise.complete('');
     }
@@ -341,11 +269,7 @@ var SessionMetaData = function(dbConnection) {
     var obj = {};
     obj[isBeginDate ? 'beginDate' : 'endDate'] = newDate.toISOString();
     // jshint unused:false
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     SessionInfo.update({ sessionId: sessionId }, { $set: obj }, function(err, res) {
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       if (err) {
         promise.error(err);
       } else {

@@ -74,8 +74,6 @@ window.VaultManagerService = [
         vault.iconsTray = vaultBehaviour.icons[actionId];
       };
       var logReceived = function(log, initialLoad) {
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         log.actionId = parseInt(log.actionId);
         log.personaId = parseInt(log.personaId);
         log.uniqueCount = ++logCount;
@@ -105,8 +103,6 @@ window.VaultManagerService = [
         if (!vault.hostName && (log.actionId === 0 || log.hasOwnProperty('hostName'))) {
           vault.hostName = log.hostName || log.value2 || '';
         }
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         stateOfVault(log);
         refreshVaultDisplay();
         resetInActivityMonitor();
@@ -118,11 +114,7 @@ window.VaultManagerService = [
         vault.logs.push(log);
       };
       var stateOfVault = function(log) {
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         vault.isActive = (log.actionId !== 18);
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         if (!vault.isActive) {
           vault.networkHealth = 0;
         }
@@ -169,11 +161,7 @@ window.VaultManagerService = [
       };
       vault.init = function(vaultData) {
         updateIcons(0);
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         vault.vaultName = vaultData.vaultId;
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         dataManager.setLogListener(vault.vaultName, logReceived);
         updateFromQueue();
       };

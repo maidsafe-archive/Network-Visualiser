@@ -40,12 +40,8 @@ exports.createSession = function(req, res) {
     return;
   }
   /* jscs:disable disallowDanglingUnderscores */
-  // jshint camelcase:false
-  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
   bridge.createSession(criteria.sessionName, req._userInfo.mailAddress, new Handler.CreateSessionHandler(res));
   /* jscs:enable disallowDanglingUnderscores */
-  // jshint camelcase:true
-  // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 };
 exports.importSession = function(req, res) {
   fs.readFile(req.files.file.path, function(err, data) {
