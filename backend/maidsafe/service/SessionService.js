@@ -35,14 +35,14 @@ var validateSessionOwner = function(req) {
 };
 exports.createSession = function(req, res) {
   var criteria = JSON.parse(JSON.stringify(req.body));
-  if (!criteria || !criteria.hasOwnProperty('session_name')) {
+  if (!criteria || !criteria.hasOwnProperty('sessionName')) {
     res.send(500, 'Invalid parameters');
     return;
   }
   /* jscs:disable disallowDanglingUnderscores */
   // jshint camelcase:false
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-  bridge.createSession(criteria.session_name, req._userInfo.mailAddress, new Handler.CreateSessionHandler(res));
+  bridge.createSession(criteria.sessionName, req._userInfo.mailAddress, new Handler.CreateSessionHandler(res));
   /* jscs:enable disallowDanglingUnderscores */
   // jshint camelcase:true
   // jscs:enable requireCamelCaseOrUpperCaseIdentifiers

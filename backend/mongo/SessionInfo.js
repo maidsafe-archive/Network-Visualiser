@@ -4,10 +4,10 @@ var SessionInfo;
 var SCHEMA = {
   // jshint camelcase:false
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-  session_id: String,
-  session_name: String,
-  created_by: String,
-  is_active: Boolean,
+  sessionId: String,
+  sessionName: String,
+  createdBy: String,
+  isActive: Boolean,
   beginDate: String,
   endDate: String
   // jshint camelcase:true
@@ -16,7 +16,7 @@ var SCHEMA = {
 var MODEL_NAME = 'sessionInfo';
 SessionInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
 var SessionMetaData = function(dbConnection) {
-  utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'session_id');
+  utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'sessionId');
   this.createSession = function(sessionName, createdBy, callback) {
     var promise = new mongoose.Promise();
     if (callback) {
@@ -30,7 +30,7 @@ var SessionMetaData = function(dbConnection) {
     }
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    SessionInfo.find({}, { session_id: 1, session_name: 1 }, function(err, res) {
+    SessionInfo.find({}, { sessionId: 1, sessionName: 1 }, function(err, res) {
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       if (err) {
@@ -54,8 +54,8 @@ var SessionMetaData = function(dbConnection) {
       } while (currentSessions.length > 0 && isDuplicateSessionId(randomId, currentSessions));
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      var newSession = new SessionInfo({ session_id: randomId, session_name: nameTrimmed,
-        created_by: createdBy, is_active: false });
+      var newSession = new SessionInfo({ sessionId: randomId, sessionName: nameTrimmed,
+        createdBy: createdBy, isActive: false });
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 
@@ -79,8 +79,8 @@ var SessionMetaData = function(dbConnection) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
-    var fullResultsCriteria = { _id: 0, session_id: 1, session_name: 1, created_by: 1, is_active: 1 };
-    var restrictedResultsCriteria = { _id: 0, session_name: 1, created_by: 1, is_active: 1 };
+    var fullResultsCriteria = { _id: 0, sessionId: 1, sessionName: 1, createdBy: 1, isActive: 1 };
+    var restrictedResultsCriteria = { _id: 0, sessionName: 1, createdBy: 1, isActive: 1 };
     /* jscs:enable disallowDanglingUnderscores */
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
@@ -106,12 +106,12 @@ var SessionMetaData = function(dbConnection) {
     }
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    SessionInfo.find({ created_by: userInfo.mailAddress }, fullResultsCriteria, function(err, res) {
+    SessionInfo.find({ createdBy: userInfo.mailAddress }, fullResultsCriteria, function(err, res) {
       if (err) {
         promise.error(err);
         return;
       }
-      SessionInfo.find({ created_by: { $ne: userInfo.mailAddress } }, restrictedResultsCriteria,
+      SessionInfo.find({ createdBy: { $ne: userInfo.mailAddress } }, restrictedResultsCriteria,
         function(errSpecific, selectSessions) {
           if (errSpecific) {
             promise.error(errSpecific);
@@ -137,18 +137,18 @@ var SessionMetaData = function(dbConnection) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
-    SessionInfo.findOne({ session_name: sessionName }, { _id: 0, session_id: 1 }, function(err, res) {
+    SessionInfo.findOne({ sessionName: sessionName }, { _id: 0, sessionId: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
       if (err || !res) {
         promise.error('Invalid Session');
         return;
       }
-      SessionInfo.remove({ session_name: sessionName }, function(removeErr, removeRes) {
+      SessionInfo.remove({ sessionName: sessionName }, function(removeErr, removeRes) {
         if (removeErr || removeRes === 0) {
           promise.error(removeErr || 'Invalid Session');
           return;
         }
-        promise.complete(res.session_id);
+        promise.complete(res.sessionId);
       });
     });
     // jshint camelcase:true
@@ -162,8 +162,8 @@ var SessionMetaData = function(dbConnection) {
     }
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    var queryCriteria = { session_name: sessionName, is_active: true };
-    var updateCriteria = { $set: { is_active: false }, $unset: { beginDate: 1, endDate: 1 } };
+    var queryCriteria = { sessionName: sessionName, isActive: true };
+    var updateCriteria = { $set: { isActive: false }, $unset: { beginDate: 1, endDate: 1 } };
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     SessionInfo.findOneAndUpdate(queryCriteria, updateCriteria, function(err, session) {
@@ -173,7 +173,7 @@ var SessionMetaData = function(dbConnection) {
       }
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      promise.complete(session.session_id);
+      promise.complete(session.sessionId);
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     });
@@ -183,7 +183,7 @@ var SessionMetaData = function(dbConnection) {
     var promise = new mongoose.Promise();
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    SessionInfo.findOne({ session_id: log.session_id }, function(err, res) {
+    SessionInfo.findOne({ sessionId: log.sessionId }, function(err, res) {
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       if (!res) {
@@ -202,7 +202,7 @@ var SessionMetaData = function(dbConnection) {
     var promise = new mongoose.Promise();
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    SessionInfo.findOneAndUpdate({ session_id: log.session_id }, { $set: { is_active: true } }, { new: false },
+    SessionInfo.findOneAndUpdate({ sessionId: log.sessionId }, { $set: { isActive: true } }, { new: false },
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       function(err, currentSession) {
@@ -212,7 +212,7 @@ var SessionMetaData = function(dbConnection) {
         }
         // jshint camelcase:false
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        if (!currentSession.is_active && refreshSessionsCallback) {
+        if (!currentSession.isActive && refreshSessionsCallback) {
           // jshint camelcase:true
           // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           refreshSessionsCallback();
@@ -229,7 +229,7 @@ var SessionMetaData = function(dbConnection) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
-    SessionInfo.findOne({ session_name: sessionName }, { _id: 0, beginDate: 1, endDate: 1 }, function(err, res) {
+    SessionInfo.findOne({ sessionName: sessionName }, { _id: 0, beginDate: 1, endDate: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
@@ -246,13 +246,13 @@ var SessionMetaData = function(dbConnection) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
-    SessionInfo.findOne({ session_name: sessionName }, { _id: 0, session_id: 1 }, function(err, res) {
+    SessionInfo.findOne({ sessionName: sessionName }, { _id: 0, sessionId: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
       if (err || !res) {
         promise.error(err);
         return;
       }
-      promise.complete(res.session_id);
+      promise.complete(res.sessionId);
     });
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
@@ -266,13 +266,13 @@ var SessionMetaData = function(dbConnection) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
-    SessionInfo.findOne({ session_id: sessionId }, { _id: 0, session_name: 1 }, function(err, res) {
+    SessionInfo.findOne({ sessionId: sessionId }, { _id: 0, sessionName: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
       if (err || !res) {
         promise.error(err);
         return;
       }
-      promise.complete(res.session_name);
+      promise.complete(res.sessionName);
     });
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
@@ -283,13 +283,13 @@ var SessionMetaData = function(dbConnection) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     /* jscs:disable disallowDanglingUnderscores */
-    SessionInfo.findOne({ session_name: sessionName }, { _id: 0, created_by: 1 }, function(err, res) {
+    SessionInfo.findOne({ sessionName: sessionName }, { _id: 0, createdBy: 1 }, function(err, res) {
       /* jscs:enable disallowDanglingUnderscores */
       if (err || !res) {
         promise.error(err);
         return;
       }
-      promise.complete(res.created_by);
+      promise.complete(res.createdBy);
     });
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
@@ -299,7 +299,7 @@ var SessionMetaData = function(dbConnection) {
     for (var index in sessions) {
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      if (sessions[index].session_id === sessionId) {
+      if (sessions[index].sessionId === sessionId) {
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         return true;
@@ -311,7 +311,7 @@ var SessionMetaData = function(dbConnection) {
     for (var index in sessions) {
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      if (sessions[index].session_name === sessionName) {
+      if (sessions[index].sessionName === sessionName) {
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         return true;
@@ -326,11 +326,11 @@ var SessionMetaData = function(dbConnection) {
     var newDateTime = newDate.getTime();
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    if ((log.action_id === 0 || log.action_id === 18) &&
+    if ((log.actionId === 0 || log.actionId === 18) &&
       (currentBeginDate === null || currentBeginDate.getTime() > newDateTime)) {
-      setDate(currentSession.session_id, true, newDate, promise);
+      setDate(currentSession.sessionId, true, newDate, promise);
     } else if (currentBeginDate != null && (currentEndDate === null || currentEndDate.getTime() < newDateTime)) {
-      setDate(currentSession.session_id, false, newDate, promise);
+      setDate(currentSession.sessionId, false, newDate, promise);
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     } else {
@@ -343,7 +343,7 @@ var SessionMetaData = function(dbConnection) {
     // jshint unused:false
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    SessionInfo.update({ session_id: sessionId }, { $set: obj }, function(err, res) {
+    SessionInfo.update({ sessionId: sessionId }, { $set: obj }, function(err, res) {
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       if (err) {

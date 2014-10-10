@@ -76,34 +76,34 @@ window.VaultManagerService = [
       var logReceived = function(log, initialLoad) {
         // jshint camelcase:false
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        log.action_id = parseInt(log.action_id);
-        log.persona_id = parseInt(log.persona_id);
+        log.actionId = parseInt(log.actionId);
+        log.personaId = parseInt(log.personaId);
         log.uniqueCount = ++logCount;
         log.formattedTime = $filter('date')(log.ts, 'dd/MM/yyyy HH:mm:ss');
         addLog(log);
-        vault.personaColour = PERSONA_COLOUR_TAG + (initialLoad ? 'na' : vaultBehaviour.personas[log.persona_id]);
-        if (log.action_id === 17) {
+        vault.personaColour = PERSONA_COLOUR_TAG + (initialLoad ? 'na' : vaultBehaviour.personas[log.personaId]);
+        if (log.actionId === 17) {
           vault.networkHealth = log.value1;
         } else {
           vault.subscriber = null;
           vault.counter = null;
           if (!initialLoad) {
-            updateIcons(log.action_id);
+            updateIcons(log.actionId);
             vault.alertMessage = vaultBehaviour.alertMessage(log);
           }
         }
         if (!initialLoad) {
-          if (log.action_id === 1 || log.action_id === 2) {
+          if (log.actionId === 1 || log.actionId === 2) {
             vault.counter = log.value1;
-          } else if (log.action_id === 6 || log.action_id === 7) {
+          } else if (log.actionId === 6 || log.actionId === 7) {
             vault.subscriber = log.value1;
           }
         }
-        if (!vault.fullVaultName && (log.action_id === 0 || log.hasOwnProperty('vault_id_full'))) {
-          vault.fullVaultName = log.vault_id_full || log.value1;
+        if (!vault.fullVaultName && (log.actionId === 0 || log.hasOwnProperty('vaultIdFull'))) {
+          vault.fullVaultName = log.vaultIdFull || log.value1;
         }
-        if (!vault.hostName && (log.action_id === 0 || log.hasOwnProperty('host_name'))) {
-          vault.hostName = log.host_name || log.value2 || '';
+        if (!vault.hostName && (log.actionId === 0 || log.hasOwnProperty('hostName'))) {
+          vault.hostName = log.hostName || log.value2 || '';
         }
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
@@ -120,7 +120,7 @@ window.VaultManagerService = [
       var stateOfVault = function(log) {
         // jshint camelcase:false
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        vault.isActive = (log.action_id !== 18);
+        vault.isActive = (log.actionId !== 18);
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         if (!vault.isActive) {
@@ -171,7 +171,7 @@ window.VaultManagerService = [
         updateIcons(0);
         // jshint camelcase:false
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        vault.vaultName = vaultData.vault_id;
+        vault.vaultName = vaultData.vaultId;
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         dataManager.setLogListener(vault.vaultName, logReceived);

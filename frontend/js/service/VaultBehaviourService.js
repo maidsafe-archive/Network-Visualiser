@@ -68,7 +68,7 @@ window.VaultBehaviourService = [
     var generalFormat = function(log) {
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      return service.personas[log.persona_id] + ' - ' + service.actions[log.action_id] + ' ';
+      return service.personas[log.personaId] + ' - ' + service.actions[log.actionId] + ' ';
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     };
@@ -81,16 +81,16 @@ window.VaultBehaviourService = [
     var formatWithOneValue = function(log, includePersona) {
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      var result = includePersona ? service.personas[log.persona_id] + ' - ' : '';
-      return result + service.actions[log.action_id] + ' ' + trim(log.value1);
+      var result = includePersona ? service.personas[log.personaId] + ' - ' : '';
+      return result + service.actions[log.actionId] + ' ' + trim(log.value1);
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     };
     var formatWithTwoValues = function(log, includePersona) {
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      var result = includePersona ? service.personas[log.persona_id] + ' - ' : '';
-      return result + service.actions[log.action_id] + ' ' + trim(log.value1) + ' : ' + trim(log.value2);
+      var result = includePersona ? service.personas[log.personaId] + ' - ' : '';
+      return result + service.actions[log.actionId] + ' ' + trim(log.value1) + ' : ' + trim(log.value2);
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     };
@@ -117,14 +117,14 @@ window.VaultBehaviourService = [
     service.formatMessage = function(log, includePersona) {
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      return (formats[log.action_id] || generalFormat)(log, includePersona);
+      return (formats[log.actionId] || generalFormat)(log, includePersona);
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     };
     service.alertMessage = function(log) {
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      if (log.action_id === 0 || log.action_id === 17 || log.action_id === 18) {
+      if (log.actionId === 0 || log.actionId === 17 || log.actionId === 18) {
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         return null;

@@ -36,7 +36,7 @@ exports.addLog = function(log, promise, refreshSessionsCallback) {
       vaultInfo.isVaultActive(log).then(function(isActive) {
         // jshint camelcase:false
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        if (!isActive && log.action_id !== 18) {
+        if (!isActive && log.actionId !== 18) {
           promise('Vault is not active');
           return;
         }
@@ -45,8 +45,8 @@ exports.addLog = function(log, promise, refreshSessionsCallback) {
         sessionInfo.updateSessionInfo(log, refreshSessionsCallback).then(function() {
           // jshint camelcase:false
           // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-          var sessionId = log.session_id;
-          delete log.session_id;
+          var sessionId = log.sessionId;
+          delete log.sessionId;
           // jshint camelcase:true
           // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           vaultLog.save(sessionId, log).then(function(data) {
@@ -56,7 +56,7 @@ exports.addLog = function(log, promise, refreshSessionsCallback) {
               } else {
                 // jshint camelcase:false
                 // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-                data.session_name = sessionName;
+                data.sessionName = sessionName;
                 // jshint camelcase:true
                 // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
                 promise(null, data);

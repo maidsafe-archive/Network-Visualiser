@@ -2,11 +2,11 @@ var config = require('./../../Config.js');
 exports.isValid = function(log) {
   // jshint camelcase:false
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-  var isValid = log.vault_id && log.action_id && log.persona_id;
-  log.action_id = parseInt(log.action_id);
+  var isValid = log.vaultId && log.actionId && log.personaId;
+  log.actionId = parseInt(log.actionId);
   // jshint camelcase:true
   // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-  if (!log.hasOwnProperty('session_id')) {
+  if (!log.hasOwnProperty('sessionId')) {
     isValid = false;
   }
   return isValid;
@@ -46,7 +46,7 @@ exports.decodeData = function(str) {
 exports.isPageRequestValid = function(criteria) {
   // jshint camelcase:false
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-  if (criteria.vault_id) {
+  if (criteria.vaultId) {
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     if (criteria.page) {

@@ -30,7 +30,7 @@ app.controller('historyCtrl', [
         refreshLogsCollection();
       }, 500);
     });
-    $http({ url: '/backend/history?&max=-1&vault_id=' + $scope.vaultId + '&sn=' + $scope.sessionName, method: 'GET' })
+    $http({ url: '/backend/history?&max=-1&vaultId=' + $scope.vaultId + '&sn=' + $scope.sessionName, method: 'GET' })
       .success(function(data) {
         var retrievedLogs = data;
         for (var i = 0; i < retrievedLogs.length; ++i) {

@@ -3,31 +3,31 @@
     <ul>
       <li>
         <div class="session_info">
-          <input ng-value="session.session_name" ng-click="openViewer(session.session_name)" class="session_name"
+          <input ng-value="session.sessionName" ng-click="openViewer(session.sessionName)" class="session_name"
           ng-class="{true:'logged-out-margin'}[!userInfo.isAuthenticated]" readonly >
 <% if (userInfo.isAuthenticated) { %>
-          <input class="session_created_by" ng-value="session.created_by" readonly>
-          <input ng-value="session.session_id" class="session_id" readonly>
+          <input class="session_created_by" ng-value="session.createdBy" readonly>
+          <input ng-value="session.sessionId" class="session_id" readonly>
  <% } %>
         </div>
         <div class="actions">
-          <a href="" class="view" ng-click="openViewer(session.session_name)"></a>
+          <a href="" class="view" ng-click="openViewer(session.sessionName)"></a>
 <% if (userInfo.isAuthenticated) { %>
           <a ng-click="session.showActions = true" class="expand-toggle" href="" ng-if="!session.showActions"></a>
           <ul class="show-hide" ng-show="session.showActions">
           <li> <a href="" ng-click="session.showActions = false" class="arrow"></a></li>
             <li>
               <div class="export-section">
-                <a href="" ng-click="onExportSessionClicked(session.session_name)" class="export" ng-show="exportStatus[session.session_name].status == 'ready' || exportStatus[session.session_name] == null"></a>
-                <div class="export-loader" ng-show="exportStatus[session.session_name].status == 'progress'"></div>
-                <a href="" class="export-download" ng-click="onDownloadExportClicked(session.session_name)" ng-show="exportStatus[session.session_name].status == 'download'"></a>
+                <a href="" ng-click="onExportSessionClicked(session.sessionName)" class="export" ng-show="exportStatus[session.sessionName].status == 'ready' || exportStatus[session.sessionName] == null"></a>
+                <div class="export-loader" ng-show="exportStatus[session.sessionName].status == 'progress'"></div>
+                <a href="" class="export-download" ng-click="onDownloadExportClicked(session.sessionName)" ng-show="exportStatus[session.sessionName].status == 'download'"></a>
               </div>
             </li>
-            <li ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by">
+            <li ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.createdBy">
               <a href="" class="clear" 
               ng-click="session.confirmAction = 'clear'; session.isConfirmDialogOpen = true"></a>
             </li>
-            <li ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by">
+            <li ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.createdBy">
               <a href="" class="delete"
               ng-click="session.confirmAction = 'delete'; session.isConfirmDialogOpen = true"></a>              
             </li>

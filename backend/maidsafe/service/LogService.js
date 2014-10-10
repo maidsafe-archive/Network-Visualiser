@@ -9,10 +9,10 @@ var saveLog = function(req, res) {
     res.send(500, 'Invalid date time format');
     return;
   }
-  if (!log.hasOwnProperty('persona_id')) {
+  if (!log.hasOwnProperty('personaId')) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    log.persona_id = config.Constants.naPersonaId;
+    log.personaId = config.Constants.naPersonaId;
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   }
@@ -53,7 +53,7 @@ var history = function(req, res) {
   if (utils.isPageRequestValid(criteria)) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    bridge.vaultHistory(criteria.sn, criteria.vault_id, timeCriteria,
+    bridge.vaultHistory(criteria.sn, criteria.vaultId, timeCriteria,
       parseInt(criteria.page), parseInt(criteria.max), new Handler.SelectLogsHandler(res));
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
@@ -73,7 +73,7 @@ var getCurrentActiveVaults = function(req, res, sessionName) {
       if (logs.length > 0) {
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         // jshint camelcase:false
-        results[logs[0].vault_id].logs = logs;
+        results[logs[0].vaultId].logs = logs;
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         // jshint camelcase:true
       }
@@ -88,13 +88,13 @@ var getCurrentActiveVaults = function(req, res, sessionName) {
     for (var index in vaults) {
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       // jshint camelcase:false
-      if (vaults[index].vault_id) {
-        results[vaults[index].vault_id] = {
-          vault_id_full: vaults[index].vault_id_full,
-          host_name: vaults[index].host_name,
+      if (vaults[index].vaultId) {
+        results[vaults[index].vaultId] = {
+          vaultIdFull: vaults[index].vaultIdFull,
+          hostName: vaults[index].hostName,
           logs: []
         };
-        bridge.vaultHistory(sessionName, vaults[index].vault_id, {}, 0, config.Constants.vaultLogsCount)
+        bridge.vaultHistory(sessionName, vaults[index].vaultId, {}, 0, config.Constants.vaultLogsCount)
           .then(onSuccess, errorHandler);
       }
       // jshint camelcase:true
@@ -114,7 +114,7 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
       if (logs.length > 0) {
         // jshint camelcase:false
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        results[logs[0].vault_id].logs = logs;
+        results[logs[0].vaultId].logs = logs;
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       }
@@ -128,13 +128,13 @@ var getActiveVaultsAtTime = function(criteria, res, sessionName) {
       for (var index in vaults) {
         // jshint camelcase:false
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        if (vaults[index].vault_id) {
-          results[vaults[index].vault_id] = {
-            vault_id_full: vaults[index].vault_id_full,
-            host_name: vaults[index].host_name,
+        if (vaults[index].vaultId) {
+          results[vaults[index].vaultId] = {
+            vaultIdFull: vaults[index].vaultIdFull,
+            hostName: vaults[index].hostName,
             logs: []
           };
-          bridge.vaultHistory(sessionName, vaults[index].vault_id, { ts: { '$lt': criteria.ts } }, 0,
+          bridge.vaultHistory(sessionName, vaults[index].vaultId, { ts: { '$lt': criteria.ts } }, 0,
             config.Constants.vaultLogsCount).then(onSuccess, onError);
         }
         // jshint camelcase:true
@@ -180,7 +180,7 @@ var testLog = function(req, res) {
   var expectedSessionId = '54ca73ce-0c3c-4155-c9e3-c89d74ad5602';
   // jshint camelcase:false
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-  if (log.session_id !== expectedSessionId) {
+  if (log.sessionId !== expectedSessionId) {
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     res.send(500, 'Invalid Session');

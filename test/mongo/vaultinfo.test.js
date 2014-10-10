@@ -20,7 +20,7 @@ describe('VaultInfo', function() {
   };
   var addVaultStatus = function(callback) {
     var data = { 'vault_id': 'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(),
-      'action_id': 0, 'value1': 'aaaabbbbccccdddd' };
+      'actionId': 0, 'value1': 'aaaabbbbccccdddd' };
     vaultInfo.updateVaultStatus(data).then(function(data) {
       callback(null, data);
     }, function(err) {
@@ -36,7 +36,7 @@ describe('VaultInfo', function() {
   };
   var updateVaultStoped = function(callback) {
     var data = { 'vault_id': 'aaaa-bbbb', 'session_id': sessionHelper.getSessionId(),
-      'action_id': 18, 'value1': 'aaaabbbbccccdddd' };
+      'actionId': 18, 'value1': 'aaaabbbbccccdddd' };
     vaultInfo.updateVaultStatus(data).then(function(data) {
       should(data).be.exactly('');
       callback(null, data);

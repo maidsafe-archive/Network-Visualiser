@@ -12,7 +12,7 @@ window.SessionHelper = [ '$window', '$http', function($window, $http) {
   var caseInsensitiveCompare = function(a, b) {
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    return a.session_name.toLowerCase().localeCompare(b.session_name.toLowerCase());
+    return a.sessionName.toLowerCase().localeCompare(b.sessionName.toLowerCase());
     // jshint camelcase:true
     // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   };
@@ -40,10 +40,10 @@ window.SessionHelper = [ '$window', '$http', function($window, $http) {
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       var newActiveSessions = result.data.filter(function(item) {
-        return item.is_active;
+        return item.isActive;
       }).sort(caseInsensitiveCompare);
       var newPendingSessions = result.data.filter(function(item) {
-        return !item.is_active;
+        return !item.isActive;
       }).sort(caseInsensitiveCompare);
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers

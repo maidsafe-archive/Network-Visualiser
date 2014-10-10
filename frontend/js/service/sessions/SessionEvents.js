@@ -12,8 +12,8 @@ window.SessionEvents = [ '$http', '$upload', 'sessionHelper', function($http, $u
       };
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      var endPoint = session.is_active ? '/backend/deleteActiveSession' : '/backend/deletePendingSession';
-      $http.get(endPoint + '?sn=' + session.session_name).error(onError);
+      var endPoint = session.isActive ? '/backend/deleteActiveSession' : '/backend/deletePendingSession';
+      $http.get(endPoint + '?sn=' + session.sessionName).error(onError);
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     };
@@ -26,7 +26,7 @@ window.SessionEvents = [ '$http', '$upload', 'sessionHelper', function($http, $u
       };
       // jshint camelcase:false
       // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      $http.get('/backend/clearActiveSession?sn=' + session.session_name).error(onError);
+      $http.get('/backend/clearActiveSession?sn=' + session.sessionName).error(onError);
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     };
@@ -91,7 +91,7 @@ window.SessionEvents = [ '$http', '$upload', 'sessionHelper', function($http, $u
       $http({
         url: '/backend/createSession',
         method: 'POST',
-        data: { 'session_name': $scope.createTab.sessionName },
+        data: { 'sessionName': $scope.createTab.sessionName },
         headers: { 'Content-Type': 'application/json' }
       }).success(onSuccess).error(onError);
     };

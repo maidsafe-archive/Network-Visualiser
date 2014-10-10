@@ -3,18 +3,18 @@
     <ul>
       <li>
         <div class="session_info">
-          <input ng-value="session.session_name" ng-click="openViewer(session.session_name)" class="session_name"
+          <input ng-value="session.sessionName" ng-click="openViewer(session.sessionName)" class="session_name"
           ng-class="{true:'logged-out-margin'}[!userInfo.isAuthenticated]" readonly >
 <% if (userInfo.isAuthenticated) { %>
-          <input class="session_created_by" ng-value="session.created_by" readonly>
-          <input ng-value="session.session_id" class="session_id" readonly>
+          <input class="session_created_by" ng-value="session.createdBy" readonly>
+          <input ng-value="session.sessionId" class="session_id" readonly>
  <% } %>
         </div>
         <div class="actions">
 <% if (userInfo.isAuthenticated) { %>          
           <a href="" class="delete"
               ng-click="session.isDeleteDialogOpen = !session.isDeleteDialogOpen || false"
-              ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.created_by"></a>
+              ng-if="userInfo.isMaidSafeUser || userInfo.mailAddress == session.createdBy"></a>
           <div class="confirm-dialog" ng-if="session.isDeleteDialogOpen">
             <div ng-if="!session.isDeleteInProgress">
               <p>Are you sure?</p>

@@ -30,7 +30,7 @@ var LogManager = function(dbConnConnection) {
           if (docs.length > 0) {
             // jshint camelcase:false
             // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-            results[docs[0].vault_id] = docs;
+            results[docs[0].vaultId] = docs;
             // jshint camelcase:true
             // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           }
@@ -65,7 +65,7 @@ var LogManager = function(dbConnConnection) {
           for (var i in data) {
             // jshint camelcase:false
             // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-            if (data[i].action_id === config.Constants.networkHealthActionId) {
+            if (data[i].actionId === config.Constants.networkHealthActionId) {
               // jshint camelcase:true
               // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
               networkHealthFound = true;
@@ -79,7 +79,7 @@ var LogManager = function(dbConnConnection) {
           }
           // jshint camelcase:false
           // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-          criteria.action_id = config.Constants.networkHealthActionId;
+          criteria.actionId = config.Constants.networkHealthActionId;
           // jshint camelcase:true
           // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
@@ -107,7 +107,7 @@ var LogManager = function(dbConnConnection) {
     }
     // jshint camelcase:false
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    dbConn.db.collection(formatCollectionName(sessionId, data.vault_id), function(err, coll) {
+    dbConn.db.collection(formatCollectionName(sessionId, data.vaultId), function(err, coll) {
       // jshint camelcase:true
       // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       if (err) {
@@ -159,7 +159,7 @@ var LogManager = function(dbConnConnection) {
       if (vaultIds[i]) {
         // jshint camelcase:false
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        dbConn.db.collection(formatCollectionName(sessionId, vaultIds[i].vault_id), deleteCollection);
+        dbConn.db.collection(formatCollectionName(sessionId, vaultIds[i].vaultId), deleteCollection);
         // jshint camelcase:true
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       }
