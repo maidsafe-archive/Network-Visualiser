@@ -3,12 +3,8 @@ var utils = require('./../maidsafe/utils.js');
 var MODEL_NAME = 'testnetStatus';
 var SCHEMA = {
   entry: Number,
-  // jshint camelcase:false
-  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-  last_updated: String,
-  is_ready: Boolean,
-  // jshint camelcase:true
-  // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+  lastUpdated: String,
+  isReady: Boolean,
   connections: [
     {
       contact: String,
@@ -21,12 +17,8 @@ var TestnetStatusInfo = function(dbConnection) {
   utils.ensureUniqueDocInMongo(dbConnection, MODEL_NAME, 'entry');
   this.updateTestnetStatus = function(data) {
     var promise = new mongoose.Promise();
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    TestnetStatus.update({ entry: 1 }, { last_updated: data.last_updated, is_ready: data.is_ready,
+    TestnetStatus.update({ entry: 1 }, { lastUpdated: data.lastUpdated, isReady: data.isReady,
     connections: data.connections }, { upsert: true }, function(errSave) {
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       if (errSave) {
         promise.error(errSave);
         return;

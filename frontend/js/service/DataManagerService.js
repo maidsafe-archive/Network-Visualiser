@@ -15,19 +15,15 @@ window.DataManagerService = [
       vaultsLoadedObserver = callback;
     };
     var addLogToPool = function(log, initialLoad) {
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      if (!vaultsInDisplay.hasOwnProperty(log.vault_id)) {
-        vaultsInDisplay[ log.vault_id ] = { pushLog: null, queue: [] };
-        newVaultObserver({ vault_id: log.vault_id });
+      if (!vaultsInDisplay.hasOwnProperty(log.vaultId)) {
+        vaultsInDisplay[ log.vaultId ] = { pushLog: null, queue: [] };
+        newVaultObserver({ vaultId: log.vaultId });
       }
       // Temporary Queue to hold logs until the vault has not registered for receiving logs
-      if (vaultsInDisplay[log.vault_id].pushLog) {
-        vaultsInDisplay[log.vault_id].pushLog(log, initialLoad);
+      if (vaultsInDisplay[log.vaultId].pushLog) {
+        vaultsInDisplay[log.vaultId].pushLog(log, initialLoad);
       } else {
-        vaultsInDisplay[log.vault_id].queue.push(log);
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+        vaultsInDisplay[log.vaultId].queue.push(log);
       }
     };
     var activeVaults = function(time) {
@@ -35,12 +31,8 @@ window.DataManagerService = [
         var logs = vault.logs.reverse();
         for (var index in logs) {
           if (logs[index]) {
-            // jshint camelcase:false
-            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-            logs[index].vault_id_full = vault.vault_id_full;
-            logs[index].host_name = vault.host_name;
-            // jshint camelcase:true
-            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+            logs[index].vaultIdFull = vault.vaultIdFull;
+            logs[index].hostName = vault.hostName;
             addLogToPool(logs[index], time == null);
           }
         }

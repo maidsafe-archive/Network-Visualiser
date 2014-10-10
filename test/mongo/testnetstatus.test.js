@@ -7,7 +7,7 @@ var testnetStatus = require('../../backend/mongo/TestnetStatus');
 var db;
 
 describe('TestnetStatus', function() {
-  var statusModel = { 'last_updated': '', isReady: false };
+  var statusModel = { 'lastUpdated': '', isReady: false };
 
   var prepareDB = function(callback) {
     mongoose.connect(config.Constants.mongoCon, function(connectionError) {

@@ -1,13 +1,13 @@
 module.exports =  function(db) {
   var sessionInfoModel = require('../../backend/mongo/SessionInfo');
-  var SESSION_NAME = 'test_session';
+  var sessionName = 'test_session';
   var USER = 'test_user';
   var sessionId;
 
   var sessionInfo = sessionInfoModel.SessionMetaData(db);
 
   var createTestSession = function(callBack) {
-    sessionInfo.createSession(SESSION_NAME, USER, function(err, data) {
+    sessionInfo.createSession(sessionName, USER, function(err, data) {
       if (err) {
         callBack(err);
         return;
@@ -22,7 +22,7 @@ module.exports =  function(db) {
   };
 
   var getCurrentSessionName = function() {
-    return SESSION_NAME;
+    return sessionName;
   };
 
   var getCurrentSessionUser = function() {
@@ -30,7 +30,7 @@ module.exports =  function(db) {
   };
 
   var deleteSession = function(callBack) {
-    sessionInfo.deleteSession(SESSION_NAME, function(err) {
+    sessionInfo.deleteSession(sessionName, function(err) {
       if (err) {
         callBack(err);
         return;

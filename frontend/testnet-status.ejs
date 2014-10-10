@@ -19,12 +19,12 @@
     <link rel="icon" type="image/ico" href="imgs/favicon.ico" />
   </head>
   <body ng-app="MaidSafe" ng-controller="testnetStatusCtrl" id="status" ng-app="myapp">
-    <header ng-class="{true:'success', false:'fail'}[testnetStatus.is_ready]">
+    <header ng-class="{true:'success', false:'fail'}[testnetStatus.isReady]">
       <% include template/status/header.html %>
     </header>
     <section>
       <div class="wrapper">
-          <h3>Last Updated <br>{{testnetStatus.last_updated | date : 'HH:mm:ss dd/MM/yyyy'}}</h3>
+          <h3>Last Updated <br>{{testnetStatus.lastUpdated | date : 'HH:mm:ss dd/MM/yyyy'}}</h3>
           <div class="system-row" ng-repeat="connection in testnetStatus.connections">
             <span class="system-status" ng-class="{false:'down', true:'up'}[connection.canConnect]"></span>
             <span class="system-ip"><p>{{connection.contact}}</p></span>

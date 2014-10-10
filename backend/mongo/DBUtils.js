@@ -47,12 +47,8 @@ var DBUtil = function(dbConnection) {
     /* jscs:disable disallowDanglingUnderscores */
     parser._transform = function(doc, encoding, done) {
       /* jscs:enable disallowDanglingUnderscores */
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-      this.push(doc.vault_id + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.action_id] + ',' +
-        PERSONA_TO_STRING[doc.persona_id] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+      this.push(doc.vaultId + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.actionId] + ',' +
+        PERSONA_TO_STRING[doc.personaId] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
       done();
     };
     return parser;
@@ -76,7 +72,7 @@ var DBUtil = function(dbConnection) {
   var setupExportFile = function() {
     var promise = new mongoose.Promise();
     var fileName = 'Logs_' + new Date().getTime() + '.csv';
-    fs.writeFile(fileName, 'Vault_Id,Timestamp,Action,Persona,Value1,Value2\n', function(err) {
+    fs.writeFile(fileName, 'vaultId,Timestamp,Action,Persona,Value1,Value2\n', function(err) {
       if (err) {
         promise.error(err);
       } else {
@@ -130,15 +126,11 @@ var DBUtil = function(dbConnection) {
     return map;
   };
   var getLogFromCSVRow = function(data) {
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    return { vault_id: data[0], ts: data[1], action_id: actionMap[data[2]],
-      persona_id: personaMap[data[3]] || 10,
+    return { vaultId: data[0], ts: data[1], actionId: actionMap[data[2]],
+      personaId: personaMap[data[3]] || 10,
       value1: data[4] || '',
       value2: data[5] || ''
     };
-    // jshint camelcase:true
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   };
   var importValidator = function(data) {
     var log = getLogFromCSVRow(data);
@@ -149,11 +141,7 @@ var DBUtil = function(dbConnection) {
       errString += ((errString === '' ? errString : ', ') + msg);
       isValid = false;
     };
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    if (!log.vault_id) {
-      // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+    if (!log.vaultId) {
       addErrorMessage('Vault Id is empty');
     }
     try {
@@ -164,26 +152,22 @@ var DBUtil = function(dbConnection) {
     } catch (e) {
       addErrorMessage('Invalid Timestamp');
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    if (log.action_id === null || isNaN(log.action_id)) {
+    if (log.actionId === null || isNaN(log.actionId)) {
       addErrorMessage('Action Id is empty or invalid - spell check');
     }
-    if (log.action_id !== null || !isNaN(log.action_id)) {
+    if (log.actionId !== null || !isNaN(log.actionId)) {
       try {
-        parseInt(log.action_id);
+        parseInt(log.actionId);
       } catch (e) {
         addErrorMessage('Invalid Action Id');
       }
     }
-    if (log.persona_id !== null || !isNaN(log.persona_id)) {
+    if (log.personaId !== null || !isNaN(log.personaId)) {
       try {
-        parseInt(log.action_id);
+        parseInt(log.actionId);
       } catch (e) {
         addErrorMessage('Invalid Persona Id');
       }
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
     }
     return { valid: isValid, msg: errString };
   };
@@ -194,28 +178,20 @@ var DBUtil = function(dbConnection) {
     // ReSharper disable once InconsistentNaming - Constructor func
     var SaveLog = function(data) {
       var actionId = actionMap[data[2]];
-      // jshint camelcase:false
-      // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
       var log = {
-        vault_id: data[0],
+        vaultId: data[0],
         ts: data[1],
-        session_id: sessionId,
-        action_id: actionId,
-        persona_id: personaMap[data[3]],
+        sessionId: sessionId,
+        actionId: actionId,
+        personaId: personaMap[data[3]],
         value1: data[4] || '',
         value2: data[5] || ''
       };
       utils.isValid(log);
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       vaultInfo.updateVaultStatus(log).then(function() {
         // we assume imported logs hold valid info. Thus stream the intake in parallel.
         sessionInfo.updateSessionInfo(log).then(function() {
-          // jshint camelcase:false
-          // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-          delete log.session_id;
-          // jshint camelcase:true
-          // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+          delete log.sessionId;
           logManager.save(sessionId, log);
         });
       });

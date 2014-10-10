@@ -38,7 +38,7 @@ window.VaultNode = React.createClass({displayName: 'VaultNode',
     var progressWidth = { width: Math.min(Math.max(0, item.networkHealth), 100) + '%'};
 
     var networkHealthTitle = null;
-    if (item.logs[item.logs.length - 1].action_id != 18) {
+    if (item.logs[item.logs.length - 1].actionId != 18) {
       networkHealthTitle = 'Network Health is ' + item.networkHealth + '%';
     }
 

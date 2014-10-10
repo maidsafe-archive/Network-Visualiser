@@ -28,11 +28,7 @@ var LogManager = function(dbConnConnection) {
         col.find(criteria, { __v: 0 }).toArray(function(err, docs) {
           /* jscs:enable disallowDanglingUnderscores */
           if (docs.length > 0) {
-            // jshint camelcase:false
-            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-            results[docs[0].vault_id] = docs;
-            // jshint camelcase:true
-            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+            results[docs[0].vaultId] = docs;
           }
           completed();
         });
@@ -63,11 +59,7 @@ var LogManager = function(dbConnConnection) {
           }
           var networkHealthFound = false;
           for (var i in data) {
-            // jshint camelcase:false
-            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-            if (data[i].action_id === config.Constants.networkHealthActionId) {
-              // jshint camelcase:true
-              // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+            if (data[i].actionId === config.Constants.networkHealthActionId) {
               networkHealthFound = true;
               break;
             }
@@ -77,11 +69,7 @@ var LogManager = function(dbConnConnection) {
             promise.complete(data);
             return;
           }
-          // jshint camelcase:false
-          // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-          criteria.action_id = config.Constants.networkHealthActionId;
-          // jshint camelcase:true
-          // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+          criteria.actionId = config.Constants.networkHealthActionId;
 
           var healthCursor = coll.find(criteria, HIDE_FIELDS).sort([
             [ 'ts', 'descending' ]
@@ -105,11 +93,7 @@ var LogManager = function(dbConnConnection) {
     if (callback) {
       promise.addBack(callback);
     }
-    // jshint camelcase:false
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    dbConn.db.collection(formatCollectionName(sessionId, data.vault_id), function(err, coll) {
-      // jshint camelcase:true
-      // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+    dbConn.db.collection(formatCollectionName(sessionId, data.vaultId), function(err, coll) {
       if (err) {
         promise.error(err);
       } else {
@@ -157,11 +141,7 @@ var LogManager = function(dbConnConnection) {
     };
     for (var i in vaultIds) {
       if (vaultIds[i]) {
-        // jshint camelcase:false
-        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        dbConn.db.collection(formatCollectionName(sessionId, vaultIds[i].vault_id), deleteCollection);
-        // jshint camelcase:true
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+        dbConn.db.collection(formatCollectionName(sessionId, vaultIds[i].vaultId), deleteCollection);
       }
     }
     return promise;

@@ -6,7 +6,7 @@ var dbHelper = require('../../ci/test/DBHelper');
 var sessionHelper = require('../../ci/test/SessionHelper');
 var logManager = require('../../backend/mongo/LogManager');
 var vaultLog;
-var log = { 'vault_id': 'aaaa-bbbb', 'value1': 'asdsds', 'action_id': 0 };
+var log = { 'vaultId': 'aaaa-bbbb', 'value1': 'asdsds', 'actionId': 0 };
 
 describe('LogManager', function() {
   var prepareDB = function(callback) {
@@ -83,15 +83,13 @@ describe('LogManager', function() {
         done();
       });
     };
-    /*jshint ignore:start*/
     saveLog(log, function(err, data) {
       should(err).not.be.ok;
-      vaultLog.history(sessionHelper.getSessionId(), log['vault_id'], {}, 0, 10, function(err, data) {
+      vaultLog.history(sessionHelper.getSessionId(), log.vaultId, {}, 0, 10, function(err, data) {
         should(err).not.be.ok;
         should(data).be.ok;
         deleteVaultLogs();
       });
     });
-    /*jshint ignore:end*/
   });
 });
