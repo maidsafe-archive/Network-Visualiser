@@ -5,12 +5,10 @@ var url = require('url');
 var config = require('./../../../Config.js');
 var saveLog = function(req, res) {
   var log = req.body;
+  utils.prepareLogModel(log);
   if (!utils.formatDate(log)) {
     res.send(500, 'Invalid date time format');
     return;
-  }
-  if (!log.hasOwnProperty('personaId')) {
-    log.personaId = config.Constants.naPersonaId;
   }
   if (!utils.isValid(log)) {
     res.send(500, 'Invalid Parameters');

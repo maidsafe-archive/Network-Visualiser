@@ -1,8 +1,37 @@
 var config = require('./../../Config.js');
-exports.isValid = function(log) {
-  var isValid = log.vaultId && !isNaN(log.actionId) && !isNaN(log.personaId);
+var transformLogToCamelCase = function(log) {
+  var oldKeys = [ 'vault_id', 'action_id', 'session_id' ];
+  var newKeys = [ 'vaultId', 'actionId', 'sessionId' ];
+  var addCamelCaseKeys = function() {
+    var index;
+    for (var key in log) {
+      if ((index = oldKeys.indexOf(key)) > -1) {
+        log[newKeys[index]] = log[key];
+      }
+    }
+  };
+  var removeOldKeys = function() {
+    for (var index in oldKeys) {
+      if (log.hasOwnProperty(oldKeys[index])) {
+        delete log[oldKeys[index]];
+      }
+    }
+  };
+  addCamelCaseKeys();
+  removeOldKeys();
+};
+exports.prepareLogModel = function(log) {
+  if (log.hasOwnProperty('vault_id')) {
+    transformLogToCamelCase(log);
+  }
+  if (!log.hasOwnProperty('personaId')) {
+    log.personaId = config.Constants.naPersonaId;
+  }
   log.actionId = parseInt(log.actionId);
   log.personaId = parseInt(log.personaId);
+};
+exports.isValid = function(log) {
+  var isValid = log.vaultId && !isNaN(log.actionId) && !isNaN(log.personaId);
   if (!log.hasOwnProperty('sessionId')) {
     isValid = false;
   }
