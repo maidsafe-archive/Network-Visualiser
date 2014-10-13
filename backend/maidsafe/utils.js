@@ -20,6 +20,54 @@ var transformLogToCamelCase = function(log) {
   addCamelCaseKeys();
   removeOldKeys();
 };
+exports.validateRequestLogModel = function(log) {
+  var errors = null;
+  var mandatoryAlways = [ 'vaultId', 'ts', 'sessionId', 'actionId', 'value1' ];
+  var mandatoryAllValues = mandatoryAlways.slice().push('value2');
+  var actionIdWithAllVaulesMandatory = [ 4, 5, 15 ];
+  var addError = function(err) {
+    errors = errors || [];
+    errors.push(err);
+  };
+  var validateNumerics = function() {
+    if(isNaN(log.personaId)) {
+      addError('PersonId is not a valid number');
+    }
+    if (isNaN(log.actionId)) {
+      addError('Action Id is not valid number');
+    }
+    if (log.actionId === 17 && isNaN(log.value1)) {
+      addError('Network health value must be an integer');
+    }
+  };
+  var validateString = function() {
+    if (!log.vaultId) {
+      addError('vaultId can not be empty');
+    }
+    if (!log.sessionId) {
+      addError('sessionId can not be empty');
+    }
+    if (log.actionId !== 17 && !log.value1) {
+      addError('value1 can not be empty');
+    }
+  };
+  var validateLog = function() {
+    var fieldsToValidate =
+        actionIdWithAllVaulesMandatory.indexOf(log.actionId) > -1 ? mandatoryAllValues : mandatoryAlways;
+    for (var index in fieldsToValidate) {
+      if (!log.hasOwnProperty(fieldsToValidate[index])) {
+        addError(fieldsToValidate[index] + ' field is mandatory');
+      }
+    }
+    validateNumerics();
+    validateString();
+  };
+  if (!(log.actionId >= 0 && log.actionId <= 18)) { // TODO take it from config
+    addError('Action id is not in valid range (0 - 18)');
+  }
+  validateLog();
+  return errors;
+};
 exports.prepareLogModel = function(log) {
   if (log.hasOwnProperty('vault_id')) {
     transformLogToCamelCase(log);
