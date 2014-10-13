@@ -23,7 +23,7 @@ var transformLogToCamelCase = function(log) {
 var formatDate = function(log) {
   try {
     if (log.ts) {
-      if (log.ts.indexOf('UTC') < 0) {
+      if (log.ts.indexOf('UTC') < 0 && (log.ts.indexOf('Z') !== log.ts.length - 1)) {
         log.ts += 'UTC';
       }
       log.ts = new Date(log.ts).toISOString();
@@ -99,7 +99,7 @@ exports.assertLogModelErrors = function(log) {
   }
   prepareLogModel(log);
   if (!formatDate(log)) {
-      addError('Invalid date format');
+    addError('Invalid date format');
   }
   validateLog();
   return errors;

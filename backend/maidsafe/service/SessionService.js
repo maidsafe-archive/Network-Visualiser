@@ -48,6 +48,7 @@ exports.importSession = function(req, res) {
     var filePath = path.resolve(config.Constants.projectRootDir, 'Import_' + new Date().getTime() + '.csv');
     fs.writeFile(filePath, data, function(err) {
       if (err) {
+        console.log(2222);
         res.send(500, 'Invalid File');
         return;
       }

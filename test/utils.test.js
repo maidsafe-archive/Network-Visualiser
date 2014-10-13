@@ -66,7 +66,7 @@ describe('Utils Test Suite', function() {
       'ts': '2014-10-10 03:32:09.350'
     };
     should(utils.assertLogModelErrors(log)).not.be.ok;
-    log = { vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89' };
+    log = { vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 6, personaId: 10, value1: '89' };
     should(utils.assertLogModelErrors(log)).be.ok;
   });
   it('Validate Log - should throw error if vaultId parameter is not present', function() {
