@@ -202,8 +202,7 @@ var DBUtil = function(dbConnection) {
       if (validationCallback) {
         var errorInfo =  utils.assertLogModelErrors(getLogFromCSVRow(data));
         if (!errorInfo) {
-          errorInfo.lineNumber = lineNumber;
-          validationErrors.push(errorInfo);
+          validationErrors.push({ lineNumber: lineNumber, errors : errorInfo});
         }
       } else {
         // ReSharper disable once WrongExpressionStatement
