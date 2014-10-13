@@ -48,7 +48,7 @@ var DBUtil = function(dbConnection) {
     parser._transform = function(doc, encoding, done) {
       /* jscs:enable disallowDanglingUnderscores */
       this.push(doc.vaultId + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.actionId] + ',' +
-        PERSONA_TO_STRING[doc.personaId] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
+        PERSONA_TO_STRING[doc.personaId] + ',' + (doc.valueOne || '') + ',' + (doc.valueTwo || '') + '\n');
       done();
     };
     return parser;
@@ -72,7 +72,7 @@ var DBUtil = function(dbConnection) {
   var setupExportFile = function() {
     var promise = new mongoose.Promise();
     var fileName = 'Logs_' + new Date().getTime() + '.csv';
-    fs.writeFile(fileName, 'vaultId,Timestamp,Action,Persona,Value1,Value2\n', function(err) {
+    fs.writeFile(fileName, 'vaultId,Timestamp,Action,Persona,valueOne,valueTwo\n', function(err) {
       if (err) {
         promise.error(err);
       } else {
@@ -128,48 +128,10 @@ var DBUtil = function(dbConnection) {
   var getLogFromCSVRow = function(data) {
     return { vaultId: data[0], ts: data[1], actionId: actionMap[data[2]],
       personaId: personaMap[data[3]] || 10,
-      value1: data[4] || '',
-      value2: data[5] || ''
+      valueOne: data[4] || '',
+      valueTwo: data[5] || '',
+      sessionId: 'tempSessionKey'
     };
-  };
-  var importValidator = function(data) {
-    var log = getLogFromCSVRow(data);
-    utils.isValid(log);
-    var errString = '';
-    var isValid = true;
-    var addErrorMessage = function(msg) {
-      errString += ((errString === '' ? errString : ', ') + msg);
-      isValid = false;
-    };
-    if (!log.vaultId) {
-      addErrorMessage('Vault Id is empty');
-    }
-    try {
-      var tempDate = new Date(log.ts);
-      if (tempDate === 'Invalid Date') {
-        addErrorMessage('Invalid Timestamp');
-      }
-    } catch (e) {
-      addErrorMessage('Invalid Timestamp');
-    }
-    if (log.actionId === null || isNaN(log.actionId)) {
-      addErrorMessage('Action Id is empty or invalid - spell check');
-    }
-    if (log.actionId !== null || !isNaN(log.actionId)) {
-      try {
-        parseInt(log.actionId);
-      } catch (e) {
-        addErrorMessage('Invalid Action Id');
-      }
-    }
-    if (log.personaId !== null || !isNaN(log.personaId)) {
-      try {
-        parseInt(log.actionId);
-      } catch (e) {
-        addErrorMessage('Invalid Persona Id');
-      }
-    }
-    return { valid: isValid, msg: errString };
   };
   var importFactory = function(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise, validationCallback) {
     var stream = fs.createReadStream(filePath);
@@ -184,10 +146,10 @@ var DBUtil = function(dbConnection) {
         sessionId: sessionId,
         actionId: actionId,
         personaId: personaMap[data[3]],
-        value1: data[4] || '',
-        value2: data[5] || ''
+        valueOne: data[4] || '',
+        valueTwo: data[5] || ''
       };
-      utils.isValid(log);
+      utils.assertLogModelErrors(log);
       vaultInfo.updateVaultStatus(log).then(function() {
         // we assume imported logs hold valid info. Thus stream the intake in parallel.
         sessionInfo.updateSessionInfo(log).then(function() {
@@ -201,10 +163,9 @@ var DBUtil = function(dbConnection) {
         return;
       }
       if (validationCallback) {
-        var errorInfo = importValidator(data);
-        if (!errorInfo.valid) {
-          errorInfo.lineNumber = lineNumber;
-          validationErrors.push(errorInfo);
+        var errorInfo =  utils.assertLogModelErrors(getLogFromCSVRow(data));
+        if (errorInfo) {
+          validationErrors.push({ lineNumber: lineNumber, errors: errorInfo });
         }
       } else {
         // ReSharper disable once WrongExpressionStatement

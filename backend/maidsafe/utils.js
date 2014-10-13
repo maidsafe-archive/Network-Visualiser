@@ -1,7 +1,7 @@
 var config = require('./../../Config.js');
 var transformLogToCamelCase = function(log) {
-  var oldKeys = [ 'vault_id', 'action_id', 'session_id' ];
-  var newKeys = [ 'vaultId', 'actionId', 'sessionId' ];
+  var oldKeys = [ 'vault_id', 'action_id', 'session_id', 'value1', 'value2' ];
+  var newKeys = [ 'vaultId', 'actionId', 'sessionId', 'valueOne', 'valueTwo' ];
   var addCamelCaseKeys = function() {
     var index;
     for (var key in log) {
@@ -20,37 +20,91 @@ var transformLogToCamelCase = function(log) {
   addCamelCaseKeys();
   removeOldKeys();
 };
-exports.prepareLogModel = function(log) {
+var formatDate = function(log) {
+  try {
+    if (log.ts) {
+      if (log.ts.indexOf('UTC') < 0 && (log.ts.indexOf('Z') !== log.ts.length - 1)) {
+        log.ts += 'UTC';
+      }
+      log.ts = new Date(log.ts).toISOString();
+    }
+  } catch (err) {
+    return false;
+  }
+  return true;
+};
+var prepareLogModel = function(log) {
   if (log.hasOwnProperty('vault_id')) {
     transformLogToCamelCase(log);
   }
   if (!log.hasOwnProperty('personaId')) {
     log.personaId = config.Constants.naPersonaId;
   }
-  log.actionId = parseInt(log.actionId);
-  log.personaId = parseInt(log.personaId);
-};
-exports.isValid = function(log) {
-  var isValid = log.vaultId && !isNaN(log.actionId) && !isNaN(log.personaId);
-  if (!log.hasOwnProperty('sessionId')) {
-    isValid = false;
+  if (!isNaN(log.actionId)) {
+    log.actionId = parseInt(log.actionId);
   }
-  return isValid;
+  if (!isNaN(log.personaId)) {
+    log.personaId = parseInt(log.personaId);
+  }
+  if (log.actionId === config.Constants.networkHealthActionId && !isNaN(log.valueOne)) {
+    log.valueOne = parseInt(log.valueOne);
+  }
 };
-exports.formatDate = function(log) {
-  try {
-    if (log.ts) {
-      if (log.ts.indexOf('UTC') < 0) {
-        log.ts += 'UTC';
-      }
-      log.ts = new Date(log.ts).toISOString();
-    } else {
-      log.ts = new Date().toISOString();
+exports.assertLogModelErrors = function(log) {
+  var errors = null;
+  var mandatoryAlways = [ 'vaultId', 'ts', 'sessionId', 'actionId', 'valueOne' ];
+  var mandatoryAllValues = mandatoryAlways.slice();
+  mandatoryAllValues.push('valueTwo');
+  var actionIdWithAllVaulesMandatory = [ 4, 9, 11, 12 ];
+  var validationMsg = config.ValidationMsg;
+  var addError = function(err) {
+    errors = errors || [];
+    errors.push(err);
+  };
+  var validateNumerics = function() {
+    if (isNaN(log.personaId)) {
+      addError(validationMsg.PERSONA_ID_NOT_A_NUMBER);
     }
-  } catch (err) {
-    return false;
+    if (isNaN(log.actionId)) {
+      addError(validationMsg.ACTION_ID_NOT_A_NUMBER);
+    } else if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
+      addError(validationMsg.ACTIONID_NOT_IN_RANGE);
+    }
+    if (log.actionId === config.Constants.networkHealthActionId && isNaN(log.valueOne)) {
+      addError(validationMsg.NETWORK_HEALTH_MUST_BE_INTEGER);
+    }
+  };
+  var validateString = function() {
+    if (!log.vaultId) {
+      addError(validationMsg.VAULTID_CANNOT_BE_EMPTY);
+    }
+    if (!log.sessionId) {
+      addError(validationMsg.SESSIONID_CANNOT_BE_EMPTY);
+    }
+    if (log.actionId !== config.Constants.networkHealthActionId && !log.valueOne) {
+      addError(validationMsg.VALUE_ONE_CANNOT_BE_EMPTY);
+    }
+  };
+  var validateLog = function() {
+    var fieldsToValidate =
+        actionIdWithAllVaulesMandatory.indexOf(log.actionId) > -1 ? mandatoryAllValues : mandatoryAlways;
+    for (var index in fieldsToValidate) {
+      if (!log.hasOwnProperty(fieldsToValidate[index]) || log[fieldsToValidate[index]] === null) {
+        addError(fieldsToValidate[index] + validationMsg.FIELD_MANDATORY);
+      }
+    }
+    if (errors) {
+      return errors;
+    }
+    validateNumerics();
+    validateString();
+  };
+  prepareLogModel(log);
+  if (log.ts && !formatDate(log)) {
+    addError(validationMsg.INVALID_DATE_FORMAT);
   }
-  return true;
+  validateLog();
+  return errors;
 };
 /* jshint unused:false */
 /* jshint forin:false */

@@ -6,7 +6,7 @@ var dbHelper = require('../../ci/test/DBHelper');
 var sessionHelper = require('../../ci/test/SessionHelper');
 var logManager = require('../../backend/mongo/LogManager');
 var vaultLog;
-var log = { 'vaultId': 'aaaa-bbbb', 'value1': 'asdsds', 'actionId': 0 };
+var log = { 'vaultId': 'aaaa-bbbb', 'valueOne': 'asdsds', 'actionId': 0 };
 
 describe('LogManager', function() {
   var prepareDB = function(callback) {

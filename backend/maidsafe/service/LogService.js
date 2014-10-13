@@ -5,13 +5,9 @@ var url = require('url');
 var config = require('./../../../Config.js');
 var saveLog = function(req, res) {
   var log = req.body;
-  utils.prepareLogModel(log);
-  if (!utils.formatDate(log)) {
-    res.send(500, 'Invalid date time format');
-    return;
-  }
-  if (!utils.isValid(log)) {
-    res.send(500, 'Invalid Parameters');
+  var err = utils.assertLogModelErrors(log);
+  if (err) {
+    res.send(400, err);
     return;
   }
   var handler = new Handler.SaveLogHandler(res);
@@ -143,12 +139,9 @@ var getTimelineDates = function(req, res) {
 };
 var testLog = function(req, res) {
   var log = req.body;
-  if (!utils.formatDate(log)) {
-    res.send(500, 'Invalid date time format');
-    return;
-  }
-  if (!utils.isValid(log)) {
-    res.send(500, 'Invalid Parameters');
+  var err = utils.assertLogModelErrors(log);
+  if (err) {
+    res.send(400, err);
     return;
   }
   var expectedSessionId = '54ca73ce-0c3c-4155-c9e3-c89d74ad5602';
