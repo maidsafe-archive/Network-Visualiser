@@ -20,7 +20,40 @@ var transformLogToCamelCase = function(log) {
   addCamelCaseKeys();
   removeOldKeys();
 };
-exports.validateRequestLogModel = function(log) {
+var formatDate = function(log) {
+  try {
+    if (log.ts) {
+      if (log.ts.indexOf('UTC') < 0) {
+        log.ts += 'UTC';
+      }
+      log.ts = new Date(log.ts).toISOString();
+    } else {
+      log.ts = new Date().toISOString();
+    }
+  } catch (err) {
+    return false;
+  }
+  return true;
+};
+var prepareLogModel = function(log) {
+  if (log.hasOwnProperty('vault_id')) {
+    transformLogToCamelCase(log);
+  }
+  if (!log.hasOwnProperty('personaId')) {
+    log.personaId = config.Constants.naPersonaId;
+  }
+  if (!isNaN(log.actionId)) {
+    log.actionId = parseInt(log.actionId);
+  }
+  if (!isNaN(log.personaId)) {
+    log.personaId = parseInt(log.personaId);
+  }
+  if (log.actionId === config.Constants.networkHealthActionId && !isNaN(log.value1)) {
+    log.value1 = parseInt()
+  }
+  return formatDate(log);
+};
+exports.assertLogModelErrors = function(log) {
   var errors = null;
   var mandatoryAlways = [ 'vaultId', 'ts', 'sessionId', 'actionId', 'value1' ];
   var mandatoryAllValues = mandatoryAlways.slice().push('value2');
@@ -36,7 +69,7 @@ exports.validateRequestLogModel = function(log) {
     if (isNaN(log.actionId)) {
       addError('Action Id is not valid number');
     }
-    if (log.actionId === 17 && isNaN(log.value1)) {
+    if (log.actionId === config.Constants.networkHealthActionId && isNaN(log.value1)) {
       addError('Network health value must be an integer');
     }
   };
@@ -47,7 +80,7 @@ exports.validateRequestLogModel = function(log) {
     if (!log.sessionId) {
       addError('sessionId can not be empty');
     }
-    if (log.actionId !== 17 && !log.value1) {
+    if (log.actionId !== config.Constants.networkHealthActionId && !log.value1) {
       addError('value1 can not be empty');
     }
   };
@@ -62,21 +95,12 @@ exports.validateRequestLogModel = function(log) {
     validateNumerics();
     validateString();
   };
-  if (!(log.actionId >= 0 && log.actionId <= 18)) { // TODO take it from config
-    addError('Action id is not in valid range (0 - 18)');
+  if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
+    addError('Action id is not in valid range (0 - ' + config.Constants.maxActionIdRange + ')');
   }
+  prepareLogModel(log);
   validateLog();
   return errors;
-};
-exports.prepareLogModel = function(log) {
-  if (log.hasOwnProperty('vault_id')) {
-    transformLogToCamelCase(log);
-  }
-  if (!log.hasOwnProperty('personaId')) {
-    log.personaId = config.Constants.naPersonaId;
-  }
-  log.actionId = parseInt(log.actionId);
-  log.personaId = parseInt(log.personaId);
 };
 exports.isValid = function(log) {
   var isValid = log.vaultId && !isNaN(log.actionId) && !isNaN(log.personaId);
@@ -84,21 +108,6 @@ exports.isValid = function(log) {
     isValid = false;
   }
   return isValid;
-};
-exports.formatDate = function(log) {
-  try {
-    if (log.ts) {
-      if (log.ts.indexOf('UTC') < 0) {
-        log.ts += 'UTC';
-      }
-      log.ts = new Date(log.ts).toISOString();
-    } else {
-      log.ts = new Date().toISOString();
-    }
-  } catch (err) {
-    return false;
-  }
-  return true;
 };
 /* jshint unused:false */
 /* jshint forin:false */

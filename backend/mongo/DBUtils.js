@@ -134,7 +134,6 @@ var DBUtil = function(dbConnection) {
   };
   var importValidator = function(data) {
     var log = getLogFromCSVRow(data);
-    utils.isValid(log);
     var errString = '';
     var isValid = true;
     var addErrorMessage = function(msg) {
@@ -187,7 +186,7 @@ var DBUtil = function(dbConnection) {
         value1: data[4] || '',
         value2: data[5] || ''
       };
-      utils.isValid(log);
+      utils.assertLogModelErrors(log);
       vaultInfo.updateVaultStatus(log).then(function() {
         // we assume imported logs hold valid info. Thus stream the intake in parallel.
         sessionInfo.updateSessionInfo(log).then(function() {
@@ -201,8 +200,8 @@ var DBUtil = function(dbConnection) {
         return;
       }
       if (validationCallback) {
-        var errorInfo = importValidator(data);
-        if (!errorInfo.valid) {
+        var errorInfo =  utils.assertLogModelErrors(getLogFromCSVRow(data));
+        if (!errorInfo) {
           errorInfo.lineNumber = lineNumber;
           validationErrors.push(errorInfo);
         }

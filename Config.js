@@ -9,7 +9,8 @@ var constants = {
   vaultLogsCount: 3,
   minLengthForDecode: 6,
   naPersonaId: 10,
-  networkHealthActionId: '17',
+  networkHealthActionId: 17,
+  maxActionIdRange: 18,
   nextBranchConfig: {
     serverPort: 9080,
     socketPort: 9081,

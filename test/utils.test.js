@@ -23,92 +23,92 @@ describe('Utils Test Suite', function() {
       actionId: 10, personaId: 10 , value1: '787987',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).not.be.ok;
+    should(utils.assertLogModelErrors(log)).not.be.ok;
   });
   it('Validate log - Should thrown an error for invalid action id', function() {
     var log = {
       vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 20, personaId: 10, value1: '787987',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
   });
   it('Validate log - Should thrown an error for empty value1', function() {
     var log = {
       vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 0, personaId: 10, value1: '',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
   });
   it('Validate Log - action Id must be a proper integer', function() {
     var log = {
       vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 'sdf', personaId: 10, value1: '787987',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
   });
   it('Validate Log - Persona Id must be a proper integer', function() {
     var log = {
       vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 10, personaId: 'sdf', value1: '787987',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
   });
   it('Validate Log - Value1 must be a integer for action Id 17', function() {
     var log = {
       vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: 'g89',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
   });
   it('Validate Log - Should throw error if required fields are missing', function() {
     var log = {
       vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).not.be.ok;
+    should(utils.assertLogModelErrors(log)).not.be.ok;
     log = { vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89' };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
   });
   it('Validate Log - should throw error if vaultId parameter is not present', function() {
     var log = {
       vaultId: '', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
     log = {
       vaultId: null, sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
     log = {
       sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
     log = {
       vaultId: 'sdsd', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).not.be.ok;
+    should(utils.assertLogModelErrors(log)).not.be.ok;
   });
   it('Validate Log - should throw error if sessionId parameter is not present', function() {
     var log = {
       vaultId: 'sds', sessionId: '', actionId: 17, personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
     log = {
       vaultId: null, sessionId: null, actionId: 17, personaId: 10, value1: '89', 'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
     log = {
       vaultId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89',  'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).be.ok;
+    should(utils.assertLogModelErrors(log)).be.ok;
     log = {
       vaultId: 'sdsd', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.validateRequestLogModel(log)).not.be.ok;
+    should(utils.assertLogModelErrors(log)).not.be.ok;
   });
 });
