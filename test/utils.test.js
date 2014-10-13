@@ -53,7 +53,7 @@ describe('Utils Test Suite', function() {
 
   it('Validate Log - Should throw an error if Session ID is empty', function() {
     var log = {
-      vaultId: 'aaa..bbb', sessionId: '', actionId: 15, personaId: 10, value1: '89',
+      vaultId: 'aaa..bbb', sessionId: '', actionId: 12, personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
     utils.assertLogModelErrors(log).should.containEql(validationMsg.SESSIONID_CANNOT_BE_EMPTY);
@@ -61,7 +61,7 @@ describe('Utils Test Suite', function() {
 
   it('Validate Log - Should throw an error if valueOne is empty', function() {
     var log = {
-      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 15, personaId: 10, value1: '',
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 13, personaId: 10, value1: '',
       'ts': '2014-10-10 03:32:09.350'
     };
     utils.assertLogModelErrors(log).should.containEql(validationMsg.VALUE_ONE_CANNOT_BE_EMPTY);
@@ -69,7 +69,7 @@ describe('Utils Test Suite', function() {
 
   it('Validate Log - Should throw an error if Vault ID is empty', function() {
     var log = {
-      vaultId: '', sessionId: 'gjhjhjhfg80987676', actionId: 15, personaId: 10, value1: '89',
+      vaultId: '', sessionId: 'gjhjhjhfg80987676', actionId: 13, personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
     utils.assertLogModelErrors(log).should.containEql(validationMsg.VAULTID_CANNOT_BE_EMPTY);
@@ -85,7 +85,7 @@ describe('Utils Test Suite', function() {
 
   it('Validate Log - Should be able to set Persona id to NA if not passed', function() {
     var  log = {
-      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 15, value1: '89',
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 12, value1: '89',
       'ts': '2014-16-10 03:32:09.350'
     };
     utils.assertLogModelErrors(log).should.be.ok;
@@ -93,7 +93,7 @@ describe('Utils Test Suite', function() {
 
   it('Validate Log - Should be able to transform from old version of log to new version ', function() {
     var  log = {
-      'vault_id': 'aaa..bbb', 'session_id': 'gjhjhjhfg80987676', 'action_id': 15, 'persona_id': 10, value1: '89',
+      'vault_id': 'aaa..bbb', 'session_id': 'gjhjhjhfg80987676', 'action_id': 12, 'persona_id': 10, value1: '89',
       'ts': '2014-16-10 03:32:09.350'
     };
     utils.assertLogModelErrors(log).should.be.ok;
@@ -101,7 +101,7 @@ describe('Utils Test Suite', function() {
 
   it('Validate Log - Should throw an error if Invalid Date format is passed', function() {
     var  log = {
-      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 15, personaId: 10, value1: '89',
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 13, personaId: 10, value1: '89',
       'ts': '2014-16-10 03:32:09.350'
     };
     utils.assertLogModelErrors(log).should.containEql(validationMsg.INVALID_DATE_FORMAT);
@@ -164,5 +164,18 @@ describe('Utils Test Suite', function() {
       'ts': '2014-10-10 03:32:09.350'
     };
     should(utils.assertLogModelErrors(log)).not.be.ok;
+  });
+  it('Validate Log - should validate for all mandatory values', function() {
+    var log = {
+      vaultId: 'sdsd', sessionId: 'gjhjhjhfg80987676', actionId: 8, personaId: 10, value1: '89',
+      'ts': '2014-10-10 03:32:09.350'
+    };
+    should(utils.assertLogModelErrors(log)).be.ok;
+  });
+  it('Validate Log - should throw error if timestamp is missing', function() {
+    var log = {
+      vaultId: 'sdsd', sessionId: 'gjhjhjhfg80987676', actionId: 3, personaId: 10, value1: '89'
+    };
+    should(utils.assertLogModelErrors(log)).be.ok;
   });
 });

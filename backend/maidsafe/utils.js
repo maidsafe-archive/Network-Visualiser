@@ -27,8 +27,6 @@ var formatDate = function(log) {
         log.ts += 'UTC';
       }
       log.ts = new Date(log.ts).toISOString();
-    } else {
-      log.ts = new Date().toISOString();
     }
   } catch (err) {
     return false;
@@ -55,7 +53,8 @@ var prepareLogModel = function(log) {
 exports.assertLogModelErrors = function(log) {
   var errors = null;
   var mandatoryAlways = [ 'vaultId', 'ts', 'sessionId', 'actionId', 'value1' ];
-  var mandatoryAllValues = mandatoryAlways.slice().push('value2');
+  var mandatoryAllValues = mandatoryAlways.slice();
+  mandatoryAllValues.push('value2');
   var actionIdWithAllVaulesMandatory = [ 4, 5, 8, 15 ];
   var validationMsg = config.ValidationMsg;
   var addError = function(err) {
@@ -101,7 +100,9 @@ exports.assertLogModelErrors = function(log) {
     validateString();
   };
   prepareLogModel(log);
-  if (!formatDate(log)) {
+  if (!log.ts) {
+    addError('Timestamp ' + validationMsg.FIELD_MANDATORY);
+  } else if (!formatDate(log)) {
     addError(validationMsg.INVALID_DATE_FORMAT);
   }
   validateLog();
