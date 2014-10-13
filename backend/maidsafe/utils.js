@@ -68,6 +68,8 @@ exports.assertLogModelErrors = function(log) {
     }
     if (isNaN(log.actionId)) {
       addError(validationMsg.ACTION_ID_NOT_A_NUMBER);
+    } else if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
+      addError(validationMsg.ACTIONID_NOT_IN_RANGE);
     }
     if (log.actionId === config.Constants.networkHealthActionId && isNaN(log.value1)) {
       addError(validationMsg.NETWORK_HEALTH_MUST_BE_INTEGER);
@@ -92,12 +94,12 @@ exports.assertLogModelErrors = function(log) {
         addError(fieldsToValidate[index] + validationMsg.FIELD_MANDATORY);
       }
     }
+    if (errors) {
+      return errors;
+    }
     validateNumerics();
     validateString();
   };
-  if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
-    addError(validationMsg.ACTIONID_NOT_IN_RANGE);
-  }
   prepareLogModel(log);
   if (!formatDate(log)) {
     addError(validationMsg.INVALID_DATE_FORMAT);

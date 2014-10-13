@@ -34,31 +34,10 @@ describe('Utils Test Suite', function() {
     };
     should(utils.assertLogModelErrors(log)).be.ok;
   });
-  it('Validate log - Should thrown an error for empty value1', function() {
-    var log = {
-      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 0, personaId: 10, value1: '',
-      'ts': '2014-10-10 03:32:09.350'
-    };
-    should(utils.assertLogModelErrors(log)).be.ok;
-  });
-  it('Validate Log - action Id must be a proper integer', function() {
-    var log = {
-      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 'sdf', personaId: 10, value1: '787987',
-      'ts': '2014-10-10 03:32:09.350'
-    };
-    should(utils.assertLogModelErrors(log)).be.ok;
-  });
-  it('Validate Log - Persona Id must be a proper integer', function() {
-    var log = {
-      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 10, personaId: 'sdf', value1: '787987',
-      'ts': '2014-10-10 03:32:09.350'
-    };
-    should(utils.assertLogModelErrors(log)).be.ok;
-  });
 
   it('Validate Log - Should throw an error if Action Id is not a proper integer', function() {
     var log = {
-      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', personaId: 10, value1: '89',
+      vaultId: 'aaa..bbb', actionId: 'sdf', sessionId: 'gjhjhjhfg80987676', personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
     utils.assertLogModelErrors(log).should.containEql(validationMsg.ACTION_ID_NOT_A_NUMBER);
