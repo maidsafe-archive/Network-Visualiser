@@ -18,12 +18,12 @@ window.LogRow = React.createClass({
         </td>
         <td style={{ width: '35%', 'word-break': 'break-all'}}>
           <div>
-              {item.value1}
+              {item.valueOne}
           </div>
         </td>
         <td style={{ width: '35%', 'word-break': 'break-all'}}>
           <div>
-              {item.value2}
+              {item.valueTwo}
           </div>
         </td>
       </tr>
@@ -81,7 +81,7 @@ window.HistoryCollection = React.createClass({
   filterLogs: function(element) {
     var scope = this.props.scope;
     var logText = element.ts + scope.vaultBehaviour.personas[element.personaId] +
-                  scope.vaultBehaviour.actions[element.actionId] + element.value1 + element.value2;
+                  scope.vaultBehaviour.actions[element.actionId] + element.valueOne + element.valueTwo;
     return logText.toLowerCase().indexOf(scope.searchText.toLowerCase()) > -1;
   }
 });

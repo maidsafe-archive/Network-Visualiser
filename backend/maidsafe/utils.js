@@ -1,7 +1,7 @@
 var config = require('./../../Config.js');
 var transformLogToCamelCase = function(log) {
-  var oldKeys = [ 'vault_id', 'action_id', 'session_id' ];
-  var newKeys = [ 'vaultId', 'actionId', 'sessionId' ];
+  var oldKeys = [ 'vault_id', 'action_id', 'session_id', 'value1', 'value2' ];
+  var newKeys = [ 'vaultId', 'actionId', 'sessionId', 'valueOne', 'valueTwo' ];
   var addCamelCaseKeys = function() {
     var index;
     for (var key in log) {
@@ -46,15 +46,15 @@ var prepareLogModel = function(log) {
   if (!isNaN(log.personaId)) {
     log.personaId = parseInt(log.personaId);
   }
-  if (log.actionId === config.Constants.networkHealthActionId && !isNaN(log.value1)) {
-    log.value1 = parseInt(log.value1);
+  if (log.actionId === config.Constants.networkHealthActionId && !isNaN(log.valueOne)) {
+    log.valueOne = parseInt(log.valueOne);
   }
 };
 exports.assertLogModelErrors = function(log) {
   var errors = null;
-  var mandatoryAlways = [ 'vaultId', 'ts', 'sessionId', 'actionId', 'value1' ];
+  var mandatoryAlways = [ 'vaultId', 'ts', 'sessionId', 'actionId', 'valueOne' ];
   var mandatoryAllValues = mandatoryAlways.slice();
-  mandatoryAllValues.push('value2');
+  mandatoryAllValues.push('valueTwo');
   var actionIdWithAllVaulesMandatory = [ 4, 5, 8, 15 ];
   var validationMsg = config.ValidationMsg;
   var addError = function(err) {
@@ -70,7 +70,7 @@ exports.assertLogModelErrors = function(log) {
     } else if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
       addError(validationMsg.ACTIONID_NOT_IN_RANGE);
     }
-    if (log.actionId === config.Constants.networkHealthActionId && isNaN(log.value1)) {
+    if (log.actionId === config.Constants.networkHealthActionId && isNaN(log.valueOne)) {
       addError(validationMsg.NETWORK_HEALTH_MUST_BE_INTEGER);
     }
   };
@@ -81,7 +81,7 @@ exports.assertLogModelErrors = function(log) {
     if (!log.sessionId) {
       addError(validationMsg.SESSIONID_CANNOT_BE_EMPTY);
     }
-    if (log.actionId !== config.Constants.networkHealthActionId && !log.value1) {
+    if (log.actionId !== config.Constants.networkHealthActionId && !log.valueOne) {
       addError(validationMsg.VALUE_ONE_CANNOT_BE_EMPTY);
     }
   };

@@ -76,11 +76,11 @@ window.VaultBehaviourService = [
     };
     var formatWithOneValue = function(log, includePersona) {
       var result = includePersona ? service.personas[log.personaId] + ' - ' : '';
-      return result + service.actions[log.actionId] + ' ' + trim(log.value1);
+      return result + service.actions[log.actionId] + ' ' + trim(log.valueOne);
     };
     var formatWithTwoValues = function(log, includePersona) {
       var result = includePersona ? service.personas[log.personaId] + ' - ' : '';
-      return result + service.actions[log.actionId] + ' ' + trim(log.value1) + ' : ' + trim(log.value2);
+      return result + service.actions[log.actionId] + ' ' + trim(log.valueOne) + ' : ' + trim(log.valueTwo);
     };
     var formats = {
       1: formatWithOneValue,

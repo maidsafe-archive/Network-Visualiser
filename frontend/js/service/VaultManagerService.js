@@ -81,7 +81,7 @@ window.VaultManagerService = [
         addLog(log);
         vault.personaColour = PERSONA_COLOUR_TAG + (initialLoad ? 'na' : vaultBehaviour.personas[log.personaId]);
         if (log.actionId === 17) {
-          vault.networkHealth = log.value1;
+          vault.networkHealth = log.valueOne;
         } else {
           vault.subscriber = null;
           vault.counter = null;
@@ -92,16 +92,16 @@ window.VaultManagerService = [
         }
         if (!initialLoad) {
           if (log.actionId === 1 || log.actionId === 2) {
-            vault.counter = log.value1;
+            vault.counter = log.valueOne;
           } else if (log.actionId === 6 || log.actionId === 7) {
-            vault.subscriber = log.value1;
+            vault.subscriber = log.valueOne;
           }
         }
         if (!vault.fullVaultName && (log.actionId === 0 || log.hasOwnProperty('vaultIdFull'))) {
-          vault.fullVaultName = log.vaultIdFull || log.value1;
+          vault.fullVaultName = log.vaultIdFull || log.valueOne;
         }
         if (!vault.hostName && (log.actionId === 0 || log.hasOwnProperty('hostName'))) {
-          vault.hostName = log.hostName || log.value2 || '';
+          vault.hostName = log.hostName || log.valueTwo || '';
         }
         stateOfVault(log);
         refreshVaultDisplay();

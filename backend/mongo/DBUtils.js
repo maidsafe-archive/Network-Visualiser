@@ -48,7 +48,7 @@ var DBUtil = function(dbConnection) {
     parser._transform = function(doc, encoding, done) {
       /* jscs:enable disallowDanglingUnderscores */
       this.push(doc.vaultId + ',' + doc.ts + ',' + ACTION_TO_STRING[doc.actionId] + ',' +
-        PERSONA_TO_STRING[doc.personaId] + ',' + (doc.value1 || '') + ',' + (doc.value2 || '') + '\n');
+        PERSONA_TO_STRING[doc.personaId] + ',' + (doc.valueOne || '') + ',' + (doc.valueTwo || '') + '\n');
       done();
     };
     return parser;
@@ -72,7 +72,7 @@ var DBUtil = function(dbConnection) {
   var setupExportFile = function() {
     var promise = new mongoose.Promise();
     var fileName = 'Logs_' + new Date().getTime() + '.csv';
-    fs.writeFile(fileName, 'vaultId,Timestamp,Action,Persona,Value1,Value2\n', function(err) {
+    fs.writeFile(fileName, 'vaultId,Timestamp,Action,Persona,valueOne,valueTwo\n', function(err) {
       if (err) {
         promise.error(err);
       } else {
@@ -128,8 +128,8 @@ var DBUtil = function(dbConnection) {
   var getLogFromCSVRow = function(data) {
     return { vaultId: data[0], ts: data[1], actionId: actionMap[data[2]],
       personaId: personaMap[data[3]] || 10,
-      value1: data[4] || '',
-      value2: data[5] || '',
+      valueOne: data[4] || '',
+      valueTwo: data[5] || '',
       sessionId: 'tempSessionKey'
     };
   };
@@ -146,8 +146,8 @@ var DBUtil = function(dbConnection) {
         sessionId: sessionId,
         actionId: actionId,
         personaId: personaMap[data[3]],
-        value1: data[4] || '',
-        value2: data[5] || ''
+        valueOne: data[4] || '',
+        valueTwo: data[5] || ''
       };
       utils.assertLogModelErrors(log);
       vaultInfo.updateVaultStatus(log).then(function() {

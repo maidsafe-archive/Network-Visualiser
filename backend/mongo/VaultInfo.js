@@ -20,8 +20,8 @@ var VaultMetaData = function() {
   var transformData = function(data) {
     var temp = { vaultId: data.vaultId, isRunning: data.actionId === 0, sessionId: data.sessionId };
     if (data.actionId === 0) {
-      temp.vaultIdFull = data.value1;
-      temp.hostName = data.value2 || '';
+      temp.vaultIdFull = data.valueOne;
+      temp.hostName = data.valueTwo || '';
     }
     return temp;
   };
