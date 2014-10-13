@@ -11,12 +11,12 @@ describe('Utils Test Suite', function() {
     utils.isEmptyObject([]).should.be.true;
     utils.isEmptyObject([ 1 ]).should.be.false;
   });
-  it('Should be able to transform old format to cameCase for log', function() {
-    var log = { 'vault_id': 'aaa..bbb', 'session_id': 'gjhjhjhfg80987676', 'action_id': 0, 'value1': '' };
-    utils.prepareLogModel(log);
-    log.hasOwnProperty('vaultId').should.be.ok;
-    log.hasOwnProperty('vault_id').should.not.be.ok;
-  });
+//  it('Should be able to transform old format to cameCase for log', function() {
+//    var log = { 'vault_id': 'aaa..bbb', 'session_id': 'gjhjhjhfg80987676', 'action_id': 0, 'value1': '' };
+//    utils.prepareLogModel(log);
+//    log.hasOwnProperty('vaultId').should.be.ok;
+//    log.hasOwnProperty('vault_id').should.not.be.ok;
+//  });
   it('Validate log - Should not thrown an error for valid log', function() {
     var log = {
       vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676',

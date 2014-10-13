@@ -132,44 +132,6 @@ var DBUtil = function(dbConnection) {
       value2: data[5] || ''
     };
   };
-  var importValidator = function(data) {
-    var log = getLogFromCSVRow(data);
-    var errString = '';
-    var isValid = true;
-    var addErrorMessage = function(msg) {
-      errString += ((errString === '' ? errString : ', ') + msg);
-      isValid = false;
-    };
-    if (!log.vaultId) {
-      addErrorMessage('Vault Id is empty');
-    }
-    try {
-      var tempDate = new Date(log.ts);
-      if (tempDate === 'Invalid Date') {
-        addErrorMessage('Invalid Timestamp');
-      }
-    } catch (e) {
-      addErrorMessage('Invalid Timestamp');
-    }
-    if (log.actionId === null || isNaN(log.actionId)) {
-      addErrorMessage('Action Id is empty or invalid - spell check');
-    }
-    if (log.actionId !== null || !isNaN(log.actionId)) {
-      try {
-        parseInt(log.actionId);
-      } catch (e) {
-        addErrorMessage('Invalid Action Id');
-      }
-    }
-    if (log.personaId !== null || !isNaN(log.personaId)) {
-      try {
-        parseInt(log.actionId);
-      } catch (e) {
-        addErrorMessage('Invalid Persona Id');
-      }
-    }
-    return { valid: isValid, msg: errString };
-  };
   var importFactory = function(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise, validationCallback) {
     var stream = fs.createReadStream(filePath);
     var validationErrors = [];
@@ -202,7 +164,7 @@ var DBUtil = function(dbConnection) {
       if (validationCallback) {
         var errorInfo =  utils.assertLogModelErrors(getLogFromCSVRow(data));
         if (!errorInfo) {
-          validationErrors.push({ lineNumber: lineNumber, errors : errorInfo});
+          validationErrors.push({ lineNumber: lineNumber, errors: errorInfo });
         }
       } else {
         // ReSharper disable once WrongExpressionStatement

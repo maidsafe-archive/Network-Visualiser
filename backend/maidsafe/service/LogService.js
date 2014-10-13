@@ -5,7 +5,7 @@ var url = require('url');
 var config = require('./../../../Config.js');
 var saveLog = function(req, res) {
   var log = req.body;
-  var err = utils.assertLogModelErrors(log)
+  var err = utils.assertLogModelErrors(log);
   if (err) {
     res.send(400, err);
     return;

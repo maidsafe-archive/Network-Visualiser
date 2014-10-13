@@ -49,9 +49,8 @@ var prepareLogModel = function(log) {
     log.personaId = parseInt(log.personaId);
   }
   if (log.actionId === config.Constants.networkHealthActionId && !isNaN(log.value1)) {
-    log.value1 = parseInt()
+    log.value1 = parseInt(log.value1);
   }
-  return formatDate(log);
 };
 exports.assertLogModelErrors = function(log) {
   var errors = null;
@@ -99,6 +98,9 @@ exports.assertLogModelErrors = function(log) {
     addError('Action id is not in valid range (0 - ' + config.Constants.maxActionIdRange + ')');
   }
   prepareLogModel(log);
+  if (!formatDate(log)) {
+      addError('Invalid date format');
+  }
   validateLog();
   return errors;
 };
