@@ -30,7 +30,7 @@ exports.validateRequestLogModel = function(log) {
     errors.push(err);
   };
   var validateNumerics = function() {
-    if(isNaN(log.personaId)) {
+    if (isNaN(log.personaId)) {
       addError('PersonId is not a valid number');
     }
     if (isNaN(log.actionId)) {
