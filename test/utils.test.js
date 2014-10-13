@@ -13,12 +13,6 @@ describe('Utils Test Suite', function() {
     utils.isEmptyObject([]).should.be.true;
     utils.isEmptyObject([ 1 ]).should.be.false;
   });
-//  it('Should be able to transform old format to cameCase for log', function() {
-//    var log = { 'vault_id': 'aaa..bbb', 'session_id': 'gjhjhjhfg80987676', 'action_id': 0, 'valueOne': '' };
-//    utils.prepareLogModel(log);
-//    log.hasOwnProperty('vaultId').should.be.ok;
-//    log.hasOwnProperty('vault_id').should.not.be.ok;
-//  });
   it('Validate log - Should not thrown an error for valid log', function() {
     var log = {
       vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676',
@@ -53,7 +47,7 @@ describe('Utils Test Suite', function() {
 
   it('Validate Log - Should throw an error if Session ID is empty', function() {
     var log = {
-      vaultId: 'aaa..bbb', sessionId: '', actionId: 12, personaId: 10, valueOne: '89',
+      vaultId: 'aaa..bbb', sessionId: '', actionId: 16, personaId: 10, valueOne: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
     utils.assertLogModelErrors(log).should.containEql(validationMsg.SESSIONID_CANNOT_BE_EMPTY);
@@ -167,7 +161,7 @@ describe('Utils Test Suite', function() {
   });
   it('Validate Log - should validate for all mandatory values', function() {
     var log = {
-      vaultId: 'sdsd', sessionId: 'gjhjhjhfg80987676', actionId: 8, personaId: 10, valueOne: '89',
+      vaultId: 'sdsd', sessionId: 'gjhjhjhfg80987676', actionId: 4, personaId: 10, valueOne: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
     should(utils.assertLogModelErrors(log)).be.ok;

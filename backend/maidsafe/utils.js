@@ -55,7 +55,7 @@ exports.assertLogModelErrors = function(log) {
   var mandatoryAlways = [ 'vaultId', 'ts', 'sessionId', 'actionId', 'valueOne' ];
   var mandatoryAllValues = mandatoryAlways.slice();
   mandatoryAllValues.push('valueTwo');
-  var actionIdWithAllVaulesMandatory = [ 4, 5, 8, 15 ];
+  var actionIdWithAllVaulesMandatory = [ 4, 9, 11, 12 ];
   var validationMsg = config.ValidationMsg;
   var addError = function(err) {
     errors = errors || [];
