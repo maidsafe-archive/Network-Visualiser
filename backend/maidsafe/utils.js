@@ -89,7 +89,7 @@ exports.assertLogModelErrors = function(log) {
     var fieldsToValidate =
         actionIdWithAllVaulesMandatory.indexOf(log.actionId) > -1 ? mandatoryAllValues : mandatoryAlways;
     for (var index in fieldsToValidate) {
-      if (!log.hasOwnProperty(fieldsToValidate[index])) {
+      if (!log.hasOwnProperty(fieldsToValidate[index]) || log[fieldsToValidate[index]] === null) {
         addError(fieldsToValidate[index] + validationMsg.FIELD_MANDATORY);
       }
     }
@@ -100,9 +100,7 @@ exports.assertLogModelErrors = function(log) {
     validateString();
   };
   prepareLogModel(log);
-  if (!log.ts) {
-    addError('Timestamp ' + validationMsg.FIELD_MANDATORY);
-  } else if (!formatDate(log)) {
+  if (log.ts && !formatDate(log)) {
     addError(validationMsg.INVALID_DATE_FORMAT);
   }
   validateLog();
