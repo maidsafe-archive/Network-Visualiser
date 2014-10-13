@@ -129,7 +129,8 @@ var DBUtil = function(dbConnection) {
     return { vaultId: data[0], ts: data[1], actionId: actionMap[data[2]],
       personaId: personaMap[data[3]] || 10,
       value1: data[4] || '',
-      value2: data[5] || ''
+      value2: data[5] || '',
+      sessionId: 'tempSessionKey'
     };
   };
   var importFactory = function(filePath, sessionId, vaultInfo, sessionInfo, logManager, promise, validationCallback) {
@@ -163,7 +164,7 @@ var DBUtil = function(dbConnection) {
       }
       if (validationCallback) {
         var errorInfo =  utils.assertLogModelErrors(getLogFromCSVRow(data));
-        if (!errorInfo) {
+        if (errorInfo) {
           validationErrors.push({ lineNumber: lineNumber, errors: errorInfo });
         }
       } else {
