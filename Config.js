@@ -27,4 +27,18 @@ if (process.env.PORT === constants.nextBranchConfig.serverPort.toString()) {
     }
   }
 }
+
+var validationMsg = {
+  PERSONA_ID_NOT_A_NUMBER: 'PersonId is not a valid number',
+  ACTION_ID_NOT_A_NUMBER: 'Action Id is not valid number',
+  NETWORK_HEALTH_MUST_BE_INTEGER: 'Network health value must be an integer',
+  VAULTID_CANNOT_BE_EMPTY: 'vaultId can not be empty',
+  SESSIONID_CANNOT_BE_EMPTY: 'sessionId can not be empty',
+  VALUE_ONE_CANNOT_BE_EMPTY: 'value1 can not be empty',
+  ACTIONID_NOT_IN_RANGE: 'Action id is not in valid range (0 - ' + constants.maxActionIdRange + ')',
+  INVALID_DATE_FORMAT: 'Invalid date format',
+  FIELD_MANDATORY: ' field is mandatory'
+};
+
 exports.Constants = constants;
+exports.ValidationMsg = validationMsg;

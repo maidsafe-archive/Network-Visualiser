@@ -2,6 +2,8 @@
 
 var should = require('should'); // jshint ignore:line
 var utils = require('../backend/maidsafe/utils');
+var config = require('../Config.js');
+var validationMsg = config.ValidationMsg;
 
 describe('Utils Test Suite', function() {
   it('Is Object Empty', function() {
@@ -53,22 +55,95 @@ describe('Utils Test Suite', function() {
     };
     should(utils.assertLogModelErrors(log)).be.ok;
   });
-  it('Validate Log - Value1 must be a integer for action Id 17', function() {
+
+  it('Validate Log - Should throw an error if Action Id is not a proper integer', function() {
     var log = {
-      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: 'g89',
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', personaId: 10, value1: '89',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.assertLogModelErrors(log)).be.ok;
+    utils.assertLogModelErrors(log).should.containEql(validationMsg.ACTION_ID_NOT_A_NUMBER);
   });
-  it('Validate Log - Should throw error if required fields are missing', function() {
+
+  it('Validate Log - Should throw an error if Network Health value is not a proper integer', function() {
     var log = {
-      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89',
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: 'styj',
       'ts': '2014-10-10 03:32:09.350'
     };
-    should(utils.assertLogModelErrors(log)).not.be.ok;
-    log = { vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 6, personaId: 10, value1: '89' };
-    should(utils.assertLogModelErrors(log)).be.ok;
+    utils.assertLogModelErrors(log).should.containEql(validationMsg.NETWORK_HEALTH_MUST_BE_INTEGER);
   });
+
+  it('Validate Log - Should throw an error if Session ID is empty', function() {
+    var log = {
+      vaultId: 'aaa..bbb', sessionId: '', actionId: 15, personaId: 10, value1: '89',
+      'ts': '2014-10-10 03:32:09.350'
+    };
+    utils.assertLogModelErrors(log).should.containEql(validationMsg.SESSIONID_CANNOT_BE_EMPTY);
+  });
+
+  it('Validate Log - Should throw an error if valueOne is empty', function() {
+    var log = {
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 15, personaId: 10, value1: '',
+      'ts': '2014-10-10 03:32:09.350'
+    };
+    utils.assertLogModelErrors(log).should.containEql(validationMsg.VALUE_ONE_CANNOT_BE_EMPTY);
+  });
+
+  it('Validate Log - Should throw an error if Vault ID is empty', function() {
+    var log = {
+      vaultId: '', sessionId: 'gjhjhjhfg80987676', actionId: 15, personaId: 10, value1: '89',
+      'ts': '2014-10-10 03:32:09.350'
+    };
+    utils.assertLogModelErrors(log).should.containEql(validationMsg.VAULTID_CANNOT_BE_EMPTY);
+  });
+
+  it('Validate Log - Should throw an error if Action ID not in range', function() {
+    var  log = {
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 20, personaId: 10, value1: '89',
+      'ts': '2014-10-10 03:32:09.350'
+    };
+    utils.assertLogModelErrors(log).should.containEql(validationMsg.ACTIONID_NOT_IN_RANGE);
+  });
+
+  it('Validate Log - Should be able to set Persona id to NA if not passed', function() {
+    var  log = {
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 15, value1: '89',
+      'ts': '2014-16-10 03:32:09.350'
+    };
+    utils.assertLogModelErrors(log).should.be.ok;
+  });
+
+  it('Validate Log - Should be able to transform from old version of log to new version ', function() {
+    var  log = {
+      'vault_id': 'aaa..bbb', 'session_id': 'gjhjhjhfg80987676', 'action_id': 15, 'persona_id': 10, value1: '89',
+      'ts': '2014-16-10 03:32:09.350'
+    };
+    utils.assertLogModelErrors(log).should.be.ok;
+  });
+
+  it('Validate Log - Should throw an error if Invalid Date format is passed', function() {
+    var  log = {
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 15, personaId: 10, value1: '89',
+      'ts': '2014-16-10 03:32:09.350'
+    };
+    utils.assertLogModelErrors(log).should.containEql(validationMsg.INVALID_DATE_FORMAT);
+  });
+
+  it('Validate Log - Should throw an error if any required field is missing', function() {
+    var   log = {
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', personaId: 10, value1: '89',
+      'ts': '2014-16-10 03:32:09.350'
+    };
+    utils.assertLogModelErrors(log).should.be.ok;
+  });
+
+  it('Validate Log - Should throw an error if Persona ID is not a valid integer', function() {
+    var log = {
+      vaultId: 'aaa..bbb', sessionId: 'gjhjhjhfg80987676', actionId: 10, personaId: 'str', value1: '89',
+      'ts': '2014-10-10 03:32:09.350'
+    };
+    utils.assertLogModelErrors(log).should.containEql(validationMsg.PERSONA_ID_NOT_A_NUMBER);
+  });
+
   it('Validate Log - should throw error if vaultId parameter is not present', function() {
     var log = {
       vaultId: '', sessionId: 'gjhjhjhfg80987676', actionId: 17, personaId: 10, value1: '89',

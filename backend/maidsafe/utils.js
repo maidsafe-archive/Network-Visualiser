@@ -57,30 +57,31 @@ exports.assertLogModelErrors = function(log) {
   var mandatoryAlways = [ 'vaultId', 'ts', 'sessionId', 'actionId', 'value1' ];
   var mandatoryAllValues = mandatoryAlways.slice().push('value2');
   var actionIdWithAllVaulesMandatory = [ 4, 5, 15 ];
+  var validationMsg = config.ValidationMsg;
   var addError = function(err) {
     errors = errors || [];
     errors.push(err);
   };
   var validateNumerics = function() {
     if (isNaN(log.personaId)) {
-      addError('PersonId is not a valid number');
+      addError(validationMsg.PERSONA_ID_NOT_A_NUMBER);
     }
     if (isNaN(log.actionId)) {
-      addError('Action Id is not valid number');
+      addError(validationMsg.ACTION_ID_NOT_A_NUMBER);
     }
     if (log.actionId === config.Constants.networkHealthActionId && isNaN(log.value1)) {
-      addError('Network health value must be an integer');
+      addError(validationMsg.NETWORK_HEALTH_MUST_BE_INTEGER);
     }
   };
   var validateString = function() {
     if (!log.vaultId) {
-      addError('vaultId can not be empty');
+      addError(validationMsg.VAULTID_CANNOT_BE_EMPTY);
     }
     if (!log.sessionId) {
-      addError('sessionId can not be empty');
+      addError(validationMsg.SESSIONID_CANNOT_BE_EMPTY);
     }
     if (log.actionId !== config.Constants.networkHealthActionId && !log.value1) {
-      addError('value1 can not be empty');
+      addError(validationMsg.VALUE_ONE_CANNOT_BE_EMPTY);
     }
   };
   var validateLog = function() {
@@ -88,28 +89,21 @@ exports.assertLogModelErrors = function(log) {
         actionIdWithAllVaulesMandatory.indexOf(log.actionId) > -1 ? mandatoryAllValues : mandatoryAlways;
     for (var index in fieldsToValidate) {
       if (!log.hasOwnProperty(fieldsToValidate[index])) {
-        addError(fieldsToValidate[index] + ' field is mandatory');
+        addError(fieldsToValidate[index] + validationMsg.FIELD_MANDATORY);
       }
     }
     validateNumerics();
     validateString();
   };
   if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
-    addError('Action id is not in valid range (0 - ' + config.Constants.maxActionIdRange + ')');
+    addError(validationMsg.ACTIONID_NOT_IN_RANGE);
   }
   prepareLogModel(log);
   if (!formatDate(log)) {
-    addError('Invalid date format');
+    addError(validationMsg.INVALID_DATE_FORMAT);
   }
   validateLog();
   return errors;
-};
-exports.isValid = function(log) {
-  var isValid = log.vaultId && !isNaN(log.actionId) && !isNaN(log.personaId);
-  if (!log.hasOwnProperty('sessionId')) {
-    isValid = false;
-  }
-  return isValid;
 };
 /* jshint unused:false */
 /* jshint forin:false */
