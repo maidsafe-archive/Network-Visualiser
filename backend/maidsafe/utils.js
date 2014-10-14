@@ -40,9 +40,6 @@ var prepareLogModel = function(log) {
   if (!log.hasOwnProperty('personaId')) {
     log.personaId = config.Constants.naPersonaId;
   }
-  if (!isNaN(log.actionId)) {
-    log.actionId = parseInt(log.actionId);
-  }
   if (!isNaN(log.personaId)) {
     log.personaId = parseInt(log.personaId);
   }
@@ -99,10 +96,24 @@ exports.assertLogModelErrors = function(log) {
     validateNumerics();
     validateString();
   };
-  prepareLogModel(log);
+  var validateConnectionMapLog = function() {
+    if (!log.vaultId) {
+      addError(validationMsg.VAULTID_CANNOT_BE_EMPTY);
+    }
+  };
   if (log.ts && !formatDate(log)) {
     addError(validationMsg.INVALID_DATE_FORMAT);
   }
+  if (isNaN(log.actionId)) {
+    addError(validationMsg.ACTION_ID_NOT_A_NUMBER);
+    return errors;
+  }
+  log.actionId = parseInt(log.actionId);
+  if (log.actionId === 19) {
+    validateConnectionMapLog();
+    return errors;
+  }
+  prepareLogModel(log);
   validateLog();
   return errors;
 };

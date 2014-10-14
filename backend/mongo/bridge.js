@@ -7,6 +7,8 @@ var sessionInfo = require('./SessionInfo.js');
 var testnetStatus = require('./TestnetStatus.js');
 var dbUtils = require('./DBUtils.js');
 var config = require('./../../Config.js');
+var connectionMap = require('./connection_map/connectionmapbridge').bridge;
+
 exports.setupMongooseConnection = function(callback, path) {
   mongoose.connect(path || config.Constants.mongoCon, function(connectionError) {
     if (connectionError) {
@@ -23,6 +25,7 @@ exports.setupMongooseConnection = function(callback, path) {
     sessionInfo = sessionInfo.SessionMetaData(db);
     testnetStatus = testnetStatus.TestnetStatusInfo(db);
     dbUtils = dbUtils.getDBUtil(db);
+    connectionMap.setDB(db);
     callback();
   });
 };
@@ -166,3 +169,4 @@ exports.updateTestnetStatus = function(data) {
 exports.getTestnetStatus = function() {
   return testnetStatus.getTestnetStatus();
 };
+exports.connectionMap = connectionMap;

@@ -10,8 +10,18 @@ var saveLog = function(req, res) {
     res.send(400, err);
     return;
   }
-  var handler = new Handler.SaveLogHandler(res);
+  var handler  = new Handler.SaveLogHandler(res);
+  if (log.actionId === config.Constants.connectionMapActionId) {
+    bridge.connectionMap.addActualLog(log, function(err, data) {
+      res.status(err ? 500 : 200);
+      res.send(err ? err.message : data);
+    });
+    return;
+  }
   bridge.addLog(log, handler.promise, handler.refreshSessionsCallback);
+  if (log.actionId === 0 || log.actionId === 18) {
+    // TODO send to FIFO Queue
+  }
 };
 var selectLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;
