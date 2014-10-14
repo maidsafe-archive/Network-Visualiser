@@ -10,7 +10,8 @@ var constants = {
   minLengthForDecode: 6,
   naPersonaId: 10,
   networkHealthActionId: 17,
-  maxActionIdRange: 18,
+  maxActionIdRange: 19,
+  connectionMapActionId: 19,
   nextBranchConfig: {
     serverPort: 9080,
     socketPort: 9081,
