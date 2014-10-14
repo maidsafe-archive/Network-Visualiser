@@ -34,9 +34,6 @@ var formatDate = function(log) {
   return true;
 };
 var prepareLogModel = function(log) {
-  if (log.hasOwnProperty('vault_id')) {
-    transformLogToCamelCase(log);
-  }
   if (!log.hasOwnProperty('personaId')) {
     log.personaId = config.Constants.naPersonaId;
   }
@@ -62,9 +59,7 @@ exports.assertLogModelErrors = function(log) {
     if (isNaN(log.personaId)) {
       addError(validationMsg.PERSONA_ID_NOT_A_NUMBER);
     }
-    if (isNaN(log.actionId)) {
-      addError(validationMsg.ACTION_ID_NOT_A_NUMBER);
-    } else if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
+    if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
       addError(validationMsg.ACTIONID_NOT_IN_RANGE);
     }
     if (log.actionId === config.Constants.networkHealthActionId && isNaN(log.valueOne)) {
@@ -101,6 +96,9 @@ exports.assertLogModelErrors = function(log) {
       addError(validationMsg.VAULTID_CANNOT_BE_EMPTY);
     }
   };
+  if (log.hasOwnProperty('vault_id')) {
+    transformLogToCamelCase(log);
+  }
   if (log.ts && !formatDate(log)) {
     addError(validationMsg.INVALID_DATE_FORMAT);
   }
