@@ -169,4 +169,8 @@ exports.updateTestnetStatus = function(data) {
 exports.getTestnetStatus = function() {
   return testnetStatus.getTestnetStatus();
 };
+exports.pushToQueue = function(log) {
+  // TODO need to implement FIFO queue
+  return log;
+};
 exports.connectionMap = connectionMap;

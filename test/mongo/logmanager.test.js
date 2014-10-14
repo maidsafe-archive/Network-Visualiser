@@ -92,18 +92,4 @@ describe('LogManager', function() {
       });
     });
   });
-  it('Should be able to save Connection Map Actual log', function(done) {
-    var log = { 'sessionId': 'd33e477f-e573-4fb8-c113-e0083afe7ce4',
-      'actionId': 19,
-      'vaultId': 'asdasd..asds',
-      'in': '80',
-      'out': 15,
-      'ts': '2014-10-10 03:32:09.350'
-    };
-    saveLog(log, function(err, data) {
-      should(err).not.be.ok;
-      should(data).be.ok;
-      done();
-    });
-  });
 });

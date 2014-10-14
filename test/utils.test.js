@@ -172,14 +172,4 @@ describe('Utils Test Suite', function() {
     };
     should(utils.assertLogModelErrors(log)).be.ok;
   });
-  it('Should be able to validate Connection Map Log', function() {
-    var log = { 'sessionId': 'd33e477f-e573-4fb8-c113-e0083afe7ce4',
-      'actionId': 19,
-      'vaultId': '',
-      'in': '80',
-      'out': 15,
-      'ts': '2014-10-10 03:32:09.350'
-    };
-    should(utils.assertLogModelErrors(log)).be.ok;
-  });
 });

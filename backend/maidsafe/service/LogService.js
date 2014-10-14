@@ -20,7 +20,7 @@ var saveLog = function(req, res) {
   }
   bridge.addLog(log, handler.promise, handler.refreshSessionsCallback);
   if (log.actionId === 0 || log.actionId === 18) {
-    // TODO send to FIFO Queue
+    bridge.pushToQueue(log);
   }
 };
 var selectLogs = function(req, res) {
