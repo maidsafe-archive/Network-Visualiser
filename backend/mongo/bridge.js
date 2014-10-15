@@ -7,7 +7,8 @@ var sessionInfo = require('./SessionInfo.js');
 var testnetStatus = require('./TestnetStatus.js');
 var dbUtils = require('./DBUtils.js');
 var config = require('./../../Config.js');
-var connectionMap = require('./connection_map/connectionmapbridge').bridge;
+var connectionMapBridge = require('./connection_map/connectionmapbridge');
+var connectionMap = connectionMapBridge.bridge;
 
 exports.setupMongooseConnection = function(callback, path) {
   mongoose.connect(path || config.Constants.mongoCon, function(connectionError) {

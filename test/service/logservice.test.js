@@ -1,7 +1,8 @@
 var logService = require('../../backend/maidsafe/service/LogService');
 var should = require('should');
 var mock = require('../../ci/test/mock');
-var serviceHelper = require('../../ci/test/ServiceTestHelper').helper;
+var serviceTestHelper = require('../../ci/test/ServiceTestHelper');
+var serviceHelper = serviceTestHelper.helper;
 
 describe('LogService', function() {
   var req;
@@ -85,7 +86,7 @@ describe('LogService', function() {
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
-  it('SaveLog - Should be able to assert incoming log for errors', function(done){
+  it('SaveLog - Should be able to assert incoming log for errors', function(done) {
     req = new mock.Request();
     req.body = {
       vaultId: '', actionId: 19, sessionId: serviceHelper.getSessionId(),
