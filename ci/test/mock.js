@@ -18,7 +18,7 @@ exports.Response = function(done, assert) {
     if (assert) {
       try {
         assert(respCode, respMsg);
-      } catch(e) {
+      } catch (e) {
         done(e);
       }
     }

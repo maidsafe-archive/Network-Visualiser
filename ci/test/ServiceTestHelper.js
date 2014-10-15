@@ -22,7 +22,7 @@ var Helper = function() {
     }
     db.dropDatabase();
     mongoose.disconnect();
-  }
+  };
   instance.connectToTestSession = function(callback) {
     bridge.setupMongooseConnection(function() {
       db = mongoose.connection.db;
@@ -31,10 +31,7 @@ var Helper = function() {
   };
   instance.getSessionId = function() {
     return sessionId;
-  }
+  };
   return instance;
 };
-
-
 exports.helper = new Helper();
-
