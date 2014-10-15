@@ -1,5 +1,5 @@
 exports.Request = function() {
-  this.body = { vaultId: 'aaa..bbb' };
+  this.body = null;
 };
 exports.Response = function(done, assert) {
   var respCode;
@@ -18,8 +18,8 @@ exports.Response = function(done, assert) {
     if (assert) {
       try {
         assert(respCode, respMsg);
-      } catch (e) {
-        done(e);
+      } catch (err) {
+        done(err);
       }
     }
   };
