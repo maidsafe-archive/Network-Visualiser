@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
 module.exports = function(dbCon) {
+  var mongoose = require('mongoose');
   var instance = this;
   var COLLECTION_NAME_SUFFIX = '_actual_connection';
   var GeneralHandler = function(promise) {
