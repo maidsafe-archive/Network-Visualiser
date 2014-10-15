@@ -1,5 +1,5 @@
 module.exports = function(dbCon) {
-  var mongoose = require('mongoose');
+  var MongoosePromise = require('mongoose').Promise;
   var instance = this;
   var COLLECTION_NAME_SUFFIX = '_actual_connection';
   var GeneralHandler = function(promise) {
@@ -12,7 +12,7 @@ module.exports = function(dbCon) {
     };
   };
   var saveActualLog = function(log, callback) {
-    var promise = new mongoose.Promise();
+    var promise = new MongoosePromise();
     if (callback) {
       promise.addBack(callback);
     }

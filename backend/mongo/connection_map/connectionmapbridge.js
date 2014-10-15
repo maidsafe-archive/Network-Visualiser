@@ -1,4 +1,3 @@
-var mongoose = require('mongoose');
 var ActualConnectionHandler = require('./ActualConnection');
 var MongoBridge = function() {
   var instance = this;
