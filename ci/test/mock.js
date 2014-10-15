@@ -1,5 +1,5 @@
 exports.Request = function() {
-  this.body;
+  this.body = null;
 };
 exports.Response = function(done, assert) {
   var respCode;
