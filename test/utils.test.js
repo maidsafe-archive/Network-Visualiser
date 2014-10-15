@@ -172,7 +172,7 @@ describe('Utils Test Suite', function() {
     };
     should(utils.assertLogModelErrors(log)).be.ok;
   });
-  it('Should be able to validate Connection Map Log', function() {
+  it('Should throw an error if vault id is empty for Connection Map Log', function() {
     var log = { 'sessionId': 'd33e477f-e573-4fb8-c113-e0083afe7ce4',
       'actionId': 19,
       vaultId: '',
