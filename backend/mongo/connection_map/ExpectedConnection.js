@@ -1,4 +1,4 @@
-module.exports = function(dbCon) {
+module.exports = function() {
   var MongoosePromise = require('mongoose').Promise;
   var instance = this;
 //  var COLLECTION_NAME_SUFFIX = '_expected_connection';

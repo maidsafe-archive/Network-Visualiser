@@ -7,12 +7,6 @@ var STATE = {
 };
 var currentState = STATE.STOP;
 var consumer;
-var onReceived = function() {
-  if (currentState === STATE.STOP) {
-    currentState = STATE.START;
-    broadcast();
-  }
-};
 var broadcast = function() {
   msg = queue.getMessageSync();
   if (msg) {
@@ -21,6 +15,12 @@ var broadcast = function() {
     });
   }
   currentState = STATE.STOP;
+};
+var onReceived = function() {
+  if (currentState === STATE.STOP) {
+    currentState = STATE.START;
+    broadcast();
+  }
 };
 exports.add = function(obj) {
   queue.putMessage(obj);

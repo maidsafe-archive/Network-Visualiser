@@ -9,7 +9,7 @@ var MongoBridge = function() {
   instance.setDB = function(db) {
     dbCon = db;
     actualConnection = new ActualConnectionHandler(db);
-    expectedConnection = new ExpectedConnection(db);
+    expectedConnection = new ExpectedConnection();
   };
   instance.addActualLog = function(log, callback) {
     return actualConnection.save(log, callback);
@@ -21,7 +21,7 @@ var MongoBridge = function() {
   queueService.subscribe(function(msg, done) {
     expectedConnection.updateExpectedConnection(msg, function(err) {
       if (err) {
-        console.log("%s - Update Expected Connection - %s ", new Date().toISOString(), err);
+        console.log('%s - Update Expected Connection - %s ', new Date().toISOString(), err);
       }
       done();
     });
