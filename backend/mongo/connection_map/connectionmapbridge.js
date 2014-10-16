@@ -1,5 +1,5 @@
 var ActualConnectionHandler = require('./ActualConnection');
-var queueService = require('../../maidsafe/service/QueueService');
+var QueueService = require('../../maidsafe/service/QueueService');
 var ExpectedConnection = require('./ExpectedConnection');
 var MongoBridge = function() {
   var instance = this;
@@ -18,10 +18,10 @@ var MongoBridge = function() {
     // TODO handle and save the log
     return promise;
   };
-  queueService.subscribe(function(msg, done) {
+  QueueService.subscribe(function(msg, done) {
     expectedConnection.updateExpectedConnection(msg, function(err) {
       if (err) {
-        console.log('%s - Update Expected Connection - %s ', new Date().toISOString(), err);
+        console.error('%s - Update Expected Connection - %s ', new Date().toISOString(), err);
       }
       done();
     });

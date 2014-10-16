@@ -17,7 +17,6 @@ module.exports = function() {
       promise.addBack(callback);
     }
     setTimeout(function() {
-      console.log(log);
       promise.complete('Expected Connection');
     }, 1000);
     return promise;
