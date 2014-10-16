@@ -4,8 +4,10 @@ exports.Request = function() {
 exports.Response = function(done, assert) {
   var respCode;
   var respMsg;
-  this.status = function(status) {
+  var instance = this;
+  instance.status = function(status) {
     respCode = status;
+    return instance;
   };
   this.send = function(status, msg) {
     if (status && msg) {
@@ -22,5 +24,6 @@ exports.Response = function(done, assert) {
         done(err);
       }
     }
+    return instance;
   };
 };
