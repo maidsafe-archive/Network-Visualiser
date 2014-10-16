@@ -32,8 +32,8 @@ var SessionQueue = function() {
     };
     timerId = setTimeout(function() {
       done();
-      console.error('%s Queue was restarted forcefully - done callback was not completed in 2000ms',
-        new Date().toISOString());
+      console.error('%s Queue was restarted forcefully - done callback was not completed in %d ms',
+        new Date().toISOString(), timerDuration);
     }, timerDuration);
     return done;
   };
@@ -55,7 +55,7 @@ exports.pushToQueue = function(log) {
   queuePool[log.sessionId].pushToQueue(log);
 };
 exports.deleteQueue = function(sessionId) {
-  delete queuePool[sessionId];
+  return delete queuePool[sessionId];
 };
 exports.subscribe = function(con) {
   consumer = con;
