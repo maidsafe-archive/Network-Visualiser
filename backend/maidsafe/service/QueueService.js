@@ -47,7 +47,7 @@ var SessionQueue = function() {
     queue.putMessage(log);
     onReceived();
   };
-}
+};
 exports.pushToQueue = function(log) {
   if (!queuePool[log.sessionId]) {
     queuePool[log.sessionId] = new SessionQueue();
