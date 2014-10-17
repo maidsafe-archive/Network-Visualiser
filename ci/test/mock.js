@@ -9,7 +9,7 @@ exports.Response = function(done, assert) {
     respCode = status;
     return instance;
   };
-  this.send = function(status, msg) {
+  instance.send = function(status, msg) {
     if (status && msg) {
       respCode = status;
       respMsg = msg;

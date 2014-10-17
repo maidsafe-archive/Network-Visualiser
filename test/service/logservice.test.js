@@ -20,6 +20,7 @@ describe('LogService', function() {
       ts: '2014-10-12T12:00:00.000Z', valueOne: 'dddd'
     };
     var assert = function(status) {
+      console.log('response :: ' + status);
       should(status).equal(200);
       done();
     };
@@ -35,6 +36,7 @@ describe('LogService', function() {
       }
     };
     var assert = function(status) {
+      console.log('response :: ' + status);
       should(status).equal(200);
       done();
     };
