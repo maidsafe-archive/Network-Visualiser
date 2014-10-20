@@ -21,7 +21,6 @@ exports.Response = function(done, assert) {
       try {
         assert(respCode, respMsg);
       } catch (err) {
-        console.log('From error in mock');
         done(err);
       }
     }
