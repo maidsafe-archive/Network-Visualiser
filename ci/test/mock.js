@@ -18,11 +18,12 @@ exports.Response = function(done, assert) {
       respMsg = status;
     }
     if (assert) {
-//      try {
+      try {
         assert(respCode, respMsg);
-//      } catch (err) {
-//        done(err);
-//      }
+        done();
+      } catch (err) {
+        done(err);
+      }
     }
     return instance;
   };
