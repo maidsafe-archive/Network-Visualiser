@@ -13,7 +13,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     shell: {
       test: {
-        command: ISTANBUL_COMMAND + ' -R mocha-unfunk-reporter test/service/logservice.test.js', //--recursive',
+        command: ISTANBUL_COMMAND + ' -R mocha-unfunk-reporter --recursive',
         options: {
           callback: ci.testCompleted
         }
