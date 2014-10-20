@@ -26,11 +26,7 @@ exports.Response = function(done, assert) {
     }
     try {
       assert(respCode, respMsg);
-      try {
-        done();
-      }catch(e){
-        console.log(e);
-      };
+      done();
     } catch (err) {
       done(err);
     }
