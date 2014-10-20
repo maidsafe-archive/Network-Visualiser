@@ -21,7 +21,7 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
-     // compledCallback();
+      compledCallback();
     };
     logService.saveLog(req, new mock.Response(compledCallback, assert));
   });
