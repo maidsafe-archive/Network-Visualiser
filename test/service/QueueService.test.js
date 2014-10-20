@@ -12,12 +12,13 @@ describe('QueueService', function() {
       valueOne: 'sd',
       ts: '2014-10-10 03:32:09.350'
     };
-    QueueService.subscribe(function(logReceived, callBack) {
+    var handleIncomingLog = function(logReceived, callBack) {
 //      logReceived.should.be.exactly(log);
-      //callBack();
-      //QueueService.deleteQueue(log.sessionId).should.be.ok;
+//      callBack();
+//      QueueService.deleteQueue(log.sessionId).should.be.ok;
       done();
-    });
+    }
+    QueueService.subscribe(handleIncomingLog);
     QueueService.pushToQueue(log);
   });
 });
