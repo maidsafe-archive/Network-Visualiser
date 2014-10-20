@@ -23,7 +23,7 @@ var SessionQueue = function() {
     var timerId;
     var timerDuration = 30000;
     var completed = false;
-    var done = function() {
+    var completedCallback = function() {
       clearTimeout(timerId);
       if (!completed) {
         completed = true;
@@ -31,11 +31,11 @@ var SessionQueue = function() {
       }
     };
     timerId = setTimeout(function() {
-      done();
+      completedCallback();
       console.error('%s Queue was restarted forcefully - done callback was not completed in %d ms',
         new Date().toISOString(), timerDuration);
     }, timerDuration);
-    return done;
+    return completedCallback;
   };
   onReceived = function() {
     if (currentState === STATE.STOP) {

@@ -14,7 +14,7 @@ describe('QueueService', function() {
     };
     QueueService.subscribe(function(logReceived, callBack) {
 //      logReceived.should.be.exactly(log);
-      callBack();
+      //callBack();
       //QueueService.deleteQueue(log.sessionId).should.be.ok;
       done();
     });
