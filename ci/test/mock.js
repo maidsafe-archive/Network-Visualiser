@@ -1,7 +1,7 @@
 exports.Request = function() {
   this.body = null;
 };
-exports.Response = function(done, assert) {
+exports.Response = function(assert) {
   var respCode;
   var respMsg;
   var instance = this;
@@ -18,14 +18,14 @@ exports.Response = function(done, assert) {
       respMsg = status;
     }
     if (assert) {
-      try {
+//      try {
         assert(respCode, respMsg);
-        done();
-      } catch (err) {
-        console.log('FAILED');
-        console.log(err);
-        //done(err);
-      }
+//        done();
+//      } catch (err) {
+//        console.log('FAILED');
+//        console.log(err);
+//        // done(err);
+//      }
     }
     return instance;
   };

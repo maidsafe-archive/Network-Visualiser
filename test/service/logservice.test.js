@@ -21,8 +21,9 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
+      done();
     };
-    logService.saveLog(req, new mock.Response(done, assert));
+    logService.saveLog(req, new mock.Response(assert));
   });
   it('SaveLog - Should be able to push log to queue for action id 0', function(done) {
     req = new mock.Request();
@@ -35,8 +36,9 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
+      done();
     };
-    logService.saveLog(req, new mock.Response(done, assert));
+    logService.saveLog(req, new mock.Response(assert));
   });
   it('SaveLog - Should be able to push log to queue for action id 18', function(done) {
     req = new mock.Request();
@@ -49,8 +51,9 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
+      done();
     };
-    logService.saveLog(req, new mock.Response(done, assert));
+    logService.saveLog(req, new mock.Response(assert));
   });
   it('SaveLog - Should be able to save Connection Map Actual log', function(done) {
     req = new mock.Request();
@@ -63,8 +66,9 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
+      done();
     };
-    logService.saveLog(req, new mock.Response(done, assert));
+    logService.saveLog(req, new mock.Response(assert));
   });
   it('SaveLog - Should be able to convert to JSON if valueOne of log is of String type', function(done) {
     req = new mock.Request();
@@ -78,8 +82,9 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
+      done();
     };
-    logService.saveLog(req, new mock.Response(done, assert));
+    logService.saveLog(req, new mock.Response(assert));
   });
   it('SaveLog - Should be able to assert incoming log for errors', function(done) {
     req = new mock.Request();
@@ -92,7 +97,8 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).not.equal(200);
+      done();
     };
-    logService.saveLog(req, new mock.Response(done, assert));
+    logService.saveLog(req, new mock.Response(assert));
   });
 });
