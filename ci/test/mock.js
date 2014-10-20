@@ -21,7 +21,7 @@ exports.Response = function(done, assert) {
       try {
         assert(respCode, respMsg);
       } catch (err) {
-       // done(err);
+        done(err);
       }
     }
     return instance;

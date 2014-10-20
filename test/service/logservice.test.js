@@ -13,7 +13,7 @@ describe('LogService', function() {
     done();
   });
 
-  it('SaveLog - Should be able to save vault log', function(compledCallback) {
+  it('SaveLog - Should be able to save vault log', function(done) {
     req = new mock.Request();
     req.body = {
       vaultId: 'aaa..bbb', actionId: 0, sessionId: serviceHelper.getSessionId(),
@@ -21,9 +21,13 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
-      compledCallback();
+      try {
+        done();
+      } catch (ee) {
+        console.log(ee);
+      }
     };
-    logService.saveLog(req, new mock.Response(compledCallback, assert));
+    logService.saveLog(req, new mock.Response(done, assert));
   });
   it('SaveLog - Should be able to push log to queue for action id 0', function(done) {
     req = new mock.Request();
