@@ -21,11 +21,7 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
-      try {
-        done();
-      } catch (ee) {
-        console.log(ee);
-      }
+      done();
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
