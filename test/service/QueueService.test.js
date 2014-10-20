@@ -16,6 +16,7 @@ describe('QueueService', function() {
 //      logReceived.should.be.exactly(log);
 //      callBack();
 //      QueueService.deleteQueue(log.sessionId).should.be.ok;
+      console.log('DONE EXCECUTION');
       done();
     }
     QueueService.subscribe(handleIncomingLog);
