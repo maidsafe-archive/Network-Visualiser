@@ -14,7 +14,7 @@ var SessionQueue = function() {
   var onReceived;
   broadcast = function() {
     msg = queue.getMessageSync();
-    if (msg) {
+    if (msg && consumer) {
       consumer(msg, new DoneCallback());
     }
     currentState = STATE.STOP;
