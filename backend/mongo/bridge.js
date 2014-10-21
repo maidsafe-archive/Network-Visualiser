@@ -8,6 +8,7 @@ var testnetStatus = require('./TestnetStatus.js');
 var dbUtils = require('./DBUtils.js');
 var config = require('./../../Config.js');
 var connectionMapBridge = require('./connection_map/connectionmapbridge');
+var QueueService = require('../maidsafe/service/QueueService');
 var connectionMap = connectionMapBridge.bridge;
 
 exports.setupMongooseConnection = function(callback, path) {
@@ -129,14 +130,22 @@ exports.getSessionIdForName = function(sessionName) {
   return sessionInfo.getSessionIdForName(sessionName);
 };
 exports.deleteActiveSession = function(sessionName, promise) {
-  sessionInfo.deleteSession(sessionName).then(function(sessionId) {
-    vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {
-      vaultLog.deleteVaultsInSession(sessionId, removedVaultIds, promise);
+  var deleteSession = function() {
+    sessionInfo.deleteSession(sessionName).then(function(sessionId) {
+      vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {
+        vaultLog.deleteVaultsInSession(sessionId, removedVaultIds, promise);
+      }, function(err) {
+        promise(err);
+      });
     }, function(err) {
       promise(err);
     });
+  };
+  sessionInfo.getSessionIdForName(sessionName).then(function(data) {
+    QueueService.deleteQueue(data);
+    deleteSession();
   }, function(err) {
-    promise(err);
+    console.error(err);
   });
 };
 exports.deletePendingSession = function(sessionName, promise) {
@@ -173,9 +182,5 @@ exports.updateTestnetStatus = function(data) {
 };
 exports.getTestnetStatus = function() {
   return testnetStatus.getTestnetStatus();
-};
-exports.pushToQueue = function(log) {
-  // TODO need to implement FIFO queue
-  return log;
 };
 exports.connectionMap = connectionMap;

@@ -3,6 +3,8 @@ var Handler = require('./Handler.js');
 var utils = require('./../utils.js');
 var url = require('url');
 var config = require('./../../../Config.js');
+var queue = require('./QueueService');
+
 var saveLog = function(req, res) {
   var log = req.body;
   var err = utils.assertLogModelErrors(log);
@@ -20,7 +22,7 @@ var saveLog = function(req, res) {
   }
   bridge.addLog(log, handler.promise, handler.refreshSessionsCallback);
   if (log.actionId === 0 || log.actionId === 18) {
-    bridge.pushToQueue(log);
+    queue.pushToQueue(log);
   }
 };
 var selectLogs = function(req, res) {

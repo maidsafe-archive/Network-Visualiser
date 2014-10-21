@@ -21,7 +21,6 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
-      done();
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
@@ -36,7 +35,6 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
-      done();
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
@@ -51,7 +49,6 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
-      done();
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
@@ -66,7 +63,6 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
-      done();
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
@@ -81,7 +77,6 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).not.equal(200);
-      done();
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
@@ -94,7 +89,6 @@ describe('LogService', function() {
       };
       var assert = function(status) {
         should(status).not.equal(200);
-        done();
       };
       logService.saveLog(req, new mock.Response(done, assert));
     }
@@ -111,7 +105,6 @@ describe('LogService', function() {
       };
       var assert = function(status) {
         should(status).not.equal(200);
-        done();
       };
       logService.saveLog(req, new mock.Response(done, assert));
     }
@@ -128,7 +121,6 @@ describe('LogService', function() {
       };
       var assert = function(status) {
         should(status).not.equal(200);
-        done();
       };
       logService.saveLog(req, new mock.Response(done, assert));
     }
@@ -146,7 +138,6 @@ describe('LogService', function() {
       };
       var assert = function(status) {
         should(status).not.equal(200);
-        done();
       };
       logService.saveLog(req, new mock.Response(done, assert));
     }
@@ -164,7 +155,6 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).equal(200);
-      done();
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
@@ -179,7 +169,6 @@ describe('LogService', function() {
     };
     var assert = function(status) {
       should(status).not.equal(200);
-      done();
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });

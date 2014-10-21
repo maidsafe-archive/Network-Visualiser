@@ -4,10 +4,19 @@ exports.Request = function() {
 exports.Response = function(done, assert) {
   var respCode;
   var respMsg;
-  this.status = function(status) {
+  var instance = this;
+  if (!assert) {
+    done('No assertion specified');
+    return;
+  }
+  if (!done) {
+    throw 'done callback is not specified';
+  }
+  instance.status = function(status) {
     respCode = status;
+    return instance;
   };
-  this.send = function(status, msg) {
+  instance.send = function(status, msg) {
     if (status && msg) {
       respCode = status;
       respMsg = msg;
@@ -15,12 +24,12 @@ exports.Response = function(done, assert) {
       respCode = 200;
       respMsg = status;
     }
-    if (assert) {
-      try {
-        assert(respCode, respMsg);
-      } catch (err) {
-        done(err);
-      }
+    try {
+      assert(respCode, respMsg);
+      done();
+    } catch (err) {
+      done(err);
     }
+    return instance;
   };
 };
