@@ -58,8 +58,7 @@ describe('LogService', function() {
       vaultId: 'aaa..bbb', actionId: 19, sessionId: serviceHelper.getSessionId(),
       ts: '2014-10-12T12:00:00.000Z', valueOne: {
         vaultAdded: 'sasd..asd',
-        vaultRemoved: '',
-        closeGroupVaults: []
+        vaultRemoved: ''
       }
     };
     var assert = function(status) {
@@ -72,7 +71,7 @@ describe('LogService', function() {
     req.body = {
       vaultId: 'aaa..bbb', actionId: 19, sessionId: serviceHelper.getSessionId(),
       ts: '2014-10-12T12:00:00.000Z', valueOne: {
-        vaultAdded: 'sasd..asd',
+        vaultAdded: '',
         vaultRemoved: ''
       }
     };
@@ -81,6 +80,72 @@ describe('LogService', function() {
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
+  it('SaveLog - Should throw validation error for Connection Map Actual log if valueOne is not present',
+    function(done) {
+      req = new mock.Request();
+      req.body = {
+        vaultId: 'aaa..bbb', actionId: 19, sessionId: serviceHelper.getSessionId(),
+        ts: '2014-10-12T12:00:00.000Z'
+      };
+      var assert = function(status) {
+        should(status).not.equal(200);
+        done();
+      };
+      logService.saveLog(req, new mock.Response(done, assert));
+    }
+  );
+  it('SaveLog - Should throw validation error for Connection Map Actual log if valueAdded is not a String',
+    function(done) {
+      req = new mock.Request();
+      req.body = {
+        vaultId: 'aaa..bbb', actionId: 19, sessionId: serviceHelper.getSessionId(),
+        ts: '2014-10-12T12:00:00.000Z', valueOne: {
+          vaultAdded: 809909,
+          vaultRemoved: ''
+        }
+      };
+      var assert = function(status) {
+        should(status).not.equal(200);
+        done();
+      };
+      logService.saveLog(req, new mock.Response(done, assert));
+    }
+  );
+  it('SaveLog - Should throw validation error for Connection Map Actual log if valueRemoved is not a String',
+    function(done) {
+      req = new mock.Request();
+      req.body = {
+        vaultId: 'aaa..bbb', actionId: 19, sessionId: serviceHelper.getSessionId(),
+        ts: '2014-10-12T12:00:00.000Z', valueOne: {
+          vaultAdded: '',
+          vaultRemoved: 809909
+        }
+      };
+      var assert = function(status) {
+        should(status).not.equal(200);
+        done();
+      };
+      logService.saveLog(req, new mock.Response(done, assert));
+    }
+  );
+  it('SaveLog - Should throw validation error for Connection Map Actual log if closeGroupVaults is not a Object',
+    function(done) {
+      req = new mock.Request();
+      req.body = {
+        vaultId: 'aaa..bbb', actionId: 19, sessionId: serviceHelper.getSessionId(),
+        ts: '2014-10-12T12:00:00.000Z', valueOne: {
+          vaultAdded: 809909,
+          vaultRemoved: '',
+          closeGroupVaults: ''
+        }
+      };
+      var assert = function(status) {
+        should(status).not.equal(200);
+        done();
+      };
+      logService.saveLog(req, new mock.Response(done, assert));
+    }
+  );
   it('SaveLog - Should be able to convert to JSON if valueOne of log is of String type', function(done) {
     req = new mock.Request();
     var valueOne = {

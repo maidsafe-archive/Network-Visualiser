@@ -39,7 +39,9 @@ var validationMsg = {
   ACTIONID_NOT_IN_RANGE: 'Action id is not in valid range (0 - ' + constants.maxActionIdRange + ')',
   INVALID_DATE_FORMAT: 'Invalid date format',
   FIELD_MANDATORY: ' field is mandatory',
-  VAULT_ADDED_REMOVED_MUST_BE_STRING: 'Vault Added or Removed must be of string type',
+  VALUT_ADDED_OR_REMOVED_MUST_BE_PRESENT: 'Vault Added or Removed value must be present',
+  VAULT_ADDED_MUST_BE_STRING: 'Vault Added or Removed must be of string type',
+  VAULT_REMOVED_MUST_BE_STRING: 'Vault Added or Removed must be of string type',
   CLOSEST_VAULTS_MUST_BE_ARRAY: 'closeGroupVaults must be an Array'
 };
 
