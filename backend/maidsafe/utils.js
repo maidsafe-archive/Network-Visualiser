@@ -95,10 +95,17 @@ exports.assertLogModelErrors = function(log) {
     if (!log.vaultId) {
       addError(validationMsg.VAULTID_CANNOT_BE_EMPTY);
     }
-    if (typeof(log.valueOne.vaultAdded) !== 'string' || typeof(log.valueOne.vaultRemoved) !== 'string') {
-      addError(validationMsg.VAULT_ADDED_REMOVED_MUST_BE_STRING);
+    if (!log.valueOne || (!log.valueOne.vaultAdded && !log.valueOne.vaultRemoved)) {
+      addError(validationMsg.VALUT_ADDED_OR_REMOVED_MUST_BE_PRESENT);
+      return;
     }
-    if (typeof(log.valueOne.closeGroupVaults) !== 'object') {
+    if (log.valueOne.hasOwnProperty('vaultAdded') && typeof(log.valueOne.vaultAdded) !== 'string') {
+      addError(validationMsg.VAULT_ADDED_MUST_BE_STRING);
+    }
+    if (log.valueOne.hasOwnProperty('vaultRemoved') && typeof(log.valueOne.vaultRemoved) !== 'string') {
+      addError(validationMsg.VAULT_REMOVED_MUST_BE_STRING);
+    }
+    if (log.valueOne.hasOwnProperty('closeGroupVaults') && typeof(log.valueOne.closeGroupVaults) !== 'object') {
       addError(validationMsg.CLOSEST_VAULTS_MUST_BE_ARRAY);
     }
   };
