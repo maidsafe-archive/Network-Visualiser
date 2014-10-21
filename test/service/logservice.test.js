@@ -30,8 +30,8 @@ describe('LogService', function() {
     req.body = {
       vaultId: 'aaa..bbb', actionId: 0, sessionId: serviceHelper.getSessionId(),
       ts: '2014-10-12T12:00:00.000Z', valueOne: {
-        'in': 'sasd..asd',
-        'out': 'asd..asd'
+        vaultAdded: 'sasd..asd',
+        vaultRemoved: 'asd..asd'
       }
     };
     var assert = function(status) {
@@ -45,8 +45,8 @@ describe('LogService', function() {
     req.body = {
       vaultId: 'aaa..bbb', actionId: 18, sessionId: serviceHelper.getSessionId(),
       ts: '2014-10-12T12:00:00.000Z', valueOne: {
-        'in': 'sasd..asd',
-        'out': 'asd..asd'
+        vaultAdded: 'sasd..asd',
+        vaultRemoved: 'asd..asd'
       }
     };
     var assert = function(status) {
@@ -60,8 +60,9 @@ describe('LogService', function() {
     req.body = {
       vaultId: 'aaa..bbb', actionId: 19, sessionId: serviceHelper.getSessionId(),
       ts: '2014-10-12T12:00:00.000Z', valueOne: {
-        'in': 'sasd..asd',
-        'out': 'asd..asd'
+        vaultAdded: 'sasd..asd',
+        vaultRemoved: '',
+        closeGroupVaults: []
       }
     };
     var assert = function(status) {
@@ -70,11 +71,27 @@ describe('LogService', function() {
     };
     logService.saveLog(req, new mock.Response(done, assert));
   });
+  it('SaveLog - Should throw validation error for Connection Map Actual log', function(done) {
+    req = new mock.Request();
+    req.body = {
+      vaultId: 'aaa..bbb', actionId: 19, sessionId: serviceHelper.getSessionId(),
+      ts: '2014-10-12T12:00:00.000Z', valueOne: {
+        vaultAdded: 'sasd..asd',
+        vaultRemoved: ''
+      }
+    };
+    var assert = function(status) {
+      should(status).not.equal(200);
+      done();
+    };
+    logService.saveLog(req, new mock.Response(done, assert));
+  });
   it('SaveLog - Should be able to convert to JSON if valueOne of log is of String type', function(done) {
     req = new mock.Request();
     var valueOne = {
-      in: 'sasd..asd',
-      out: 'asd..asd'
+      vaultAdded: '',
+      vaultRemoved: 'asd..asd',
+      closeGroupVaults: []
     };
     req.body = {
       vaultId: 'aaa..bbb', actionId: 19, sessionId: serviceHelper.getSessionId(),
@@ -91,8 +108,8 @@ describe('LogService', function() {
     req.body = {
       vaultId: '', actionId: 19, sessionId: serviceHelper.getSessionId(),
       ts: '2014-10-12T12:00:00.000Z', valueOne: {
-        'in': 'sasd..asd',
-        'out': 'asd..asd'
+        vaultAdded: 'sasd..asd',
+        vaultRemoved: 'asd..asd'
       }
     };
     var assert = function(status) {

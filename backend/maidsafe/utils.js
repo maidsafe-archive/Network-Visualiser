@@ -95,6 +95,12 @@ exports.assertLogModelErrors = function(log) {
     if (!log.vaultId) {
       addError(validationMsg.VAULTID_CANNOT_BE_EMPTY);
     }
+    if (typeof(log.valueOne.vaultAdded) !== 'string' || typeof(log.valueOne.vaultRemoved) !== 'string') {
+      addError(validationMsg.VAULT_ADDED_REMOVED_MUST_BE_STRING);
+    }
+    if (typeof(log.valueOne.closeGroupVaults) !== 'object') {
+      addError(validationMsg.CLOSEST_VAULTS_MUST_BE_ARRAY);
+    }
   };
   if (log.hasOwnProperty('vault_id')) {
     transformLogToCamelCase(log);
