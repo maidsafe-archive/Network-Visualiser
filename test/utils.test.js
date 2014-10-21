@@ -177,8 +177,8 @@ describe('Utils Test Suite', function() {
       'actionId': 19,
       vaultId: '',
       valueOne: {
-        in: 'sds.sdsds',
-        out: 'sdsd..sdssd'
+        vaultAdded: 'sds.sdsds',
+        vaultRemoved: 'sdsd..sdssd'
       },
       'ts': '2014-10-10 03:32:09.350'
     };
