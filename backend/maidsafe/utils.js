@@ -95,6 +95,12 @@ exports.assertLogModelErrors = function(log) {
     if (!log.vaultId) {
       addError(validationMsg.VAULTID_CANNOT_BE_EMPTY);
     }
+    if (typeof(log.valueOne.vaultAdded) !== 'string' || typeof(log.valueOne.vaultRemoved) !== 'string') {
+      addError(validationMsg.VAULT_ADDED_REMOVED_MUST_BE_STRING);
+    }
+    if (typeof(log.valueOne.closeGroupVaults) !== 'object') {
+      addError(validationMsg.CLOSEST_VAULTS_MUST_BE_ARRAY);
+    }
   };
   if (log.hasOwnProperty('vault_id')) {
     transformLogToCamelCase(log);
@@ -107,7 +113,10 @@ exports.assertLogModelErrors = function(log) {
     return errors;
   }
   log.actionId = parseInt(log.actionId);
-  if (log.actionId === 19) {
+  if (log.actionId === config.Constants.connectionMapActionId) {
+    if (log.valueOne && typeof log.valueOne === 'string') {
+      log.valueOne = JSON.parse(log.valueOne);
+    }
     validateConnectionMapLog();
     return errors;
   }
