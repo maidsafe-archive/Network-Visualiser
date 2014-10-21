@@ -21,7 +21,7 @@ var saveLog = function(req, res) {
     return;
   }
   bridge.addLog(log, handler.promise, handler.refreshSessionsCallback);
-  if (log.actionId === 0 || log.actionId === 18) {
+  if (log.actionId === config.Constants.startActionId || log.actionId === config.Constants.stopActionId) {
     queue.pushToQueue(log);
   }
 };

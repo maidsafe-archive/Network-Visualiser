@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
+var config = require('./../../Config');
 var SessionInfo;
 var SCHEMA = {
   sessionId: String,
@@ -256,7 +257,7 @@ var SessionMetaData = function(dbConnection) {
     var currentEndDate = currentSession.endDate ? new Date(currentSession.endDate) : null;
     var newDate = new Date(log.ts);
     var newDateTime = newDate.getTime();
-    if ((log.actionId === 0 || log.actionId === 18) &&
+    if ((log.actionId === config.Constants.startActionId || log.actionId === config.Constants.stopActionId) &&
       (currentBeginDate === null || currentBeginDate.getTime() > newDateTime)) {
       setDate(currentSession.sessionId, true, newDate, promise);
     } else if (currentBeginDate != null && (currentEndDate === null || currentEndDate.getTime() < newDateTime)) {

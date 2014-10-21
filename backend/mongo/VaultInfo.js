@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var config = require('./../../Config');
 var VaultInfo;
 var MODEL_NAME = 'vaultInfo';
 var SCHEMA = {
@@ -15,11 +16,15 @@ var SCHEMA = {
 VaultInfo = mongoose.model(MODEL_NAME, new mongoose.Schema(SCHEMA), MODEL_NAME);
 var VaultMetaData = function() {
   var canUpdateStatus = function(actionId) {
-    return (actionId === 18 || actionId === 0);
+    return (actionId === config.Constants.stopActionId || actionId === config.Constants.startActionId);
   };
   var transformData = function(data) {
-    var temp = { vaultId: data.vaultId, isRunning: data.actionId === 0, sessionId: data.sessionId };
-    if (data.actionId === 0) {
+    var temp = {
+      vaultId: data.vaultId,
+      isRunning: data.actionId === config.Constants.startActionId,
+      sessionId: data.sessionId
+    };
+    if (data.actionId === config.Constants.stopActionId) {
       temp.vaultIdFull = data.valueOne;
       temp.hostName = data.valueTwo || '';
     }
