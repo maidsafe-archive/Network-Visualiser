@@ -10,7 +10,8 @@ var constants = {
   minLengthForDecode: 6,
   naPersonaId: 10,
   networkHealthActionId: 17,
-  maxActionIdRange: 18,
+  maxActionIdRange: 19,
+  connectionMapActionId: 19,
   nextBranchConfig: {
     serverPort: 9080,
     socketPort: 9081,
@@ -37,7 +38,11 @@ var validationMsg = {
   VALUE_ONE_CANNOT_BE_EMPTY: 'value1 can not be empty',
   ACTIONID_NOT_IN_RANGE: 'Action id is not in valid range (0 - ' + constants.maxActionIdRange + ')',
   INVALID_DATE_FORMAT: 'Invalid date format',
-  FIELD_MANDATORY: ' field is mandatory'
+  FIELD_MANDATORY: ' field is mandatory',
+  VALUT_ADDED_OR_REMOVED_MUST_BE_PRESENT: 'Vault Added or Removed value must be present',
+  VAULT_ADDED_MUST_BE_STRING: 'Vault Added or Removed must be of string type',
+  VAULT_REMOVED_MUST_BE_STRING: 'Vault Added or Removed must be of string type',
+  CLOSEST_VAULTS_MUST_BE_ARRAY: 'closeGroupVaults must be an Array'
 };
 
 exports.Constants = constants;

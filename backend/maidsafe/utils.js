@@ -34,14 +34,8 @@ var formatDate = function(log) {
   return true;
 };
 var prepareLogModel = function(log) {
-  if (log.hasOwnProperty('vault_id')) {
-    transformLogToCamelCase(log);
-  }
   if (!log.hasOwnProperty('personaId')) {
     log.personaId = config.Constants.naPersonaId;
-  }
-  if (!isNaN(log.actionId)) {
-    log.actionId = parseInt(log.actionId);
   }
   if (!isNaN(log.personaId)) {
     log.personaId = parseInt(log.personaId);
@@ -65,9 +59,7 @@ exports.assertLogModelErrors = function(log) {
     if (isNaN(log.personaId)) {
       addError(validationMsg.PERSONA_ID_NOT_A_NUMBER);
     }
-    if (isNaN(log.actionId)) {
-      addError(validationMsg.ACTION_ID_NOT_A_NUMBER);
-    } else if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
+    if (!(log.actionId >= 0 && log.actionId <= config.Constants.maxActionIdRange)) {
       addError(validationMsg.ACTIONID_NOT_IN_RANGE);
     }
     if (log.actionId === config.Constants.networkHealthActionId && isNaN(log.valueOne)) {
@@ -99,10 +91,43 @@ exports.assertLogModelErrors = function(log) {
     validateNumerics();
     validateString();
   };
-  prepareLogModel(log);
+  var validateConnectionMapLog = function() {
+    if (!log.vaultId) {
+      addError(validationMsg.VAULTID_CANNOT_BE_EMPTY);
+    }
+    if (!log.valueOne || (!log.valueOne.vaultAdded && !log.valueOne.vaultRemoved)) {
+      addError(validationMsg.VALUT_ADDED_OR_REMOVED_MUST_BE_PRESENT);
+      return;
+    }
+    if (log.valueOne.hasOwnProperty('vaultAdded') && typeof(log.valueOne.vaultAdded) !== 'string') {
+      addError(validationMsg.VAULT_ADDED_MUST_BE_STRING);
+    }
+    if (log.valueOne.hasOwnProperty('vaultRemoved') && typeof(log.valueOne.vaultRemoved) !== 'string') {
+      addError(validationMsg.VAULT_REMOVED_MUST_BE_STRING);
+    }
+    if (log.valueOne.hasOwnProperty('closeGroupVaults') && typeof(log.valueOne.closeGroupVaults) !== 'object') {
+      addError(validationMsg.CLOSEST_VAULTS_MUST_BE_ARRAY);
+    }
+  };
+  if (log.hasOwnProperty('vault_id')) {
+    transformLogToCamelCase(log);
+  }
   if (log.ts && !formatDate(log)) {
     addError(validationMsg.INVALID_DATE_FORMAT);
   }
+  if (isNaN(log.actionId)) {
+    addError(validationMsg.ACTION_ID_NOT_A_NUMBER);
+    return errors;
+  }
+  log.actionId = parseInt(log.actionId);
+  if (log.actionId === config.Constants.connectionMapActionId) {
+    if (log.valueOne && typeof log.valueOne === 'string') {
+      log.valueOne = JSON.parse(log.valueOne);
+    }
+    validateConnectionMapLog();
+    return errors;
+  }
+  prepareLogModel(log);
   validateLog();
   return errors;
 };

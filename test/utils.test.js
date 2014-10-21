@@ -172,4 +172,16 @@ describe('Utils Test Suite', function() {
     };
     should(utils.assertLogModelErrors(log)).be.ok;
   });
+  it('Should throw an error if vault id is empty for Connection Map Log', function() {
+    var log = { 'sessionId': 'd33e477f-e573-4fb8-c113-e0083afe7ce4',
+      'actionId': 19,
+      vaultId: '',
+      valueOne: {
+        vaultAdded: 'sds.sdsds',
+        vaultRemoved: 'sdsd..sdssd'
+      },
+      'ts': '2014-10-10 03:32:09.350'
+    };
+    should(utils.assertLogModelErrors(log)).be.ok;
+  });
 });

@@ -7,6 +7,9 @@ var sessionInfo = require('./SessionInfo.js');
 var testnetStatus = require('./TestnetStatus.js');
 var dbUtils = require('./DBUtils.js');
 var config = require('./../../Config.js');
+var connectionMapBridge = require('./connection_map/connectionmapbridge');
+var connectionMap = connectionMapBridge.bridge;
+
 exports.setupMongooseConnection = function(callback, path) {
   mongoose.connect(path || config.Constants.mongoCon, function(connectionError) {
     if (connectionError) {
@@ -23,6 +26,7 @@ exports.setupMongooseConnection = function(callback, path) {
     sessionInfo = sessionInfo.SessionMetaData(db);
     testnetStatus = testnetStatus.TestnetStatusInfo(db);
     dbUtils = dbUtils.getDBUtil(db);
+    connectionMap.setDB(db);
     callback();
   });
 };
@@ -41,7 +45,11 @@ exports.addLog = function(log, promise, refreshSessionsCallback) {
         sessionInfo.updateSessionInfo(log, refreshSessionsCallback).then(function() {
           var sessionId = log.sessionId;
           delete log.sessionId;
-          vaultLog.save(sessionId, log).then(function(data) {
+          vaultLog.save(sessionId, log, function(err, data) {
+            if (err) {
+              promise(err);
+              return;
+            }
             sessionInfo.getSessionNameForId(sessionId).then(function(sessionName) {
               if (!data || !sessionName) {
                 promise('Error adding log');
@@ -166,3 +174,8 @@ exports.updateTestnetStatus = function(data) {
 exports.getTestnetStatus = function() {
   return testnetStatus.getTestnetStatus();
 };
+exports.pushToQueue = function(log) {
+  // TODO need to implement FIFO queue
+  return log;
+};
+exports.connectionMap = connectionMap;
