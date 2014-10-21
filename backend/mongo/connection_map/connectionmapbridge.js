@@ -1,21 +1,14 @@
-var mongoose = require('mongoose');
+var ActualConnectionHandler = require('./ActualConnection');
 var MongoBridge = function() {
   var instance = this;
-  var db;
-
-  instance.setDB = function(dbCon) {
-    db = dbCon;
+  var dbCon;
+  var actualConnection;
+  instance.setDB = function(db) {
+    dbCon = db;
+    actualConnection = new ActualConnectionHandler(db);
   };
   instance.addActualLog = function(log, callback) {
-    var promise = new mongoose.Promise();
-    if (callback) {
-      promise.addBack(callback);
-    }
-    // TODO handle and save the log
-    setTimeout(function() {
-      promise.complete('Connection Map Saved');
-    }, 1000);
-    return promise;
+    return actualConnection.save(log, callback);
   };
   instance.updateExpected = function(log, promise) {
     // TODO handle and save the log
