@@ -38,7 +38,9 @@ var validationMsg = {
   VALUE_ONE_CANNOT_BE_EMPTY: 'value1 can not be empty',
   ACTIONID_NOT_IN_RANGE: 'Action id is not in valid range (0 - ' + constants.maxActionIdRange + ')',
   INVALID_DATE_FORMAT: 'Invalid date format',
-  FIELD_MANDATORY: ' field is mandatory'
+  FIELD_MANDATORY: ' field is mandatory',
+  VAULT_ADDED_REMOVED_MUST_BE_STRING: 'Vault Added or Removed must be of string type',
+  CLOSEST_VAULTS_MUST_BE_ARRAY: 'closeGroupVaults must be an Array'
 };
 
 exports.Constants = constants;
