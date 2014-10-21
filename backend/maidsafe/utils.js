@@ -107,7 +107,10 @@ exports.assertLogModelErrors = function(log) {
     return errors;
   }
   log.actionId = parseInt(log.actionId);
-  if (log.actionId === 19) {
+  if (log.actionId === config.Constants.connectionMapActionId) {
+    if (log.valueOne && typeof log.valueOne === 'string') {
+      log.valueOne = JSON.parse(log.valueOne);
+    }
     validateConnectionMapLog();
     return errors;
   }

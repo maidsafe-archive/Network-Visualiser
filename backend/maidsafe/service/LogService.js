@@ -12,9 +12,6 @@ var saveLog = function(req, res) {
   }
   var handler  = new Handler.SaveLogHandler(res);
   if (log.actionId === config.Constants.connectionMapActionId) {
-    if (log && log.valueOne && typeof log.valueOne === 'string') {
-      log = JSON.parse(log.valueOne);
-    }
     bridge.connectionMap.addActualLog(log, function(err, data) {
       res.status(err ? 500 : 200);
       res.send(err ? err.message : data);
