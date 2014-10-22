@@ -24,7 +24,7 @@ var VaultMetaData = function() {
       isRunning: data.actionId === config.Constants.startActionId,
       sessionId: data.sessionId
     };
-    if (data.actionId === config.Constants.stopActionId) {
+    if (data.actionId === config.Constants.startActionId) {
       temp.vaultIdFull = data.valueOne;
       temp.hostName = data.valueTwo || '';
     }
@@ -72,6 +72,10 @@ var VaultMetaData = function() {
     VaultInfo.find({ sessionId: sessionId, isRunning: 1 }, { _id: 0, vaultId: 1, vaultIdFull: 1, hostName: 1 },
       function(err, vaults) {
         /* jscs:enable disallowDanglingUnderscores */
+        if (err) {
+          promise.error(err);
+          return;
+        }
         promise.complete(vaults);
       });
     return promise;

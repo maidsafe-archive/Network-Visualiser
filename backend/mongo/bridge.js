@@ -86,6 +86,15 @@ exports.vaultHistory = function(sessionName, vaultId, criteria, page, max, callb
   });
   return promise;
 };
+exports.getActiveVaultsFullId = function(sessionId) {
+  var promise = new mongoose.Promise();
+  vaultInfo.getActiveVaults(sessionId).then(function(vaults) {
+    promise.complete(vaults);
+  }, function(err) {
+    promise.error(err);
+  });
+  return promise;
+};
 exports.getActiveVaults = function(sessionName) {
   var promise = new mongoose.Promise();
   sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {

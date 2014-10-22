@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var config = require('./../../../Config');
 var partialSort = require('./partialsort');
+var bridge = require('./../bridge');
 
 module.exports = function(dbCon) {
   var MongoosePromise = mongoose.Promise;
@@ -46,30 +47,29 @@ module.exports = function(dbCon) {
     ));
     return diffsForUpdate;
   };
-  var getExpectedConnections = function(sessionId, callback) {
+  var getExpectedConnections = function(sessionId, activeIds, callback) {
     var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
     var map = function(){
-      var data = {ts:this.ts,vaultId: this.vaultId, closestVaults:this.closestVaults};
+      var data = { ts:this.ts,vaultId: this.vaultId, closestVaults:this.closestVaults };
       emit(this.vaultId,data);
     };
-    // reduce function
     var reduce = function(key, values){
       return values[0];
     };
-    // map-reduce command
     var command = {
-      mapreduce: collectionName, // the name of the collection we are map-reducing
-      map: map.toString(), // a function for mapping
-      reduce: reduce.toString(), // a function  for reducing
-      sort: {ts: -1}, // sorting on field ts
-      out: {inline: 1}  // doesn't create a new collection, includes the result in the output obtained
+      mapreduce: collectionName,
+      map: map.toString(),
+      reduce: reduce.toString(),
+      sort: { ts: -1 },
+      out: { inline: 1 },  // doesn't create a new collection, includes the result in the output obtained
+      query: { vaultId: { $in : activeIds } } // this condition is not working thus filtering in map function
     };
-    dbCon.db.executeDbCommand(command, function(err, dbres) {
-      if (dbres.documents[0].errmsg === 'ns doesn\'t exist' ) {
-        callback(err, []);
+    dbCon.db.command(command, function(err, dbres) {
+      if (err && err.errmsg === 'ns doesn\'t exist' ) {
+        callback(null, []);
         return;
       }
-      callback(err, dbres.documents[0].results);
+      callback(err, dbres.results);
     });
   };
   var saveExpectedConnection = function(sessionId, data, callback) {
@@ -108,7 +108,13 @@ module.exports = function(dbCon) {
         );
       }
     };
-    getExpectedConnections(log.sessionId, onExpectedConnections);
+    bridge.getActiveVaultsFullId(log.sessionId).then(function(activeValuts) {
+      var activeIds = [];
+      for(var index in activeValuts) {
+        activeIds.push(activeValuts[index].vaultIdFull);
+      }
+      getExpectedConnections(log.sessionId, activeIds, onExpectedConnections);
+    });
     return promise;
   };
   instance.updateExpectedConnection = updateExpectedConnection;
