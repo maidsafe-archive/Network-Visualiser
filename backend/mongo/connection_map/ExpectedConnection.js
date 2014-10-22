@@ -152,6 +152,33 @@ module.exports = function(dbCon) {
     });
     return promise;
   };
+  var retrieveExpectedConnections = function(sessionId, callback) {
+    var promise = new MongoosePromise();
+    if (callback) {
+      promise.addBack(callback);
+    }
+    bridge.getActiveVaultsFullId(sessionId).then(function(activeValuts) {
+      var activeIds = [];
+      for (var index in activeValuts) {
+        if (activeValuts[index]) {
+          activeIds.push(activeValuts[index].vaultIdFull);
+        }
+      }
+      getExpectedConnections(sessionId, activeIds, function(err, data) {
+        if (err) {
+          promise.error(err);
+          return;
+        }
+        promise.complete(data);
+      });
+    });
+    return promise;
+  };
+  var dropCollection = function(sessionId) {
+    dbCon.db.dropCollection(sessionId + COLLECTION_NAME_SUFFIX);
+  };
+  instance.dropCollection = dropCollection;
+  instance.getExpectedConnections = retrieveExpectedConnections;
   instance.updateExpectedConnection = updateExpectedConnection;
   return instance;
 };

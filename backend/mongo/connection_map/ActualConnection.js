@@ -25,6 +25,10 @@ module.exports = function(dbCon) {
     });
     return promise;
   };
+  var dropCollection = function(sessionId) {
+    dbCon.db.dropCollection(sessionId + COLLECTION_NAME_SUFFIX);
+  };
   instance.save = saveActualLog;
+  instance.dropCollection = dropCollection;
   return instance;
 };

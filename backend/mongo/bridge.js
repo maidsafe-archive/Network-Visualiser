@@ -152,6 +152,8 @@ exports.deleteActiveSession = function(sessionName, promise) {
   };
   sessionInfo.getSessionIdForName(sessionName).then(function(data) {
     QueueService.deleteQueue(data);
+    connectionMap.dropActualLog(data);
+    connectionMap.dropExpectedConnections(data);
     deleteSession();
   }, function(err) {
     console.error(err);

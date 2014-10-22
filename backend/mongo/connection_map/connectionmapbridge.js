@@ -14,6 +14,15 @@ var MongoBridge = function() {
   instance.addActualLog = function(log, callback) {
     return actualConnection.save(log, callback);
   };
+  instance.dropActualLog = function(sessionId) {
+    return actualConnection.dropCollection(sessionId);
+  };
+  instance.dropExpectedConnections = function(sessionId) {
+    return expectedConnection.dropCollection(sessionId);
+  };
+  instance.getExpectedConnections = function(sessionId, callback) {
+    return expectedConnection.getExpectedConnections(sessionId, callback);
+  };
   QueueService.subscribe(function(msg, done) {
     expectedConnection.updateExpectedConnection(msg, function(err) {
       if (err) {

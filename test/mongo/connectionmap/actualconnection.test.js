@@ -29,6 +29,7 @@ describe('ActualConnection Model', function() {
     };
     actualConnection.save(log, function(err) {
       should(err).be.ok;
+      actualConnection.dropCollection('ghghg..jhjhj');
       done();
     });
   });
