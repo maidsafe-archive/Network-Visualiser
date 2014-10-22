@@ -1,24 +1,25 @@
-var closerToTarget = function(nodeA, nodeB, target) {
-  // return -1 if a closer than b
-  // return 1 if b closer than a
-  // 0 if equal
-  var nodeAId = HexDecode(nodeA);
-  var nodeBId = HexDecode(nodeB);
-  var targetId = HexDecode(target);
-  for (var i = 0; i < 64; ++i) {
-    var result1 = nodeAId[i] ^ targetId[i];
-    var result2 = nodeBId[i] ^ targetId[i];
-    if (result1 != result2)
-      return result1 < result2 ? -1 : 1;
-  }
-  return 0;
-};
-var HexDecode = function(hex) {
+var hexDecode = function(hex) {
   var rawId = [];
   for (var i = 0; i < hex.length; i += 2) {
     rawId.push(parseInt(hex.substr(i, 2), 16));
   }
   return rawId;
+};
+var closerToTarget = function(nodeA, nodeB, target) {
+  // return -1 if a closer than b
+  // return 1 if b closer than a
+  // 0 if equal
+  var nodeAId = hexDecode(nodeA);
+  var nodeBId = hexDecode(nodeB);
+  var targetId = hexDecode(target);
+  for (var i = 0; i < 64; ++i) {
+    var result1 = nodeAId[i] ^ targetId[i];
+    var result2 = nodeBId[i] ^ targetId[i];
+    if (result1 !== result2) {
+      return result1 < result2 ? -1 : 1;
+    }
+  }
+  return 0;
 };
 var bisect = function(items, x, target) {
   var mid;
@@ -37,9 +38,9 @@ var bisect = function(items, x, target) {
 var insort = function(closest, x, target) {
   var insertAt = bisect(closest, x, target);
   var clone = closest.splice(0);
-  closest = clone.slice(0, insertAt)
+  closest = clone.slice(0, insertAt);
   closest.push(x);
-  closest = closest.concat(clone.slice(insertAt, clone.length))
+  closest = closest.concat(clone.slice(insertAt, clone.length));
   closest.pop();
   return closest;
 };
@@ -50,7 +51,7 @@ var sort = function(vaults, maxSize, target) {
     return closerToTarget(i, j, target);
   });
   max = closest[maxSize - 1];
-  for (var i=maxSize; i<vaults.length; i++) {
+  for (var i = maxSize; i < vaults.length; i++) {
     if (closerToTarget(max, vaults[i], target) > 0) {
       closest = insort(closest, vaults[i], target);
       max = closest[maxSize - 1];
@@ -60,4 +61,4 @@ var sort = function(vaults, maxSize, target) {
   return closest;
 };
 exports.sort = sort;
-exports.closerToTarget = closerToTarget
+exports.closerToTarget = closerToTarget;

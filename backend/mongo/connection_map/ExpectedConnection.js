@@ -1,3 +1,5 @@
+/* global emit:false */
+
 var mongoose = require('mongoose');
 var config = require('./../../../Config');
 var partialSort = require('./partialsort');
@@ -19,25 +21,52 @@ module.exports = function(dbCon) {
   var formatConnectionData = function(ts, vaultId, closeConnections) {
     return { ts: ts, vaultId: vaultId, closestVaults: closeConnections };
   };
-  var computeExpectedConnections = function(log, expConSnapshot) {
+  var computeExpectedConnectionsOnStop = function(log, expConSnapshot) {
     var vaultLastSnapshot;
     var vaultIds = [];
     var diffsForUpdate = [];
     for (var i in expConSnapshot) {
-      vaultLastSnapshot = expConSnapshot[i].value;
-      vaultIds.push(vaultLastSnapshot.vaultId);
-      if (vaultLastSnapshot.closestVaults.indexOf(log.valueOne) === -1) {
-        if (vaultLastSnapshot.closestVaults.length === config.Constants.maxClosest &&
-          partialSort.closerToTarget(log.valueOne,
-            vaultLastSnapshot.closestVaults[config.Constants.maxClosest -1],
-            vaultLastSnapshot.vaultId) > -1) {
-          continue;
+      if (expConSnapshot[i].value && expConSnapshot[i].value.vaultId !== log.valueOne) {
+        vaultIds.push(expConSnapshot[i].value.vaultId);
+      }
+    }
+    for (var index in expConSnapshot) {
+      if (expConSnapshot[index]) {
+        vaultLastSnapshot = expConSnapshot[index].value;
+        if (log.valueOne !== vaultLastSnapshot.vaultId && vaultLastSnapshot.closestVaults.indexOf(log.valueOne) > -1) {
+          diffsForUpdate.push(formatConnectionData(log.ts,
+            vaultLastSnapshot.vaultId,
+            partialSort.sort(vaultIds, config.Constants.maxClosest, vaultLastSnapshot.vaultId)
+          ));
         }
-        vaultLastSnapshot.closestVaults.push(log.valueOne);
-        diffsForUpdate.push(formatConnectionData(log.ts,
-          vaultLastSnapshot.vaultId,
-          partialSort.sort(vaultLastSnapshot.closestVaults, config.Constants.maxClosest, vaultLastSnapshot.vaultId)
-        ));
+      }
+    }
+    return diffsForUpdate;
+  };
+  var computeExpectedConnections = function(log, expConSnapshot) {
+    var vaultLastSnapshot;
+    var vaultIds = [];
+    var diffsForUpdate = [];
+    var compute = function() {
+      if (vaultLastSnapshot.closestVaults.length === config.Constants.maxClosest &&
+        partialSort.closerToTarget(log.valueOne,
+          vaultLastSnapshot.closestVaults[config.Constants.maxClosest - 1],
+          vaultLastSnapshot.vaultId) > -1) {
+        return;
+      }
+      vaultLastSnapshot.closestVaults.push(log.valueOne);
+      diffsForUpdate.push(formatConnectionData(log.ts,
+        vaultLastSnapshot.vaultId,
+        partialSort.sort(vaultLastSnapshot.closestVaults, config.Constants.maxClosest, vaultLastSnapshot.vaultId)
+      ));
+    };
+    for (var i in expConSnapshot) {
+      if (expConSnapshot[i]) {
+        vaultLastSnapshot = expConSnapshot[i].value;
+        vaultIds.push(vaultLastSnapshot.vaultId);
+        if (vaultLastSnapshot.closestVaults.indexOf(log.valueOne) === -1) {
+          compute();
+        }
       }
     }
     // update the started vaults expected connections
@@ -49,11 +78,10 @@ module.exports = function(dbCon) {
   };
   var getExpectedConnections = function(sessionId, activeIds, callback) {
     var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
-    var map = function(){
-      var data = { ts:this.ts,vaultId: this.vaultId, closestVaults:this.closestVaults };
-      emit(this.vaultId,data);
+    var map = function() {
+      emit(this.vaultId, { ts: this.ts, vaultId: this.vaultId, closestVaults: this.closestVaults });
     };
-    var reduce = function(key, values){
+    var reduce = function(key, values) {
       return values[0];
     };
     var command = {
@@ -62,10 +90,10 @@ module.exports = function(dbCon) {
       reduce: reduce.toString(),
       sort: { ts: -1 },
       out: { inline: 1 },  // doesn't create a new collection, includes the result in the output obtained
-      query: { vaultId: { $in : activeIds } } // this condition is not working thus filtering in map function
+      query: { vaultId: { $in: activeIds } } // this condition is not working thus filtering in map function
     };
     dbCon.db.command(command, function(err, dbres) {
-      if (err && err.errmsg === 'ns doesn\'t exist' ) {
+      if (err && err.errmsg === 'ns doesn\'t exist') {
         callback(null, []);
         return;
       }
@@ -80,6 +108,11 @@ module.exports = function(dbCon) {
   var updateExpectedConnection = function(log, callback) {
     var diffs;
     var promise = new MongoosePromise();
+    var mockHandler = function(err) {
+      if (err) {
+        console.log(err);
+      }
+    };
     if (callback) {
       promise.addBack(callback);
     }
@@ -99,19 +132,21 @@ module.exports = function(dbCon) {
           new GeneralHandler(promise));
         return;
       }
-      diffs = computeExpectedConnections(log, docs);
+      diffs = log.actionId === config.Constants.startActionId ?
+        computeExpectedConnections(log, docs) : computeExpectedConnectionsOnStop(log, docs);
       for (var i = 0; i < diffs.length; i++) {
         saveExpectedConnection(log.sessionId,
           diffs[i],
-          i === diffs.length-1 ? new GeneralHandler(promise) : function(err) {
-          }
+          (i === diffs.length - 1) ? new GeneralHandler(promise) : mockHandler
         );
       }
     };
     bridge.getActiveVaultsFullId(log.sessionId).then(function(activeValuts) {
       var activeIds = [];
-      for(var index in activeValuts) {
-        activeIds.push(activeValuts[index].vaultIdFull);
+      for (var index in activeValuts) {
+        if (activeValuts[index]) {
+          activeIds.push(activeValuts[index].vaultIdFull);
+        }
       }
       getExpectedConnections(log.sessionId, activeIds, onExpectedConnections);
     });
