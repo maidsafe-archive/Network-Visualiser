@@ -30,9 +30,8 @@ var saveLog = function(req, res) {
       queue.pushToQueue(log);
     }
     handler.promise();
-  }
+  };
   bridge.addLog(log, addLogHandler, handler.refreshSessionsCallback);
-
 };
 var selectLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;

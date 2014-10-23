@@ -26,8 +26,8 @@ module.exports = function(dbCon) {
     if (index < 0) {
       return array;
     }
-    return array.slice(0, index).concat(array.slice(++index))
-  }
+    return array.slice(0, index).concat(array.slice(++index));
+  };
   var computeExpectedConnectionsOnStop = function(log, expConSnapshot) {
     var vaultLastSnapshot;
     var vaultIds = [];
@@ -43,7 +43,8 @@ module.exports = function(dbCon) {
         if (log.valueOne !== vaultLastSnapshot.vaultId && vaultLastSnapshot.closestVaults.indexOf(log.valueOne) > -1) {
           diffsForUpdate.push(formatConnectionData(log.ts,
             vaultLastSnapshot.vaultId,
-            partialSort.sort(removeFromArray(vaultLastSnapshot.vaultId, vaultIds), config.Constants.maxClosest, vaultLastSnapshot.vaultId)
+            partialSort.sort(removeFromArray(vaultLastSnapshot.vaultId, vaultIds), config.Constants.maxClosest,
+              vaultLastSnapshot.vaultId)
           ));
         }
       }
@@ -178,7 +179,9 @@ module.exports = function(dbCon) {
           return;
         }
         for (var i in data) {
-          result.push(data[i].value);
+          if (data[i]) {
+            result.push(data[i].value);
+          }
         }
         promise.complete(result);
       });

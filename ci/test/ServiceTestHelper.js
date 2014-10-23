@@ -18,7 +18,7 @@ var Helper = function() {
   };
   instance.getDB = function() {
     return db;
-  }
+  };
   instance.closeAndDropDB = function() {
     if (!db) {
       throw 'Database not initialized';
