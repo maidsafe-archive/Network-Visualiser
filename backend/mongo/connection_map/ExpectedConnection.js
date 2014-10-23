@@ -100,12 +100,12 @@ module.exports = function(dbCon) {
       out: { inline: 1 },  // doesn't create a new collection, includes the result in the output obtained
       query: { vaultId: { $in: activeIds } }
     };
-    dbCon.db.command(command, function(err, dbres) {
+    dbCon.db.command(command, function(err, dbRes) {
       if (err && err.errmsg === 'ns doesn\'t exist') {
         callback(null, []);
         return;
       }
-      callback(err, dbres.results);
+      callback(err, dbRes.results);
     });
   };
   var saveExpectedConnection = function(sessionId, data, callback) {
