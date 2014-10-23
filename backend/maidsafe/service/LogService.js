@@ -7,6 +7,7 @@ var queue = require('./QueueService');
 
 var saveLog = function(req, res) {
   var log = req.body;
+  var sessionId = log.sessionId;
   var err = utils.assertLogModelErrors(log);
   if (err) {
     res.send(400, err);
@@ -20,10 +21,18 @@ var saveLog = function(req, res) {
     });
     return;
   }
-  bridge.addLog(log, handler.promise, handler.refreshSessionsCallback);
-  if (log.actionId === config.Constants.startActionId || log.actionId === config.Constants.stopActionId) {
-    queue.pushToQueue(log);
+  var addLogHandler = function(err) {
+    if (err) {
+      handler.promise(err);
+    }
+    if (log.actionId === config.Constants.startActionId || log.actionId === config.Constants.stopActionId) {
+      log.sessionId = sessionId;
+      queue.pushToQueue(log);
+    }
+    handler.promise();
   }
+  bridge.addLog(log, addLogHandler, handler.refreshSessionsCallback);
+
 };
 var selectLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;

@@ -7,7 +7,7 @@ var Helper = function() {
   var db;
   var instance = this;
   var createSession = instance.createSession = function(callback) {
-    bridge.createSession('TestSession21', 'demo', function(err, data) {
+    bridge.createSession('TestSession', 'demo', function(err, data) {
       if (err) {
         callback(err);
         return;
@@ -16,6 +16,9 @@ var Helper = function() {
       callback();
     });
   };
+  instance.getDB = function() {
+    return db;
+  }
   instance.closeAndDropDB = function() {
     if (!db) {
       throw 'Database not initialized';

@@ -21,6 +21,13 @@ module.exports = function(dbCon) {
   var formatConnectionData = function(ts, vaultId, closeConnections) {
     return { ts: ts, vaultId: vaultId, closestVaults: closeConnections };
   };
+  var removeFromArray = function(value, array) {
+    var index = array.indexOf(value);
+    if (index < 0) {
+      return array;
+    }
+    return array.slice(0, index).concat(array.slice(++index))
+  }
   var computeExpectedConnectionsOnStop = function(log, expConSnapshot) {
     var vaultLastSnapshot;
     var vaultIds = [];
@@ -36,7 +43,7 @@ module.exports = function(dbCon) {
         if (log.valueOne !== vaultLastSnapshot.vaultId && vaultLastSnapshot.closestVaults.indexOf(log.valueOne) > -1) {
           diffsForUpdate.push(formatConnectionData(log.ts,
             vaultLastSnapshot.vaultId,
-            partialSort.sort(vaultIds, config.Constants.maxClosest, vaultLastSnapshot.vaultId)
+            partialSort.sort(removeFromArray(vaultLastSnapshot.vaultId, vaultIds), config.Constants.maxClosest, vaultLastSnapshot.vaultId)
           ));
         }
       }
@@ -72,7 +79,7 @@ module.exports = function(dbCon) {
     // update the started vaults expected connections
     diffsForUpdate.push(formatConnectionData(log.ts,
       log.valueOne,
-      partialSort.sort(vaultIds, config.Constants.maxClosest, log.valueOne)
+      partialSort.sort(removeFromArray(log.valueOne, vaultIds), config.Constants.maxClosest, log.valueOne)
     ));
     return diffsForUpdate;
   };
@@ -82,7 +89,7 @@ module.exports = function(dbCon) {
       emit(this.vaultId, { ts: this.ts, vaultId: this.vaultId, closestVaults: this.closestVaults });
     };
     var reduce = function(key, values) {
-      return values[0];
+      return values[values.length - 1];
     };
     var command = {
       mapreduce: collectionName,
@@ -90,7 +97,7 @@ module.exports = function(dbCon) {
       reduce: reduce.toString(),
       sort: { ts: -1 },
       out: { inline: 1 },  // doesn't create a new collection, includes the result in the output obtained
-      query: { vaultId: { $in: activeIds } } // this condition is not working thus filtering in map function
+      query: { vaultId: { $in: activeIds } }
     };
     dbCon.db.command(command, function(err, dbres) {
       if (err && err.errmsg === 'ns doesn\'t exist') {
@@ -165,11 +172,15 @@ module.exports = function(dbCon) {
         }
       }
       getExpectedConnections(sessionId, activeIds, function(err, data) {
+        var result = [];
         if (err) {
           promise.error(err);
           return;
         }
-        promise.complete(data);
+        for (var i in data) {
+          result.push(data[i].value);
+        }
+        promise.complete(result);
       });
     });
     return promise;
