@@ -1,5 +1,3 @@
-/* global emit:false */
-
 var mongoose = require('mongoose');
 var config = require('./../../../Config');
 var partialSort = require('./partialsort');
@@ -33,13 +31,13 @@ module.exports = function(dbCon) {
     var vaultIds = [];
     var diffsForUpdate = [];
     for (var i in expConSnapshot) {
-      if (expConSnapshot[i].value && expConSnapshot[i].value.vaultId !== log.valueOne) {
-        vaultIds.push(expConSnapshot[i].value.vaultId);
+      if (expConSnapshot[i] && expConSnapshot[i].vaultId !== log.valueOne) {
+        vaultIds.push(expConSnapshot[i].vaultId);
       }
     }
     for (var index in expConSnapshot) {
       if (expConSnapshot[index]) {
-        vaultLastSnapshot = expConSnapshot[index].value;
+        vaultLastSnapshot = expConSnapshot[index];
         if (log.valueOne !== vaultLastSnapshot.vaultId && vaultLastSnapshot.closestVaults.indexOf(log.valueOne) > -1) {
           diffsForUpdate.push(formatConnectionData(log.ts,
             vaultLastSnapshot.vaultId,
@@ -70,7 +68,7 @@ module.exports = function(dbCon) {
     };
     for (var i in expConSnapshot) {
       if (expConSnapshot[i]) {
-        vaultLastSnapshot = expConSnapshot[i].value;
+        vaultLastSnapshot = expConSnapshot[i];
         vaultIds.push(vaultLastSnapshot.vaultId);
         if (vaultLastSnapshot.closestVaults.indexOf(log.valueOne) === -1) {
           compute();
@@ -86,26 +84,33 @@ module.exports = function(dbCon) {
   };
   var getExpectedConnections = function(sessionId, activeIds, callback) {
     var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
-    var map = function() {
-      emit(this.vaultId, { ts: this.ts, vaultId: this.vaultId, closestVaults: this.closestVaults });
+    var counter = activeIds.length;
+    var monitor = {};
+    var reduce = function(docs) {
+      var reducedResults = [];
+      for (var i = 0; i < docs.length && counter > 0; i++) {
+        if (!monitor.hasOwnProperty(docs[i].vaultId)) {
+          reducedResults.push(docs[i]);
+          monitor[docs[i].vaultId] = true;
+          counter--;
+        }
+      }
+      return reducedResults;
     };
-    var reduce = function(key, values) {
-      return values[values.length - 1];
-    };
-    var command = {
-      mapreduce: collectionName,
-      map: map.toString(),
-      reduce: reduce.toString(),
-      sort: { ts: -1 },
-      out: { inline: 1 },  // doesn't create a new collection, includes the result in the output obtained
-      query: { vaultId: { $in: activeIds } }
-    };
-    dbCon.db.command(command, function(err, dbRes) {
-      if (err && err.errmsg === 'ns doesn\'t exist') {
-        callback(null, []);
+    dbCon.db.collection(collectionName, function(err, coll) {
+      if (err) {
+        callback(err);
         return;
       }
-      callback(err, dbRes.results);
+      coll.find({ vaultId: { $in: activeIds } }).sort([
+        [ '_id', 'descending' ]
+      ]).toArray(function(err, docs) {
+        if (err) {
+          callback(err);
+          return;
+        }
+        callback(null, reduce(docs));
+      });
     });
   };
   var saveExpectedConnection = function(sessionId, data, callback) {
@@ -173,17 +178,11 @@ module.exports = function(dbCon) {
         }
       }
       getExpectedConnections(sessionId, activeIds, function(err, data) {
-        var result = [];
         if (err) {
           promise.error(err);
           return;
         }
-        for (var i in data) {
-          if (data[i]) {
-            result.push(data[i].value);
-          }
-        }
-        promise.complete(result);
+        promise.complete(data);
       });
     });
     return promise;

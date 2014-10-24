@@ -174,6 +174,9 @@ exports.clearActiveSession = function(sessionName, callback) {
     return promise;
   }
   sessionInfo.clearActiveSession(sessionName).then(function(sessionId) {
+    QueueService.deleteQueue(sessionId);
+    connectionMap.dropActualLog(sessionId);
+    connectionMap.dropExpectedConnections(sessionId);
     vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {
       vaultLog.deleteVaultsInSession(sessionId, removedVaultIds).then(function(res) {
         promise.complete(res);
