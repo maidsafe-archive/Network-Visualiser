@@ -86,6 +86,15 @@ exports.vaultHistory = function(sessionName, vaultId, criteria, page, max, callb
   });
   return promise;
 };
+exports.getActiveVaultsFullId = function(sessionId) {
+  var promise = new mongoose.Promise();
+  vaultInfo.getActiveVaults(sessionId).then(function(vaults) {
+    promise.complete(vaults);
+  }, function(err) {
+    promise.error(err);
+  });
+  return promise;
+};
 exports.getActiveVaults = function(sessionName) {
   var promise = new mongoose.Promise();
   sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
@@ -143,6 +152,8 @@ exports.deleteActiveSession = function(sessionName, promise) {
   };
   sessionInfo.getSessionIdForName(sessionName).then(function(data) {
     QueueService.deleteQueue(data);
+    connectionMap.dropActualLog(data);
+    connectionMap.dropExpectedConnections(data);
     deleteSession();
   }, function(err) {
     console.error(err);
@@ -163,6 +174,9 @@ exports.clearActiveSession = function(sessionName, callback) {
     return promise;
   }
   sessionInfo.clearActiveSession(sessionName).then(function(sessionId) {
+    QueueService.deleteQueue(sessionId);
+    connectionMap.dropActualLog(sessionId);
+    connectionMap.dropExpectedConnections(sessionId);
     vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {
       vaultLog.deleteVaultsInSession(sessionId, removedVaultIds).then(function(res) {
         promise.complete(res);

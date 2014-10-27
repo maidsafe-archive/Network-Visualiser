@@ -12,6 +12,9 @@ var constants = {
   networkHealthActionId: 17,
   maxActionIdRange: 19,
   connectionMapActionId: 19,
+  startActionId: 0,
+  stopActionId: 18,
+  maxClosest: 4,
   nextBranchConfig: {
     serverPort: 9080,
     socketPort: 9081,

@@ -1,9 +1,9 @@
-var sq = require('simplequeue');
 var queuePool = {};
 var consumer;
 var SessionQueue = function() {
   var msg;
-  var queue = sq.createQueue();
+  var instance = this;
+  var queue = [];
   var STATE = {
     START: 0,
     STOP: 1
@@ -13,11 +13,12 @@ var SessionQueue = function() {
   var broadcast;
   var onReceived;
   broadcast = function() {
-    msg = queue.getMessageSync();
-    if (msg && consumer) {
-      consumer(msg, new DoneCallback());
+    if (consumer) {
+      msg = queue.shift();
+      if (msg) {
+        consumer(JSON.parse(msg), new DoneCallback());
+      }
     }
-    currentState = STATE.STOP;
   };
   DoneCallback = function() {
     var timerId;
@@ -27,6 +28,7 @@ var SessionQueue = function() {
       clearTimeout(timerId);
       if (!completed) {
         completed = true;
+        currentState = STATE.STOP;
         broadcast();
       }
     };
@@ -43,10 +45,11 @@ var SessionQueue = function() {
       broadcast();
     }
   };
-  this.pushToQueue  = function(log) {
-    queue.putMessage(log);
+  instance.pushToQueue  = function(log) {
+    queue.push(JSON.stringify(log));
     onReceived();
   };
+  return instance;
 };
 exports.pushToQueue = function(log) {
   if (!queuePool[log.sessionId]) {
