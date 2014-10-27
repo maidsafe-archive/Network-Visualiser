@@ -40,13 +40,6 @@ window.HistoryCollection = React.createClass({displayName: 'HistoryCollection',
   render: function() {
     var scope = this.props.scope;
     var logsCollection = scope.logs;
-    var totalLogsCount = logsCollection.length;
-    var renderedItemsCount = Math.min(this.state.renderedItemsCount, totalLogsCount);
-    logsCollection = logsCollection.slice(0, renderedItemsCount);
-    if (scope.searchText && scope.searchText != '') {
-      logsCollection = logsCollection.filter(this.filterLogs);
-    }
-
     var rows = _.map(logsCollection, function(log) {
       return (
         LogRow({item: log, scope: scope, key: log.logIndex})
@@ -57,13 +50,13 @@ window.HistoryCollection = React.createClass({displayName: 'HistoryCollection',
       React.DOM.div(null, 
         React.addons.InfiniteScroll({pageStart: 0, 
                                      loadMore: this.loadMoreLogs, 
-                                     hasMore: renderedItemsCount < totalLogsCount, 
+                                     hasMore: scope.paging.hasMore,
                                      loader: React.DOM.div({className: "loader"}, React.DOM.div({className: "loader-animation"}), "Loading ...")}, 
           React.DOM.table(null, 
             rows
           )
         ), 
-         totalLogsCount == renderedItemsCount ? React.DOM.div({style: { 'height':'25px'}}) : null
+         scope.paging.hasMore ? React.DOM.div({style: { 'height':'25px'}}) : null
       )
     );
   },
@@ -72,11 +65,8 @@ window.HistoryCollection = React.createClass({displayName: 'HistoryCollection',
     scope.setReactLogsCollectionItem(this);
   },
   loadMoreLogs: function() {
-    setTimeout(function () {
-      this.setState({
-        renderedItemsCount: this.state.renderedItemsCount + 50
-      });
-    }.bind(this), 500);
+    var scope = this.props.scope;
+    scope.loadNextPage();
   },
   filterLogs: function(element) {
     var scope = this.props.scope;
