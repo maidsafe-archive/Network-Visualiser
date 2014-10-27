@@ -1,4 +1,5 @@
 /* global window:false */
+
 var app = window.angular.module('MaidSafe', [ 'ui-rangeSlider', 'ngReact' ]);
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {
@@ -14,8 +15,9 @@ app.service('layoutService', window.TimelineLayoutService);
 app.controller('timelineCtrl', [
   '$scope', '$rootScope', '$http', '$timeout', 'dataManager', 'playbackService', 'socketService',
   'vaultManager', 'layoutService',
-  function($scope,
-    $rootScope, $http, $timeout, dataManager, playbackService, socketService, vaultManager, layoutService) {
+  function(
+    $scope, $rootScope, $http, $timeout, dataManager, playbackService, socketService, vaultManager, layoutService
+    ) {
     $scope.changedOnPause = false;
     $scope.PLAYER_STATE = { PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause' };
     $scope.playerState = $scope.PLAYER_STATE.STOPPED;
