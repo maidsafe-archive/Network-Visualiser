@@ -46,7 +46,7 @@ var LogManager = function(dbConnConnection) {
       if (err) {
         promise.error(err);
       } else {
-        var q = coll.find(utils.isEmptyObject(criteria) ? criteria: {$or: criteria} , HIDE_FIELDS).sort([
+        var q = coll.find(utils.isEmptyObject(criteria) ? criteria : { $or: criteria }, HIDE_FIELDS).sort([
           [ 'ts', 'descending' ]
         ]);
         if (max > 0) {

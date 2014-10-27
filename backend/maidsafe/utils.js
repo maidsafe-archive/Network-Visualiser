@@ -197,22 +197,23 @@ exports.filterSessionVaultNames = function(sessionId, dbConnName, collections) {
   return sessionVaultNames;
 };
 exports.likeSearchForVault = function(value) {
-  var keys = ['valueOne', 'valueTwo', 'actionId', 'personaId', 'ts'];
+  var keys = [ 'valueOne', 'valueTwo', 'actionId', 'personaId', 'ts' ];
   var criteria = [];
   var key;
   var condition;
   for (var keyIndex in keys) {
-    key = keys[keyIndex];
-    condition = {};
-    if (key === 'actionId' || key === 'personaId') {
-      if (isNaN(value)) {
+    if (keys[keyIndex]) {
+      key = keys[keyIndex];
+      condition = {};
+      if ((key === 'actionId' || key === 'personaId') && isNaN(value)) {
         continue;
+      } else if (key === 'actionId' || key === 'personaId') {
+        condition[key] = parseInt(value);
+      } else { // For like operation on strings
+        condition[key] = new RegExp(value, 'i');
       }
-      condition[key] = parseInt(value);
-    } else { // For like operation on strings
-      condition[key] = new RegExp(value, 'i');
+      criteria.push(condition);
     }
-    criteria.push(condition);
   }
   return criteria;
 };
