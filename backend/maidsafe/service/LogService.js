@@ -39,9 +39,9 @@ var history = function(req, res) {
     res.send(500, 'Missing Session Name');
     return;
   }
-  var timeCriteria = criteria.ts ? { 'ts': { '$lt': criteria.ts } } : {};
+  var searchCriteria = criteria.searchVal ? utils.likeSearchForVault(criteria.searchVal) : {};
   if (utils.isPageRequestValid(criteria)) {
-    bridge.vaultHistory(criteria.sn, criteria.vaultId, timeCriteria,
+    bridge.vaultHistory(criteria.sn, criteria.vaultId, searchCriteria,
       parseInt(criteria.page), parseInt(criteria.max), new Handler.SelectLogsHandler(res));
   } else {
     res.send(500, 'Invalid Request');
