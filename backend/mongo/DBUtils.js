@@ -58,7 +58,7 @@ var DBUtil = function(dbConnection) {
     var outStream = fs.createWriteStream(fileName, { 'flags': 'a' });
     dbConn.db.collection(formattedCollectionName, function(err, col) {
       /* jscs:disable disallowDanglingUnderscores */
-      var stream = col.find({}, { __id: 0, __v: 0 }).sort([
+      var stream = col.find({}, { __id: 0, __v: 0 }).batchSize(10000).sort([
         /* jscs:enable disallowDanglingUnderscores */
         [ 'ts', 'ascending' ]
       ]).stream();

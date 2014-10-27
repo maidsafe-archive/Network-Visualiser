@@ -21,6 +21,13 @@
     <link rel="icon" type="image/ico" href="imgs/favicon.ico" />
 
     <title>Network Visualiser - History View</title>
+    <!-- Suppressing the Search field temporarily. Remove the style below to enable the layout-->
+    <style>
+      header {height: 10px}
+      #history section { top:54px }
+      #history section .table-head { top:25px }
+      .info {display:none}
+    </style>
   </head>
   <body ng-app="MaidSafe" ng-controller="historyCtrl" id="history">
     <header>
@@ -31,7 +38,7 @@
         </p>
       </div>
       <div class="info">
-        <div class="search-wrapper">
+        <div class="search-wrapper" >
           <form id="search-filter">
             <input type="text" style="font-weight: none; text-align: center;" name="focus" class="search-box" required ng-model="searchText" placeholder="Type text to filter" />
 
