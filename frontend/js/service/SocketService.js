@@ -9,7 +9,7 @@ window.SocketService = [
     $rootScope.sessionName = '';
     var socket = window.io.connect($rootScope.socketEndPoint);
     socket.on('log', function(data) {
-      if ($rootScope.realTime && data.sessionName === $rootScope.sessionName) {
+      if ($rootScope.realTime) {
         if (logObserver) {
           $timeout(function() {
             logObserver(data);
