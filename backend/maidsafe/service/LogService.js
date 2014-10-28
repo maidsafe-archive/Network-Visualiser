@@ -29,7 +29,7 @@ var saveLog = function(req, res) {
       log.sessionId = sessionId;
       queue.pushToQueue(log);
     }
-    handler.promise();
+    handler.promise(err, log);
   };
   bridge.addLog(log, addLogHandler, handler.refreshSessionsCallback);
 };

@@ -3,7 +3,7 @@ var mapperObj;
 var SessionMapper = function() {
   var instance = this;
   var map = {};
-  var sessionNames =[];
+  var sessionNames = [];
   var getSessionIdForName = function(sessionName, callback) {
     bridge.getSessionIdForName(sessionName).then(function(sessionId) {
       callback(null, sessionId);

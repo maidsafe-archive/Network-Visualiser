@@ -25,6 +25,9 @@ io.sockets.on('connection', function(socket) {
 });
 exports.broadcastLog = function(data) {
   var channelName = data.sessionName ? data.sessionName : sessionMapper.getSessionName(data.sessionId);
+  if (!channelName) {
+    return;
+  }
   io.sockets.to(channelName).emit(LOG_CHANNEL_NAME, data);
 };
 exports.broadcastSignal = function(data) {
