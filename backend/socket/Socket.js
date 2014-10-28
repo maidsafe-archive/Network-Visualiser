@@ -4,6 +4,8 @@ var sessionMapper = require('./SessionMapper');
 var LOG_CHANNEL_NAME = 'log'; // channel for sending the log notifications
 var SIGNAL_CHANNEL_NAME = 'signal'; // channel for sending the signal notifications
 var TESTNET_STATUS_UPDATE_NAME = 'testnet_status_update';
+var ACTUAL_CONN = 'actual_conn';
+var EXPECTED_CONN = 'expected_conn';
 var SOCKET_LISTEN_PORT = config.Constants.socketPort; // port for socket connection
 var LOG_LEVEL = 0; // 0 - ERROR, 1 - WARN, 2- INFO, 3 - DEBUG
 /********** CONSTANTS - END *********************/
@@ -35,5 +37,17 @@ exports.broadcastSignal = function(data) {
 };
 exports.broadcastTestnetStatusUpdate = function(data) {
   io.sockets.emit(TESTNET_STATUS_UPDATE_NAME, data);
+};
+exports.broadcastActualConnection = function(data) {
+  var channel = sessionMapper.getSessionName(data.sessionId);
+  if (channel) {
+    io.sockets.to(channel).emit(ACTUAL_CONN, data);
+  }
+};
+exports.broadcastExpectedConnectionDiff = function(data) {
+  var channel = sessionMapper.getSessionName(data.sessionId);
+  if (channel) {
+    io.sockets.to(channel).emit(EXPECTED_CONN, data);
+  }
 };
 console.log('socket listening on ' + SOCKET_LISTEN_PORT);

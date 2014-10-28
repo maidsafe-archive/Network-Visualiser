@@ -4,6 +4,7 @@ var utils = require('./../utils.js');
 var url = require('url');
 var config = require('./../../../Config.js');
 var queue = require('./QueueService');
+var socket = require('./../../socket/Socket');
 
 var saveLog = function(req, res) {
   var log = req.body;
@@ -18,6 +19,9 @@ var saveLog = function(req, res) {
     bridge.connectionMap.addActualLog(log, function(err, data) {
       res.status(err ? 500 : 200);
       res.send(err ? err.message : data);
+      if (!err) {
+        socket.broadcastActualConnection(log);
+      }
     });
     return;
   }
