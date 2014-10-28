@@ -17,6 +17,9 @@ var Helper = function() {
       callback();
     });
   };
+  instance.deleteTestSession = function(callback) {
+    bridge.deleteActiveSession(SESSION_NAME, callback);
+  };
   instance.getDB = function() {
     return db;
   };

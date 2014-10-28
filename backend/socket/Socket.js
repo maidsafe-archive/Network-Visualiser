@@ -20,6 +20,7 @@ io.sockets.on('connection', function(socket) {
     socket.session = sessionName;
     socket.join(sessionName);
     sessionMapper.add(sessionName);
+    socket.emit('ready', 'socket ready');
   });
   socket.on('disconnect', function() {
     socket.leave(socket.session);
