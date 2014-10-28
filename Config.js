@@ -5,7 +5,7 @@ var constants = {
   sanityCheckerDir: '../../../testnet_status_monitor/master',
   paging: { max: 200 },
   serverPort: 8080,
-  socketPort: 8081,
+  socketPort: 80,
   vaultLogsCount: 3,
   minLengthForDecode: 6,
   naPersonaId: 10,

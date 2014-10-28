@@ -4,8 +4,8 @@
 var should = require('should');
 var serviceHelper = require('./../ci/test/ServiceTestHelper').helper;
 var io = require('socket.io-client');
-var socketServer = require('../backend/socket/Socket');
 var config = require('./../Config');
+var socketServer = require('../backend/socket/Socket');
 var socketURL = 'http://localhost:' + config.Constants.socketPort;
 
 var options = {
