@@ -10,6 +10,7 @@
     "zeroclipboard":"latest",
     "ng-file-upload":"latest",
     "animate.css":"latest",
-    "ngReact":"latest"
+    "react": "0.9.0",
+    "ngReact":"0.0.1"
   }
 }

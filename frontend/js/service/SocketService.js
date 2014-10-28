@@ -1,13 +1,13 @@
 /* global window:false */
 
 window.SocketService = [
-  '$rootScope', '$timeout', function($rootScope, $timeout) {
-    $rootScope.realTime = true;
-    $rootScope.sessionName = '';
-    var socket = window.io.connect($rootScope.socketEndPoint);
+  '$rootScope', '$timeout', '$location', function($rootScope, $timeout, $location) {
     var logObserver;
     var signalObserver;
     var testnetStatusObserver;
+    $rootScope.realTime = true;
+    $rootScope.sessionName = '';
+    var socket = window.io.connect($rootScope.socketEndPoint);
     socket.on('log', function(data) {
       if ($rootScope.realTime && data.sessionName === $rootScope.sessionName) {
         if (logObserver) {
@@ -42,5 +42,10 @@ window.SocketService = [
     this.setTestnetStatusListener = function(callback) {
       testnetStatusObserver = callback;
     };
+    if ($location.search().sn) {
+      socket.emit('channel', $location.search().sn);
+    } else {
+      console.info('Socket connection not established as no session name is found');
+    }
   }
 ];
