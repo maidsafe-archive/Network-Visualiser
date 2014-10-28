@@ -19,8 +19,13 @@ io.sockets.on('connection', function(socket) {
     }
     socket.session = sessionName;
     socket.join(sessionName);
-    sessionMapper.add(sessionName);
-    socket.emit('ready', 'socket ready');
+    sessionMapper.add(sessionName, function(err) {
+      if (err) {
+        socket.emit('error', err);
+        return;
+      }
+      socket.emit('ready', 'connected');
+    });
   });
   socket.on('disconnect', function() {
     socket.leave(socket.session);

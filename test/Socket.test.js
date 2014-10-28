@@ -32,8 +32,8 @@ describe('Socket Server', function() {
   it('should be able to broadcast log message and receive it', function(done) {
     var data = {
       'sessionId': serviceHelper.getSessionId(),
-      'actionId': 18,
-      vaultId: 'aaa.asss'
+      'actionId': 1, vaultId: 'aaa.asss',
+      ts: '2014-10-12T12:00:00.000Z', valueOne: 'dddd'
     };
     var client = new SocketClient();
     client.io.on('log', function(data) {
@@ -70,7 +70,11 @@ describe('Socket Server', function() {
       sessionName: serviceHelper.getSessionName(),
       'sessionId': serviceHelper.getSessionId(),
       'actionId': 18,
-      vaultId: 'aaa.asss'
+      vaultId: 'aaa.asss',
+      ts: '2014-10-12T12:00:00.000Z', valueOne: {
+        vaultAdded: 'sasd..asd',
+        vaultRemoved: 'asd..asd'
+      }
     };
     var client = new SocketClient();
     client.io.on('actual_conn', function(data) {

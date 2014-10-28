@@ -26,17 +26,19 @@ var SessionMapper = function() {
     removeFromArray(getSessionName(sessionId), sessionNames);
     delete map[sessionId];
   };
-  var updateSessionId = function(sessionName) {
+  var updateSessionId = function(sessionName, callback) {
     if (sessionNames.indexOf(sessionName) > -1) {
+      callback(null);
       return;
     }
     getSessionIdForName(sessionName, function(err, sessionId) {
       if (err) {
-        console.error(err);
+        callback(err);
         return;
       }
       sessionNames.push(sessionName);
       map[sessionId] = sessionName;
+      callback(null, sessionId);
     });
   };
   instance.getSessionName = getSessionName;
