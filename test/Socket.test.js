@@ -5,8 +5,9 @@ var should = require('should');
 var serviceHelper = require('./../ci/test/ServiceTestHelper').helper;
 var io = require('socket.io-client');
 var config = require('./../Config');
-var socketServer = require('../backend/socket/Socket');
+var testConfig = require('./Config');
 var socketURL = 'http://localhost:' + config.Constants.socketPort;
+var socketServer = require('../backend/socket/Socket');
 
 var options = {
   'force new connection': true
@@ -21,6 +22,9 @@ var SocketClient = function() {
   return instance;
 };
 describe('Socket Server', function() {
+  if (!testConfig.Constants.testSocket) {
+    return;
+  }
   before(serviceHelper.connectToTestSession);
 
   after(function(done) {
