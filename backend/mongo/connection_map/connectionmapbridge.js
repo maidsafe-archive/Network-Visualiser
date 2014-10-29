@@ -20,8 +20,11 @@ var MongoBridge = function() {
   instance.dropExpectedConnections = function(sessionId) {
     return expectedConnection.dropCollection(sessionId);
   };
-  instance.getExpectedConnections = function(sessionId, callback) {
-    return expectedConnection.getExpectedConnections(sessionId, callback);
+  instance.getExpectedConnections = function(sessionId, timestamp, callback) {
+    return expectedConnection.getExpectedConnections(sessionId, timestamp, callback);
+  };
+  instance.getActualConnections = function(sessionId, timestamp, callback) {
+    return actualConnection.getActualConnections(sessionId, timestamp, callback);
   };
   QueueService.subscribe(function(msg, done) {
     expectedConnection.updateExpectedConnection(msg, function(err) {

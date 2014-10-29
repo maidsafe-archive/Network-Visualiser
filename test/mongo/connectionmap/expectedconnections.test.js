@@ -62,7 +62,7 @@ describe('Expected Connections', function() {
       }
     };
     populateStartLogs(sessionId, function(err) {
-      bridge.connectionMap.getExpectedConnections(sessionId, function(err, data) {
+      bridge.connectionMap.getExpectedConnections(sessionId, null, function(err, data) {
         assert(data);
         bridge.clearActiveSession(serviceHelper.getSessionName(), done);
       });
@@ -85,7 +85,7 @@ describe('Expected Connections', function() {
       }
     };
     var validate = function() {
-      bridge.connectionMap.getExpectedConnections(sessionId, function(err, data) {
+      bridge.connectionMap.getExpectedConnections(sessionId, null, function(err, data) {
         assert(data);
         bridge.clearActiveSession(serviceHelper.getSessionName(), done);
       });
