@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var config = require('./../../../Config');
 var partialSort = require('./partialsort');
 var bridge = require('./../bridge');
+var socket = require('./../../socket/Socket');
 
 module.exports = function(dbCon) {
   var MongoosePromise = mongoose.Promise;
@@ -152,6 +153,7 @@ module.exports = function(dbCon) {
           diffs[i],
           (i === diffs.length - 1) ? new GeneralHandler(promise) : mockHandler
         );
+        socket.broadcastExpectedConnectionDiff(diffs);
       }
     };
     bridge.getActiveVaultsFullId(log.sessionId).then(function(activeValuts) {

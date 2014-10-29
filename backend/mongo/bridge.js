@@ -10,7 +10,7 @@ var config = require('./../../Config.js');
 var connectionMapBridge = require('./connection_map/connectionmapbridge');
 var QueueService = require('../maidsafe/service/QueueService');
 var connectionMap = connectionMapBridge.bridge;
-
+var sessionMapper = require('./../socket/SessionMapper');
 exports.setupMongooseConnection = function(callback, path) {
   mongoose.connect(path || config.Constants.mongoCon, function(connectionError) {
     if (connectionError) {
@@ -150,10 +150,11 @@ exports.deleteActiveSession = function(sessionName, promise) {
       promise(err);
     });
   };
-  sessionInfo.getSessionIdForName(sessionName).then(function(data) {
-    QueueService.deleteQueue(data);
-    connectionMap.dropActualLog(data);
-    connectionMap.dropExpectedConnections(data);
+  sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
+    QueueService.deleteQueue(sessionId);
+    connectionMap.dropActualLog(sessionId);
+    connectionMap.dropExpectedConnections(sessionId);
+    sessionMapper.remove(sessionId);
     deleteSession();
   }, function(err) {
     console.error(err);
@@ -177,6 +178,7 @@ exports.clearActiveSession = function(sessionName, callback) {
     QueueService.deleteQueue(sessionId);
     connectionMap.dropActualLog(sessionId);
     connectionMap.dropExpectedConnections(sessionId);
+    sessionMapper.remove(sessionId);
     vaultInfo.deleteVaultInfoForSession(sessionId).then(function(removedVaultIds) {
       vaultLog.deleteVaultsInSession(sessionId, removedVaultIds).then(function(res) {
         promise.complete(res);
