@@ -5,6 +5,7 @@ var url = require('url');
 var config = require('./../../../Config.js');
 var queue = require('./QueueService');
 var socket = require('./../../socket/Socket');
+var connectionMapService = require('./ConnectionMapService');
 
 var saveLog = function(req, res) {
   var log = req.body;
@@ -15,7 +16,7 @@ var saveLog = function(req, res) {
     return;
   }
   var handler  = new Handler.SaveLogHandler(res);
-  if (log.actionId === config.Constants.connectionMapActionId) {
+  var saveToActualConn = function() {
     bridge.connectionMap.addActualLog(log, function(err, data) {
       res.status(err ? 500 : 200);
       res.send(err ? err.message : data);
@@ -23,6 +24,9 @@ var saveLog = function(req, res) {
         socket.broadcastActualConnection(log);
       }
     });
+  };
+  if (log.actionId === config.Constants.connectionMapActionId) {
+    saveToActualConn();
     return;
   }
   var addLogHandler = function(err) {
@@ -182,3 +186,4 @@ exports.vaultHistory = history;
 exports.getActiveVaults = activeVaultsWithRecentLogs;
 exports.getTimelineDates = getTimelineDates;
 exports.testLog = testLog;
+exports.connectionMap = connectionMapService;

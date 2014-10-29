@@ -83,12 +83,13 @@ module.exports = function(dbCon) {
     ));
     return diffsForUpdate;
   };
-  var getExpectedConnections = function(sessionId, activeIds, callback) {
+  var getExpectedConnections = function(sessionId, activeIds, timestamp, callback) {
+    timestamp = timestamp || new Date().toISOString();
     var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
-    var counter = activeIds.length;
-    var monitor = {};
     var reduce = function(docs) {
       var reducedResults = [];
+      var monitor = {};
+      var counter = activeIds.length;
       for (var i = 0; i < docs.length && counter > 0; i++) {
         if (!monitor.hasOwnProperty(docs[i].vaultId)) {
           reducedResults.push(docs[i]);
@@ -103,7 +104,7 @@ module.exports = function(dbCon) {
         callback(err);
         return;
       }
-      coll.find({ vaultId: { $in: activeIds } }).sort([
+      coll.find({ vaultId: { $in: activeIds }, ts: { $lte: timestamp } }).sort([
         [ '_id', 'descending' ]
       ]).toArray(function(err, docs) {
         if (err) {
@@ -124,7 +125,7 @@ module.exports = function(dbCon) {
     var promise = new MongoosePromise();
     var mockHandler = function(err) {
       if (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     if (callback) {
@@ -163,30 +164,42 @@ module.exports = function(dbCon) {
           activeIds.push(activeValuts[index].vaultIdFull);
         }
       }
-      getExpectedConnections(log.sessionId, activeIds, onExpectedConnections);
+      getExpectedConnections(log.sessionId, activeIds, null, onExpectedConnections);
     });
     return promise;
   };
-  var retrieveExpectedConnections = function(sessionId, callback) {
+  var retrieveExpectedConnections = function(sessionId, timestamp, callback) {
     var promise = new MongoosePromise();
     if (callback) {
       promise.addBack(callback);
     }
-    bridge.getActiveVaultsFullId(sessionId).then(function(activeValuts) {
-      var activeIds = [];
-      for (var index in activeValuts) {
-        if (activeValuts[index]) {
-          activeIds.push(activeValuts[index].vaultIdFull);
-        }
-      }
-      getExpectedConnections(sessionId, activeIds, function(err, data) {
+    timestamp = timestamp || new Date().toISOString();
+    var getActiveVaults = function(callback) {
+      bridge.getActiveVaultsAtTime(sessionId, timestamp, callback);
+    };
+    var getExpected = function(activeIds) {
+      getExpectedConnections(sessionId, activeIds, timestamp, function(err, data) {
         if (err) {
           promise.error(err);
           return;
         }
         promise.complete(data);
       });
-    });
+    };
+    var onActiveVaultsReceived = function(err, vaults) {
+      var vaultIds = [];
+      if (err) {
+        promise.error('Active vaults could not be retrieved');
+        return;
+      }
+      for (var i in vaults) {
+        if (vaults[i] && vaults[i].vaultIdFull) {
+          vaultIds.push(vaults[i].vaultIdFull);
+        }
+      }
+      getExpected(vaultIds);
+    };
+    getActiveVaults(onActiveVaultsReceived);
     return promise;
   };
   var dropCollection = function(sessionId) {

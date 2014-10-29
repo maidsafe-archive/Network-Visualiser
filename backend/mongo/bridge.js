@@ -199,4 +199,50 @@ exports.updateTestnetStatus = function(data) {
 exports.getTestnetStatus = function() {
   return testnetStatus.getTestnetStatus();
 };
+exports.getActiveVaultsAtTime = function(sessionId, timestamp, callback) {
+  var promise = new mongoose.Promise();
+  var results = {};
+  var activeVaults = [];
+  var counter = 0;
+  if (callback) {
+    promise.addBack(callback);
+  }
+  var filterActiveVaults = function(vaults) {
+    var onError =  function(err) {
+      console.error(new  Date().toISOString() + ' : ' + err.message || err);
+      counter++;
+      if (counter >= vaults.length) {
+        promise.complete(activeVaults);
+      }
+    };
+    var onSuccess = function(data) {
+      counter++;
+      if (data && data.active) {
+        activeVaults.push(results[data.vaultId]);
+      }
+      if (counter >= vaults.length) {
+        promise.complete(activeVaults);
+      }
+    };
+    if (vaults.length === 0) {
+      promise.error('No active vaults');
+      return;
+    }
+    for (var index in vaults) {
+      if (vaults[index] && vaults[index].vaultId) {
+        results[vaults[index].vaultId] = {
+          vaultId: vaults[index].vaultId,
+          vaultIdFull: vaults[index].vaultIdFull,
+          hostName: vaults[index].hostName
+        };
+        // fetch only the last log message
+        vaultLog.isVaultActive(sessionId, vaults[index].vaultId, timestamp).then(onSuccess, onError);
+      }
+    }
+  };
+  vaultInfo.getAllVaultNames(sessionId).then(filterActiveVaults, function(err) {
+    promise.error(err);
+  });
+  return promise;
+};
 exports.connectionMap = connectionMap;

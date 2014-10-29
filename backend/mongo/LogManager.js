@@ -162,6 +162,35 @@ var LogManager = function(dbConnConnection) {
     vaultHistory(formatCollectionName(sessionId, vaultId), criteria, page, max, promise);
     return promise;
   };
+  this.isVaultActive = function(sessionId, vaultId, timestamp, callback) {
+    timestamp = timestamp || new Date().toISOString();
+    var promise = new mongoose.Promise();
+    if (callback) {
+      promise.addBack(callback);
+    }
+    var collectionName = sessionId + '_' + utils.transformVaultId(vaultId);
+    dbConn.db.collection(collectionName, function(err, coll) {
+      if (err) {
+        promise.error(err);
+        return;
+      }
+      coll.find({ ts: { $lte: timestamp } }).sort([ 'ts', 'descending' ]).toArray(function(err, log) {
+        if (err) {
+          promise.error(err);
+          return;
+        }
+        var result = null;
+        if (log && log.length > 0) {
+          result = {
+            active: log.length > 0 && log[0].actionId !== config.Constants.stopActionId,
+            vaultId: log[0].vaultId
+          };
+        }
+        promise.complete(result);
+      });
+    });
+    return promise;
+  };
   return this;
 };
 exports.getManager = LogManager;
