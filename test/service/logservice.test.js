@@ -6,6 +6,18 @@ var mock = require('../../ci/test/mock');
 var serviceTestHelper = require('../../ci/test/ServiceTestHelper');
 var serviceHelper = serviceTestHelper.helper;
 
+var Handler = function(done) {
+  var flag = false;
+  var completed = function(err) {
+    if (flag) {
+      return;
+    }
+    flag = true;
+    done(err);
+  };
+  return completed;
+};
+
 describe('LogService', function() {
   var req;
   before(serviceHelper.connectToTestSession);
@@ -24,7 +36,7 @@ describe('LogService', function() {
     var assert = function(status) {
       should(status).equal(200);
     };
-    logService.saveLog(req, new mock.Response(done, assert));
+    logService.saveLog(req, new mock.Response(new Handler(done), assert));
   });
   it('SaveLog - Should be able to push log to queue for action id 0', function(done) {
     req = new mock.Request();
@@ -38,7 +50,7 @@ describe('LogService', function() {
     var assert = function(status) {
       should(status).equal(200);
     };
-    logService.saveLog(req, new mock.Response(done, assert));
+    logService.saveLog(req, new mock.Response(new Handler(done), assert));
   });
   it('SaveLog - Should be able to push log to queue for action id 18', function(done) {
     req = new mock.Request();
@@ -52,7 +64,7 @@ describe('LogService', function() {
     var assert = function(status) {
       should(status).equal(200);
     };
-    logService.saveLog(req, new mock.Response(done, assert));
+    logService.saveLog(req, new mock.Response(new Handler(done), assert));
   });
   it('SaveLog - Should be able to save Connection Map Actual log', function(done) {
     req = new mock.Request();

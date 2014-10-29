@@ -1,6 +1,6 @@
-var ActualConnectionHandler = require('./ActualConnection');
 var QueueService = require('../../maidsafe/service/QueueService');
 var ExpectedConnection = require('./ExpectedConnection');
+var ActualConnectionHandler = require('./ActualConnection');
 var MongoBridge = function() {
   var instance = this;
   var dbCon;
@@ -8,6 +8,9 @@ var MongoBridge = function() {
   var expectedConnection;
   instance.setDB = function(db) {
     dbCon = db;
+    if (ActualConnectionHandler) {
+      ActualConnectionHandler = require('./ActualConnection');
+    }
     actualConnection = new ActualConnectionHandler(db);
     expectedConnection = new ExpectedConnection(db);
   };

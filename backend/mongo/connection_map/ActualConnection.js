@@ -1,4 +1,5 @@
 var bridge = require('./../bridge');
+
 module.exports = function(dbCon) {
   var MongoosePromise = require('mongoose').Promise;
   var instance = this;
