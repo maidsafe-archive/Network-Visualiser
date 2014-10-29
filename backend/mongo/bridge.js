@@ -72,7 +72,7 @@ exports.selectLogs = function(sessionName, criteria, promise) {
     vaultLog.selectLogs(sessionId, criteria, promise);
   });
 };
-var vaultHistory = exports.vaultHistory = function(sessionName, vaultId, criteria, page, max, callback) {
+exports.vaultHistory = function(sessionName, vaultId, criteria, page, max, callback) {
   var promise = new mongoose.Promise();
   if (callback) {
     promise.addBack(callback);
@@ -209,7 +209,7 @@ exports.getActiveVaultsAtTime = function(sessionId, timestamp, callback) {
   }
   var filterActiveVaults = function(vaults) {
     var onError =  function(err) {
-      console.error(new  Date().toISOString() + " : " + err.message || err);
+      console.error(new  Date().toISOString() + ' : ' + err.message || err);
       counter++;
       if (counter >= vaults.length) {
         promise.complete(activeVaults);

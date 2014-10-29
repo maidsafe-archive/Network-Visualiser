@@ -27,7 +27,7 @@ module.exports = function(dbCon) {
     return promise;
   };
   var getActualConnections = function(sessionId, activeIds, timestamp, callback) {
-    var timestamp = timestamp || new Date().toISOString();
+    timestamp = timestamp || new Date().toISOString();
     var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
     var reduce = function(docs) {
       var monitor = {};
@@ -47,7 +47,7 @@ module.exports = function(dbCon) {
         callback(err);
         return;
       }
-      coll.find({vaultId: {$in : activeIds}, ts: { $lte : timestamp }}).sort([
+      coll.find({ vaultId: { $in: activeIds }, ts: { $lte: timestamp } }).sort([
         [ '_id', 'descending' ]
       ]).toArray(function(err, docs) {
         if (err) {
@@ -66,7 +66,7 @@ module.exports = function(dbCon) {
     if (callback) {
       promise.addBack(callback);
     }
-    var getActiveVaults = function (callback) {
+    var getActiveVaults = function(callback) {
       bridge.getActiveVaultsAtTime(sessionId, timestamp, callback);
     };
     var getActual = function(activeIds) {
@@ -90,7 +90,7 @@ module.exports = function(dbCon) {
         }
       }
       getActual(vaultIds);
-    }
+    };
     getActiveVaults(onActiveVaultsReceived);
     return promise;
   };

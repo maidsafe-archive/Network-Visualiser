@@ -174,7 +174,7 @@ var LogManager = function(dbConnConnection) {
         promise.error(err);
         return;
       }
-      coll.find({ts: {$lte : timestamp}}).sort(['ts', 'descending']).toArray(function(err, log) {
+      coll.find({ ts: { $lte: timestamp } }).sort([ 'ts', 'descending' ]).toArray(function(err, log) {
         if (err) {
           promise.error(err);
           return;

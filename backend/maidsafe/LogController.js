@@ -29,7 +29,7 @@ var getConnectionMapSnapshot = function(req, res) {
   }
   logService.connectionMap.snapshot(criteria.sn, criteria.ts || new Date().toISOString(), function(err, data) {
     res.status(err ? 500 : 200);
-    res.send(err ? 'An Error Occurred' : data)
+    res.send(err ? 'An Error Occurred' : data);
   });
 };
 exports.register = function(server) {

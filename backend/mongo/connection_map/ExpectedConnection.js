@@ -84,7 +84,7 @@ module.exports = function(dbCon) {
     return diffsForUpdate;
   };
   var getExpectedConnections = function(sessionId, activeIds, timestamp, callback) {
-    var timestamp = timestamp || new Date().toISOString();
+    timestamp = timestamp || new Date().toISOString();
     var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
     var reduce = function(docs) {
       var reducedResults = [];
@@ -104,7 +104,7 @@ module.exports = function(dbCon) {
         callback(err);
         return;
       }
-      coll.find({ vaultId: { $in: activeIds }, ts: {$lte : timestamp} }).sort([
+      coll.find({ vaultId: { $in: activeIds }, ts: { $lte: timestamp } }).sort([
         [ '_id', 'descending' ]
       ]).toArray(function(err, docs) {
         if (err) {
@@ -173,9 +173,10 @@ module.exports = function(dbCon) {
     if (callback) {
       promise.addBack(callback);
     }
-    var getActiveVaults = function (callback) {
+    timestamp = timestamp || new Date().toISOString();
+    var getActiveVaults = function(callback) {
       bridge.getActiveVaultsAtTime(sessionId, timestamp, callback);
-    }
+    };
     var getExpected = function(activeIds) {
       getExpectedConnections(sessionId, activeIds, timestamp, function(err, data) {
         if (err) {
@@ -197,7 +198,7 @@ module.exports = function(dbCon) {
         }
       }
       getExpected(vaultIds);
-    }
+    };
     getActiveVaults(onActiveVaultsReceived);
     return promise;
   };

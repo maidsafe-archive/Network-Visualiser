@@ -9,12 +9,12 @@ var ConnectionMapService = function() {
       if (counter === max) {
         callback();
       }
-    }
+    };
     instance.complete = complete;
     return instance;
   };
   var getExpectedConnections = function(sessionId, timestamp, callback) {
-    bridge.connectionMap.getExpectedConnections(sessionId, timestamp, function(err, data){
+    bridge.connectionMap.getExpectedConnections(sessionId, timestamp, function(err, data) {
       if (err) {
         callback('Error in getting Expected Result', null);
       }
@@ -35,7 +35,7 @@ var ConnectionMapService = function() {
     var actualConnection;
     var onComplete;
     onComplete = function() {
-      callback(null, {actual: actualConnection, expected: expectedConnection});
+      callback(null, { actual: actualConnection, expected: expectedConnection });
     };
     var handler = new Handler(2, onComplete);
     var onExpectedData = function(err, conn) {
@@ -49,7 +49,7 @@ var ConnectionMapService = function() {
         actualConnection = conn;
       }
       handler.complete();
-    }
+    };
     bridge.getSessionIdForName(sessionName).then(function(sessionId) {
       getExpectedConnections(sessionId, timestamp, onExpectedData);
       getActualConnections(sessionId, timestamp, onActualData);
