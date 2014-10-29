@@ -58,6 +58,24 @@ module.exports = function(dbCon) {
       });
     });
   };
+  var getActualConnectionsDiff = function(sessionId, minTime, maxTime, callback) {
+    var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
+    dbCon.db.collection(collectionName, function(err, coll) {
+      if (err) {
+        callback(err);
+        return;
+      }
+      coll.find({ ts: { $gte: minTime, $lte: maxTime } }).sort([
+        [ '_id', 'descending' ]
+      ]).toArray(function(err, docs) {
+        if (err) {
+          callback(err);
+          return;
+        }
+        callback(null, docs);
+      });
+    });
+  };
   var dropCollection = function(sessionId) {
     dbCon.db.dropCollection(sessionId + COLLECTION_NAME_SUFFIX);
   };
@@ -94,8 +112,23 @@ module.exports = function(dbCon) {
     getActiveVaults(onActiveVaultsReceived);
     return promise;
   };
+  var retrieveActualConnectionDiff = function(sessionId, minTime, maxTime, callback) {
+    var promise = new MongoosePromise();
+    if (callback) {
+      promise.addBack(callback);
+    }
+    getActualConnectionsDiff(sessionId, minTime, maxTime, function(err, data) {
+      if (err) {
+        promise.error('Expected Fetch with range faied');
+        return;
+      }
+      promise.complete(data);
+    });
+    return promise;
+  };
   instance.save = saveActualLog;
   instance.dropCollection = dropCollection;
   instance.getActualConnections = retrieveActualConnection;
+  instance.getActualConnectionsDiff = retrieveActualConnectionDiff;
   return instance;
 };

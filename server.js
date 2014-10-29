@@ -32,6 +32,14 @@ var configureMvcEngine = function() {
   userAuth.configureAuth(app);
   app.use(app.router);
 };
+var enableCORS = function() {
+  app.use(function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    next();
+  });
+};
 var registerControllers = function() {
   userAuth.setupAuthCallbacks(app);
   sessionController.register(app);
@@ -43,6 +51,7 @@ var registerControllers = function() {
 bridge.setupMongooseConnection(function() {
   configureMvcEngine();
   registerControllers();
+  enableCORS();
   app.use(express.static(__dirname + '/frontend'));
   app.get('/', userAuth.appendUserInfo, function(req, res) {
     /* jscs:disable disallowDanglingUnderscores */

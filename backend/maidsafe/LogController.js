@@ -32,6 +32,17 @@ var getConnectionMapSnapshot = function(req, res) {
     res.send(err ? 'An Error Occurred' : data);
   });
 };
+var getConnectionMapDiff = function(req, res) {
+  var criteria = url.parse(req.url, true).query;
+  if (!criteria || !criteria.sn || !criteria.min || !criteria.max) {
+    res.send(400, 'Either parameter sn, min or max is missing');
+    return;
+  }
+  logService.connectionMap.connectionMapDiff(criteria.sn, criteria.min, criteria.max, function(err, data) {
+    res.status(err ? 500 : 200);
+    res.send(err ? 'An Error Occurred' : data);
+  });
+};
 exports.register = function(server) {
   server.post('/log', saveLogs);
   server.get('/backend/vaults', getActiveVaults);
@@ -41,4 +52,5 @@ exports.register = function(server) {
   server.get('/backend/timelineDates', getTimelineDates);
   server.post('/testlog', testLog);
   server.get('/connectionMapSnapshot', getConnectionMapSnapshot);
+  server.get('/connectionMapDiff', getConnectionMapDiff);
 };
