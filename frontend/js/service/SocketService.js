@@ -7,7 +7,9 @@ window.SocketService = [
     var testnetStatusObserver;
     $rootScope.realTime = true;
     $rootScope.sessionName = '';
-    var socket = window.io.connect($rootScope.socketEndPoint);
+    var socket = window.io.connect($rootScope.socketEndPoint, {
+      transports: [ 'websocket', 'xhr-polling' ]
+    });
     socket.on('log', function(data) {
       if ($rootScope.realTime) {
         if (logObserver) {
@@ -44,8 +46,6 @@ window.SocketService = [
     };
     if ($location.search().sn) {
       socket.emit('channel', $location.search().sn);
-    } else {
-      console.info('Socket connection not established as no session name is found');
     }
   }
 ];

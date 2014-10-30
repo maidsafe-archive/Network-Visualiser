@@ -41,11 +41,12 @@ describe('Expected Connections', function() {
       req = new mock.Request();
       req.body = log;
       logService.saveLog(req,
-        new mock.Response(mockCallback, (index === (vaultFullIds.length - 1)) ? completed : mockCallback));
+        new mock.Response((index === (vaultFullIds.length - 1)) ? completed : mockCallback, mockCallback));
     }
   };
   it('compute expected connections - vaults starting', function(done) {
     var sessionId = serviceHelper.getSessionId();
+    var flag = false;
     var assert = function(data) {
       should(data).be.ok;
       for (var i in data) {
@@ -61,15 +62,24 @@ describe('Expected Connections', function() {
         }
       }
     };
-    populateStartLogs(sessionId, function(err) {
-      bridge.connectionMap.getExpectedConnections(sessionId, null, function(err, data) {
-        assert(data);
-        bridge.clearActiveSession(serviceHelper.getSessionName(), done);
-      });
-    });
+    var getData = function(err) {
+      if (flag) {
+        return;
+      }
+      flag = true;
+      setTimeout(function() {
+        bridge.connectionMap.getExpectedConnections(sessionId, new Date().toISOString(), function(err, data) {
+          assert(data);
+          bridge.clearActiveSession(serviceHelper.getSessionName(), done);
+        });
+      }, 100);
+    };
+    populateStartLogs(sessionId, getData);
   });
+
   it('compute expected connections - vault exit ', function(done) {
     var sessionId = serviceHelper.getSessionId();
+    var flag = false;
     var assert = function(data) {
       should(data).be.ok;
       for (var i in data) {
@@ -85,7 +95,11 @@ describe('Expected Connections', function() {
       }
     };
     var validate = function() {
-      bridge.connectionMap.getExpectedConnections(sessionId, null, function(err, data) {
+      if (flag) {
+        return;
+      }
+      flag = true;
+      bridge.connectionMap.getExpectedConnections(sessionId, new Date().toISOString(), function(err, data) {
         assert(data);
         bridge.clearActiveSession(serviceHelper.getSessionName(), done);
       });
@@ -101,9 +115,9 @@ describe('Expected Connections', function() {
       req = new mock.Request();
       req.body = log;
       logService.saveLog(req,
-        new mock.Response(mockCallback, function(err, data) {
-          setTimeout(validate, 50);
-        }));
+        new mock.Response(function(err, data) {
+          setTimeout(validate, 100);
+        }, mockCallback));
     });
   });
 });

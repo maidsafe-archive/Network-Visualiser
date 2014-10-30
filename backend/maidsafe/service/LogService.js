@@ -16,7 +16,7 @@ var saveLog = function(req, res) {
     return;
   }
   var handler  = new Handler.SaveLogHandler(res);
-  var saveToActualConn = function() {
+  var saveToActualConn = function(log) {
     bridge.connectionMap.addActualLog(log, function(err, data) {
       res.status(err ? 500 : 200);
       res.send(err ? err.message : data);
@@ -26,7 +26,7 @@ var saveLog = function(req, res) {
     });
   };
   if (log.actionId === config.Constants.connectionMapActionId) {
-    saveToActualConn();
+    saveToActualConn(log);
     return;
   }
   var addLogHandler = function(err) {
@@ -36,6 +36,7 @@ var saveLog = function(req, res) {
     if (log.actionId === config.Constants.startActionId || log.actionId === config.Constants.stopActionId) {
       log.sessionId = sessionId;
       queue.pushToQueue(log);
+      saveToActualConn(log);
     }
     handler.promise(err, log);
   };

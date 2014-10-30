@@ -115,6 +115,24 @@ module.exports = function(dbCon) {
       });
     });
   };
+  var getExpectedConnectionsDiff = function(sessionId, minTime, maxTime, callback) {
+    var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
+    dbCon.db.collection(collectionName, function(err, coll) {
+      if (err) {
+        callback(err);
+        return;
+      }
+      coll.find({ ts: { $gte: minTime, $lte: maxTime } }).sort([
+        [ '_id', 'descending' ]
+      ]).toArray(function(err, docs) {
+        if (err) {
+          callback(err);
+          return;
+        }
+        callback(null, docs);
+      });
+    });
+  };
   var saveExpectedConnection = function(sessionId, data, callback) {
     dbCon.db.collection(sessionId + COLLECTION_NAME_SUFFIX, function(err, coll) {
       coll.save(data, callback);
@@ -202,11 +220,26 @@ module.exports = function(dbCon) {
     getActiveVaults(onActiveVaultsReceived);
     return promise;
   };
+  var retrieveExpectedConnectionsDiff = function(sessionId, minTime, maxTime, callback) {
+    var promise = new MongoosePromise();
+    if (callback) {
+      promise.addBack(callback);
+    }
+    getExpectedConnectionsDiff(sessionId, minTime, maxTime, function(err, data) {
+      if (err) {
+        promise.error('Expected Fetch with range faied');
+        return;
+      }
+      promise.complete(data);
+    });
+    return promise;
+  };
   var dropCollection = function(sessionId) {
     dbCon.db.dropCollection(sessionId + COLLECTION_NAME_SUFFIX);
   };
   instance.dropCollection = dropCollection;
   instance.getExpectedConnections = retrieveExpectedConnections;
+  instance.getExpectedConnectionsDiff = retrieveExpectedConnectionsDiff;
   instance.updateExpectedConnection = updateExpectedConnection;
   return instance;
 };
