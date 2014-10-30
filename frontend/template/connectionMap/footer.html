@@ -1,0 +1,10 @@
+<div class="status" ng-class="{true:'alert'}[alert != null]">
+  <span>{{alert}}</span>
+</div>
+<div class="connectionMapZoom">
+	<div class="inlineBlock">
+		<button class="zoomButton">-</button>
+		<button class="zoomButton">+</button>
+	</div>
+</div>
+<label class="counter">Vault Count - {{vaultManager.vaultCollection.length}}</label>

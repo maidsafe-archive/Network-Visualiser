@@ -76,5 +76,8 @@ bridge.setupMongooseConnection(function() {
   app.get('/testnet-status', function(req, res) {
     res.render('testnet-status', { socketPort: socketPort });
   });
+  app.get('/connectionmap', function(req, res) {
+    res.render('connectionMap', { socketPort: socketPort });
+  });
   app.listen(serverPort);
 });
