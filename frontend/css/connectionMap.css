@@ -26,7 +26,37 @@
 .connectionMapKey ul li div{
   display: inline-block;
 }
-
+.connectionMapKey ul li div.icon{
+    width: 50px;
+    height: 10px;
+    margin-right: 5px;
+    background-size: 50;
+    background-position: 0px 4px;
+}
+.connectionMapKey ul li div.iconTwo{
+    width: 15px;
+    height: 12px;
+    background-size: 12;
+    background-position: 0px 1.5px;
+}
+.connectionMapKey ul li .lastAdded{
+    background: url('../imgs/connection_map_keys/blue-solid-line.png') no-repeat;
+}
+.connectionMapKey ul li .lastRemoved{
+    background: url('../imgs/connection_map_keys/red-solid-line.png') no-repeat;
+}
+.connectionMapKey ul li .existingClosed{
+    background: url('../imgs/connection_map_keys/green-solid-line.png') no-repeat;
+}
+.connectionMapKey ul li .notInCloseGroup{
+    background: url('../imgs/connection_map_keys/grey-solid-line.png') no-repeat;
+}
+.connectionMapKey ul li .sixteenClosed {
+    background: url('../imgs/connection_map_keys/grey-solid-circle.png') no-repeat;
+}
+.connectionMapKey ul li .lessSixteenClosed {
+    background: url('../imgs/connection_map_keys/grey-outline-circle.png') no-repeat;
+}
 .connectionMapZoom {
   position: absolute;
   width: 20%;
@@ -45,6 +75,14 @@
   width: 30px;
   height: 30px;
   font-size: 40px;
+}
+.connectionMapZoom .dec{
+    background: url('../imgs/connection_map_keys/minus-icon.png') no-repeat;
+    background-color: #87b7ec;
+ }
+.connectionMapZoom .inc{
+    background: url('../imgs/connection_map_keys/plus-icon.png') no-repeat;
+    background-color: #87b7ec;
 }
 .connectionMapZoom .zoomButton:hover{
   background-color: #29578A;  
@@ -89,8 +127,9 @@
 }
 ul.button-center{
   position: absolute;
-  width: 100%;
+  width: 80%;
   margin: 1.3em 0;
+  margin-left: 10%;
   text-align: center;
 }
 

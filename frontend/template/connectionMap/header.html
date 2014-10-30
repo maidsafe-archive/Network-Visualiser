@@ -27,6 +27,6 @@
     <button ng-click="toggleExpandAllLogs()">{{allVaultsExpanded?'Hide All':'Expand All'}}</button>
   </li> -->
   <li>
-    <button ng-click="toggleKeyTray()">{{keyTrayClosed?'Show Keys':'Hide Keys'}}</button>
+    <button ng-click="toggleKeyTray()">{{!keyTrayClosed?'Show Keys':'Hide Keys'}}</button>
   </li>
 </ul>
