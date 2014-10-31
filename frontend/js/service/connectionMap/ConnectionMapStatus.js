@@ -5,12 +5,37 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
   var actualConnections = {};
 
   var updateUI = function() {
-    console.log(transformer.transform(actualConnections, expectedConnections));
+//    console.log(transformer.transform(actualConnections, expectedConnections));
+    // TODO bind with D3
   };
+  var setActualLog = function(data) {
+    switch (data.actionId) {
+      case 18:
+        delete actualConnections[data.vaultId];
+        break;
 
+      default:
+        actualConnections[data.vaultId] = data;
+        break;
+    }
+  };
+  var iterateActualLogs = function(actual) {
+    for (var i in actual) {
+      if (actual[i]) {
+        setActualLog(actual[i]);
+      }
+    }
+  };
+  var iterateExpectedLogs = function(expected) {
+    for (var i in expected) {
+      if (expected[i]) {
+        expectedConnections[transformer.formatVaultId(expected[i].vaultId)] = expected[i].closestVaults;
+      }
+    }
+  };
   var setSnapshotStatus = function(data) {
-    actualConnections = data.actual || {};
-    expectedConnections = data.expected || {};
+    iterateActualLogs(data.actual)
+    iterateExpectedLogs(data.expected);
     updateUI();
   };
   var updateExpected = function(diffs) {
@@ -25,15 +50,7 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
     if (!data) {
       return;
     }
-    switch (data.actionId) {
-      case 18:
-        delete actualConnections[data.vaultId];
-        break;
-
-      default:
-        actualConnections[data.vaultId] = data;
-        break;
-    }
+    setActualLog(data);
     updateUI();
   };
   instance.setSnapshot = setSnapshotStatus;

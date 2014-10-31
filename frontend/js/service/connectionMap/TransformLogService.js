@@ -17,7 +17,7 @@ window.Transform = [ function() {
       if (actual[index]) {
         temp = {};
         temp.name = actual[index].vaultId;
-        temp.group = actual[index].valueOne.closeGroup || [];
+        temp.group = actual[index].valueOne.closeGroupVaults || [];
         temp.lastIn = actual[index].valueOne.vaultAdded || '';
         temp.lastOut = actual[index].valueOne.vaultRemoved || '';
         temp.expected = getExpected(actual[index].vaultId, expected);
