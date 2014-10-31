@@ -1,5 +1,5 @@
 /* global window:false */
-window.ConnectionMapStatus = [ 'expectedConnectionHelper', function(expectedConnectionHelper) {
+window.ConnectionMapStatus = [ function() {
   var instance = this;
   var expectedConnections = {};
   var actualConnections = {};
@@ -23,15 +23,9 @@ window.ConnectionMapStatus = [ 'expectedConnectionHelper', function(expectedConn
       }
     }
   };
-  var computeExpected = function(log) {
-    var compute = (log.actionId === 0) ? expectedConnectionHelper.computeExpectedOnStart
-      : expectedConnectionHelper.computeExpectedOnStart;
-    updateExpected(compute(log, expectedConnections));
-  };
   instance.setActualStatus = setActual;
   instance.setExpectedStatus = setExpected;
   instance.updateExpected = updateExpected;
   instance.updateActual = updateActual;
-  instance.computeExpected = computeExpected;
   return instance;
 } ];
