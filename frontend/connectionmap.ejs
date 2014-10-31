@@ -30,8 +30,10 @@
 
     <script type="text/javascript" src="js/connectionmap/d3/d3.min.js"></script>
     <script type="text/javascript" src="js/connectionmap/con_map_transform.js"></script>
+    <script type="text/javascript" src="js/connectionmap/ConnectionMap.js"></script>
     <script type="text/javascript" src="js/connectionmap/events.js"></script>
     <script type="text/javascript" src="js/connectionmap/d3connectionmap.js"></script>
+    <script type="text/javascript" src="js/reactjs/jsx-output/connectionmap.js"></script>
     <title>Network Visualiser - Realtime View</title>
 
     <link rel="shortcut icon" href="imgs/favicon.ico"/>
@@ -45,7 +47,7 @@
     <div class="connectionMapContainer">
       <ng-include src="'template/connectionMap/connectionMapKeys.html'"></ng-include>
       <div class="connectionMapView">
-        <div id="conMap"></div>
+        <div ng-react-component="ConnectionMap"></div>
       </div>
     </div>
   </section>
