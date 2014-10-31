@@ -14,6 +14,7 @@ var SOCKET_IO_CONFIG = { 'log level': LOG_LEVEL };
 var io = require('socket.io').listen(SOCKET_LISTEN_PORT, SOCKET_IO_CONFIG);
 io.sockets.on('connection', function(socket) {
   socket.on('channel', function(sessionName) {
+    console.log('ses' + sessionName)
     if (!sessionName) {
       return;
     }
@@ -50,8 +51,8 @@ exports.broadcastActualConnection = function(data) {
     io.sockets.to(channel).emit(ACTUAL_CONN, data);
   }
 };
-exports.broadcastExpectedConnectionDiff = function(data) {
-  var channel = sessionMapper.getSessionName(data.sessionId);
+exports.broadcastExpectedConnectionDiff = function(sessionId, data) {
+  var channel = sessionMapper.getSessionName(sessionId);
   if (channel) {
     io.sockets.to(channel).emit(EXPECTED_CONN, data);
   }
