@@ -13,7 +13,6 @@ app.service('dataService', window.ConnectionMapDataService);
 app.controller('connectionMapCtrl', [
   '$scope', '$timeout', '$filter', '$rootScope', 'dataService', 'connectionMapStatus', 'socketService',
   function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService) {
-
     $scope.keyTrayClosed = false;
     $scope.currentTime = '';
     $scope.toggleKeyTray = function() {

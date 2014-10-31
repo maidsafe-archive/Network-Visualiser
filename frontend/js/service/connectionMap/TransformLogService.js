@@ -5,26 +5,27 @@ window.Transform = [ function() {
     return vaultId.slice(0, 6) + '..' + vaultId.slice(vaultId.length - 6, vaultId.length);
   };
   var getExpected = function(vaultId, expected) {
-    for (var index in expected) {
-      if (expected[index] && formatVaultId(expected[index].vaultId) === vaultId) {
-        return expected[index].closestVaults;
-      }
+    if (expected[vaultId]) {
+      return expected[vaultId] || [];
     }
+    return [];
   };
   var transform = function(actual, expected) {
     var result = [];
+    var temp;
     for (var index in actual) {
       if (actual[index]) {
-        var temp = {};
+        temp = {};
         temp.name = actual[index].vaultId;
-        temp.group = actual[index].valueOne.closeGroup;
-        temp.lastIn = actual[index].valueOne.vaultAdded;
-        temp.lastOut = actual[index].valueOne.vaultRemoved;
+        temp.group = actual[index].valueOne.closeGroup || [];
+        temp.lastIn = actual[index].valueOne.vaultAdded || '';
+        temp.lastOut = actual[index].valueOne.vaultRemoved || '';
         temp.expected = getExpected(actual[index].vaultId, expected);
         result.push(temp);
       }
     }
     return result;
   };
+  instance.formatVaultId = formatVaultId;
   instance.transform = transform;
 } ];

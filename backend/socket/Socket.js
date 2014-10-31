@@ -14,7 +14,6 @@ var SOCKET_IO_CONFIG = { 'log level': LOG_LEVEL };
 var io = require('socket.io').listen(SOCKET_LISTEN_PORT, SOCKET_IO_CONFIG);
 io.sockets.on('connection', function(socket) {
   socket.on('channel', function(sessionName) {
-    console.log('ses' + sessionName)
     if (!sessionName) {
       return;
     }
