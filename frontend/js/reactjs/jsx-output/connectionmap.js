@@ -9,7 +9,7 @@ window.ConnectionMap = React.createClass({displayName: 'ConnectionMap',
   },
   render: function() {
     if (this.state.connectionMap) {
-      this.state.connectionMap.drawConnections(this.props.scope.connections.slice(0));
+      this.state.connectionMap.drawConnections(this.props.scope.connections);
     }
     return React.DOM.div({id: 'conMap'});
   }

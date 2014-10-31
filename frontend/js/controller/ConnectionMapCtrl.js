@@ -15,9 +15,11 @@ app.controller('connectionMapCtrl', [
   function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService) {
     $scope.keyTrayClosed = false;
     $scope.currentTime = '';
+    $scope.connections = [];
     $scope.toggleKeyTray = function() {
       $scope.keyTrayClosed = !$scope.keyTrayClosed;
     };
+    var reactComponent;
     var clockTimer = function() {
       $scope.currentTime = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss');
       $timeout(clockTimer, 1000);
@@ -26,6 +28,14 @@ app.controller('connectionMapCtrl', [
       console.error('Session Name not found');
       return;
     }
+    $scope.registerReactComponent = function(reactComp) {
+      debugger
+      reactComponent = reactComp;
+    };
+    mapStatus.onStatusChange(function(trasformedData) {
+      $scope.connections = trasformedData;
+      //reactComponent.setState({});
+    });
     socketService.connectToChannel($rootScope.sessionName);
     dataService.getConnectionMapSnapshot($rootScope.sessionName).then(function(data) {
       mapStatus.setSnapshot(data);

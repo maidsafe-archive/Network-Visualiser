@@ -3,10 +3,11 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
   var instance = this;
   var expectedConnections = {};
   var actualConnections = {};
-
+  var statusChangeCallback;
   var updateUI = function() {
-//    console.log(transformer.transform(actualConnections, expectedConnections));
-    // TODO bind with D3
+    if (statusChangeCallback) {
+      statusChangeCallback(transformer.transform(actualConnections, expectedConnections));
+    }
   };
   var setActualLog = function(data) {
     switch (data.actionId) {
@@ -33,6 +34,9 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
       }
     }
   };
+  var setStatusChangeCallback = function(callback) {
+    statusChangeCallback = callback;
+  };
   var setSnapshotStatus = function(data) {
     iterateActualLogs(data.actual);
     iterateExpectedLogs(data.expected);
@@ -56,5 +60,6 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
   instance.setSnapshot = setSnapshotStatus;
   instance.updateExpected = updateExpected;
   instance.updateActual = updateActual;
+  instance.onStatusChange = setStatusChangeCallback;
   return instance;
 } ];
