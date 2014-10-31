@@ -34,7 +34,7 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
     }
   };
   var setSnapshotStatus = function(data) {
-    iterateActualLogs(data.actual)
+    iterateActualLogs(data.actual);
     iterateExpectedLogs(data.expected);
     updateUI();
   };
