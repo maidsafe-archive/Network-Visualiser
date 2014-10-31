@@ -1,13 +1,15 @@
-.connectionMapContainer{
+.connectionMapContainer {
   width: 100%;
   position: absolute;
   top: 90px;
 }
-.connectionMapKey{
-  width: 100%;  
-  border-bottom: 1px solid #EEE; 
+
+.connectionMapKey {
+  width: 100%;
+  border-bottom: 1px solid #EEE;
 }
-.connectionMapKey:after{
+
+.connectionMapKey:after {
   content: ".";
   display: block;
   clear: both;
@@ -15,7 +17,8 @@
   line-height: 0;
   height: 0;
 }
-.connectionMapKey ul li{
+
+.connectionMapKey ul li {
   width: 16.6%;
   font-size: 10px;
   padding: 15px 0;
@@ -23,8 +26,48 @@
   float: left;
   text-align: center;
 }
-.connectionMapKey ul li div{
+
+.connectionMapKey ul li div {
   display: inline-block;
+}
+
+.connectionMapKey ul li div.icon {
+  width: 50px;
+  height: 10px;
+  margin-right: 5px;
+  background-size: 50;
+  background-position: 0px 4px;
+}
+
+.connectionMapKey ul li div.iconTwo {
+  width: 15px;
+  height: 12px;
+  background-size: 12;
+  background-position: 0px 1.5px;
+}
+
+.connectionMapKey ul li .lastAdded {
+  background: url('../imgs/connection_map_keys/blue-solid-line.png') no-repeat;
+}
+
+.connectionMapKey ul li .lastRemoved {
+  background: url('../imgs/connection_map_keys/red-solid-line.png') no-repeat;
+}
+
+.connectionMapKey ul li .existingClosed {
+  background: url('../imgs/connection_map_keys/green-solid-line.png') no-repeat;
+}
+
+.connectionMapKey ul li .notInCloseGroup {
+  background: url('../imgs/connection_map_keys/grey-solid-line.png') no-repeat;
+}
+
+.connectionMapKey ul li .sixteenClosed {
+  background: url('../imgs/connection_map_keys/grey-solid-circle.png') no-repeat;
+}
+
+.connectionMapKey ul li .lessSixteenClosed {
+  background: url('../imgs/connection_map_keys/grey-outline-circle.png') no-repeat;
 }
 
 .connectionMapZoom {
@@ -35,7 +78,7 @@
   margin: 10px 0;
 }
 
-.connectionMapZoom .zoomButton{
+.connectionMapZoom .zoomButton {
   display: inline-block;
   float: left;
   margin: 0 5px;
@@ -46,9 +89,21 @@
   height: 30px;
   font-size: 40px;
 }
-.connectionMapZoom .zoomButton:hover{
-  background-color: #29578A;  
+
+.connectionMapZoom .dec {
+  background: url('../imgs/connection_map_keys/minus-icon.png') no-repeat;
+  background-color: #87b7ec;
 }
+
+.connectionMapZoom .inc {
+  background: url('../imgs/connection_map_keys/plus-icon.png') no-repeat;
+  background-color: #87b7ec;
+}
+
+.connectionMapZoom .zoomButton:hover {
+  background-color: #29578A;
+}
+
 .connectionMapStatus {
   width: 30%;
   position: absolute;
@@ -58,7 +113,7 @@
   text-align: center;
 }
 
-.connectionMapStatus .statusButton{
+.connectionMapStatus .statusButton {
   width: 150px;
   font-size: 12px;
   display: inline-block;
@@ -68,41 +123,48 @@
   border-radius: 10px;
 }
 
-.connectionMapStatus .statusButton:hover{
+.connectionMapStatus .statusButton:hover {
   background-color: #29578A;
 }
 
-.leftButtonRadiusClear{
+.leftButtonRadiusClear {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
-.rightButtonRadiusClear{
- border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important; 
+
+.rightButtonRadiusClear {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
-.connectionMapStatus .selected{
+
+.connectionMapStatus .selected {
   background-color: #29578A;
 }
-.connectionMapView{
+
+.connectionMapView {
   width: 100%;
-  text-align: center;
-}
-ul.button-center{
-  position: absolute;
-  width: 100%;
-  margin: 1.3em 0;
   text-align: center;
 }
 
-ul.button-center li{
+ul.button-center {
+  position: absolute;
+  width: 80%;
+  margin: 1.3em 0;
+  margin-left: 10%;
+  text-align: center;
+}
+
+ul.button-center li {
   float: left;
 }
-ul.button-center li button{
+
+ul.button-center li button {
   width: 150px;
   font-size: 14px;
   margin: 0 1px 0 0;
-  border-radius: 10px; 
+  border-radius: 10px;
 }
-.inlineBlock{
+
+.inlineBlock {
   display: inline-block;
 }

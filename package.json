@@ -11,7 +11,7 @@
     "express": "3.x",
     "mongoose": "3.8.x",
     "connect-mongo": "0.4.x",
-    "socket.io": "0.9",
+    "socket.io": "1.2.0",
     "bower": "latest",
     "async": "latest",
     "connect-multiparty": "1.x",
