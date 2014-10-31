@@ -1,5 +1,5 @@
 /* global window:false */
-var app = window.angular.module('MaidSafe', []);
+var app = window.angular.module('MaidSafe', [ 'ngReact' ]);
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {
     $rootScope.socketEndPoint = 'http://' + $location.host() + ':' + window.socketPort;

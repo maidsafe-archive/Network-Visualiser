@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+
 window.ConnectionMap = React.createClass({displayName: 'ConnectionMap',
   getInitialState: function() {
     return {connectionMap: null};
@@ -14,3 +15,4 @@ window.ConnectionMap = React.createClass({displayName: 'ConnectionMap',
     return React.DOM.div({id: 'conMap'});
   }
 });
+
