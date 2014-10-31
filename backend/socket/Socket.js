@@ -50,8 +50,8 @@ exports.broadcastActualConnection = function(data) {
     io.sockets.to(channel).emit(ACTUAL_CONN, data);
   }
 };
-exports.broadcastExpectedConnectionDiff = function(data) {
-  var channel = sessionMapper.getSessionName(data.sessionId);
+exports.broadcastExpectedConnectionDiff = function(sessionId, data) {
+  var channel = sessionMapper.getSessionName(sessionId);
   if (channel) {
     io.sockets.to(channel).emit(EXPECTED_CONN, data);
   }

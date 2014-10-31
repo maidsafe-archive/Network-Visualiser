@@ -172,7 +172,7 @@ module.exports = function(dbCon) {
           diffs[i],
           (i === diffs.length - 1) ? new GeneralHandler(promise) : mockHandler
         );
-        socket.broadcastExpectedConnectionDiff(diffs);
+        socket.broadcastExpectedConnectionDiff(log.sessionId, diffs);
       }
     };
     bridge.getActiveVaultsFullId(log.sessionId).then(function(activeValuts) {

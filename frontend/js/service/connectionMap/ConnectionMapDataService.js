@@ -8,7 +8,7 @@ window.ConnectionMapDataService = [
         return;
       }
       var deferred = $q.defer();
-      var url = '/backend/connectionMapSnapshot?sn=' + sessionName;
+      var url = '/connectionMapSnapshot?sn=' + sessionName;
       if (timestamp) {
         url += '&ts=' + timestamp;
       }
@@ -21,7 +21,7 @@ window.ConnectionMapDataService = [
         return;
       }
       var deferred = $q.defer();
-      $http.get('/backend/connectionMapSnapshot?sn=' + sessionName + '&min=' + minTime + '&max=' + maxTime)
+      $http.get('/connectionMapDiff?sn=' + sessionName + '&min=' + minTime + '&max=' + maxTime)
         .success(deferred.resolve).error(deferred.reject);
       return deferred.promise;
     };
