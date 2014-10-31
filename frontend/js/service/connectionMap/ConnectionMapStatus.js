@@ -32,6 +32,6 @@ window.ConnectionMapStatus = [ 'expectedConnectionHelper', function(expectedConn
   instance.setExpectedStatus = setExpected;
   instance.updateExpected = updateExpected;
   instance.updateActual = updateActual;
-  instance.computeExpectedOnStart = computeExpected;
+  instance.computeExpected = computeExpected;
   return instance;
 } ];
