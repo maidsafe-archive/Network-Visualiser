@@ -4,10 +4,12 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
   var expectedConnections = {};
   var actualConnections = {};
   var statusChangeCallback;
+  instance.vaultsCount = 0;
   var updateUI = function() {
     if (statusChangeCallback) {
-      console.log(transformer.transform(actualConnections, expectedConnections));
-      statusChangeCallback(transformer.transform(actualConnections, expectedConnections));
+      var vaults = transformer.transform(actualConnections, expectedConnections);
+      instance.vaultsCount = vaults.length;
+      statusChangeCallback(vaults);
     }
   };
   var transformVaults = function(data) {

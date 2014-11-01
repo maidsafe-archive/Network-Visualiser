@@ -12,8 +12,8 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   // ---------
   var svg;
   var connectionMapEvents;
-  var WIDTH = window.innerWidth - (window.innerWidth / 20);// 20 is picked random
-  var HEIGHT = window.innerHeight - 190; // 90 (header) + 50 (footer) + 50 (bottom status)
+  var WIDTH = window.innerWidth;// - (window.innerWidth / 100);// 20 is picked random
+  var HEIGHT = window.innerHeight - 200; // 90 (header) + 50 (footer) + 50 (bottom status) + 10 padding
   var RADIUS_X = WIDTH / 2;
   var RADIUS_Y = HEIGHT / 2;
   var CIRCLE_TEXT_GAP = 18;
@@ -27,19 +27,14 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   var transY = RADIUS_Y;
   var lastScale;
   var replaceVaultFormat = function(data) {
-    if (data.indexOf('..') !== -1) {
-      return data.replace('..', '_');
-    }
-    if (data.indexOf('_') !== -1) {
-      return data.replace('_', '..');
-    }
+    return data.indexOf('..') !== -1 ? data.replace('..', '_') : data.replace('_', '..');
   };
   var zoom = function() {
     if (lastDragPosition) {
       transX += (-1 * (lastDragPosition.sourceEvent.offsetX - d3.event.sourceEvent.offsetX));
       transY += (-1 * (lastDragPosition.sourceEvent.offsetY - d3.event.sourceEvent.offsetY));
     }
-    if (!lastDragPosition) {
+    if (!lastDragPosition || !lastScale) {
       lastScale = d3.event.scale;
     }
     svg.attr('transform', 'translate(' + [ transX, transY ] + ')scale(' + lastScale + ')');
