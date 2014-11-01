@@ -17,7 +17,10 @@ app.controller('connectionMapCtrl', [
     $scope.keyTrayClosed = false;
     $scope.currentTime = '';
     $scope.connections = [];
-    $scope.vaultsCount;
+    $scope.vaultsCount = 0;
+    $scope.showViewer = function() {
+      window.location.href = '/viewer#?sn=' + $rootScope.sessionName;
+    };
     $scope.toggleKeyTray = function() {
       $scope.keyTrayClosed = !$scope.keyTrayClosed;
     };
@@ -26,11 +29,11 @@ app.controller('connectionMapCtrl', [
       var scaleIndex;
       var scale;
       var svg;
-      svg = d3.select('svg g');
+      svg = window.d3.select('svg g');
       text = svg.attr('transform');
       scaleIndex = text.indexOf('scale');
       if (scaleIndex > -1) {
-        scale = parseFloat(text.substring(scaleIndex + 6, text.length -1)) + zoomFactor;
+        scale = parseFloat(text.substring(scaleIndex + 6, text.length - 1)) + zoomFactor;
         svg.attr('transform', text.substring(0, scaleIndex) + 'scale(' + scale + ')');
         return;
       }
@@ -66,11 +69,10 @@ app.controller('connectionMapCtrl', [
     $timeout(function() {
       clockTimer();
     }, 10);
-    $scope.$watch( function() {
-        return mapStatus.vaultsCount
-      }, function(newValue) {
-        $scope.vaultsCount = newValue ;
-      }
-    );
+    $scope.$watch(function() {
+      return mapStatus.vaultsCount;
+    }, function(newValue) {
+      $scope.vaultsCount = newValue ;
+    });
   }
 ]);
