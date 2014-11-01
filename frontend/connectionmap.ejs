@@ -54,8 +54,8 @@
   </section>
   <div class="connectionMapStatus">
     <div class="inlineBlock">
-      <button class="statusButton leftButtonRadiusClear selected">Churn Status</button>
-      <button class="statusButton rightButtonRadiusClear">Connectivity Status</button>
+      <button class="statusButton leftButtonRadiusClear" ng-click="changeConnectionStatus(2);" ng-class="{selected:conMapStatus == 2}">Churn Status</button>
+      <button class="statusButton rightButtonRadiusClear" ng-click="changeConnectionStatus(1);" ng-class="{selected:conMapStatus == 1}">Connectivity Status</button>
     </div>
   </div>
   <div class="loading" ng-if="showLoader">

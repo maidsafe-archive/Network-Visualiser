@@ -70,6 +70,18 @@
   background: url('../imgs/connection_map_keys/grey-outline-circle.png') no-repeat;
 }
 
+.connectionMapKey ul li .validClosed {
+  background: url('../imgs/connection_map_keys/blue-dashed-line.png') no-repeat;
+}
+
+.connectionMapKey ul li .missingClosed {
+  background: url('../imgs/connection_map_keys/red-dashed-line.png') no-repeat;
+}
+
+.connectionMapKey ul li .invalidClosed {
+  background: url('../imgs/connection_map_keys/orange-dashed-line.png') no-repeat;
+}
+
 .connectionMapZoom {
   position: absolute;
   width: 20%;
@@ -148,9 +160,10 @@
 
 ul.button-center {
   position: absolute;
-  width: 80%;
+  width: 50%;
   margin: 1.3em 0;
-  margin-left: 10%;
+  margin-left: 25%;
+  margin-right: 25%;
   text-align: center;
 }
 

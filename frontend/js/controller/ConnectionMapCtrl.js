@@ -13,6 +13,7 @@ app.service('dataService', window.ConnectionMapDataService);
 app.controller('connectionMapCtrl', [
   '$scope', '$timeout', '$filter', '$rootScope', 'dataService', 'connectionMapStatus', 'socketService',
   function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService) {
+    $scope.conMapStatus = 2;
     $scope.keyTrayClosed = false;
     $scope.currentTime = '';
     $scope.connections = [];
@@ -30,6 +31,10 @@ app.controller('connectionMapCtrl', [
     }
     $scope.registerReactComponent = function(reactComp) {
       reactComponent = reactComp;
+    };
+    $scope.changeConnectionStatus = function(mode) {
+      $scope.conMapStatus = mode;
+      connectionMapEvents.setMode(mode);
     };
     mapStatus.onStatusChange(function(trasformedData) {
       $scope.connections = trasformedData;

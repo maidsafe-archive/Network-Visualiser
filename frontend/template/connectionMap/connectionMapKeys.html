@@ -1,5 +1,5 @@
 <div class="connectionMapKey" ng-show="keyTrayClosed">
-  <ul>
+  <ul ng-if="conMapStatus == 2">
     <li>
       <div class="icon lastAdded"></div>
       <div>Last added to closed group</div>
@@ -11,6 +11,32 @@
     <li>
       <div class="icon existingClosed"></div>
       <div>Existing closed group connection</div>
+    </li>
+    <li>
+      <div class="icon notInCloseGroup"></div>
+      <div>Not in close group</div>
+    </li>
+    <li>
+      <div class="iconTwo sixteenClosed"></div>
+      <div>16 closed group connection</div>
+    </li>
+    <li>
+      <div class="iconTwo lessSixteenClosed"></div>
+      <div>&lt;16 closed group connection</div>
+    </li>
+  </ul>
+  <ul ng-if="conMapStatus == 1">
+    <li>
+      <div class="icon validClosed"></div>
+      <div>Valid closed group connection</div>
+    </li>
+    <li>
+      <div class="icon missingClosed"></div>
+      <div>Missing closed group connection</div>
+    </li>
+    <li>
+      <div class="icon invalidClosed"></div>
+      <div>Invalid closed group connection</div>
     </li>
     <li>
       <div class="icon notInCloseGroup"></div>

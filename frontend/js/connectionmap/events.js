@@ -12,7 +12,7 @@ var ConnectionEvents = function(svg) {
   var TEXT_NODE_SELECTED_CLASS = 'selected';
   var CLOSE_GROUP_LIMIT = 4;
   var LINK_MODE = { CONNECTIVITY: 1, CHURN: 2 };
-  var mode = LINK_MODE.CONNECTIVITY;
+  var mode = LINK_MODE.CHURN;
   var clickEvent = { state: false, node: null };
   var replaceVaultFormat = function(data) {
     if (data.indexOf('..') !== -1) {
@@ -71,8 +71,8 @@ var ConnectionEvents = function(svg) {
             className = GROUP_CLASS;
             labelClass = 'light-blue';
           }
-          svg.select('g#node-' + d + ' text').classed(labelClass, true);
-          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' + d).classed(className, true);
+          svg.select('g#node-' + replaceVaultFormat(d) + ' text').classed(labelClass, true);
+          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' + replaceVaultFormat(d)).classed(className, true);
         });
       }
       svg.selectAll('path.link.target-' + replaceVaultFormat(node.name)).classed(OVERLAPPING_TARGET_CLASS, true);
@@ -169,7 +169,7 @@ var ConnectionEvents = function(svg) {
   };
   this.setMode = function(modeSelected) {
     mode = modeSelected;
-    if (!clickEvent.node) {
+      if (!clickEvent.node) {
       return;
     }
     if (clickEvent.state) {

@@ -11,7 +11,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   // Constants
   // ---------
   var svg;
-  var events;
+  var connectionMapEvents;
   var WIDTH = window.innerWidth - (window.innerWidth / 20);// 20 is picked random
   var HEIGHT = window.innerHeight - 190; // 90 (header) + 50 (footer) + 50 (bottom status)
   var RADIUS_X = WIDTH / 2;
@@ -84,10 +84,11 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
         return d3.ascending(a.name, b.name);
       });
     var transformedData = new ConnectionMapTransformer(connectionMap);
-    if (!events) {
-      events = new ConnectionEvents();
+    if (!connectionMapEvents) {
+      connectionMapEvents = new ConnectionEvents();
+      window.connectionMapEvents = connectionMapEvents;
     }
-    events.updateSVG(svg);
+    connectionMapEvents.updateSVG(svg);
     connectionMap.sort(function(a, b) {
       return a.name < b.name;
     });
@@ -96,7 +97,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       .attr('class', 'arc')
       .attr('d', d3.svg.arc().outerRadius(RADIUS_Y - (RADIUS_Y / 0.33)).innerRadius(0)
       .startAngle(0).endAngle(2 * Math.PI))
-      .on('mousedown', events.mousedown);
+      .on('mousedown', connectionMapEvents.mousedown);
     var nodes = cluster.nodes(transformedData.nodes);
     var splines = bundle(transformedData.links);
     var path = svg.selectAll('path.link')
@@ -134,9 +135,9 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       .text(function(d) {
         return d.name;
       })
-      .on('mouseover', events.mouseover)
-      .on('mouseout', events.mouseout)
-      .on('click', events.mouseClick);
+      .on('mouseover', connectionMapEvents.mouseover)
+      .on('mouseout', connectionMapEvents.mouseout)
+      .on('click', connectionMapEvents.mouseClick);
     nodes.append('svg:circle')
       .attr('cx', CIRCLE_SIZE)
       .attr('cy', CIRCLE_SIZE)
@@ -145,7 +146,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       .classed('full', function(d) {
         return d.group && d.group.length === CIRCLE_FULL_LIMIT;
       });
-    events.updateLinksOnLoad(nodes);
+    connectionMapEvents.updateLinksOnLoad(nodes);
   };
   this.drawConnections = drawConnectionLinks;
   return this;
