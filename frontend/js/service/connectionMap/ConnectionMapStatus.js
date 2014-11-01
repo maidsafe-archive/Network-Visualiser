@@ -6,6 +6,7 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
   var statusChangeCallback;
   var updateUI = function() {
     if (statusChangeCallback) {
+      console.log(transformer.transform(actualConnections, expectedConnections))
       statusChangeCallback(transformer.transform(actualConnections, expectedConnections));
     }
   };
@@ -16,6 +17,16 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
         break;
 
       default:
+        if (data.valueOne.closeGroupVaults) {
+          data.valueOne.closeGroupVaults = formatVaultIds(data.valueOne.closeGroupVaults);
+        }
+        if (data.valueOne.vaultAdded) {
+          data.valueOne.vaultAdded = transformer.formatVaultId(data.valueOne.vaultAdded);
+        }
+        if (data.valueOne.vaultRemoved) {
+          data.valueOne.vaultRemoved = transformer.formatVaultId(data.valueOne.vaultRemoved);
+        }
+        console.log(data)
         actualConnections[data.vaultId] = data;
         break;
     }
@@ -27,10 +38,16 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
       }
     }
   };
+  var formatVaultIds = function(vaults) {
+    for (var i in vaults) {
+      vaults[i] = transformer.formatVaultId(vaults[i]);
+    }
+    return vaults;
+  };
   var iterateExpectedLogs = function(expected) {
     for (var i in expected) {
       if (expected[i]) {
-        expectedConnections[transformer.formatVaultId(expected[i].vaultId)] = expected[i].closestVaults;
+        expectedConnections[transformer.formatVaultId(expected[i].vaultId)] = formatVaultIds(expected[i].closestVaults);
       }
     }
   };

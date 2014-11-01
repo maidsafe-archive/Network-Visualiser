@@ -1,4 +1,4 @@
-function ConnectionMapTransformer(connectionMap) {
+var ConnectionMapTransformer = function(connectionMap) {
   var generateNodes = function() {
     var map = {};
     var addConnections = function(vault, key, max) {
@@ -44,7 +44,7 @@ function ConnectionMapTransformer(connectionMap) {
     var find = function(name, data) {
       var node = map[name];
       if (!node) {
-        node = map[name] = data || {name: name, children: []};
+        node = map[name] = data || { name: name, children: [] };
         if (name.length) {
           node.parent = find('');
           node.parent.children.push(node);
@@ -68,7 +68,7 @@ function ConnectionMapTransformer(connectionMap) {
     nodes.children.forEach(function(d) {
       if (d.connections) {
         d.connections.forEach(function(i) {
-          temp = {source: map[d.name], target: map[i], isDashed: false};
+          temp = { source: map[d.name], target: map[i], isDashed: false };
           if (map[d.name].expected.indexOf(i) > -1) {
             temp.isDashed = true;
           }
@@ -79,18 +79,18 @@ function ConnectionMapTransformer(connectionMap) {
     return connectionLinks;
   };
   var reset = function(svg) {
-    svg.selectAll("path.link.overlaped-target").classed('overlaped-target', false);
-    svg.selectAll("path.link.group").classed('group', false);
+    svg.selectAll('path.link.overlaped-target').classed('overlaped-target', false);
+    svg.selectAll('path.link.group').classed('group', false);
   };
   this.nodes = generateNodes();
-  this.links = generateLinks(this.nodes);
+  this.links = this.nodes ? generateLinks(this.nodes) : null;
   this.updateConnectionLinks = function(svg, node) {
     reset(svg);
     if (node.group) {
       node.group.forEach(function(d) {
-        svg.selectAll("path.link.source-" + node.name + ".target-" + d).classed('group', true)
+        svg.selectAll('path.link.source-' + node.name.replace('..', '_') + '.target-' + d).classed('group', true)
       });
-      svg.selectAll("path.link.target-" + node.name).classed('overlaped-target', true);
+      svg.selectAll('path.link.target-' + node.name.replace('..', '_')).classed('overlaped-target', true);
     }
   };
   return this;

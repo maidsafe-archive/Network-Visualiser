@@ -29,12 +29,11 @@ app.controller('connectionMapCtrl', [
       return;
     }
     $scope.registerReactComponent = function(reactComp) {
-      debugger
       reactComponent = reactComp;
     };
     mapStatus.onStatusChange(function(trasformedData) {
       $scope.connections = trasformedData;
-      //reactComponent.setState({});
+      reactComponent.setState({});
     });
     socketService.connectToChannel($rootScope.sessionName);
     dataService.getConnectionMapSnapshot($rootScope.sessionName).then(function(data) {
