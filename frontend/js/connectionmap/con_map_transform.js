@@ -1,4 +1,13 @@
+/*jshint unused:false*/
 var ConnectionMapTransformer = function(connectionMap) {
+  var replaceVaultFormat = function(data) {
+    if (data.indexOf('..') !== -1) {
+      return data.replace('..', '_');
+    }
+    if (data.indexOf('_') !== -1) {
+      return data.replace('_', '..');
+    }
+  };
   var generateNodes = function() {
     var map = {};
     var addConnections = function(vault, key, max) {
@@ -11,7 +20,7 @@ var ConnectionMapTransformer = function(connectionMap) {
       }
     };
     var updateConnections = function(vault) {
-      vault.connections = []
+      vault.connections = [];
       if (vault.expected && vault.expected.length > 0) {
         addConnections(vault, 'expected', 4);
       }
@@ -30,7 +39,6 @@ var ConnectionMapTransformer = function(connectionMap) {
         updateConnections(vault);
         vault.connections.forEach(function(name) {
           if (!map[name]) {
-            ;
             map[name] = true;
             connectionMap.push({
               name: name,
@@ -88,9 +96,9 @@ var ConnectionMapTransformer = function(connectionMap) {
     reset(svg);
     if (node.group) {
       node.group.forEach(function(d) {
-        svg.selectAll('path.link.source-' + node.name.replace('..', '_') + '.target-' + d).classed('group', true)
+        svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' + d).classed('group', true);
       });
-      svg.selectAll('path.link.target-' + node.name.replace('..', '_')).classed('overlaped-target', true);
+      svg.selectAll('path.link.target-' + replaceVaultFormat(node.name)).classed('overlaped-target', true);
     }
   };
   return this;

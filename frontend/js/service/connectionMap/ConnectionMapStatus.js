@@ -6,9 +6,17 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
   var statusChangeCallback;
   var updateUI = function() {
     if (statusChangeCallback) {
-      console.log(transformer.transform(actualConnections, expectedConnections))
+      console.log(transformer.transform(actualConnections, expectedConnections));
       statusChangeCallback(transformer.transform(actualConnections, expectedConnections));
     }
+  };
+  var transformVaults = function(data) {
+    for (var i in data) {
+      if (data[i]) {
+        data[i] = transformer.formatVaultId(data[i]);
+      }
+    }
+    return data;
   };
   var setActualLog = function(data) {
     switch (data.actionId) {
@@ -26,7 +34,6 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
         if (data.valueOne.vaultRemoved) {
           data.valueOne.vaultRemoved = transformer.formatVaultId(data.valueOne.vaultRemoved);
         }
-        console.log(data)
         actualConnections[data.vaultId] = data;
         break;
     }
@@ -40,7 +47,9 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
   };
   var formatVaultIds = function(vaults) {
     for (var i in vaults) {
-      vaults[i] = transformer.formatVaultId(vaults[i]);
+      if (vaults[i]) {
+        vaults[i] = transformer.formatVaultId(vaults[i]);
+      }
     }
     return vaults;
   };
@@ -62,7 +71,8 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
   var updateExpected = function(diffs) {
     for (var index in diffs) {
       if (diffs[index]) {
-        expectedConnections[transformer.formatVaultId(diffs[index].vaultId)] = diffs[index].closestVaults;
+        expectedConnections[transformer.formatVaultId(diffs[index].vaultId)] = transformVaults(
+          diffs[index].closestVaults);
       }
     }
     updateUI();

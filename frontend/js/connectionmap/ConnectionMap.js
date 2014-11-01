@@ -1,6 +1,11 @@
 /*
  * TODO :: Set width and height dynamically based on parent node, present logic wont hold good
  */
+/* global window:false */
+/* global d3:false */
+/* global ConnectionMapTransformer:false */
+/* global ConnectionEvents:false */
+/*jshint unused:false*/
 var ConnectionMapBuilder = function(connectionMap, elementId) {
   var div = d3.select('#' + elementId);
   // Constants
@@ -8,12 +13,12 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   var svg;
   var events;
   var WIDTH = window.innerWidth - (window.innerWidth / 20);// 20 is picked random
-  var HEIGHT = window.innerHeight - 155; // 90 (header) + 50 (footer) + 15 (padding)
+  var HEIGHT = window.innerHeight - 190; // 90 (header) + 50 (footer) + 50 (bottom status)
   var RADIUS_X = WIDTH / 2;
   var RADIUS_Y = HEIGHT / 2;
   var CIRCLE_TEXT_GAP = 18;
   var CIRCLE_LINE_GAP = 3;
-  var CIRCLE_FULL_LIMIT = 5;
+  var CIRCLE_FULL_LIMIT = 16; // when the circle will be full blue
   var CIRCLE_SIZE = 3;
   // Helpers
   // -------
@@ -21,7 +26,14 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   var transX = RADIUS_X;
   var transY = RADIUS_Y;
   var lastScale;
-
+  var replaceVaultFormat = function(data) {
+    if (data.indexOf('..') !== -1) {
+      return data.replace('..', '_');
+    }
+    if (data.indexOf('_') !== -1) {
+      return data.replace('_', '..');
+    }
+  };
   var zoom = function() {
     if (lastDragPosition) {
       transX += (-1 * (lastDragPosition.sourceEvent.offsetX - d3.event.sourceEvent.offsetX));
@@ -44,7 +56,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   var bundle = d3.layout.bundle();
   var line = d3.svg.line.radial().
     interpolate('bundle').
-    tension(.85).
+    tension(0.85).
     radius(function(d) {
       return d.y;
     }).
@@ -82,28 +94,28 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
     svg.selectAll('*').remove();
     svg.append('svg:path')
       .attr('class', 'arc')
-      .attr('d', d3.svg.arc().outerRadius(RADIUS_Y - (RADIUS_Y / .33)).innerRadius(0)
+      .attr('d', d3.svg.arc().outerRadius(RADIUS_Y - (RADIUS_Y / 0.33)).innerRadius(0)
       .startAngle(0).endAngle(2 * Math.PI))
       .on('mousedown', events.mousedown);
     var nodes = cluster.nodes(transformedData.nodes);
-    var splines = bundle(transformedData.links)
+    var splines = bundle(transformedData.links);
     var path = svg.selectAll('path.link')
       .data(transformedData.links)
       .enter().append('svg:path')
       .attr('class', function(d) {
-        return 'link source-' + d.source.name.replace('..', '_') + ' target-' + d.target.name.replace('..', '_');
+        return 'link source-' + replaceVaultFormat(d.source.name) + ' target-' + replaceVaultFormat(d.target.name);
       })
       .attr('d', function(d, i) {
         return line(splines[i]);
       });
-    var nodes = svg.selectAll('g.node')
+    nodes = svg.selectAll('g.node')
       .data(nodes.filter(function(n) {
         return !n.children;
       }))
       .enter().append('svg:g')
       .attr('class', 'node')
       .attr('id', function(d) {
-        return 'node-' + d.name.replace('..', '_');
+        return 'node-' + replaceVaultFormat(d.name);
       })
       .attr('transform', function(d) {
         return 'rotate(' + (d.x - 90) + ')translate(' + d.y + ')';
@@ -131,7 +143,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       .attr('r', CIRCLE_SIZE)
       .attr('transform', 'translate(' + CIRCLE_LINE_GAP + ',-' + CIRCLE_LINE_GAP + ')')
       .classed('full', function(d) {
-        return d.group && d.group.length == CIRCLE_FULL_LIMIT;
+        return d.group && d.group.length === CIRCLE_FULL_LIMIT;
       });
     events.updateLinksOnLoad(nodes);
   };
