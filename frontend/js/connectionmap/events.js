@@ -72,7 +72,8 @@ var ConnectionEvents = function(svg) {
             labelClass = 'light-blue';
           }
           svg.select('g#node-' + replaceVaultFormat(d) + ' text').classed(labelClass, true);
-          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' + replaceVaultFormat(d)).classed(className, true);
+          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
+            replaceVaultFormat(d)).classed(className, true);
         });
       }
       svg.selectAll('path.link.target-' + replaceVaultFormat(node.name)).classed(OVERLAPPING_TARGET_CLASS, true);
@@ -169,7 +170,7 @@ var ConnectionEvents = function(svg) {
   };
   this.setMode = function(modeSelected) {
     mode = modeSelected;
-      if (!clickEvent.node) {
+    if (!clickEvent.node) {
       return;
     }
     if (clickEvent.state) {

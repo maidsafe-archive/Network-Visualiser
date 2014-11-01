@@ -34,7 +34,7 @@ app.controller('connectionMapCtrl', [
     };
     $scope.changeConnectionStatus = function(mode) {
       $scope.conMapStatus = mode;
-      connectionMapEvents.setMode(mode);
+      window.connectionMapEvents.setMode(mode);
     };
     mapStatus.onStatusChange(function(trasformedData) {
       $scope.connections = trasformedData;
