@@ -31,6 +31,9 @@ app.controller('viewerCtrl', [
         $scope.setStatusAlert('No active vaults');
       }
     };
+    $scope.showConnectionMap = function() {
+      window.location.href = '/connectionmap#?sn=' + $rootScope.sessionName;
+    };
     $scope.timeline = function() {
       window.open('/timeline#?sn=' + $rootScope.sessionName, '_blank').focus();
     };

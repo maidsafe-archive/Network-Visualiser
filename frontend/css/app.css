@@ -563,3 +563,40 @@ footer div.status.alert { background: #f78b8b; }
   font-size: 16px;
   margin: 0.8em 2.2em;
 }
+
+.leftButtonRadiusClear {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.rightButtonRadiusClear {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+ul.button-center .selected {
+  background-color: #29578A;
+}
+
+ul.button-center {
+  position: absolute;
+  width: 50%;
+  margin: 1.3em 0;
+  margin-left: 25%;
+  margin-right: 25%;
+  text-align: center;
+}
+
+ul.button-center li {
+  float: left;
+}
+
+ul.button-center li button {
+  width: 150px;
+  font-size: 14px;
+  margin: 0 1px 0 0;
+  border-radius: 10px;
+}
+.inlineBlock {
+  display: inline-block;
+}

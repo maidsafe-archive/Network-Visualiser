@@ -1,5 +1,5 @@
 /* global window:false */
-var app = window.angular.module('MaidSafe', []);
+var app = window.angular.module('MaidSafe', [ 'ngReact' ]);
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {
     $rootScope.socketEndPoint = 'http://' + $location.host() + ':' + window.socketPort;
@@ -13,11 +13,34 @@ app.service('dataService', window.ConnectionMapDataService);
 app.controller('connectionMapCtrl', [
   '$scope', '$timeout', '$filter', '$rootScope', 'dataService', 'connectionMapStatus', 'socketService',
   function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService) {
+    $scope.conMapStatus = 2;
     $scope.keyTrayClosed = false;
     $scope.currentTime = '';
+    $scope.connections = [];
+    $scope.vaultsCount = 0;
+    $scope.showViewer = function() {
+      window.location.href = '/viewer#?sn=' + $rootScope.sessionName;
+    };
     $scope.toggleKeyTray = function() {
       $scope.keyTrayClosed = !$scope.keyTrayClosed;
     };
+    $scope.zoom = function(zoomFactor) {
+      var text;
+      var scaleIndex;
+      var scale;
+      var svg;
+      svg = window.d3.select('svg g');
+      text = svg.attr('transform');
+      scaleIndex = text.indexOf('scale');
+      if (scaleIndex > -1) {
+        scale = parseFloat(text.substring(scaleIndex + 6, text.length - 1)) + zoomFactor;
+        svg.attr('transform', text.substring(0, scaleIndex) + 'scale(' + scale + ')');
+        return;
+      }
+      scale = 1 + zoomFactor;
+      svg.attr('transform', text + 'scale(' + scale + ')');
+    };
+    var reactComponent;
     var clockTimer = function() {
       $scope.currentTime = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss');
       $timeout(clockTimer, 1000);
@@ -26,6 +49,17 @@ app.controller('connectionMapCtrl', [
       console.error('Session Name not found');
       return;
     }
+    $scope.registerReactComponent = function(reactComp) {
+      reactComponent = reactComp;
+    };
+    $scope.changeConnectionStatus = function(mode) {
+      $scope.conMapStatus = mode;
+      window.connectionMapEvents.setMode(mode);
+    };
+    mapStatus.onStatusChange(function(trasformedData) {
+      $scope.connections = trasformedData;
+      reactComponent.setState({});
+    });
     socketService.connectToChannel($rootScope.sessionName);
     dataService.getConnectionMapSnapshot($rootScope.sessionName).then(function(data) {
       mapStatus.setSnapshot(data);
@@ -35,5 +69,10 @@ app.controller('connectionMapCtrl', [
     $timeout(function() {
       clockTimer();
     }, 10);
+    $scope.$watch(function() {
+      return mapStatus.vaultsCount;
+    }, function(newValue) {
+      $scope.vaultsCount = newValue ;
+    });
   }
 ]);

@@ -3,8 +3,8 @@
 </div>
 <div class="connectionMapZoom">
   <div class="inlineBlock">
-    <button class="zoomButton icon dec"></button>
-    <button class="zoomButton icon inc"></button>
+    <button class="zoomButton icon dec" ng-click="zoom(-0.1)"></button>
+    <button class="zoomButton icon inc" ng-click="zoom(0.1)"></button>
   </div>
 </div>
-<label class="counter">Vault Count - {{vaultManager.vaultCollection.length}}</label>
+<label class="counter">Vault Count - {{vaultsCount}}</label>

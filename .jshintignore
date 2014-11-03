@@ -1,5 +1,6 @@
 frontend/components
 frontend/js/plugins
 frontend/js/reactjs
+frontend/js/connectionmap/d3
 node_modules
 coverage

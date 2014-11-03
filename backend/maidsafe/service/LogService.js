@@ -36,11 +36,11 @@ var saveLog = function(req, res) {
     if (log.actionId === config.Constants.startActionId || log.actionId === config.Constants.stopActionId) {
       log.sessionId = sessionId;
       queue.pushToQueue(log);
-      saveToActualConn(log);
     }
     handler.promise(err, log);
   };
   bridge.addLog(log, addLogHandler, handler.refreshSessionsCallback);
+  saveToActualConn(log);
 };
 var selectLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;

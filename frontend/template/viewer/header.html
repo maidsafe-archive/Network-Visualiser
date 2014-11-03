@@ -13,6 +13,16 @@
     <button ng-click="search()">Search</button>
   </li>-->
 </ul>
+<ul class="button-center">
+  <div class="inlineBlock">
+    <li>
+      <button class="leftButtonRadiusClear selected">Status Monitor</button>
+    </li>
+    <li>
+      <button class="rightButtonRadiusClear" ng-click="showConnectionMap()">Connection Map</button>
+    </li>
+  </div>
+</ul>
 <ul class="buttons-right">
   <li>
     <button ng-click="toggleExpandAllLogs()">{{allVaultsExpanded?'Hide All':'Expand All'}}</button>

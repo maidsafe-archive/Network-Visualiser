@@ -3,6 +3,7 @@
     <link rel="stylesheet" type="text/css" href="components/normalize.css/normalize.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
     <link rel="stylesheet" type="text/css" href="css/connectionMap.css">
+    <link rel="stylesheet" type="text/css" href="css/d3.css">
     <link rel="stylesheet" type="text/css" href="css/shapes.css">
     <link rel="stylesheet" type="text/css" href="css/colours.css">
     <link rel="stylesheet" type="text/css" href="css/fonts.css">
@@ -18,8 +19,8 @@
     <script src="components/underscore/underscore-min.js"></script>
     <script src="components/react/react.min.js"></script>
     <script src="components/ngReact/ngReact.min.js"></script>
+    <script type="text/javascript" src="js/reactjs/jsx-output/connectionmap.js"></script>
     <script src="js/reactjs/addons/react-infinite-scroll.min.js"></script>
-    <!--<script src="js/reactjs/jsx-output/VaultCollection.js"></script>-->
 
     <script type="text/javascript" src="js/service/connectionMap/TransformLogService.js"></script>
     <script type="text/javascript" src="js/service/connectionMap/ConnectionMapDataService.js"></script>
@@ -27,6 +28,11 @@
     <script type="text/javascript" src="js/service/connectionMap/SocketService.js"></script>
     <script type="text/javascript">var socketPort = <%- JSON.stringify(socketPort) %>;</script>
     <script type="text/javascript" src="js/controller/ConnectionMapCtrl.js"></script>
+
+    <script type="text/javascript" src="js/connectionmap/d3/d3.min.js"></script>
+    <script type="text/javascript" src="js/connectionmap/con_map_transform.js"></script>
+    <script type="text/javascript" src="js/connectionmap/ConnectionMap.js"></script>
+    <script type="text/javascript" src="js/connectionmap/events.js"></script>
 
     <title>Network Visualiser - Realtime View</title>
 
@@ -41,14 +47,14 @@
     <div class="connectionMapContainer">
       <ng-include src="'template/connectionMap/connectionMapKeys.html'"></ng-include>
       <div class="connectionMapView">
-        sample text
+        <div ng-react-component="ConnectionMap"></div>
       </div>
     </div>
   </section>
   <div class="connectionMapStatus">
     <div class="inlineBlock">
-      <button class="statusButton leftButtonRadiusClear selected">Churn Status</button>
-      <button class="statusButton rightButtonRadiusClear">Connectivity Status</button>
+      <button class="statusButton leftButtonRadiusClear" ng-click="changeConnectionStatus(2);" ng-class="{selected:conMapStatus == 2}">Churn Status</button>
+      <button class="statusButton rightButtonRadiusClear" ng-click="changeConnectionStatus(1);" ng-class="{selected:conMapStatus == 1}">Connectivity Status</button>
     </div>
   </div>
   <div class="loading" ng-if="showLoader">

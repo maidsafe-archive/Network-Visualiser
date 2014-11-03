@@ -70,6 +70,18 @@
   background: url('../imgs/connection_map_keys/grey-outline-circle.png') no-repeat;
 }
 
+.connectionMapKey ul li .validClosed {
+  background: url('../imgs/connection_map_keys/blue-dashed-line.png') no-repeat;
+}
+
+.connectionMapKey ul li .missingClosed {
+  background: url('../imgs/connection_map_keys/red-dashed-line.png') no-repeat;
+}
+
+.connectionMapKey ul li .invalidClosed {
+  background: url('../imgs/connection_map_keys/orange-dashed-line.png') no-repeat;
+}
+
 .connectionMapZoom {
   position: absolute;
   width: 20%;
@@ -127,16 +139,6 @@
   background-color: #29578A;
 }
 
-.leftButtonRadiusClear {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
-
-.rightButtonRadiusClear {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-}
-
 .connectionMapStatus .selected {
   background-color: #29578A;
 }
@@ -146,25 +148,112 @@
   text-align: center;
 }
 
-ul.button-center {
-  position: absolute;
-  width: 80%;
-  margin: 1.3em 0;
-  margin-left: 10%;
-  text-align: center;
+.link {
+  stroke:#98C2E5;
+}
+.link.grey {
+  stroke:#CCCCCC;
+}
+.link.target {
+  stroke:#CCCCCC;
+  stroke-width: 1px;
+}
+.link.source {
+  stroke:#CCCCCC;
+  stroke-width: 1;
 }
 
-ul.button-center li {
-  float: left;
+.link.not-exp{
+  stroke:#F7931E;
+  stroke-dasharray: 7,4;
+  stroke-width:1.5;
+  stroke-opacity:1;
 }
 
-ul.button-center li button {
-  width: 150px;
-  font-size: 14px;
-  margin: 0 1px 0 0;
-  border-radius: 10px;
+.link.missing{
+  stroke:#ED1C24;
+  stroke-dasharray: 7,4;
+  stroke-width:1.5;
+  stroke-opacity:1;
 }
 
-.inlineBlock {
-  display: inline-block;
+.link.missing.grey , .link.not-exp.grey {
+  stroke:#CCCCCC;
+  stroke-dasharray: none;
+  stroke-opacity:.5;
+}
+
+.link.source.grey {
+  stroke:#CCCCCC;
+  stroke-width: 1;
+  stroke-opacity:.5;
+}
+.link.source.missing-expected{
+  stroke:#ED1C24;
+  stroke-dasharray : 7,4;
+  stroke-width:1.5;
+  stroke-opacity:1;
+}
+.link.source.in{
+  stroke:#0DB535;
+  stroke-width:1.5;
+  stroke-opacity:1;
+}
+.link.source.out{
+  stroke:#ED1C24;
+  stroke-width:1.5;
+  stroke-opacity:1;
+}
+.link.source.not-expected {
+  stroke:#F7931E;
+  stroke-dasharray: 7,4;
+  stroke-width:1.5;
+  stroke-opacity:1;
+}
+.link.source.close-group {
+  stroke:#5593D7;
+  stroke-dasharray : 7,4;
+  stroke-width:1.5;
+  stroke-opacity:1;
+}
+.link.source.group{
+  stroke:#98C2E5;
+  stroke-width:1.5;
+  stroke-opacity:1;
+}
+.link.target.overlaped-target {
+  fill: none;
+  stroke: #5593D7;
+  stroke-opacity: .1;
+  pointer-events: none;
+}
+.node text {
+  fill: #999999;
+}
+.node text.red {
+  fill:#ED1C24;
+}
+.node text.green {
+  fill:#0DB535;
+}
+.node text.blue {
+  fill:#5593D7;
+}
+.node text.light-blue {
+  fill:#98C2E5;
+}
+.node text.orange {
+  fill:#F7931E;
+}
+.node text.selected {
+  fill:black;
+  font-weight: bold;
+}
+.node circle {
+  fill:white;
+  stroke:#808080;
+  stroke-width:1.2;
+}
+.node circle.full {
+  fill:#808080;
 }
