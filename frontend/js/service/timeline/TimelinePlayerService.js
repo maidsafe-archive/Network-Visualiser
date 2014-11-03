@@ -83,7 +83,7 @@ window.PlayerService = [
     };
     var prepareData = function(data) {
       buffering = false;
-      (dataTransformer || populateTimePool)(data.data);
+      populateTimePool(data);
       sortTimePool();
       if (!timerId) {
         start();
@@ -189,14 +189,10 @@ window.PlayerService = [
     };
     this.stop = function() {
       clearAll();
-      console.log('stop');
       setPlayerStatus(status.stopped);
     };
     this.onStatusChange = function(callback) {
       statusChangeListner = callback;
-    };
-    this.setTransformer = function(callback) {
-      dataTransformer = callback;
     };
     this.addToBufferPool = populateTimePool;
     this.onSnapShotChange = function(handler) {

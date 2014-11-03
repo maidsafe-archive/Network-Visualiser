@@ -88,7 +88,6 @@ app.controller('connectionMapTimelineCtrl', [
     playBackService.setSnapShotHandler(dataService.getConnectionMapSnapshot);
     playBackService.setBufferedDataHandler(dataService.getConnectionMapDiff);
     player.onSnapShotChange(onSnapShotChange);
-    player.setTransformer(playerDataTransformer);
     socketService.connectToChannel($rootScope.sessionName);
     $timeout(function() {
       clockTimer();
