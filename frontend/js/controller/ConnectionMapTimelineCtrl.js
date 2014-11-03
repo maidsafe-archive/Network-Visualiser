@@ -1,5 +1,5 @@
 /* global window:false */
-var app = window.angular.module('MaidSafe', [ 'ngReact' ]);
+var app = window.angular.module('MaidSafe', [ 'ui-rangeSlider', 'ngReact' ]);
 app.run([
   '$rootScope', '$location', function($rootScope, $location) {
     $rootScope.socketEndPoint = 'http://' + $location.host() + ':' + window.socketPort;
@@ -10,22 +10,25 @@ app.service('socketService', window.ConnectionMapSocketService);
 app.service('connectionMapStatus', window.ConnectionMapStatus);
 app.service('d3Transformer', window.Transform);
 app.service('dataService', window.ConnectionMapDataService);
-app.controller('connectionMapCtrl', [
+app.service('playBackService', window.PlaybackDataService);
+app.service('player', window.PlayerService);
+app.controller('connectionMapTimelineCtrl', [
   '$scope', '$timeout', '$filter', '$rootScope', 'dataService', 'connectionMapStatus', 'socketService',
-  function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService) {
+  'playBackService', 'player',
+  function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService, playBackService, player) {
+    $scope.PLAYER_STATE = { PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause' };
+    $scope.playerState = $scope.PLAYER_STATE.STOPPED;
+    $scope.playback = { currentState: 0, maxSteps: 1000, incrementalSteps: 0 };
+    $scope.currentPlayTime = null;
+    $scope.maxTime = new Date();
     $scope.conMapStatus = 2;
     $scope.keyTrayClosed = false;
     $scope.currentTime = '';
     $scope.connections = [];
     $scope.vaultsCount = 0;
-    $scope.showViewer = function() {
-      window.location.href = '/viewer#?sn=' + $rootScope.sessionName;
-    };
+    $scope.player = player;
     $scope.toggleKeyTray = function() {
       $scope.keyTrayClosed = !$scope.keyTrayClosed;
-    };
-    $scope.showTimeline = function() {
-      window.location.href = '/connectionmaptimeline#?sn=' + $rootScope.sessionName;
     };
     $scope.zoom = function(zoomFactor) {
       var text;
@@ -48,6 +51,25 @@ app.controller('connectionMapCtrl', [
       $scope.currentTime = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss');
       $timeout(clockTimer, 1000);
     };
+    var playerDataTransformer = function(data) {
+      var addExpected = function() {
+        if (!data || !data.expected) {
+          return;
+        }
+        player.addToBufferPool(data.expected);
+      };
+      var addActual = function() {
+        if (!data || !data.actual) {
+          return;
+        }
+        player.addToBufferPool(data.actual);
+      };
+      addActual();
+      addExpected();
+    };
+    var onSnapShotChange = function(data) {
+      $scope.connections = data;
+    };
     if (!$rootScope.sessionName) {
       console.error('Session Name not found');
       return;
@@ -63,15 +85,17 @@ app.controller('connectionMapCtrl', [
       $scope.connections = trasformedData;
       reactComponent.setState({});
     });
+    playBackService.setSnapShotHandler(dataService.getConnectionMapSnapshot);
+    playBackService.setBufferedDataHandler(dataService.getConnectionMapDiff);
+    player.onSnapShotChange(onSnapShotChange);
+    player.setTransformer(playerDataTransformer);
     socketService.connectToChannel($rootScope.sessionName);
-    dataService.getConnectionMapSnapshot($rootScope.sessionName).then(function(data) {
-      mapStatus.setSnapshot(data);
-    }, function(err) {
-      console.error('%s %s', new Date().toISOString(), err);
-    });
     $timeout(function() {
       clockTimer();
     }, 10);
+    window.player = player;
+    window.sessionName = $rootScope.sessionName;
+    player.init($rootScope.sessionName);
     $scope.$watch(function() {
       return mapStatus.vaultsCount;
     }, function(newValue) {
