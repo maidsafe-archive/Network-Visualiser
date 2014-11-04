@@ -63,6 +63,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
     attr('viewBox', [ 0, 0, WIDTH, HEIGHT ].join(' ')).
     attr('height', HEIGHT);
   var drawConnectionLinks = function(connections) {
+    var lastNodeSelection = d3.select('svg text.selected');
     d3.select('svg g').remove('*');
     svg = d3.select('svg').append('svg:g').
       call(d3.behavior.zoom().scaleExtent([ -5, 20 ]).on('zoom', zoom)).call(dragEvent).
@@ -80,12 +81,8 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
         return d3.ascending(a.name, b.name);
       });
     var transformedData = new ConnectionMapTransformer(connectionMap);
-    if (!connectionMapEvents) {
-      if (!window.connectionMapEvents) { // This condition is to retain the node selection state on UI update
-        connectionMapEvents = new ConnectionEvents();
-        window.connectionMapEvents = connectionMapEvents;
-      }
-    }
+    connectionMapEvents = new ConnectionEvents();
+    window.connectionMapEvents = connectionMapEvents;
     connectionMapEvents.updateSVG(svg);
     connectionMap.sort(function(a, b) {
       return a.name < b.name;
@@ -133,6 +130,9 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       .text(function(d) {
         return d.name;
       })
+      .attr('text', function(d) {
+        return d.name;
+      })
       .on('mouseover', connectionMapEvents.mouseover)
       .on('mouseout', connectionMapEvents.mouseout)
       .on('click', connectionMapEvents.mouseClick);
@@ -145,6 +145,14 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
         return d.group && d.group.length === CIRCLE_FULL_LIMIT;
       });
     connectionMapEvents.updateLinksOnLoad(nodes);
+    if (lastNodeSelection && lastNodeSelection[0][0]) {
+      var node = d3.select('svg text[text="' + lastNodeSelection.text() + '"]');
+      if (!node || !node[0]) {
+        return;
+      }
+      node.on('click')(node.data()[0])
+    }
+    lastNodeSelection = null;
   };
   this.drawConnections = drawConnectionLinks;
   return this;
