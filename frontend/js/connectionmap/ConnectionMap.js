@@ -150,7 +150,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       if (!node || !node[0]) {
         return;
       }
-      node.on('click')(node.data()[0])
+      node.on('click')(node.data()[0]);
     }
     lastNodeSelection = null;
   };
