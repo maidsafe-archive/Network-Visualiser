@@ -61,7 +61,6 @@ app.controller('connectionMapTimelineCtrl', [
       return;
     }
     $scope.registerReactComponent = function(reactComp) {
-
       reactComponent = reactComp;
     };
     $scope.changeConnectionStatus = function(mode) {
@@ -72,7 +71,7 @@ app.controller('connectionMapTimelineCtrl', [
       $scope.connections = transformedData;
       try {
         reactComponent.setState({});
-      } catch(e) {
+      }catch (e) {
         console.error(e);
       }
     });

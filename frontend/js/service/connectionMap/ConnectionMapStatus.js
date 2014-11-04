@@ -73,14 +73,11 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
     updateUI();
   };
   var updateExpected = function(diffs) {
-    if (!angular.isArray(diffs)) {
-      diffs = [diffs];
+    if (!window.angular.isArray(diffs)) {
+      diffs = [ diffs ];
     }
     for (var index in diffs) {
       if (diffs[index]) {
-        if (!diffs[index].vaultId) {
-          debugger;
-        }
         expectedConnections[transformer.formatVaultId(diffs[index].vaultId)] = transformVaults(
           diffs[index].closestVaults);
       }
