@@ -81,8 +81,10 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       });
     var transformedData = new ConnectionMapTransformer(connectionMap);
     if (!connectionMapEvents) {
-      connectionMapEvents = new ConnectionEvents();
-      window.connectionMapEvents = connectionMapEvents;
+      if (!window.connectionMapEvents) { // This condition is to retain the node selection state on UI update
+        connectionMapEvents = new ConnectionEvents();
+        window.connectionMapEvents = connectionMapEvents;
+      }
     }
     connectionMapEvents.updateSVG(svg);
     connectionMap.sort(function(a, b) {
