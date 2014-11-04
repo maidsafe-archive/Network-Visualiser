@@ -59,8 +59,8 @@ app.controller('connectionMapCtrl', [
       $scope.conMapStatus = mode;
       window.connectionMapEvents.setMode(mode);
     };
-    mapStatus.onStatusChange(function(trasformedData) {
-      $scope.connections = trasformedData;
+    mapStatus.onStatusChange(function(transformedData) {
+      $scope.connections = transformedData;
       reactComponent.setState({});
     });
     socketService.connectToChannel($rootScope.sessionName);

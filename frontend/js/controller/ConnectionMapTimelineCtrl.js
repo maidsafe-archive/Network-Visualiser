@@ -27,7 +27,11 @@ app.controller('connectionMapTimelineCtrl', [
     $scope.toggleKeyTray = function() {
       $scope.keyTrayClosed = !$scope.keyTrayClosed;
     };
-   // player.watchState($scope.playback.currentState);
+    var pushDiffs = function(data) {
+      $timeout(function() {
+        (data.hasOwnProperty('actionId') ? mapStatus.updateActual : mapStatus.updateExpected)(data);
+      }, 1);
+    };
     $scope.zoom = function(zoomFactor) {
       var text;
       var scaleIndex;
@@ -50,26 +54,32 @@ app.controller('connectionMapTimelineCtrl', [
       $timeout(clockTimer, 1000);
     };
     var onSnapShotChange = function(data) {
-      $scope.connections = data;
+      mapStatus.setSnapshot(data);
     };
     if (!$rootScope.sessionName) {
       console.error('Session Name not found');
       return;
     }
     $scope.registerReactComponent = function(reactComp) {
+
       reactComponent = reactComp;
     };
     $scope.changeConnectionStatus = function(mode) {
       $scope.conMapStatus = mode;
       window.connectionMapEvents.setMode(mode);
     };
-    mapStatus.onStatusChange(function(trasformedData) {
-      $scope.connections = trasformedData;
-      reactComponent.setState({});
+    mapStatus.onStatusChange(function(transformedData) {
+      $scope.connections = transformedData;
+      try {
+        reactComponent.setState({});
+      } catch(e) {
+        console.error(e);
+      }
     });
     playBackService.setSnapShotHandler(dataService.getConnectionMapSnapshot);
     playBackService.setBufferedDataHandler(dataService.getConnectionMapDiff);
     player.onSnapShotChange(onSnapShotChange);
+    player.setPushLogHandler(pushDiffs);
     socketService.connectToChannel($rootScope.sessionName);
     $timeout(function() {
       clockTimer();

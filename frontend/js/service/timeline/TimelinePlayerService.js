@@ -13,15 +13,16 @@ window.PlayerService = [
     var bufferMonitor = 0;
     var firstBuffer = true;
     var bufferPool = {};
-    var statusChangeListner;
+    var statusChangeListener;
     var buffering;
     var onSnapShotChange;
     var startTime;
     var sessionName;
     var scope;
+    var pushLogHandler;
     var lastRangeTime = -1;
     var autoSeekIntervalPromise;
-    var seekedOnPauseState = false;
+    var didSeekOnPauseState = false;
     instance.showProgress = false;
     instance.STATE = { PLAY: 0, STOP: 1, PAUSE: 2 };
     instance.currentState = instance.STATE.STOP;
@@ -96,8 +97,9 @@ window.PlayerService = [
     };
     var PushWrapper = function(log) {
       this.push = function() {
-        console.log(log);
-        // dataManager.pushLog(log);
+        if (pushLogHandler) {
+          pushLogHandler(log);
+        }
       };
     };
     var initializeListeners = function() {
@@ -124,7 +126,7 @@ window.PlayerService = [
             new SeekHandler(instance.playerUI.currentPlayTime, newValue);
             break;
           case instance.STATE.PAUSE:
-            seekedOnPauseState = true;
+            didSeekOnPauseState = true;
             break;
           case instance.STATE.STOP:
             break;
@@ -228,11 +230,11 @@ window.PlayerService = [
       clearInterval(timerId);
     };
     instance.resume = function() {
-      if (!seekedOnPauseState) {
+      if (!didSeekOnPauseState) {
         start();
         return;
       }
-      seekedOnPauseState = false;
+      didSeekOnPauseState = false;
       clearAll();
       instance.play(instance.playerUI.currentPlayTime);
     };
@@ -243,10 +245,13 @@ window.PlayerService = [
       instance.currentState = instance.STATE.STOP;
     };
     instance.onStatusChange = function(callback) {
-      statusChangeListner = callback;
+      statusChangeListener = callback;
     };
     instance.onSnapShotChange = function(handler) {
       onSnapShotChange = handler;
+    };
+    instance.setPushLogHandler = function(handler) {
+      pushLogHandler = handler;
     };
   }
 ];
