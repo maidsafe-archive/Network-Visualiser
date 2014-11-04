@@ -72,7 +72,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
         }
         return 'translate(' + transX + ',' + transY + ')';
       });
-    svg.on("dblclick.zoom", null);
+    svg.on('dblclick.zoom', null);
     connectionMap = connections || connectionMap;
     var cluster = d3.layout.cluster().
       size([ 360, RADIUS_Y / 2 ])

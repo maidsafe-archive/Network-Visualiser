@@ -1,5 +1,5 @@
 /* global window:false */
-/* jshint maxstatements:false */
+
 window.PlayerService = [
   '$filter', '$timeout', 'playBackService', function($filter, $timeout, playBackService) {
     var instance = this;
@@ -18,7 +18,6 @@ window.PlayerService = [
     var onSnapShotChange;
     var startTime;
     var sessionName;
-    var scope;
     var pushLogHandler;
     var lastRangeTime = -1;
     var autoSeekIntervalPromise;
@@ -42,48 +41,48 @@ window.PlayerService = [
       firstBuffer = true;
       bufferPool = {};
     };
-    var populateTimePool = function(history) {
-      var key;
-      var log;
-      var addLog = function(vaultLogs) {
-        for (var index in vaultLogs) {
-          if (vaultLogs[index]) {
-            log = vaultLogs[index];
-            key = getDateKey(log.ts);
-            if (!bufferPool.hasOwnProperty(key)) {
-              bufferPool[key] = [];
+    var prepareData = function(data) {
+      var populateTimePool = function(history) {
+        var key;
+        var log;
+        var addLog = function(vaultLogs) {
+          for (var index in vaultLogs) {
+            if (vaultLogs[index]) {
+              log = vaultLogs[index];
+              key = getDateKey(log.ts);
+              if (!bufferPool.hasOwnProperty(key)) {
+                bufferPool[key] = [];
+              }
+              bufferPool[key].push(log);
             }
-            bufferPool[key].push(log);
+          }
+        };
+
+        for (var vault in history) {
+          if (history[vault]) {
+            addLog(history[vault]);
           }
         }
       };
-
-      for (var vault in history) {
-        if (history[vault]) {
-          addLog(history[vault]);
-        }
-      }
-    };
-    // sorting by id to arrange in the same sequence order of receiving the logs
-    var sortTimePool = function() {
-      for (var key in bufferPool) {
-        if (bufferPool[key]) {
-          bufferPool[key] = $filter('orderBy')(bufferPool[key], '-__id');
-        }
-      }
-      if (!timePool) {
-        timePool = bufferPool; // setPlayerStatus("Ready to play")
-        bufferPool = {};
-      } else {
-        for (var bKey in bufferPool) {
-          if (bufferPool[bKey]) {
-            timePool[bKey] = bufferPool[bKey];
+      // sorting by id to arrange in the same sequence order of receiving the logs
+      var sortTimePool = function() {
+        for (var key in bufferPool) {
+          if (bufferPool[key]) {
+            bufferPool[key] = $filter('orderBy')(bufferPool[key], '-__id');
           }
         }
-        bufferPool = {};
-      }
-    };
-    var prepareData = function(data) {
+        if (!timePool) {
+          timePool = bufferPool; // setPlayerStatus("Ready to play")
+          bufferPool = {};
+        } else {
+          for (var bKey in bufferPool) {
+            if (bufferPool[bKey]) {
+              timePool[bKey] = bufferPool[bKey];
+            }
+          }
+          bufferPool = {};
+        }
+      };
       buffering = false;
       populateTimePool(data);
       sortTimePool();
@@ -95,14 +94,7 @@ window.PlayerService = [
       instance.currentState = instance.STATE.PLAY;
       timerId = setInterval(pushLogs, SPEED);
     };
-    var PushWrapper = function(log) {
-      this.push = function() {
-        if (pushLogHandler) {
-          pushLogHandler(log);
-        }
-      };
-    };
-    var initializeListeners = function() {
+    var initializeListeners = function(scope) {
       var SeekHandler = function(time, rangeValue) {
         if (autoSeekIntervalPromise) {
           $timeout.cancel(autoSeekIntervalPromise);
@@ -136,27 +128,44 @@ window.PlayerService = [
     var pushLogs = function() {
       instance.playerUI.currentPlayState += 1;
       var logs = timePool[getDateKey(new Date(nextPushTime + 1000).toISOString())];
+      var updateNextPushTime = function() {
+        if (playEndsAt < nextPushTime) {
+          instance.stop();
+          return;
+        }
+        nextPushTime += SPEED;
+        loadBuffer();
+      };
+      var PushWrapper = function(log) {
+        this.push = function() {
+          if (pushLogHandler) {
+            pushLogHandler(log);
+          }
+        };
+        return this.push;
+      };
       if (logs && logs.length > 0) {
         for (var index in logs) {
           if (logs[index]) {
-            setTimeout(new PushWrapper(logs[index]).push, 1);
+            setTimeout(new PushWrapper(logs[index]), 1);
           }
         }
       }
       updateNextPushTime();
     };
-    /*jshint unused:false */
-    /*jshint forin:false */
-    var isEmpty = function(obj) {
-      for (var o in obj) {
-        return false;
-      }
-      return true;
-    };
+
     /*jshint forin:true */
     /*jshint unused:true */
     var loadBuffer = function() {
       var condition;
+      /*jshint unused:false */
+      /*jshint forin:false */
+      var isEmpty = function(obj) {
+        for (var o in obj) {
+          return false;
+        }
+        return true;
+      };
       if (firstBuffer) {
         condition = (BUFFER_MINUTES * 60) / 4;
       } else {
@@ -175,14 +184,6 @@ window.PlayerService = [
             .then(prepareData, onNetworkError);
         }
       }
-    };
-    var updateNextPushTime = function() {
-      if (playEndsAt < nextPushTime) {
-        instance.stop();
-        return;
-      }
-      nextPushTime += SPEED;
-      loadBuffer();
     };
     instance.play = function(time) {
       time = time || startTime;
@@ -210,7 +211,6 @@ window.PlayerService = [
     };
     instance.init = function(sn, $scope) {
       sessionName = sn;
-      scope = $scope;
       playBackService.getTimeLineData(sessionName, function(err, data) {
         if (err) {
           onNetworkError(err);
@@ -223,7 +223,7 @@ window.PlayerService = [
           currentPlayState: 0
         };
       });
-      initializeListeners();
+      initializeListeners($scope);
     };
     instance.pause = function() {
       instance.currentState = instance.STATE.PAUSE;
