@@ -1,6 +1,6 @@
 /* global window:false */
 window.PlayerService = [
-  '$filter', 'playBackService', function($filter, playBackService) {
+  '$filter', '$timeout', 'playBackService', function($filter, $timeout, playBackService) {
     var instance = this;
     var timerId = 0;
     var nextPushTime;
@@ -18,8 +18,8 @@ window.PlayerService = [
     var startTime;
     var sessionName;
     var scope;
-    var tempRangeUpdateCounter = 0;
-    var lastRangeTime = 0;
+    var lastRangeTime = -1;
+    var autoSeekIntervalPromise;
     instance.STATE = { PLAY: 0, STOP: 1, PAUSE: 2 };
     instance.currentState = instance.STATE.STOP;
     instance.playerUI = { maxSteps: 1000, currentPlayTime: 0, currentPlayState: 0 };
@@ -98,22 +98,34 @@ window.PlayerService = [
       };
     };
     var initializeListeners = function() {
+      var SeekHandler = function(time, rangeValue) {
+        if (autoSeekIntervalPromise) {
+          $timeout.cancel(autoSeekIntervalPromise);
+          autoSeekIntervalPromise = null;
+        }
+        autoSeekIntervalPromise = $timeout(function() {
+          instance.stop();
+          instance.playerUI.currentPlayState = rangeValue;
+          instance.play(new Date(time).toISOString());
+        }, 1000);
+      };
       scope.$watch('player.playerUI.currentPlayState', function(newValue, oldValue) {
         instance.playerUI.currentPlayTime = startTime +  (newValue * 1000);
-        console.log(newValue);
-        // if (newValue  === (lastRangeTime + 1) || (newValue === 0 && oldValue === 0)) {
-        //  return;
-        // }
-        // instance.stop();
-        // switch (instance.currentState) {
-        //  case instance.STATE.PLAY:
-        //    instance.play(new Date(instance.playerUI.currentPlayTime).toISOString());
-        //    break;
-        //  case instance.STATE.PAUSE:
-        //    break;
-        //  case instance.STATE.STOP:
-        //    break;
-        // };
+        if (newValue  === (lastRangeTime + 1) || (newValue === 0 && oldValue === 0)) {
+          lastRangeTime += 1;
+          return;
+        }
+        lastRangeTime = newValue;
+        console.log('Can seek' + new Date());
+        switch (instance.currentState) {
+          case instance.STATE.PLAY:
+            new SeekHandler(instance.playerUI.currentPlayTime, newValue);
+            break;
+          case instance.STATE.PAUSE:
+            break;
+          case instance.STATE.STOP:
+            break;
+        }
       });
     };
     var pushLogs = function() {
@@ -168,18 +180,22 @@ window.PlayerService = [
       loadBuffer();
     };
     instance.play = function(time) {// pass time as an ISO string
-     // playEndsAt = new Date().getTime();
+      var timeInMills = time ? new Date(time).getTime() : null;
       instance.currentState = instance.STATE.PLAY;
-      time = time || new Date(startTime).toISOString();
       clearAll();
-      nextPushTime = new Date(time).getTime();
+      nextPushTime = time ? timeInMills : new Date().getTime();
       playBackService.getSnapShot(sessionName, time).then(function(data) {
         if (!onSnapShotChange) {
           console.error('Set Snapshot Callback before getting Snapshot');
           return;
         }
         onSnapShotChange(data);
-        lastBufferedTime = startTime + (BUFFER_MINUTES * 60000);
+        if (time) {
+          instance.currentPlayTime = timeInMills;
+          lastBufferedTime = timeInMills + (BUFFER_MINUTES * 60000);
+        } else {
+          lastBufferedTime = startTime + (BUFFER_MINUTES * 60000);
+        }
         var bufferData = playBackService.getBufferedData(sessionName, new Date(startTime).toISOString(),
           new Date(lastBufferedTime).toISOString());
         if (bufferData) {
@@ -199,7 +215,7 @@ window.PlayerService = [
         playEndsAt = (data.endTime ? data.endTime : new Date().getTime()) + 10000;
         instance.playerUI = {
           currentPlayTime: startTime, maxSteps: Math.ceil((playEndsAt - startTime) / 1000),
-           currentPlayState: 0
+          currentPlayState: 0
         };
       });
       initializeListeners();
