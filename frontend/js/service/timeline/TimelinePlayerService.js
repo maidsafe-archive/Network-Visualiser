@@ -1,6 +1,7 @@
 /* global window:false */
 window.PlayerService = [
   '$filter', 'playBackService', function($filter, playBackService) {
+    var instance = this;
     var timerId = 0;
     var nextPushTime;
     var playEndsAt;
@@ -11,14 +12,17 @@ window.PlayerService = [
     var bufferMonitor = 0;
     var firstBuffer = true;
     var bufferPool = {};
-    var status = { playing: 0, stopped: 1, pause: 2, resume: 3 };
-    var playerStatus = '';
     var statusChangeListner;
     var buffering;
-    var dataTransformer;
     var onSnapShotChange;
     var startTime;
     var sessionName;
+    var scope;
+    var tempRangeUpdateCounter = 0;
+    var lastRangeTime = 0;
+    instance.STATE = { PLAY: 0, STOP: 1, PAUSE: 2 };
+    instance.currentState = instance.STATE.STOP;
+    instance.playerUI = { maxSteps: 1000, currentPlayTime: 0, currentPlayState: 0 };
     var onNetworkError = function(err) {
       buffering = false;
       console.error(err.data);
@@ -33,12 +37,6 @@ window.PlayerService = [
       bufferMonitor = 0;
       firstBuffer = true;
       bufferPool = {};
-    };
-    var setPlayerStatus = function(status) {
-      playerStatus = status;
-      if (statusChangeListner) {
-        statusChangeListner(playerStatus);
-      }
     };
     var populateTimePool = function(history) {
       var key;
@@ -90,6 +88,7 @@ window.PlayerService = [
       }
     };
     var start = function() {
+      instance.currentState = instance.STATE.PLAY;
       timerId = setInterval(pushLogs, SPEED);
     };
     var PushWrapper = function(log) {
@@ -98,8 +97,27 @@ window.PlayerService = [
         // dataManager.pushLog(log);
       };
     };
+    var initializeListeners = function() {
+      scope.$watch('player.playerUI.currentPlayState', function(newValue, oldValue) {
+        instance.playerUI.currentPlayTime = startTime +  (newValue * 1000);
+        console.log(newValue);
+        // if (newValue  === (lastRangeTime + 1) || (newValue === 0 && oldValue === 0)) {
+        //  return;
+        // }
+        // instance.stop();
+        // switch (instance.currentState) {
+        //  case instance.STATE.PLAY:
+        //    instance.play(new Date(instance.playerUI.currentPlayTime).toISOString());
+        //    break;
+        //  case instance.STATE.PAUSE:
+        //    break;
+        //  case instance.STATE.STOP:
+        //    break;
+        // };
+      });
+    };
     var pushLogs = function() {
-      setPlayerStatus(status.playing);
+      instance.playerUI.currentPlayState += 1;
       var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())];
       if (logs && logs.length > 0) {
         for (var index in logs) {
@@ -149,12 +167,12 @@ window.PlayerService = [
       nextPushTime += SPEED;
       loadBuffer();
     };
-    this.play = function(time) {// pass time as an ISO string
+    instance.play = function(time) {// pass time as an ISO string
      // playEndsAt = new Date().getTime();
+      instance.currentState = instance.STATE.PLAY;
       time = time || new Date(startTime).toISOString();
       clearAll();
       nextPushTime = new Date(time).getTime();
-      lastBufferedTime = nextPushTime;
       playBackService.getSnapShot(sessionName, time).then(function(data) {
         if (!onSnapShotChange) {
           console.error('Set Snapshot Callback before getting Snapshot');
@@ -169,33 +187,38 @@ window.PlayerService = [
         }
       }, onNetworkError);
     };
-    this.init = function(sn) {
+    instance.init = function(sn, $scope) {
       sessionName = sn;
+      scope = $scope;
       playBackService.getTimeLineData(sessionName, function(err, data) {
         if (err) {
           onNetworkError(err);
           return;
         }
-        startTime = data.startTime;
-        playEndsAt = data.endTime;
+        startTime = new Date(data.startTime).getTime() - 1000;
+        playEndsAt = (data.endTime ? data.endTime : new Date().getTime()) + 10000;
+        instance.playerUI = {
+          currentPlayTime: startTime, maxSteps: Math.ceil((playEndsAt - startTime) / 1000),
+           currentPlayState: 0
+        };
       });
+      initializeListeners();
     };
-    this.pause = function() {
-      setPlayerStatus(status.pause);
+    instance.pause = function() {
+      instance.currentState = instance.STATE.PAUSE;
       clearInterval(timerId);
     };
-    this.resume = function() {
+    instance.resume = function() {
       start();
     };
-    this.stop = function() {
+    instance.stop = function() {
       clearAll();
-      setPlayerStatus(status.stopped);
+      instance.currentState = instance.STATE.STOP;
     };
-    this.onStatusChange = function(callback) {
+    instance.onStatusChange = function(callback) {
       statusChangeListner = callback;
     };
-    this.addToBufferPool = populateTimePool;
-    this.onSnapShotChange = function(handler) {
+    instance.onSnapShotChange = function(handler) {
       onSnapShotChange = handler;
     };
   }

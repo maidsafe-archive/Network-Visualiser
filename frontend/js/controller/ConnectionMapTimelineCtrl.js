@@ -18,18 +18,17 @@ app.controller('connectionMapTimelineCtrl', [
   function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService, playBackService, player) {
     $scope.PLAYER_STATE = { PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause' };
     $scope.playerState = $scope.PLAYER_STATE.STOPPED;
-    $scope.playback = { currentState: 0, maxSteps: 1000, incrementalSteps: 0 };
-    $scope.currentPlayTime = null;
+    $scope.playback; // this variable is used to bing the player state on to the UI
     $scope.maxTime = new Date();
     $scope.conMapStatus = 2;
     $scope.keyTrayClosed = false;
-    $scope.currentTime = '';
     $scope.connections = [];
     $scope.vaultsCount = 0;
     $scope.player = player;
     $scope.toggleKeyTray = function() {
       $scope.keyTrayClosed = !$scope.keyTrayClosed;
     };
+   // player.watchState($scope.playback.currentState);
     $scope.zoom = function(zoomFactor) {
       var text;
       var scaleIndex;
@@ -50,22 +49,6 @@ app.controller('connectionMapTimelineCtrl', [
     var clockTimer = function() {
       $scope.currentTime = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss');
       $timeout(clockTimer, 1000);
-    };
-    var playerDataTransformer = function(data) {
-      var addExpected = function() {
-        if (!data || !data.expected) {
-          return;
-        }
-        player.addToBufferPool(data.expected);
-      };
-      var addActual = function() {
-        if (!data || !data.actual) {
-          return;
-        }
-        player.addToBufferPool(data.actual);
-      };
-      addActual();
-      addExpected();
     };
     var onSnapShotChange = function(data) {
       $scope.connections = data;
@@ -94,7 +77,7 @@ app.controller('connectionMapTimelineCtrl', [
     }, 10);
     window.player = player;
     window.sessionName = $rootScope.sessionName;
-    player.init($rootScope.sessionName);
+    player.init($rootScope.sessionName, $scope);
     $scope.$watch(function() {
       return mapStatus.vaultsCount;
     }, function(newValue) {
