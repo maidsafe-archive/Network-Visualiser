@@ -1,4 +1,5 @@
 /* global window:false */
+/* jshint maxstatements:false */
 window.PlayerService = [
   '$filter', '$timeout', 'playBackService', function($filter, $timeout, playBackService) {
     var instance = this;
@@ -20,6 +21,7 @@ window.PlayerService = [
     var scope;
     var lastRangeTime = -1;
     var autoSeekIntervalPromise;
+    var seekedOnPauseState = false;
     instance.STATE = { PLAY: 0, STOP: 1, PAUSE: 2 };
     instance.currentState = instance.STATE.STOP;
     instance.playerUI = { maxSteps: 1000, currentPlayTime: 0, currentPlayState: 0 };
@@ -106,7 +108,7 @@ window.PlayerService = [
         autoSeekIntervalPromise = $timeout(function() {
           instance.stop();
           instance.playerUI.currentPlayState = rangeValue;
-          instance.play(new Date(time).toISOString());
+          instance.play(time);
         }, 1000);
       };
       scope.$watch('player.playerUI.currentPlayState', function(newValue, oldValue) {
@@ -116,12 +118,12 @@ window.PlayerService = [
           return;
         }
         lastRangeTime = newValue;
-        console.log('Can seek' + new Date());
         switch (instance.currentState) {
           case instance.STATE.PLAY:
             new SeekHandler(instance.playerUI.currentPlayTime, newValue);
             break;
           case instance.STATE.PAUSE:
+            seekedOnPauseState = true;
             break;
           case instance.STATE.STOP:
             break;
@@ -130,7 +132,7 @@ window.PlayerService = [
     };
     var pushLogs = function() {
       instance.playerUI.currentPlayState += 1;
-      var logs = timePool[getDateKey(new Date(nextPushTime).toISOString())];
+      var logs = timePool[getDateKey(new Date(nextPushTime + 1000).toISOString())];
       if (logs && logs.length > 0) {
         for (var index in logs) {
           if (logs[index]) {
@@ -173,30 +175,26 @@ window.PlayerService = [
     };
     var updateNextPushTime = function() {
       if (playEndsAt < nextPushTime) {
-        this.stop();
+        instance.stop();
         return;
       }
       nextPushTime += SPEED;
       loadBuffer();
     };
-    instance.play = function(time) {// pass time as an ISO string
-      var timeInMills = time ? new Date(time).getTime() : null;
+    instance.play = function(time) {
+      time = time || startTime;
       instance.currentState = instance.STATE.PLAY;
       clearAll();
-      nextPushTime = time ? timeInMills : new Date().getTime();
-      playBackService.getSnapShot(sessionName, time).then(function(data) {
+      nextPushTime = time;
+      playBackService.getSnapShot(sessionName, new Date(time).toISOString()).then(function(data) {
         if (!onSnapShotChange) {
           console.error('Set Snapshot Callback before getting Snapshot');
           return;
         }
         onSnapShotChange(data);
-        if (time) {
-          instance.currentPlayTime = timeInMills;
-          lastBufferedTime = timeInMills + (BUFFER_MINUTES * 60000);
-        } else {
-          lastBufferedTime = startTime + (BUFFER_MINUTES * 60000);
-        }
-        var bufferData = playBackService.getBufferedData(sessionName, new Date(startTime).toISOString(),
+        instance.currentPlayTime = time;
+        lastBufferedTime = time + (BUFFER_MINUTES * 60000);
+        var bufferData = playBackService.getBufferedData(sessionName, new Date(time).toISOString(),
           new Date(lastBufferedTime).toISOString());
         if (bufferData) {
           bufferData.then(prepareData, onNetworkError);
@@ -225,10 +223,18 @@ window.PlayerService = [
       clearInterval(timerId);
     };
     instance.resume = function() {
-      start();
+      if (!seekedOnPauseState) {
+        start();
+        return;
+      }
+      seekedOnPauseState = false;
+      clearAll();
+      instance.play(instance.playerUI.currentPlayTime);
     };
     instance.stop = function() {
       clearAll();
+      instance.playerUI.currentPlayTime = startTime;
+      instance.playerUI.currentPlayState = 0;
       instance.currentState = instance.STATE.STOP;
     };
     instance.onStatusChange = function(callback) {

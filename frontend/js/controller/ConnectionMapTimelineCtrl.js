@@ -18,7 +18,6 @@ app.controller('connectionMapTimelineCtrl', [
   function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService, playBackService, player) {
     $scope.PLAYER_STATE = { PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause' };
     $scope.playerState = $scope.PLAYER_STATE.STOPPED;
-    $scope.playback; // this variable is used to bing the player state on to the UI
     $scope.maxTime = new Date();
     $scope.conMapStatus = 2;
     $scope.keyTrayClosed = false;
