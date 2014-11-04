@@ -16,10 +16,11 @@ app.controller('connectionMapTimelineCtrl', [
   '$scope', '$timeout', '$filter', '$rootScope', 'dataService', 'connectionMapStatus', 'socketService',
   'playBackService', 'player',
   function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService, playBackService, player) {
+    $scope.showStatusButton = false;
     $scope.PLAYER_STATE = { PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause' };
     $scope.playerState = $scope.PLAYER_STATE.STOPPED;
     $scope.maxTime = new Date();
-    $scope.conMapStatus = 2;
+    $scope.conMapStatus = 1;
     $scope.keyTrayClosed = false;
     $scope.connections = [];
     $scope.vaultsCount = 0;
@@ -71,6 +72,9 @@ app.controller('connectionMapTimelineCtrl', [
       $scope.connections = transformedData;
       try {
         reactComponent.setState({});
+        window.connectionMapEvents.onNodeTextClicked(function(clicked) {
+          $scope.showStatusButton = clicked;
+        });
       }catch (e) {
         console.error(e);
       }

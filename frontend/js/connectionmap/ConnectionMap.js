@@ -72,6 +72,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
         }
         return 'translate(' + transX + ',' + transY + ')';
       });
+    svg.on("dblclick.zoom", null);
     connectionMap = connections || connectionMap;
     var cluster = d3.layout.cluster().
       size([ 360, RADIUS_Y / 2 ])
@@ -92,7 +93,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       .attr('class', 'arc')
       .attr('d', d3.svg.arc().outerRadius(RADIUS_Y - (RADIUS_Y / 0.33)).innerRadius(0)
       .startAngle(0).endAngle(2 * Math.PI))
-      .on('mousedown', connectionMapEvents.mousedown);
+      .on('dblclick', connectionMapEvents.mousedown);
     var nodes = cluster.nodes(transformedData.nodes);
     var splines = bundle(transformedData.links);
     var path = svg.selectAll('path.link')

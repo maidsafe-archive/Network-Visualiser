@@ -12,8 +12,9 @@ var ConnectionEvents = function(svg) {
   var TEXT_NODE_SELECTED_CLASS = 'selected';
   var CLOSE_GROUP_LIMIT = 4;
   var LINK_MODE = { CONNECTIVITY: 1, CHURN: 2 };
-  var mode = LINK_MODE.CHURN;
+  var mode = LINK_MODE.CONNECTIVITY;
   var clickEvent = { state: false, node: null };
+  var nodeTextClicked = null;
   var replaceVaultFormat = function(data) {
     if (data.indexOf('..') !== -1) {
       return data.replace('..', '_');
@@ -122,6 +123,9 @@ var ConnectionEvents = function(svg) {
     }
     clickEvent.state = false;
     revertConnections(clickEvent.node);
+    if (nodeTextClicked) {
+      nodeTextClicked(false, clickEvent.node);
+    }
   };
   var restoreMouseClick = function() {
     if (clickEvent.state) {
@@ -139,6 +143,9 @@ var ConnectionEvents = function(svg) {
     clickEvent.state = true;
     clickEvent.node = d;
     showConnections(d);
+    if (nodeTextClicked) {
+      nodeTextClicked(true, d);
+    }
   };
   this.updateLinksOnLoad = function(nodes) {
     nodes.each(function(node) {
@@ -184,6 +191,9 @@ var ConnectionEvents = function(svg) {
   this.updateSVG = function(svgRegion) {
     svg = svgRegion;
     setTimeout(restoreMouseClick, 1);
+  };
+  this.onNodeTextClicked = function(callback) {
+    nodeTextClicked = callback;
   };
   return this;
 };

@@ -13,7 +13,8 @@ app.service('dataService', window.ConnectionMapDataService);
 app.controller('connectionMapCtrl', [
   '$scope', '$timeout', '$filter', '$rootScope', 'dataService', 'connectionMapStatus', 'socketService',
   function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService) {
-    $scope.conMapStatus = 2;
+    $scope.showStatusButton = false;
+    $scope.conMapStatus = 1;
     $scope.keyTrayClosed = false;
     $scope.currentTime = '';
     $scope.connections = [];
@@ -62,6 +63,9 @@ app.controller('connectionMapCtrl', [
     mapStatus.onStatusChange(function(transformedData) {
       $scope.connections = transformedData;
       reactComponent.setState({});
+      window.connectionMapEvents.onNodeTextClicked(function(clicked) {
+        $scope.showStatusButton = clicked;
+      });
     });
     socketService.connectToChannel($rootScope.sessionName);
     dataService.getConnectionMapSnapshot($rootScope.sessionName).then(function(data) {
