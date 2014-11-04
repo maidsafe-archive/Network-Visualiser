@@ -22,6 +22,7 @@ window.PlayerService = [
     var lastRangeTime = -1;
     var autoSeekIntervalPromise;
     var seekedOnPauseState = false;
+    instance.showProgress = false;
     instance.STATE = { PLAY: 0, STOP: 1, PAUSE: 2 };
     instance.currentState = instance.STATE.STOP;
     instance.playerUI = { maxSteps: 1000, currentPlayTime: 0, currentPlayState: 0 };
@@ -184,6 +185,7 @@ window.PlayerService = [
     instance.play = function(time) {
       time = time || startTime;
       instance.currentState = instance.STATE.PLAY;
+      instance.showProgress = true;
       clearAll();
       nextPushTime = time;
       playBackService.getSnapShot(sessionName, new Date(time).toISOString()).then(function(data) {
@@ -197,7 +199,10 @@ window.PlayerService = [
         var bufferData = playBackService.getBufferedData(sessionName, new Date(time).toISOString(),
           new Date(lastBufferedTime).toISOString());
         if (bufferData) {
-          bufferData.then(prepareData, onNetworkError);
+          bufferData.then(function(data) {
+            instance.showProgress = false;
+            prepareData(data);
+          }, onNetworkError);
         }
       }, onNetworkError);
     };
