@@ -186,7 +186,7 @@ window.PlayerService = [
       }
     };
     instance.play = function(time) {
-      time = time || startTime;
+      time = time || instance.playerUI.currentPlayTime || startTime;
       instance.currentState = instance.STATE.PLAY;
       instance.showProgress = true;
       clearAll();
