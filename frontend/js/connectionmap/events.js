@@ -61,17 +61,23 @@ var ConnectionEvents = function(svg) {
       if (mode === LINK_MODE.CHURN) {
         var className;
         var labelClass;
+        if (node.lastIn) {
+          className = VAULT_ENTERED_CLASS;
+          labelClass = 'green';
+          svg.select('g#node-' + replaceVaultFormat(node.lastIn) + ' text').classed(labelClass, true);
+          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
+          replaceVaultFormat(node.lastIn)).classed(className, true);
+        }
+        if (node.lastOut) {
+          className = VAULT_LEFT_CLASS;
+          labelClass = 'red';
+          svg.select('g#node-' + replaceVaultFormat(node.lastOut) + ' text').classed(labelClass, true);
+          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
+          replaceVaultFormat(node.lastOut)).classed(className, true);
+        }
         node.group.forEach(function(d) {
-          if (d === node.lastIn) {
-            className = VAULT_ENTERED_CLASS;
-            labelClass = 'green';
-          } else if (d === node.lastOut) {
-            className = VAULT_LEFT_CLASS;
-            labelClass = 'red';
-          } else {
-            className = GROUP_CLASS;
-            labelClass = 'light-blue';
-          }
+          className = GROUP_CLASS;
+          labelClass = 'light-blue';
           svg.select('g#node-' + replaceVaultFormat(d) + ' text').classed(labelClass, true);
           svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
             replaceVaultFormat(d)).classed(className, true);
