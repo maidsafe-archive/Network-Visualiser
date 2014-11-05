@@ -197,7 +197,7 @@ window.PlayerService = [
           return;
         }
         onSnapShotChange(data);
-        instance.currentPlayTime = time;
+        instance.playerUI.currentPlayTime = time;
         lastBufferedTime = time + (BUFFER_MINUTES * 60000);
         var bufferData = playBackService.getBufferedData(sessionName, new Date(time).toISOString(),
           new Date(lastBufferedTime).toISOString());

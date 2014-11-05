@@ -13,16 +13,15 @@ window.Transform = [ function() {
   };
   var transform = function(actual, expected) {
     var result = [];
-    var temp;
     for (var index in actual) {
       if (actual[index]) {
-        temp = {};
-        temp.name = formatVaultId(actual[index].vaultId);
-        temp.group = actual[index].valueOne.closeGroupVaults || [];
-        temp.lastIn = actual[index].valueOne.vaultAdded || '';
-        temp.lastOut = actual[index].valueOne.vaultRemoved || '';
-        temp.expected = getExpected(actual[index].vaultId, expected);
-        result.push(temp);
+        result.push({
+          'name': formatVaultId(actual[index].vaultId),
+          'group': actual[index].valueOne.closeGroupVaults || [],
+          'lastIn': actual[index].valueOne.vaultAdded || '',
+          'lastOut': actual[index].valueOne.vaultRemoved || '',
+          'expected': getExpected(actual[index].vaultId, expected)
+        });
       }
     }
     return result;
