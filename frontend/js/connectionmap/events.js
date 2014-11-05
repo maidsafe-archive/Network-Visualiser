@@ -2,6 +2,7 @@
 /*jshint unused:false*/
 /* global window:false */
 var ConnectionEvents = function(svg) {
+  var instance = this;
   var GROUP_CLASS = 'group';
   var OVERLAPPING_TARGET_CLASS = 'overlaped-target';
   var CLOSE_GROUP_CLASS = 'close-group';
@@ -13,7 +14,7 @@ var ConnectionEvents = function(svg) {
   var TEXT_NODE_SELECTED_CLASS = 'selected';
   var CLOSE_GROUP_LIMIT = 4;
   var LINK_MODE = { CONNECTIVITY: 1, CHURN: 2 };
-  window.connectionMode = window.connectionMode || LINK_MODE.CONNECTIVITY;
+  var connectionMode = connectionMode || LINK_MODE.CONNECTIVITY;
   var clickEvent = { state: false, node: null };
   var nodeTextClicked = null;
   var replaceVaultFormat = function(data) {
@@ -51,7 +52,7 @@ var ConnectionEvents = function(svg) {
     svg.select('svg g#node-' + replaceVaultFormat(node.name) + ' text').classed(TEXT_NODE_SELECTED_CLASS, true);
     svg.selectAll('.link').classed(GREY_LINK_CLASS, true);
     if (node.group) {
-      if (window.connectionMode === LINK_MODE.CONNECTIVITY) {
+      if (connectionMode === LINK_MODE.CONNECTIVITY) {
         node.group.slice(0, CLOSE_GROUP_LIMIT).forEach(function(vaultName) {
           svg.select('g#node-' + replaceVaultFormat(vaultName) + ' text').classed('blue', true);
           svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
@@ -59,7 +60,7 @@ var ConnectionEvents = function(svg) {
             .classed(CLOSE_GROUP_CLASS, true);
         });
       }
-      if (window.connectionMode === LINK_MODE.CHURN) {
+      if (connectionMode === LINK_MODE.CHURN) {
         var className;
         var labelClass;
         if (node.lastIn) {
@@ -86,7 +87,7 @@ var ConnectionEvents = function(svg) {
       }
       svg.selectAll('path.link.target-' + replaceVaultFormat(node.name)).classed(OVERLAPPING_TARGET_CLASS, true);
     }
-    if (node.expected && window.connectionMode === LINK_MODE.CONNECTIVITY) {
+    if (node.expected && connectionMode === LINK_MODE.CONNECTIVITY) {
       updateExpectedAndMissingLinks(node);
     }
   };
@@ -124,14 +125,14 @@ var ConnectionEvents = function(svg) {
       svg.select('#node-' + replaceVaultFormat(d[name].name)).classed(name, value);
     };
   };
-  this.mousedown = function() {
+  var mouseDown = function() {
     if (!clickEvent.state) {
       return;
     }
     clickEvent.state = false;
     revertConnections(clickEvent.node);
     if (nodeTextClicked) {
-      window.connectionMode = LINK_MODE.CONNECTIVITY;
+      connectionMode = LINK_MODE.CONNECTIVITY;
       nodeTextClicked(false, clickEvent.node);
     }
   };
@@ -143,7 +144,7 @@ var ConnectionEvents = function(svg) {
       showConnections(clickEvent.node);
     }
   };
-  this.mouseClick = function(d) {
+  var mouseClick = function(d) {
     if (clickEvent.state) {
       clickEvent.state = false;
       revertConnections(clickEvent.node);
@@ -155,7 +156,7 @@ var ConnectionEvents = function(svg) {
       nodeTextClicked(true, d);
     }
   };
-  this.updateLinksOnLoad = function(nodes) {
+  var updateLinksOnLoad = function(nodes) {
     nodes.each(function(node) {
       if (node.group && node.expected) {
         var actual = node.group.slice(0, CLOSE_GROUP_LIMIT);
@@ -178,13 +179,13 @@ var ConnectionEvents = function(svg) {
       d3.selectAll('.link').classed('grey', true);
     }
   };
-  this.mouseover = function(d) {
+  var mouseOver = function(d) {
     if (!clickEvent.state) {
       showConnections(d);
     }
   };
-  this.setMode = function(modeSelected) {
-    window.connectionMode = modeSelected;
+  var setMode = function(modeSelected) {
+    connectionMode = modeSelected;
     if (!clickEvent.node) {
       return;
     }
@@ -195,13 +196,20 @@ var ConnectionEvents = function(svg) {
       showConnections(clickEvent.node);
     }
   };
-  this.mouseout = revertConnections;
-  this.updateSVG = function(svgRegion) {
+  var updateSVG = function(svgRegion) {
     svg = svgRegion;
     setTimeout(restoreMouseClick, 1);
   };
-  this.onNodeTextClicked = function(callback) {
+  var onNodeTextClicked = function(callback) {
     nodeTextClicked = callback;
   };
-  return this;
+  instance.mousedown = mouseDown;
+  instance.mouseClick = mouseClick;
+  instance.updateLinksOnLoad = updateLinksOnLoad;
+  instance.mouseover = mouseOver;
+  instance.setMode = setMode;
+  instance.mouseout = revertConnections;
+  instance.updateSVG = updateSVG;
+  instance.onNodeTextClicked = onNodeTextClicked;
+  return instance;
 };
