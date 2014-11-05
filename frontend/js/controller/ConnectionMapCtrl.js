@@ -38,10 +38,12 @@ app.controller('connectionMapCtrl', [
       scaleIndex = text.indexOf('scale');
       if (scaleIndex > -1) {
         scale = parseFloat(text.substring(scaleIndex + 6, text.length - 1)) + zoomFactor;
+        reactComponent.state.connectionMap.setLastScale(scale);
         svg.attr('transform', text.substring(0, scaleIndex) + 'scale(' + scale + ')');
         return;
       }
       scale = 1 + zoomFactor;
+      reactComponent.state.connectionMap.setLastScale(scale);
       svg.attr('transform', text + 'scale(' + scale + ')');
     };
     var reactComponent;
@@ -58,12 +60,15 @@ app.controller('connectionMapCtrl', [
     };
     $scope.changeConnectionStatus = function(mode) {
       $scope.conMapStatus = mode;
-      window.connectionMapEvents.setMode(mode);
+      reactComponent.state.connectionMap.setConnectionMode(mode);
     };
     mapStatus.onStatusChange(function(transformedData) {
       $scope.connections = transformedData;
       reactComponent.setState({});
-      window.connectionMapEvents.onNodeTextClicked(function(clicked) {
+      reactComponent.state.connectionMap.onNodeTextClicked(function(clicked) {
+        if (!clicked) {
+          $scope.conMapStatus = 1;
+        }
         $scope.showStatusButton = clicked;
       });
     });
