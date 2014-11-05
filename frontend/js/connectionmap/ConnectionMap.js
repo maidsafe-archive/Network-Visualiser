@@ -7,6 +7,7 @@
 /* global ConnectionEvents:false */
 /*jshint unused:false*/
 var ConnectionMapBuilder = function(connectionMap, elementId) {
+  var instance = this;
   var div = d3.select('#' + elementId);
   // Constants
   // ---------
@@ -25,7 +26,6 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   var lastDragPosition;
   var transX = RADIUS_X;
   var transY = RADIUS_Y;
-  var lastScale;
   var replaceVaultFormat = function(data) {
     return data.indexOf('..') !== -1 ? data.replace('..', '_') : data.replace('_', '..');
   };
@@ -34,10 +34,10 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       transX += (-1 * (lastDragPosition.sourceEvent.offsetX - d3.event.sourceEvent.offsetX));
       transY += (-1 * (lastDragPosition.sourceEvent.offsetY - d3.event.sourceEvent.offsetY));
     }
-    if (!lastDragPosition || !lastScale) {
-      lastScale = d3.event.scale;
+    if (!lastDragPosition || !window.lastScale) {
+      window.lastScale = d3.event.scale;
     }
-    svg.attr('transform', 'translate(' + [ transX, transY ] + ')scale(' + lastScale + ')');
+    svg.attr('transform', 'translate(' + [ transX, transY ] + ')scale(' + window.lastScale + ')');
   };
   var dragEvent = d3.behavior.drag()
     .on('dragstart', function() {
@@ -68,8 +68,8 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
     svg = d3.select('svg').append('svg:g').
       call(d3.behavior.zoom().scaleExtent([ -5, 20 ]).on('zoom', zoom)).call(dragEvent).
       attr('transform', function() {
-        if (lastScale) {
-          return 'translate(' + transX + ',' + transY + ')scale(' + lastScale + ')';
+        if (window.lastScale) {
+          return 'translate(' + transX + ',' + transY + ')scale(' + window.lastScale + ')';
         }
         return 'translate(' + transX + ',' + transY + ')';
       });
@@ -154,6 +154,6 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
     }
     lastNodeSelection = null;
   };
-  this.drawConnections = drawConnectionLinks;
-  return this;
+  instance.drawConnections = drawConnectionLinks;
+  return instance;
 };

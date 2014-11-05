@@ -43,10 +43,12 @@ app.controller('connectionMapTimelineCtrl', [
       scaleIndex = text.indexOf('scale');
       if (scaleIndex > -1) {
         scale = parseFloat(text.substring(scaleIndex + 6, text.length - 1)) + zoomFactor;
+        window.lastScale = scale;
         svg.attr('transform', text.substring(0, scaleIndex) + 'scale(' + scale + ')');
         return;
       }
       scale = 1 + zoomFactor;
+      window.lastScale = scale;
       svg.attr('transform', text + 'scale(' + scale + ')');
     };
     var reactComponent;
@@ -73,6 +75,9 @@ app.controller('connectionMapTimelineCtrl', [
       try {
         reactComponent.setState({});
         window.connectionMapEvents.onNodeTextClicked(function(clicked) {
+          if (!clicked) {
+            $scope.conMapStatus = 1;
+          }
           $scope.showStatusButton = clicked;
         });
       }catch (e) {

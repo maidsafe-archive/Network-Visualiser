@@ -1,5 +1,6 @@
 /* global d3:false */
 /*jshint unused:false*/
+/* global window:false */
 var ConnectionEvents = function(svg) {
   var GROUP_CLASS = 'group';
   var OVERLAPPING_TARGET_CLASS = 'overlaped-target';
@@ -12,7 +13,7 @@ var ConnectionEvents = function(svg) {
   var TEXT_NODE_SELECTED_CLASS = 'selected';
   var CLOSE_GROUP_LIMIT = 4;
   var LINK_MODE = { CONNECTIVITY: 1, CHURN: 2 };
-  var mode = LINK_MODE.CONNECTIVITY;
+  window.connectionMode = window.connectionMode || LINK_MODE.CONNECTIVITY;
   var clickEvent = { state: false, node: null };
   var nodeTextClicked = null;
   var replaceVaultFormat = function(data) {
@@ -50,7 +51,7 @@ var ConnectionEvents = function(svg) {
     svg.select('svg g#node-' + replaceVaultFormat(node.name) + ' text').classed(TEXT_NODE_SELECTED_CLASS, true);
     svg.selectAll('.link').classed(GREY_LINK_CLASS, true);
     if (node.group) {
-      if (mode === LINK_MODE.CONNECTIVITY) {
+      if (window.connectionMode === LINK_MODE.CONNECTIVITY) {
         node.group.slice(0, CLOSE_GROUP_LIMIT).forEach(function(vaultName) {
           svg.select('g#node-' + replaceVaultFormat(vaultName) + ' text').classed('blue', true);
           svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
@@ -58,7 +59,7 @@ var ConnectionEvents = function(svg) {
             .classed(CLOSE_GROUP_CLASS, true);
         });
       }
-      if (mode === LINK_MODE.CHURN) {
+      if (window.connectionMode === LINK_MODE.CHURN) {
         var className;
         var labelClass;
         if (node.lastIn) {
@@ -85,7 +86,7 @@ var ConnectionEvents = function(svg) {
       }
       svg.selectAll('path.link.target-' + replaceVaultFormat(node.name)).classed(OVERLAPPING_TARGET_CLASS, true);
     }
-    if (node.expected && mode === LINK_MODE.CONNECTIVITY) {
+    if (node.expected && window.connectionMode === LINK_MODE.CONNECTIVITY) {
       updateExpectedAndMissingLinks(node);
     }
   };
@@ -130,6 +131,7 @@ var ConnectionEvents = function(svg) {
     clickEvent.state = false;
     revertConnections(clickEvent.node);
     if (nodeTextClicked) {
+      window.connectionMode = LINK_MODE.CONNECTIVITY;
       nodeTextClicked(false, clickEvent.node);
     }
   };
@@ -182,7 +184,7 @@ var ConnectionEvents = function(svg) {
     }
   };
   this.setMode = function(modeSelected) {
-    mode = modeSelected;
+    window.connectionMode = modeSelected;
     if (!clickEvent.node) {
       return;
     }
