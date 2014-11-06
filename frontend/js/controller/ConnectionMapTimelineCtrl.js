@@ -16,6 +16,7 @@ app.controller('connectionMapTimelineCtrl', [
   '$scope', '$timeout', '$filter', '$rootScope', 'dataService', 'connectionMapStatus', 'socketService',
   'playBackService', 'player',
   function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService, playBackService, player) {
+    var reactComponent;
     $scope.showStatusButton = false;
     $scope.PLAYER_STATE = { PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause' };
     $scope.playerState = $scope.PLAYER_STATE.STOPPED;
@@ -43,13 +44,14 @@ app.controller('connectionMapTimelineCtrl', [
       scaleIndex = text.indexOf('scale');
       if (scaleIndex > -1) {
         scale = parseFloat(text.substring(scaleIndex + 6, text.length - 1)) + zoomFactor;
+        reactComponent.state.connectionMap.setLastScale(scale);
         svg.attr('transform', text.substring(0, scaleIndex) + 'scale(' + scale + ')');
         return;
       }
       scale = 1 + zoomFactor;
+      reactComponent.state.connectionMap.setLastScale(scale);
       svg.attr('transform', text + 'scale(' + scale + ')');
     };
-    var reactComponent;
     var clockTimer = function() {
       $scope.currentTime = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss');
       $timeout(clockTimer, 1000);
@@ -66,13 +68,16 @@ app.controller('connectionMapTimelineCtrl', [
     };
     $scope.changeConnectionStatus = function(mode) {
       $scope.conMapStatus = mode;
-      window.connectionMapEvents.setMode(mode);
+      reactComponent.state.connectionMap.setConnectionMode(mode);
     };
     mapStatus.onStatusChange(function(transformedData) {
       $scope.connections = transformedData;
       try {
         reactComponent.setState({});
-        window.connectionMapEvents.onNodeTextClicked(function(clicked) {
+        reactComponent.state.connectionMap.onNodeTextClicked(function(clicked) {
+          if (!clicked) {
+            $scope.conMapStatus = 1;
+          }
           $scope.showStatusButton = clicked;
         });
       }catch (e) {
@@ -87,9 +92,7 @@ app.controller('connectionMapTimelineCtrl', [
     $timeout(function() {
       clockTimer();
     }, 10);
-    window.player = player;
-    window.sessionName = $rootScope.sessionName;
-    player.init($rootScope.sessionName, $scope);
+    player.init($rootScope.sessionName, $scope, $scope.player);
     $scope.$watch(function() {
       return mapStatus.vaultsCount;
     }, function(newValue) {

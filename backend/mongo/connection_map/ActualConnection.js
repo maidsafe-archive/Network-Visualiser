@@ -3,7 +3,10 @@ var bridge = require('./../bridge');
 module.exports = function(dbCon) {
   var MongoosePromise = require('mongoose').Promise;
   var instance = this;
-  var COLLECTION_NAME_SUFFIX = '_actual_connection';
+  var COLLECTION_NAME_PREFIX = 'actual_connection_';
+  var formatCollectionName = function(sessionId) {
+    return COLLECTION_NAME_PREFIX + sessionId;
+  };
   var GeneralHandler = function(promise) {
     return function(err, doc) {
       if (err) {
@@ -18,7 +21,7 @@ module.exports = function(dbCon) {
     if (callback) {
       promise.addBack(callback);
     }
-    dbCon.db.collection(log.sessionId + COLLECTION_NAME_SUFFIX, function(err, collection) {
+    dbCon.db.collection(formatCollectionName(log.sessionId), function(err, collection) {
       if (err) {
         promise.error(err);
         return;
@@ -29,7 +32,6 @@ module.exports = function(dbCon) {
   };
   var getActualConnections = function(sessionId, activeIds, timestamp, callback) {
     timestamp = timestamp || new Date().toISOString();
-    var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
     var reduce = function(docs) {
       var monitor = {};
       var reducedResults = [];
@@ -43,7 +45,7 @@ module.exports = function(dbCon) {
       }
       return reducedResults;
     };
-    dbCon.db.collection(collectionName, function(err, coll) {
+    dbCon.db.collection(formatCollectionName(sessionId), function(err, coll) {
       if (err) {
         callback(err);
         return;
@@ -60,8 +62,7 @@ module.exports = function(dbCon) {
     });
   };
   var getActualConnectionsDiff = function(sessionId, minTime, maxTime, callback) {
-    var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
-    dbCon.db.collection(collectionName, function(err, coll) {
+    dbCon.db.collection(formatCollectionName(sessionId), function(err, coll) {
       if (err) {
         callback(err);
         return;
@@ -78,7 +79,7 @@ module.exports = function(dbCon) {
     });
   };
   var dropCollection = function(sessionId) {
-    dbCon.db.dropCollection(sessionId + COLLECTION_NAME_SUFFIX);
+    dbCon.db.dropCollection(formatCollectionName(sessionId));
   };
   var retrieveActualConnection = function(sessionId, timestamp, callback) {
     var promise = new MongoosePromise();

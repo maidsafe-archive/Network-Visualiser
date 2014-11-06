@@ -7,11 +7,11 @@
 /* global ConnectionEvents:false */
 /*jshint unused:false*/
 var ConnectionMapBuilder = function(connectionMap, elementId) {
+  var instance = this;
   var div = d3.select('#' + elementId);
   // Constants
   // ---------
   var svg;
-  var connectionMapEvents;
   var WIDTH = window.innerWidth;// - (window.innerWidth / 100);// 20 is picked random
   var HEIGHT = window.innerHeight - 200; // 90 (header) + 50 (footer) + 50 (bottom status) + 10 padding
   var RADIUS_X = WIDTH / 2;
@@ -20,12 +20,25 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   var CIRCLE_LINE_GAP = 3;
   var CIRCLE_FULL_LIMIT = 16; // when the circle will be full blue
   var CIRCLE_SIZE = 3;
+  var INITIAL_SCALE_LEVEL = 0.9; // TODO Dynamically update based on the number of vaults
   // Helpers
   // -------
   var lastDragPosition;
   var transX = RADIUS_X;
   var transY = RADIUS_Y;
-  var lastScale;
+  var lastScale = INITIAL_SCALE_LEVEL;
+  var connectionMapEvents = new ConnectionEvents();
+  var events = {
+    nodeClicked: null
+  };
+  var setLastScale = function(scale) {
+    lastScale = scale;
+  };
+  connectionMapEvents.onNodeTextClicked(function(selected, node) {
+    if (events.nodeClicked) {
+      events.nodeClicked(selected, node);
+    }
+  });
   var replaceVaultFormat = function(data) {
     return data.indexOf('..') !== -1 ? data.replace('..', '_') : data.replace('_', '..');
   };
@@ -34,10 +47,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       transX += (-1 * (lastDragPosition.sourceEvent.offsetX - d3.event.sourceEvent.offsetX));
       transY += (-1 * (lastDragPosition.sourceEvent.offsetY - d3.event.sourceEvent.offsetY));
     }
-    if (!lastDragPosition || !lastScale) {
-      lastScale = d3.event.scale;
-    }
-    svg.attr('transform', 'translate(' + [ transX, transY ] + ')scale(' + lastScale + ')');
+    svg.attr('transform', 'translate(' + [ transX, transY ] + ')scale(' + (lastScale || d3.event.scale) + ')');
   };
   var dragEvent = d3.behavior.drag()
     .on('dragstart', function() {
@@ -63,7 +73,14 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
     attr('viewBox', [ 0, 0, WIDTH, HEIGHT ].join(' ')).
     attr('height', HEIGHT);
   var drawConnectionLinks = function(connections) {
-    var lastNodeSelection = d3.select('svg text.selected');
+    var lastNodeSelection = null;
+    if (connectionMapEvents.isAnyNodeClicked()) {
+      lastNodeSelection = d3.select('svg text.selected');
+      if (!lastNodeSelection || !lastNodeSelection[0][0]) {
+        connectionMapEvents.clearNodeClickedState();
+        connectionMapEvents.mouseout();
+      }
+    }
     d3.select('svg g').remove('*');
     svg = d3.select('svg').append('svg:g').
       call(d3.behavior.zoom().scaleExtent([ -5, 20 ]).on('zoom', zoom)).call(dragEvent).
@@ -81,8 +98,6 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
         return d3.ascending(a.name, b.name);
       });
     var transformedData = new ConnectionMapTransformer(connectionMap);
-    connectionMapEvents = new ConnectionEvents();
-    window.connectionMapEvents = connectionMapEvents;
     connectionMapEvents.updateSVG(svg);
     connectionMap.sort(function(a, b) {
       return a.name < b.name;
@@ -152,8 +167,14 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       }
       node.on('click')(node.data()[0]);
     }
-    lastNodeSelection = null;
   };
-  this.drawConnections = drawConnectionLinks;
-  return this;
+  instance.onNodeTextClicked = function(callback) {
+    events.nodeClicked = callback;
+  };
+  instance.setConnectionMode = function(mode) {
+    connectionMapEvents.setMode(mode);
+  };
+  instance.drawConnections = drawConnectionLinks;
+  instance.setLastScale = setLastScale;
+  return instance;
 };
