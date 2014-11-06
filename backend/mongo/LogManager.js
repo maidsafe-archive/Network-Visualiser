@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var utils = require('./../maidsafe/utils.js');
 var config = require('./../../Config.js');
+var nodeUtil = require('util');
 var LogManager = function(dbConnConnection) {
   var dbConn;
   var HIDE_FIELDS;
@@ -158,6 +159,9 @@ var LogManager = function(dbConnConnection) {
     var promise = new mongoose.Promise();
     if (callback) {
       promise.addBack(callback);
+    }
+    if (!utils.isEmptyObject(criteria) && !nodeUtil.isArray(criteria)) {
+      criteria = [ criteria ];
     }
     vaultHistory(formatCollectionName(sessionId, vaultId), criteria, page, max, promise);
     return promise;

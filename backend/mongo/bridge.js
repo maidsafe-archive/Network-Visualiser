@@ -80,6 +80,8 @@ exports.vaultHistory = function(sessionName, vaultId, criteria, page, max, callb
   sessionInfo.getSessionIdForName(sessionName).then(function(sessionId) {
     vaultLog.history(sessionId, vaultId, criteria, page, max).then(function(res) {
       promise.complete(res);
+    }, function(err) {
+      promise.error(err);
     });
   }, function(err) {
     promise.error(err);
