@@ -7,7 +7,10 @@ var socket = require('./../../socket/Socket');
 module.exports = function(dbCon) {
   var MongoosePromise = mongoose.Promise;
   var instance = this;
-  var COLLECTION_NAME_SUFFIX = '_expected_connection';
+  var COLLECTION_NAME_PREFIX = 'expected_connection_';
+  var formatCollectionName = function(sessionId) {
+    return COLLECTION_NAME_PREFIX + sessionId;
+  };
   var GeneralHandler = function(promise) {
     return function(err, doc) {
       if (err) {
@@ -85,7 +88,7 @@ module.exports = function(dbCon) {
   };
   var getExpectedConnections = function(sessionId, activeIds, timestamp, callback) {
     timestamp = timestamp || new Date().toISOString();
-    var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
+    var collectionName = formatCollectionName(sessionId);
     var reduce = function(docs) {
       var reducedResults = [];
       var monitor = {};
@@ -116,7 +119,7 @@ module.exports = function(dbCon) {
     });
   };
   var getExpectedConnectionsDiff = function(sessionId, minTime, maxTime, callback) {
-    var collectionName = sessionId + COLLECTION_NAME_SUFFIX;
+    var collectionName = formatCollectionName(sessionId);
     dbCon.db.collection(collectionName, function(err, coll) {
       if (err) {
         callback(err);
@@ -134,7 +137,7 @@ module.exports = function(dbCon) {
     });
   };
   var saveExpectedConnection = function(sessionId, data, callback) {
-    dbCon.db.collection(sessionId + COLLECTION_NAME_SUFFIX, function(err, coll) {
+    dbCon.db.collection(formatCollectionName(sessionId), function(err, coll) {
       coll.save(data, callback);
     });
   };
@@ -235,7 +238,7 @@ module.exports = function(dbCon) {
     return promise;
   };
   var dropCollection = function(sessionId) {
-    dbCon.db.dropCollection(sessionId + COLLECTION_NAME_SUFFIX);
+    dbCon.db.dropCollection(formatCollectionName(sessionId));
   };
   instance.dropCollection = dropCollection;
   instance.getExpectedConnections = retrieveExpectedConnections;
