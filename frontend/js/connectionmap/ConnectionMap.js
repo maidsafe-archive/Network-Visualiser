@@ -63,6 +63,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
     attr('viewBox', [ 0, 0, WIDTH, HEIGHT ].join(' ')).
     attr('height', HEIGHT);
   var drawConnectionLinks = function(connections) {
+    var lastNodeSelection = d3.select('svg text.selected');
     d3.select('svg g').remove('*');
     svg = d3.select('svg').append('svg:g').
       call(d3.behavior.zoom().scaleExtent([ -5, 20 ]).on('zoom', zoom)).call(dragEvent).
@@ -72,6 +73,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
         }
         return 'translate(' + transX + ',' + transY + ')';
       });
+    svg.on('dblclick.zoom', null);
     connectionMap = connections || connectionMap;
     var cluster = d3.layout.cluster().
       size([ 360, RADIUS_Y / 2 ])
@@ -79,10 +81,8 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
         return d3.ascending(a.name, b.name);
       });
     var transformedData = new ConnectionMapTransformer(connectionMap);
-    if (!connectionMapEvents) {
-      connectionMapEvents = new ConnectionEvents();
-      window.connectionMapEvents = connectionMapEvents;
-    }
+    connectionMapEvents = new ConnectionEvents();
+    window.connectionMapEvents = connectionMapEvents;
     connectionMapEvents.updateSVG(svg);
     connectionMap.sort(function(a, b) {
       return a.name < b.name;
@@ -92,7 +92,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       .attr('class', 'arc')
       .attr('d', d3.svg.arc().outerRadius(RADIUS_Y - (RADIUS_Y / 0.33)).innerRadius(0)
       .startAngle(0).endAngle(2 * Math.PI))
-      .on('mousedown', connectionMapEvents.mousedown);
+      .on('dblclick', connectionMapEvents.mousedown);
     var nodes = cluster.nodes(transformedData.nodes);
     var splines = bundle(transformedData.links);
     var path = svg.selectAll('path.link')
@@ -130,6 +130,9 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       .text(function(d) {
         return d.name;
       })
+      .attr('text', function(d) {
+        return d.name;
+      })
       .on('mouseover', connectionMapEvents.mouseover)
       .on('mouseout', connectionMapEvents.mouseout)
       .on('click', connectionMapEvents.mouseClick);
@@ -142,6 +145,14 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
         return d.group && d.group.length === CIRCLE_FULL_LIMIT;
       });
     connectionMapEvents.updateLinksOnLoad(nodes);
+    if (lastNodeSelection && lastNodeSelection[0][0]) {
+      var node = d3.select('svg text[text="' + lastNodeSelection.text() + '"]');
+      if (!node || !node[0]) {
+        return;
+      }
+      node.on('click')(node.data()[0]);
+    }
+    lastNodeSelection = null;
   };
   this.drawConnections = drawConnectionLinks;
   return this;

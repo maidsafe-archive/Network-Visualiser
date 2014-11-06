@@ -16,17 +16,17 @@ var saveLog = function(req, res) {
     return;
   }
   var handler  = new Handler.SaveLogHandler(res);
-  var saveToActualConn = function(log) {
+  var SaveToActualConn = function(log, response) {
     bridge.connectionMap.addActualLog(log, function(err, data) {
-      res.status(err ? 500 : 200);
-      res.send(err ? err.message : data);
+      response.status(err ? 500 : 200);
+      response.send(err ? err.message : data);
       if (!err) {
         socket.broadcastActualConnection(log);
       }
     });
   };
   if (log.actionId === config.Constants.connectionMapActionId) {
-    saveToActualConn(log);
+    new SaveToActualConn(log, res);
     return;
   }
   var addLogHandler = function(err) {
@@ -36,11 +36,11 @@ var saveLog = function(req, res) {
     if (log.actionId === config.Constants.startActionId || log.actionId === config.Constants.stopActionId) {
       log.sessionId = sessionId;
       queue.pushToQueue(log);
+      new SaveToActualConn(log, res);
     }
     handler.promise(err, log);
   };
   bridge.addLog(log, addLogHandler, handler.refreshSessionsCallback);
-  saveToActualConn(log);
 };
 var selectLogs = function(req, res) {
   var criteria = url.parse(req.url, true).query;

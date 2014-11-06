@@ -66,11 +66,16 @@ window.ConnectionMapStatus = [ 'd3Transformer', function(transformer) {
     statusChangeCallback = callback;
   };
   var setSnapshotStatus = function(data) {
+    expectedConnections = {};
+    actualConnections = {};
     iterateActualLogs(data.actual);
     iterateExpectedLogs(data.expected);
     updateUI();
   };
   var updateExpected = function(diffs) {
+    if (!window.angular.isArray(diffs)) {
+      diffs = [ diffs ];
+    }
     for (var index in diffs) {
       if (diffs[index]) {
         expectedConnections[transformer.formatVaultId(diffs[index].vaultId)] = transformVaults(
