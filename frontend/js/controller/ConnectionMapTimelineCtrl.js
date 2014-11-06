@@ -92,9 +92,7 @@ app.controller('connectionMapTimelineCtrl', [
     $timeout(function() {
       clockTimer();
     }, 10);
-    window.player = player;
-    window.sessionName = $rootScope.sessionName;
-    player.init($rootScope.sessionName, $scope);
+    player.init($rootScope.sessionName, $scope, $scope.player);
     $scope.$watch(function() {
       return mapStatus.vaultsCount;
     }, function(newValue) {

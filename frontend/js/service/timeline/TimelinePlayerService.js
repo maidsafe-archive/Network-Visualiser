@@ -94,7 +94,7 @@ window.PlayerService = [
       instance.currentState = instance.STATE.PLAY;
       timerId = setInterval(pushLogs, SPEED);
     };
-    var initializeListeners = function(scope) {
+    var initializeListeners = function(scope, variableToWatch) {
       var SeekHandler = function(time, rangeValue) {
         if (autoSeekIntervalPromise) {
           $timeout.cancel(autoSeekIntervalPromise);
@@ -106,7 +106,9 @@ window.PlayerService = [
           instance.play(time);
         }, 1000);
       };
-      scope.$watch('player.playerUI.currentPlayState', function(newValue, oldValue) {
+      scope.$watch(function() {
+        return variableToWatch.playerUI.currentPlayState;
+      }, function(newValue, oldValue) {
         instance.playerUI.currentPlayTime = startTime +  (newValue * 1000);
         if (newValue  === (lastRangeTime + 1) || (newValue === 0 && oldValue === 0)) {
           lastRangeTime += 1;
@@ -209,7 +211,7 @@ window.PlayerService = [
         }
       }, onNetworkError);
     };
-    instance.init = function(sn, $scope) {
+    instance.init = function(sn, $scope, scopePlayerVariable) {
       sessionName = sn;
       playBackService.getTimeLineData(sessionName, function(err, data) {
         if (err) {
@@ -223,7 +225,7 @@ window.PlayerService = [
           currentPlayState: 0
         };
       });
-      initializeListeners($scope);
+      initializeListeners($scope, scopePlayerVariable);
     };
     instance.pause = function() {
       instance.currentState = instance.STATE.PAUSE;

@@ -92,7 +92,8 @@ var ConnectionEvents = function(svg) {
     }
   };
   var revertConnections = function(node) {
-    if (clickEvent.state || !node.name) {
+    node = node || clickEvent.node;
+    if (clickEvent.state || !node || !node.name) {
       return;
     }
     var linkClasses = [ OVERLAPPING_TARGET_CLASS, GROUP_CLASS, GREY_LINK_CLASS,
@@ -202,6 +203,12 @@ var ConnectionEvents = function(svg) {
   };
   var onNodeTextClicked = function(callback) {
     nodeTextClicked = callback;
+  };
+  instance.isAnyNodeClicked = function() {
+    return clickEvent.state;
+  };
+  instance.clearNodeClickedState = function() {
+    clickEvent.state = false;
   };
   instance.mousedown = mouseDown;
   instance.mouseClick = mouseClick;

@@ -20,7 +20,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   var CIRCLE_LINE_GAP = 3;
   var CIRCLE_FULL_LIMIT = 16; // when the circle will be full blue
   var CIRCLE_SIZE = 3;
-  var INITIAL_SCALE_LEVEL = 0.9;
+  var INITIAL_SCALE_LEVEL = 0.9; // TODO Dynamically update based on the number of vaults
   // Helpers
   // -------
   var lastDragPosition;
@@ -73,7 +73,14 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
     attr('viewBox', [ 0, 0, WIDTH, HEIGHT ].join(' ')).
     attr('height', HEIGHT);
   var drawConnectionLinks = function(connections) {
-    var lastNodeSelection = d3.select('svg text.selected');
+    var lastNodeSelection = null;
+    if (connectionMapEvents.isAnyNodeClicked()) {
+      lastNodeSelection = d3.select('svg text.selected');
+      if (!lastNodeSelection || !lastNodeSelection[0][0]) {
+        connectionMapEvents.clearNodeClickedState();
+        connectionMapEvents.mouseout();
+      }
+    }
     d3.select('svg g').remove('*');
     svg = d3.select('svg').append('svg:g').
       call(d3.behavior.zoom().scaleExtent([ -5, 20 ]).on('zoom', zoom)).call(dragEvent).
@@ -160,7 +167,6 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       }
       node.on('click')(node.data()[0]);
     }
-    lastNodeSelection = null;
   };
   instance.onNodeTextClicked = function(callback) {
     events.nodeClicked = callback;
