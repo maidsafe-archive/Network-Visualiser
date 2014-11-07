@@ -50,7 +50,7 @@ var registerControllers = function() {
 };
 bridge.setupMongooseConnection(function(err) {
   if (err) {
-    console.error("Failed to connect to mongodb -- %s", err);
+    console.error('Failed to connect to mongodb -- %s', err);
     process.exit(0);
   }
   configureMvcEngine();
