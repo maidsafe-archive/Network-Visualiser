@@ -257,3 +257,6 @@
 .node circle.full {
   fill:#808080;
 }
+.hidePath {
+  stroke-opacity: 0 !important;
+}

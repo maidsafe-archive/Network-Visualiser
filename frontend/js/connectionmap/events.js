@@ -6,6 +6,7 @@ var ConnectionEvents = function(svg) {
   var GROUP_CLASS = 'group';
   var OVERLAPPING_TARGET_CLASS = 'overlaped-target';
   var CLOSE_GROUP_CLASS = 'close-group';
+  var HIDE_PATH = 'hidePath';
   var MISSING_EXPECTED = 'missing-expected';
   var NOT_EXPECTED_CLASS = 'not-expected';
   var VAULT_ENTERED_CLASS = 'in';
@@ -14,7 +15,7 @@ var ConnectionEvents = function(svg) {
   var TEXT_NODE_SELECTED_CLASS = 'selected';
   var CLOSE_GROUP_LIMIT = 4;
   var LINK_MODE = { CONNECTIVITY: 1, CHURN: 2 };
-  var connectionMode = connectionMode || LINK_MODE.CONNECTIVITY;
+  var connectionMode = LINK_MODE.CONNECTIVITY;
   var clickEvent = { state: false, node: null };
   var nodeTextClicked = null;
   var replaceVaultFormat = function(data) {
@@ -23,6 +24,16 @@ var ConnectionEvents = function(svg) {
     }
     if (data.indexOf('_') !== -1) {
       return data.replace('_', '..');
+    }
+  };
+  var togglePathVisibilityForConnections = function(node, show) {
+    if (node.group && node.group.length > CLOSE_GROUP_LIMIT) {
+      var connections =  node.group.slice(CLOSE_GROUP_LIMIT);
+      connections.forEach(function(vaultName){
+        svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
+        replaceVaultFormat(vaultName))
+          .classed(HIDE_PATH, show);
+      });
     }
   };
   var updateExpectedAndMissingLinks = function(node) {
@@ -82,7 +93,7 @@ var ConnectionEvents = function(svg) {
           labelClass = 'light-blue';
           svg.select('g#node-' + replaceVaultFormat(d) + ' text').classed(labelClass, true);
           svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
-            replaceVaultFormat(d)).classed(className, true);
+            replaceVaultFormat(d)).classed(className, true).classed(HIDE_PATH, false);
         });
       }
       svg.selectAll('path.link.target-' + replaceVaultFormat(node.name)).classed(OVERLAPPING_TARGET_CLASS, true);
@@ -97,11 +108,12 @@ var ConnectionEvents = function(svg) {
       return;
     }
     var linkClasses = [ OVERLAPPING_TARGET_CLASS, GROUP_CLASS, GREY_LINK_CLASS,
-      VAULT_ENTERED_CLASS, VAULT_LEFT_CLASS, MISSING_EXPECTED, NOT_EXPECTED_CLASS, CLOSE_GROUP_CLASS ];
+      VAULT_ENTERED_CLASS, VAULT_LEFT_CLASS, MISSING_EXPECTED, NOT_EXPECTED_CLASS, CLOSE_GROUP_CLASS];
     var textClasses = [ 'blue', 'green', 'red', 'orange', 'light-blue' ];
     linkClasses.forEach(function(className) {
       svg.selectAll('path.link.' + className).classed(className, false);
     });
+    togglePathVisibilityForConnections(node, true);
     textClasses.forEach(function(className) {
       svg.selectAll('g.node text').classed(className, false);
     });
@@ -159,6 +171,7 @@ var ConnectionEvents = function(svg) {
   };
   var updateLinksOnLoad = function(nodes) {
     nodes.each(function(node) {
+      togglePathVisibilityForConnections(node, true);
       if (node.group && node.expected) {
         var actual = node.group.slice(0, CLOSE_GROUP_LIMIT);
         node.expected.forEach(function(expected) {

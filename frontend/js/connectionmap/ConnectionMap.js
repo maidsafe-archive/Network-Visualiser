@@ -20,7 +20,7 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
   var CIRCLE_LINE_GAP = 3;
   var CIRCLE_FULL_LIMIT = 16; // when the circle will be full blue
   var CIRCLE_SIZE = 3;
-  var INITIAL_SCALE_LEVEL = 0.9; // TODO Dynamically update based on the number of vaults
+  var INITIAL_SCALE_LEVEL = 0; // TODO Dynamically update based on the number of vaults
   // Helpers
   // -------
   var lastDragPosition;
@@ -47,7 +47,8 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
       transX += (-1 * (lastDragPosition.sourceEvent.offsetX - d3.event.sourceEvent.offsetX));
       transY += (-1 * (lastDragPosition.sourceEvent.offsetY - d3.event.sourceEvent.offsetY));
     }
-    svg.attr('transform', 'translate(' + [ transX, transY ] + ')scale(' + (lastScale || d3.event.scale) + ')');
+    lastScale =  d3.event.scale;
+    svg.attr('transform', 'translate(' + [ transX, transY ] + ')scale(' + lastScale + ')');
   };
   var dragEvent = d3.behavior.drag()
     .on('dragstart', function() {
