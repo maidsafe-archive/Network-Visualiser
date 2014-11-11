@@ -1,0 +1,21 @@
+<div class="status" ng-class="{true:'alert'}[alert != null]">
+  <span>{{alert}}</span>
+</div>
+<div class="timeline">
+  <div class="player">
+    <div class="time_slider">
+      <div class="time_label" tooltip="{{ player.playerUI.currentPlayTime |  date: 'dd/MM/yyyy' }}" canshow="true">
+        {{ player.playerUI.currentPlayTime |  date: 'HH:mm:ss' }}
+      </div>
+      <div class="slider" range-slider min="0" max="player.playerUI.maxSteps" model-min="0" model-max="player.playerUI.currentPlayState" pin-handle="min" show-values="false" >
+      </div>
+      <div class="player_buttons">
+        <button ng-click="player.play()" ng-show="player.currentState == player.STATE.STOP" class="play-btn">Play</button>
+        <button ng-click="player.pause()" ng-show="player.currentState == player.STATE.PLAY" class="pause-btn">Pause</button>
+        <button ng-click="player.resume()" ng-show="player.currentState == player.STATE.PAUSE" class="resume-btn">Resume</button>
+        <!-- <button ng-click="stopHistoryPlayback()" ng-show="playerState != PLAYER_STATE.STOPPED">Stop</button>   -->
+      </div>
+    </div>
+  </div>
+</div>
+<label class="counter">Vault Count - {{vaultsCount}}</label>

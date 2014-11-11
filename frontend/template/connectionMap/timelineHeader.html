@@ -1,38 +1,38 @@
 <div class="top-header">
-  <h1><a href="/" class="home"></a>Network Visualiser - Timeline View</h1>
-  <p class="time_label">
-    Snapshot at {{maxTime | date:'HH:mm:ss, dd/MM/yyyy'}}
-  </p>
-  <!--<ng-include src="'template/common/zoom_control.html'"></ng-include>-->
-</div>
-
-<div class="timeline">
-  <div class="player">
-    <div class="time_slider">
-      <div class="time_label" tooltip="{{ player.playerUI.currentPlayTime |  date: 'dd/MM/yyyy' }}" canshow="true">
-        {{ player.playerUI.currentPlayTime |  date: 'HH:mm:ss' }}
-      </div>
-      <div class="slider" range-slider min="0" max="player.playerUI.maxSteps" model-min="0" model-max="player.playerUI.currentPlayState" pin-handle="min" show-values="false" >
-      </div>
-      <div class="player_buttons">
-        <button ng-click="player.play()" ng-show="player.currentState == player.STATE.STOP" class="play-btn">Play</button>
-        <button ng-click="player.pause()" ng-show="player.currentState == player.STATE.PLAY" class="pause-btn">Pause</button>
-        <button ng-click="player.resume()" ng-show="player.currentState == player.STATE.PAUSE" class="resume-btn">Resume</button>
-        <!-- <button ng-click="stopHistoryPlayback()" ng-show="playerState != PLAYER_STATE.STOPPED">Stop</button>   -->
-      </div>
+  <h1><a href="/" class="home"></a>Network Visualiser - Realtime View</h1>
+  <div class="connectionMapZoom">
+    <div class="inlineBlock">
+      <button class="zoomButton icon dec" ng-click="zoom(-0.1)"></button>
+      <button class="zoomButton icon inc" ng-click="zoom(0.1)"></button>
     </div>
   </div>
+  <p class="time_label">
+    {{currentTime | date : 'HH:mm:ss dd/MM/yyyy'}}
+  </p>
 </div>
-
-<ul class="buttons-right">
-  <!--<li>
-        <p class="time_label">
-          Snapshot till {{maxTime | date:'HH:mm:ss, dd/MM/yyyy'}}
-        </p>
-      </li>-->
+<ul class="buttons-left">
+  <li>
+    <!--<button ng-click="showTimeline()">Timeline</button>-->
+    <button ng-click="showViewer()">Status Monitor</button>
+  </li>
   <!--<li>-->
-    <!--<button ng-click="toggleExpandAllLogs()">{{allVaultsExpanded?'Hide All':'Expand All'}}</button>-->
+  <!--<button ng-click="search()">Search</button>-->
   <!--</li>-->
+</ul>
+<ul class="button-center">
+  <div class="inlineBlock">
+    <li>
+      <button class="leftButtonRadiusClear" ng-click="showRealtime()">Real time</button>
+    </li>
+    <li>
+      <button class="rightButtonRadiusClear selected" ng-click="">Timeline</button>
+    </li>
+  </div>
+</ul>
+<ul class="buttons-right">
+  <!-- <li>
+    <button ng-click="toggleExpandAllLogs()">{{allVaultsExpanded?'Hide All':'Expand All'}}</button>
+  </li> -->
   <li>
     <button ng-click="toggleKeyTray()">{{!keyTrayClosed?'Show Keys':'Hide Keys'}}</button>
   </li>

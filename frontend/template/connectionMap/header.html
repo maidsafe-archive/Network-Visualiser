@@ -1,6 +1,11 @@
 <div class="top-header">
   <h1><a href="/" class="home"></a>Network Visualiser - Realtime View</h1>
-
+  <div class="connectionMapZoom">
+    <div class="inlineBlock">
+      <button class="zoomButton icon dec" ng-click="zoom(-0.1)"></button>
+      <button class="zoomButton icon inc" ng-click="zoom(0.1)"></button>
+    </div>
+  </div>
   <p class="time_label">
     {{currentTime | date : 'HH:mm:ss dd/MM/yyyy'}}
   </p>

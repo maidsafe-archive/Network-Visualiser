@@ -46,8 +46,9 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
     if (lastDragPosition) {
       transX += (-1 * (lastDragPosition.sourceEvent.offsetX - d3.event.sourceEvent.offsetX));
       transY += (-1 * (lastDragPosition.sourceEvent.offsetY - d3.event.sourceEvent.offsetY));
+    } else {
+      lastScale =  d3.event.scale || lastScale;
     }
-    lastScale =  d3.event.scale;
     svg.attr('transform', 'translate(' + [ transX, transY ] + ')scale(' + lastScale + ')');
   };
   var dragEvent = d3.behavior.drag()

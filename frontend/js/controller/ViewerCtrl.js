@@ -35,10 +35,11 @@ app.controller('viewerCtrl', [
       window.location.href = '/connectionmap#?sn=' + $rootScope.sessionName;
     };
     $scope.timeline = function() {
-      window.open('/timeline#?sn=' + $rootScope.sessionName, '_blank').focus();
+      window.location.href = '/timeline#?sn=' + $rootScope.sessionName;
     };
     $scope.search = function() {
       window.open('/search#?sn=' + $rootScope.sessionName, '_blank').focus();
+
     };
     $scope.setStatusAlert = function(msg) {
       $scope.alert = msg;
