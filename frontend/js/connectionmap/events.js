@@ -37,6 +37,22 @@ var ConnectionEvents = function(svg) {
           .classed(css.HIDE_PATH, show);
       });
     }
+    if (node.group && node.expected) {
+      var actual = node.group.slice(0, CLOSE_GROUP_LIMIT);
+      node.expected.forEach(function(expected) {
+        if (actual.indexOf(expected) === -1) {
+          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
+          replaceVaultFormat(expected))
+            .classed('missing', true).classed(css.HIDE_PATH, !show);
+        }
+      });
+      actual.forEach(function(vaultName) {
+        if (node.expected.indexOf(vaultName) === -1) {
+          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
+          replaceVaultFormat(vaultName)).classed('missing', false).classed('not-exp', true);
+        }
+      });
+    }
   };
   var updateExpectedAndMissingLinks = function(node) {
     if (node.group && node.expected) {
@@ -81,7 +97,7 @@ var ConnectionEvents = function(svg) {
           labelClass = 'green';
           svg.select('g#node-' + replaceVaultFormat(node.lastIn) + ' text').classed(labelClass, true);
           svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
-          replaceVaultFormat(node.lastIn)).classed(className, true);
+          replaceVaultFormat(node.lastIn)).classed(className, true).classed(css.HIDE_PATH, false);
         }
         if (node.lastOut) {
           className = css.VAULT_LEFT_CLASS;
@@ -91,6 +107,9 @@ var ConnectionEvents = function(svg) {
           replaceVaultFormat(node.lastOut)).classed(className, true);
         }
         node.group.forEach(function(d) {
+          if (d === node.lastIn) {
+            return;
+          }
           className = css.GROUP_CLASS;
           labelClass = 'light-blue';
           svg.select('g#node-' + replaceVaultFormat(d) + ' text').classed(labelClass, true);
@@ -118,6 +137,7 @@ var ConnectionEvents = function(svg) {
       svg.selectAll('path.link.' + className).classed(className, false);
     });
     togglePathVisibilityForConnections(node, true);
+
     textClasses.forEach(function(className) {
       svg.selectAll('g.node text').classed(className, false);
     });
@@ -176,22 +196,6 @@ var ConnectionEvents = function(svg) {
   var updateLinksOnLoad = function(nodes) {
     nodes.each(function(node) {
       togglePathVisibilityForConnections(node, true);
-      if (node.group && node.expected) {
-        var actual = node.group.slice(0, CLOSE_GROUP_LIMIT);
-        node.expected.forEach(function(expected) {
-          if (actual.indexOf(expected) === -1) {
-            svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
-              replaceVaultFormat(expected))
-              .classed('missing', true);
-          }
-        });
-        actual.forEach(function(vaultName) {
-          if (node.expected.indexOf(vaultName) === -1) {
-            svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
-              replaceVaultFormat(vaultName)).classed('missing', false).classed('not-exp', true);
-          }
-        });
-      }
     });
     if (clickEvent.state) {
       d3.selectAll('.link').classed('grey', true);

@@ -49,6 +49,9 @@ var ConnectionMapBuilder = function(connectionMap, elementId) {
     } else {
       lastScale =  d3.event.scale || lastScale;
     }
+    if (!lastScale) {
+      lastScale = d3.event.scale;
+    }
     svg.attr('transform', 'translate(' + [ transX, transY ] + ')scale(' + lastScale + ')');
   };
   var dragEvent = d3.behavior.drag()
