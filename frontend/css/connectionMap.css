@@ -231,6 +231,8 @@
 }
 .node text {
   fill: #999999;
+  text-transform: uppercase;
+  font-family:  "Courier New", Courier, monospace;
 }
 .node text.red {
   fill:#ED1C24;
