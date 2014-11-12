@@ -53,6 +53,14 @@ var ConnectionEvents = function(svg) {
         }
       });
     }
+    if (node.lastIn && node.group.indexOf(node.lastIn) < 4) {
+      svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
+      replaceVaultFormat(node.lastIn)).classed(css.HIDE_PATH, show);
+    }
+    if (node.lastOut) {
+      svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
+      replaceVaultFormat(node.lastIn)).classed(css.HIDE_PATH, show);
+    }
   };
   var updateExpectedAndMissingLinks = function(node) {
     if (node.group && node.expected) {

@@ -39,7 +39,6 @@ app.controller('viewerCtrl', [
     };
     $scope.search = function() {
       window.open('/search#?sn=' + $rootScope.sessionName, '_blank').focus();
-
     };
     $scope.setStatusAlert = function(msg) {
       $scope.alert = msg;
