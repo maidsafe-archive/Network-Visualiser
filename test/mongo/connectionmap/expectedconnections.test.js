@@ -72,7 +72,7 @@ describe('Expected Connections', function() {
           assert(data);
           bridge.clearActiveSession(serviceHelper.getSessionName(), done);
         });
-      }, 300);
+      }, 500);
     };
     populateStartLogs(sessionId, getData);
   });
@@ -116,7 +116,7 @@ describe('Expected Connections', function() {
       req.body = log;
       logService.saveLog(req,
         new mock.Response(function(err, data) {
-          setTimeout(validate, 300);
+          setTimeout(validate, 500);
         }, mockCallback));
     });
   });
