@@ -29,6 +29,12 @@ app.controller('connectionMapTimelineCtrl', [
     $scope.toggleKeyTray = function() {
       $scope.keyTrayClosed = !$scope.keyTrayClosed;
     };
+    $scope.showRealtime = function() {
+      window.location.href = '/connectionmap#?sn=' + $rootScope.sessionName;
+    };
+    $scope.showViewer = function() {
+      window.location.href = '/viewer#?sn=' + $rootScope.sessionName;
+    };
     var pushDiffs = function(data) {
       $timeout(function() {
         (data.hasOwnProperty('actionId') ? mapStatus.updateActual : mapStatus.updateExpected)(data);

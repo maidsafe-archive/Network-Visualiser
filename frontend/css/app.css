@@ -51,11 +51,12 @@ header p.title {
   margin: 1em 0em 1em 2em;
 }
 
-header div.timeline {
-  float: left;
+footer div.timeline {
+  position: absolute;
+  display: inline-block;
+  left: 25%;
   margin: .3em;
-  position: relative;
-  width: 75%;
+  width: 50%;
 }
 
 .time_slider div.time_label {
@@ -63,13 +64,14 @@ header div.timeline {
   display: inline-block;
   float: left;
   font-family: 'OpenSansRegular', Arial, sans-serif;
-  font-size: 30px;
-  margin: -0.1em 1em 0em 0;
+  font-size: 24px;
+  margin: 0.2em 0;
 }
 
 .time_slider div.slider {
-  margin-left: 12em !important;
-  width: 80%;
+  margin-left: 2.5em !important;
+  float: left;
+  width: 70%;
 }
 
 header div.timeline div.player div.player_msgs span {
@@ -198,10 +200,10 @@ button {
   cursor: pointer;
   display: inline-block;
   float: right;
-  font-size: 16px;
-  padding: 5px 15px 5px 15px;
+  font-size: 14px;
+  padding: 5px;
   text-decoration: none;
-  width: 115px;
+  width: 130px;
   outline: 0;
 }
 

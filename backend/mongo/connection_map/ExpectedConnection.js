@@ -185,7 +185,7 @@ module.exports = function(dbCon) {
           activeIds.push(activeValuts[index].vaultIdFull);
         }
       }
-      getExpectedConnections(log.sessionId, activeIds, null, onExpectedConnections);
+      getExpectedConnections(log.sessionId, activeIds, log.ts, onExpectedConnections);
     });
     return promise;
   };

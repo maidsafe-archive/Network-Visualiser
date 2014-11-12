@@ -29,6 +29,12 @@ app.controller('timelineCtrl', [
     socketService.stop();
     $scope.autoSeekIntervalPromise = null;
     layoutService.bind($scope);
+    $scope.realtime = function() {
+      window.location.href = '/viewer#?sn=' + $rootScope.sessionName;
+    };
+    $scope.showConnectionMap = function() {
+      window.location.href = '/connectionmap#?sn=' + $rootScope.sessionName;
+    };
     $scope.$watch('playback.currentState', function(newValue) {
       if ($scope.firstLogtime && String(newValue).indexOf('.') === -1) {
         if ($rootScope.playerPaused) {
