@@ -44,7 +44,7 @@ describe('Expected Connections', function() {
         new mock.Response((index === (vaultFullIds.length - 1)) ? completed : mockCallback, mockCallback));
     }
   };
-  /*
+
   it('compute expected connections - vaults starting', function(done) {
     var sessionId = serviceHelper.getSessionId();
     var flag = false;
@@ -73,11 +73,10 @@ describe('Expected Connections', function() {
           assert(data);
           bridge.clearActiveSession(serviceHelper.getSessionName(), done);
         });
-      }, 1000);
+      }, 200);
     };
     populateStartLogs(sessionId, getData);
   });
-  */
 
   it('compute expected connections - vault exit ', function(done) {
     var sessionId = serviceHelper.getSessionId();
