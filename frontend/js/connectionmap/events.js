@@ -100,6 +100,16 @@ var ConnectionEvents = function(svg) {
       if (connectionMode === LINK_MODE.CHURN) {
         var className;
         var labelClass;
+        node.group.forEach(function(d) {
+          if (d === node.lastIn) {
+            return;
+          }
+          className = css.GROUP_CLASS;
+          labelClass = 'light-blue';
+          svg.select('g#node-' + replaceVaultFormat(d) + ' text').classed(labelClass, true);
+          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
+          replaceVaultFormat(d)).classed(className, true).classed(css.HIDE_PATH, false);
+        });
         if (node.lastIn) {
           className = css.VAULT_ENTERED_CLASS;
           labelClass = 'green';
@@ -114,16 +124,6 @@ var ConnectionEvents = function(svg) {
           svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
           replaceVaultFormat(node.lastOut)).classed(className, true);
         }
-        node.group.forEach(function(d) {
-          if (d === node.lastIn) {
-            return;
-          }
-          className = css.GROUP_CLASS;
-          labelClass = 'light-blue';
-          svg.select('g#node-' + replaceVaultFormat(d) + ' text').classed(labelClass, true);
-          svg.selectAll('path.link.source-' + replaceVaultFormat(node.name) + '.target-' +
-            replaceVaultFormat(d)).classed(className, true).classed(css.HIDE_PATH, false);
-        });
       }
       svg.selectAll('path.link.target-' + replaceVaultFormat(node.name)).classed(css.OVERLAPPING_TARGET_CLASS, true);
     }

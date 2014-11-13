@@ -178,7 +178,11 @@ module.exports = function(dbCon) {
         socket.broadcastExpectedConnectionDiff(log.sessionId, diffs);
       }
     };
-    bridge.getActiveVaultsFullId(log.sessionId).then(function(activeValuts) {
+    bridge.getActiveVaultsAtTime(log.sessionId, log.ts, function(err, activeValuts) {
+      if (err) {
+        promise.error(err);
+        return;
+      }
       var activeIds = [];
       for (var index in activeValuts) {
         if (activeValuts[index]) {

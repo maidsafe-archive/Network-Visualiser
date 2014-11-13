@@ -46,6 +46,10 @@
   background-position: 0px 1.5px;
 }
 
+.player_buttons {
+  display: inline-block;
+}
+
 .connectionMapKey ul li .lastAdded {
   background: url('../imgs/connection_map_keys/blue-solid-line.png') no-repeat;
 }
@@ -86,32 +90,32 @@
   position: absolute;
   width: 20%;
   text-align: center;
-  right: 70px;
+  right: 60px;
   margin: 2px 0;
 }
 
 .connectionMapZoom .zoomButton {
   display: inline-block;
   float: left;
-  margin: 0 5px;
+  margin: 1px 5px;
   padding: 0;
   line-height: 10px;
   border-radius: 100%;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   font-size: 40px;
 }
 
 .connectionMapZoom .dec {
   background: url('../imgs/connection_map_keys/minus-icon.png') no-repeat;
   background-color: #87b7ec;
-  background-size: 20px;
+  background-size: 18px;
 }
 
 .connectionMapZoom .inc {
   background: url('../imgs/connection_map_keys/plus-icon.png') no-repeat;
   background-color: #87b7ec;
-  background-size: 20px;
+  background-size: 18px;
 }
 
 .connectionMapZoom .zoomButton:hover {
@@ -233,6 +237,7 @@
   fill: #999999;
   text-transform: uppercase;
   font-family:  "Courier New", Courier, monospace;
+  cursor: pointer;
 }
 .node text.red {
   fill:#ED1C24;

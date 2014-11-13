@@ -80,12 +80,14 @@ app.controller('connectionMapTimelineCtrl', [
       $scope.connections = transformedData;
       try {
         reactComponent.setState({});
-        reactComponent.state.connectionMap.onNodeTextClicked(function(clicked) {
-          if (!clicked) {
-            $scope.conMapStatus = 1;
-          }
-          $scope.showStatusButton = clicked;
-        });
+        if (reactComponent.state.connectionMap) {
+          reactComponent.state.connectionMap.onNodeTextClicked(function(clicked) {
+            if (!clicked) {
+              $scope.conMapStatus = 1;
+            }
+            $scope.showStatusButton = clicked;
+          });
+        }
       }catch (e) {
         console.error(e);
       }
