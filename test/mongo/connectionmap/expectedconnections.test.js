@@ -29,6 +29,14 @@ describe('Expected Connections', function() {
     serviceHelper.closeAndDropDB();
     done();
   });
+
+  var SendLog = function(req, index, completed) {
+    return function() {
+      logService.saveLog(req,
+        new mock.Response((index === (vaultFullIds.length - 1)) ? completed : mockCallback, mockCallback));
+    };
+  };
+
   var populateStartLogs = function(sessionId, completed) {
     for (var index = 0; index < vaultFullIds.length; index++) {
       var log = {};
@@ -40,8 +48,7 @@ describe('Expected Connections', function() {
       log.ts = new Date().toISOString();
       req = new mock.Request();
       req.body = log;
-      logService.saveLog(req,
-        new mock.Response((index === (vaultFullIds.length - 1)) ? completed : mockCallback, mockCallback));
+      setTimeout(new SendLog(req, index, completed), index * 10);
     }
   };
 
@@ -117,7 +124,7 @@ describe('Expected Connections', function() {
       req.body = log;
       logService.saveLog(req,
         new mock.Response(function(err, data) {
-          setTimeout(validate, 500);
+          setTimeout(validate, 250);
         }, mockCallback));
     });
   });
