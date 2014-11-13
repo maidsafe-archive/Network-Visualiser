@@ -73,7 +73,7 @@ describe('Expected Connections', function() {
           assert(data);
           bridge.clearActiveSession(serviceHelper.getSessionName(), done);
         });
-      }, 500);
+      }, 250);
     };
     populateStartLogs(sessionId, getData);
   });
