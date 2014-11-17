@@ -88,9 +88,8 @@
 
 .connectionMapZoom {
   position: absolute;
-  width: 20%;
   text-align: center;
-  right: 60px;
+  right: 170px;
   margin: 2px 0;
 }
 
