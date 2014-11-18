@@ -57,6 +57,7 @@ footer div.timeline {
   left: 25%;
   margin: 0.4em 0;
   width: 50%;
+  height: 52px;
 }
 
 .time_slider div.time_label {
@@ -76,6 +77,7 @@ footer div.timeline {
   width: 75%;
   position: absolute;
   left: 15%;
+  height: 52px;
 }
 
 .player_buttons {

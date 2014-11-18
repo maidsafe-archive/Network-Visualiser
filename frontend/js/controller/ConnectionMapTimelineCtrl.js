@@ -6,16 +6,15 @@ app.run([
     $rootScope.sessionName = $location.search().sn;
   }
 ]);
-app.service('socketService', window.ConnectionMapSocketService);
 app.service('connectionMapStatus', window.ConnectionMapStatus);
 app.service('d3Transformer', window.Transform);
 app.service('dataService', window.ConnectionMapDataService);
 app.service('playBackService', window.PlaybackDataService);
 app.service('player', window.PlayerService);
 app.controller('connectionMapTimelineCtrl', [
-  '$scope', '$timeout', '$filter', '$rootScope', 'dataService', 'connectionMapStatus', 'socketService',
+  '$scope', '$timeout', '$filter', '$rootScope', 'dataService', 'connectionMapStatus',
   'playBackService', 'player',
-  function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, socketService, playBackService, player) {
+  function($scope, $timeout, $filter, $rootScope, dataService, mapStatus, playBackService, player) {
     var reactComponent;
     $scope.showStatusButton = false;
     $scope.PLAYER_STATE = { PLAYING: 'playing', STOPPED: 'stopped', PAUSED: 'pause' };
@@ -96,7 +95,6 @@ app.controller('connectionMapTimelineCtrl', [
     playBackService.setBufferedDataHandler(dataService.getConnectionMapDiff);
     player.onSnapShotChange(onSnapShotChange);
     player.setPushLogHandler(pushDiffs);
-    socketService.connectToChannel($rootScope.sessionName);
     $timeout(function() {
       clockTimer();
     }, 10);

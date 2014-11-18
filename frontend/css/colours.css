@@ -57,7 +57,7 @@
 
 .ngrs-range-slider .ngrs-runner {
   background: #5593d7 url("../imgs/timeline/slider-bg.png") repeat-x 0 0 !important;
-  height: 30px !important;
+  height: 40px !important;
 }
 
 .ngrs-range-slider .ngrs-handle { background: #ffffff !important; }
