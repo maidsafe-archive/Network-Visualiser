@@ -103,7 +103,7 @@
 .toggle_create_session {
   height: 150px;
   left: 2em;
-  top: 72px;
+  top: 70px;
   width: 450px;
 }
 
@@ -390,7 +390,7 @@ ul.show-hide {
   -webkit-transition: all ease 0.2s;
   -moz-transition: all ease 0.2s;
   transition: all ease 0.2s;
-  
+
 }
 
 ul.show-hide.ng-hide {
@@ -407,7 +407,7 @@ a.arrow {
 
 
 a.clear {
-  background: url('/imgs/sessions/clear_icon.png') no-repeat top left; 
+  background: url('/imgs/sessions/clear_icon.png') no-repeat top left;
   width:28px;
   height: 25px;
   display: block;
@@ -648,5 +648,3 @@ footer button {
   -webkit-animation-delay: -0.32s;
   animation-delay: -0.32s;
 }
-
-

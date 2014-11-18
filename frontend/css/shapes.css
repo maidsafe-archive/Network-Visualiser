@@ -183,7 +183,7 @@
 .play-btn:hover {background: #29578A url('../imgs/timeline/icon-play.png') no-repeat 0 -2px; background-size: 60px;}
 
 .pause-btn {
-  background: #87b7ec url('../imgs/timeline/icon-pause.png') no-repeat -4px -2px;
+  background: #87b7ec url('../imgs/timeline/icon-pause.png') no-repeat -2px -2px;
   height: 30px;
   text-indent: -9999px;
   width: 55px;
@@ -191,7 +191,7 @@
   background-size: 60px;
 }
 
-.pause-btn:hover {background: #29578A url('../imgs/timeline/icon-pause.png') no-repeat -4px -2px; background-size: 60px;}
+.pause-btn:hover {background: #29578A url('../imgs/timeline/icon-pause.png') no-repeat -2px -2px; background-size: 60px;}
 
 .resume-btn {
   background: #87b7ec url('../imgs/timeline/icon-resume.png') no-repeat 0 -2px;

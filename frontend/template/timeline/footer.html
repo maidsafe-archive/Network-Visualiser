@@ -1,11 +1,11 @@
 <div class="status" ng-class="{true:'alert'}[alert != null]">
   <span>{{alert}}</span>
 </div>
-<div class="timeline">
+<div class="timeline" ng-init="now = Date()">
   <div class="player">
     <div class="time_slider">
-      <div class="time_label" tooltip="{{ currentPlayTime |  date: 'dd/MM/yyyy' }}" canshow="true">
-        {{ currentPlayTime |  date: 'HH:mm:ss' }}
+      <div class="time_label" title="{{ currentPlayTime ? (currentPlayTime |  date: 'dd/MM/yyyy') : '00:00:00' }}" canshow="true">
+        {{ currentPlayTime ? (currentPlayTime |  date: 'HH:mm:ss') : "00:00:00" }}
       </div>
       <div class="slider" range-slider min="0" max="playback.maxSteps" model-min="0" model-max="playback.currentState" pin-handle="		min" show-values="false" >
       </div>

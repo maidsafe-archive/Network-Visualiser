@@ -4,8 +4,8 @@
 <div class="timeline">
   <div class="player">
     <div class="time_slider">
-      <div class="time_label" tooltip="{{ player.playerUI.currentPlayTime |  date: 'dd/MM/yyyy' }}" canshow="true">
-        {{ player.playerUI.currentPlayTime |  date: 'HH:mm:ss' }}
+      <div class="time_label" title="{{ player.playerUI.currentPlayTime ? (player.playerUI.currentPlayTime |  date: 'dd/MM/yyyy') : '00:00:00' }}" canshow="true">
+        {{ player.playerUI.currentPlayTime ? (player.playerUI.currentPlayTime |  date: 'HH:mm:ss') : '00:00:00' }}
       </div>
       <div class="slider" range-slider min="0" max="player.playerUI.maxSteps" model-min="0" model-max="player.playerUI.currentPlayState" pin-handle="min" show-values="false" >
       </div>

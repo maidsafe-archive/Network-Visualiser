@@ -55,23 +55,36 @@ footer div.timeline {
   position: absolute;
   display: inline-block;
   left: 25%;
-  margin: .3em;
+  margin: 0.4em 0;
   width: 50%;
+  height: 52px;
 }
 
 .time_slider div.time_label {
   color: #fff;
   display: inline-block;
-  float: left;
+  text-align: center;
   font-family: 'OpenSansRegular', Arial, sans-serif;
-  font-size: 24px;
-  margin: 0.2em 0;
+  font-size: 20px;
+  margin: 0.3em 0;
+  width: 15%;
+  position: absolute;
+  left: 0;
 }
 
 .time_slider div.slider {
-  margin-left: 2.5em !important;
   float: left;
-  width: 70%;
+  width: 75%;
+  position: absolute;
+  left: 15%;
+  height: 52px;
+}
+
+.player_buttons {
+  width: 10%;
+  position: absolute;
+  right: 0;
+  display: inline-block;
 }
 
 header div.timeline div.player div.player_msgs span {
@@ -225,7 +238,7 @@ button.sign-in-google {
 
 button.sign-in-github {
   background: url('/imgs/signin_github_icon.png') no-repeat top left;
-  
+
 }
 
 button.sign-in-google,
@@ -404,20 +417,20 @@ section div#wrapper.tray_open { top: 270px; }
 }
 
 .message-bar input[type=text] {
-    background: transparent;
-    word-wrap: normal;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    -icab-text-overflow: ellipsis;
-    -khtml-text-overflow: ellipsis;
-    -moz-text-overflow: ellipsis;
-    -webkit-text-overflow: ellipsis;
-    overflow: hidden;
-    border: 0px;
-    width: 220px;
-    outline:0px;
-    padding: 3px 4px;
+  background: transparent;
+  word-wrap: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -icab-text-overflow: ellipsis;
+  -khtml-text-overflow: ellipsis;
+  -moz-text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis;
+  overflow: hidden;
+  border: 0px;
+  width: 220px;
+  outline:0px;
+  padding: 3px 4px;
 }
 
 .node div.box {
@@ -537,7 +550,7 @@ button.copy-clipboard.zeroclipboard-is-active {
 footer {
   background-color: #5593d7;
   bottom: 0px;
-  height: 50px;
+  height: 52px;
   min-width: 1150px;
   position: fixed;
   width: 100%;
