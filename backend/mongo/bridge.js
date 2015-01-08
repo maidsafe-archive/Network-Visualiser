@@ -159,7 +159,7 @@ exports.deleteActiveSession = function(sessionName, promise) {
     sessionMapper.remove(sessionId);
     deleteSession();
   }, function(err) {
-    console.error(err);
+    promise(err);
   });
 };
 exports.deletePendingSession = function(sessionName, promise) {
